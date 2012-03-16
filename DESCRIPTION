@@ -1,0 +1,14 @@
+Package: distance
+Maintainer: David L Miller <dave@ninepointeightone.net>
+License: GPL version 2 or later
+Title: 
+LazyLoad: yes
+Author: David L. Miller
+Description: 
+Version: 1.0
+URL: 
+Date: 2012-04-18
+Depends:
+    R (>= 2.10.0),mrds
+Suggests:
+    mmds, dsm
