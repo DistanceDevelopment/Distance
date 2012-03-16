@@ -25,6 +25,7 @@
 # @value
 # TKTKTK need to think about this!!
 #' @author David L. Miller
+#' @export
 #'
 #' @examples
 #'  # An example from mrds, the golf tee data.
