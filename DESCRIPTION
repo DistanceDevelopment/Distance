@@ -1,7 +1,8 @@
 Package: distance
 Maintainer: David L Miller <dave@ninepointeightone.net>
 License: GPL version 2 or later
-Title: 
+Title: A simple way to fit detection functions to distance sampling data and
+    calculate abundance/density for biological populations.
 LazyLoad: yes
 Author: David L. Miller
 Description: 
@@ -11,4 +12,7 @@ Date: 2012-04-18
 Depends:
     R (>= 2.10.0),mrds
 Suggests:
-    mmds, dsm
+    mmds,
+    dsm
+Collate:
+    'ds.R'

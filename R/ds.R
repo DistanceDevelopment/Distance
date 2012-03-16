@@ -22,12 +22,17 @@
 #'        distance.
 #' @param binned if the data are binned, set this to \code{TRUE} (default 
 #'        \code{FALSE}).
-#' @value
-#' TKTKTK need to think about this!!
+# @value
+# TKTKTK need to think about this!!
 #' @author David L. Miller
 #'
 #' @examples
-#'
+#'  # An example from mrds, the golf tee data.
+#'  library(distance)
+#'  data(book.tee.data)
+#'  tee.data<-book.tee.data$book.tee.dataframe
+#'  ds.model<-ds(tee.data,4)
+#'  summary(ds.model)
 ds<-function(data, truncation, transect="line", formula=~1, key="hn",
              adjustment="cos", order=NULL, scale="scale",binned=FALSE){
   
@@ -103,11 +108,11 @@ max.order <- 6
                             "adj.scale=\"",scale,"\")",sep="")
     ## MCDS models
     }else{
-      model.formula <- paste("~mcds(key = \"",key, 
-                                   "formula =\"", formula,"\"", 
-                                   "adj.series=\"",adjustment,"\"",
-                                   "adj.order=",order[1:i],
-                                   "adj.scale=\"",scale,"\"")
+      model.formula <- paste("~mcds(key = \"",key,"\",", 
+                                   "formula =~",as.character(formula)[2],",", 
+                                   "adj.series=\"",adjustment,"\",",
+                                   "adj.order=",order[1:i],",",
+                                   "adj.scale=\"",scale,"\")",sep="")
     }
 
     models[[i]]<-ddf(dsmodel = as.formula(model.formula),data = data, 
