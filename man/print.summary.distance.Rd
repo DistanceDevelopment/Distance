@@ -1,0 +1,29 @@
+\name{print.summary.distance}
+\alias{print.summary.distance}
+\title{Print summary of distance detection function model object}
+\usage{
+  \method{print}{summary.distance} (x, ...)
+}
+\arguments{
+  \item{x}{a summary of distance sampling analysis}
+
+  \item{\dots}{unspecified and unused arguments for S3
+  consistency}
+}
+\value{
+  Nothing, just prints the summary.
+}
+\description{
+  Provides a brief summary of a distance sampling analysis.
+  Including: detection function parameters, model selection
+  criterion, and optionally abundance in the covered
+  (sampled) region and its standard error.
+}
+\author{
+  David L. Miller and Jeff Laake
+}
+\seealso{
+  \code{\link{summary.ds}}
+}
+\keyword{utility}
+

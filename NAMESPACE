@@ -1,1 +1,4 @@
 export(ds)
+S3method(print,distance)
+S3method(print,summary.distance)
+S3method(summary,distance)

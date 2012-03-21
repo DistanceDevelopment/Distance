@@ -10,9 +10,18 @@ Version: 1.0
 URL: 
 Date: 2012-04-18
 Depends:
-    R (>= 2.10.0),mrds
+    R (>= 2.10.0),
+    mrds,
+    optimx,
+    Rsolnp
 Suggests:
     mmds,
+    testthat,
     dsm
 Collate:
     'ds.R'
+    'create.bins.R'
+    'summary.distance.R'
+    'print.summary.distance.R'
+    'print.distance.R'
+    'model.description.R'

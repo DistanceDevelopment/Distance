@@ -2,15 +2,22 @@
 \alias{ds}
 \title{Fit detection functions to line or point transect data}
 \usage{
-  ds(data, truncation, transect = "line", formula = ~1,
-    key = "hn", adjustment = "cos", order = NULL,
-    scale = "scale", binned = FALSE)
+  ds(data, truncation = NULL, transect = "line",
+    formula = ~1, key = "hn", adjustment = "cos",
+    order = NULL, scale = "scale", bins = NULL,
+    monotonicity = FALSE, truncation.percentage = NULL,
+    region.table = NULL, sample.table = NULL,
+    obs.table = NULL, convert.units = 1)
 }
 \arguments{
   \item{data}{a \code{data.frame} containing at least a
   column called \code{distance}.}
 
-  \item{truncation}{truncation distance.}
+  \item{truncation}{truncation distance. Can be supplied as
+  a \code{list} with elements \code{left} and \code{right}
+  if left truncation is required. Truncation can be
+  specified as a percentage of the largest distances to
+  discard. See \code{truncation.percentage}, below.}
 
   \item{transect}{indicates transect type "line" (default)
   or "point".}
@@ -25,19 +32,113 @@
   cosine (default), "herm" gives Hermite polynomial and
   "poly" gives simple polynomial.  "cos" is recommended.}
 
-  \item{order}{orders of the adjustment terms (as a
-  vector), the default value (\code{NULL}) will select via
-  AIC. TKTKTK talk about which orders are correct}
+  \item{order}{orders of the adjustment terms to fit (as a
+  vector/scalar), the default value (\code{NULL}) will
+  select via AIC. For cosine adjustments, valid orders are
+  integers greater than 2. For Hermite polynomials, even
+  integers equal or greater than 4 are allowed. For simple
+  polynomials even integers equal or greater than 2 are
+  allowed.}
 
   \item{scale}{the scale by which the distances in the
   adjustment terms are divided. Defaults to "scale", the
   scale parameter of the detection function. Other option
   is "width" which scales by the truncation distance.}
 
-  \item{binned}{if the data are binned, set this to
-  \code{TRUE} (default \code{FALSE}).}
+  \item{bins}{if the data are binned, this vector gives the
+  cutpoints of the bins. Ensure that the first element is 0
+  (or the left truncation distance) and the last is the
+  distance to the end of the furthest bin.  (Default
+  \code{NULL}, no binning.)}
+
+  \item{monotonicity}{should the detection function be
+  constrained for monotonicity weakly ("weak"), strictly
+  ("strict") or not at all ("none" or \code{FALSE}). See
+  Montonicity, below. (Default \code{FALSE}).}
+
+  \item{truncation.percentage}{percentage of the largest
+  distances to discard. Must be n number between 0 (no
+  truncation) and slightly less than 100. Note if you use
+  \code{truncation.percentage} then left truncation can't
+  be specified.}
+
+  \item{region.table}{\code{data.frame} with two columns:
+  \tabular{ll}{ \code{Region.Label} \tab label for the
+  region\cr \code{Area} \tab area of the region\cr}
+  \code{region.table} has one row for each stratum. If
+  there is no stratification then \code{region.table} has
+  one entry with \code{Area} corresponding to the total
+  survey area.}
+
+  \item{sample.table}{\code{data.frame} mapping the regions
+  to the samples ( i.e. transects). There are three
+  columns: \tabular{ll}{\code{Sample.Label} \tab label for
+  the sample\cr \code{Region.Label} \tab label for the
+  region that the sample belongs to.\cr \code{Effort} \tab
+  the effort expended in that sample (e.g. transect
+  length).\cr}}
+
+  \item{obs.table}{\code{data.frame} mapping the individual
+  observations (objects) to regions and samples. There
+  should be three columns: \tabular{ll}{\code{object} \tab
+  \cr \code{Region.Label} \tab label for the region that
+  the sample belongs to.\cr \code{Sample.Label} \tab label
+  for the sample\cr}}
+
+  \item{convert.units}{conversion between units for
+  abundance estimation, see "Units", below. (Defaults to 1,
+  implying all of the units are "correct" already.)}
+}
+\value{
+  TKTKTK need to think about this!!
 }
 \description{
+  BLURB
+}
+\section{Details}{
+  If abundance estimates are required the
+  \code{data.frame}s \code{region.table},
+  \code{sample.table} and \code{obs.table} must be
+  supplied.
+}
+
+\section{Units}{
+  In extrapolating to the entire survey region it is
+  important that the unit measurements be consistent or
+  converted for consistency.  A conversion factor can be
+  specified with the \code{convert.units} variable.  The
+  values of \code{Area} in \code{region.table}, must be
+  made consistent with the units for \code{Effort} in
+  \code{sample.table} and the units of \code{distance} in
+  the \code{data.frame} that was analyzed.  It is easiest
+  if the units of \code{Area} are the square of the units
+  of \code{Effort} and then it is only necessary to convert
+  the units of \code{distance} to the units of
+  \code{Effort}. For example, if \code{Effort} was entered
+  in kilometers and \code{Area} in square kilometers and
+  \code{distance} in meters then using
+  \code{convert.units=0.001} would convert meters to
+  kilometers, density would be expressed in square
+  kilometers which would then be consistent with units for
+  \code{Area}.  However, they can all be in different units
+  as long as the appropriate composite value for
+  \code{convert.units} is chosen.  Abundance for a survey
+  region can be expressed as: \code{A*N/a} where \code{A}
+  is \code{Area} for the survey region, \code{N} is the
+  abundance in the covered (sampled) region, and \code{a}
+  is the area of the sampled region and is in units of
+  \code{Effort * distance}.  The sampled region \code{a} is
+  multiplied by \code{convert.units}, so it should be
+  chosen such that the result is in the same units as
+  \code{Area}.  For example, if \code{Effort} was entered
+  in kilometers, \code{Area|} in hectares (100m x 100m) and
+  \code{distance} in meters, then using
+  \code{convert.units=10} will convert \code{a} to units of
+  hectares (100 to convert meters to 100 meters for
+  distance and .1 to convert km to 100m units).
+}
+
+\section{Monotonicity}{
   BLURB
 }
 \examples{
@@ -47,6 +148,29 @@
  tee.data<-book.tee.data$book.tee.dataframe
  ds.model<-ds(tee.data,4)
  summary(ds.model)
+
+ # same model, but calculating abundance
+ # need to supply the region, sample and observation tables
+ region<-book.tee.data$book.tee.region
+ samples<-book.tee.data$book.tee.samples
+ obs<-book.tee.data$book.tee.obs
+
+ ds.dht.model<-ds(tee.data,4,region.table=region,
+              sample.table=samples,obs.table=obs)
+ summary(ds.dht.model)
+
+ # specify order 2 cosine adjustments
+ ds.model.cos2<-ds(tee.data,4,adjustment="cos",order=2)
+ summary(ds.model.cos2)
+
+ # specify order 2 and 4 cosine adjustments
+ ds.model.cos24<-ds(tee.data,4,adjustment="cos",order=c(2,4))
+ summary(ds.model.cos24)
+
+ # truncate the largest 10\% of the data and fit only a hazard-rate
+ # detection function
+ ds.model.hr.trunc<-ds(tee.data,truncation.percentage=10,key="hr",adjustment=NULL)
+ summary(ds.model.hr.trunc)
 }
 \author{
   David L. Miller

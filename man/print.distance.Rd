@@ -1,0 +1,19 @@
+\name{print.distance}
+\alias{print.distance}
+\title{Simple pretty printer for distance sampling analyses}
+\usage{
+  \method{print}{distance} (x, ...)
+}
+\arguments{
+  \item{x}{a distance sampling analysis (result from
+  calling \code{\link{ds}}).}
+}
+\description{
+  Simply prints out a brief description of the model which
+  was fitted. For more detailed information use
+  \code{\link{summary}}.
+}
+\author{
+  David L. Miller
+}
+
