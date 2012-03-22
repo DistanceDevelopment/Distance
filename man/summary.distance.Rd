@@ -2,8 +2,7 @@
 \alias{summary.distance}
 \title{Summary of distance sampling analysis}
 \usage{
-  \method{summary}{distance} (object, se = TRUE, N = TRUE,
-    ...)
+  \method{summary}{distance} (object, ...)
 }
 \arguments{
   \item{object}{a distance analysis}
@@ -20,8 +19,8 @@
 }
 \note{
   This function just calls \code{\link{summary.ds}} and
-  \code{\link{summary.dht}}, collates and prints the
-  results in a nice way.
+  \code{\link{dht}}, collates and prints the results in a
+  nice way.
 }
 \author{
   David L. Miller

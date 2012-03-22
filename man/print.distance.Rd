@@ -7,6 +7,9 @@
 \arguments{
   \item{x}{a distance sampling analysis (result from
   calling \code{\link{ds}}).}
+
+  \item{...}{not passed through, just for S3
+  compatibility.}
 }
 \description{
   Simply prints out a brief description of the model which
