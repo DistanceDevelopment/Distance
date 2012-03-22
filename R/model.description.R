@@ -17,7 +17,7 @@ model.description<-function(model){
     if(length(adj.order)>1){
       mod.str<-paste(mod.str,"s",sep="")
     }
-    mod.str<-paste(mod.str,"of order",adj.order)
+    mod.str<-paste(mod.str,"of order",paste(adj.order,collapse=","))
   }
 
   return(mod.str)

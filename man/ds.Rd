@@ -91,7 +91,10 @@
   implying all of the units are "correct" already.)}
 }
 \value{
-  TKTKTK need to think about this!!
+  a list with elements: \tabular{ll}{\code{dsmodel} \tab a
+  detection function model object.\cr \code{dht} \tab
+  abundance/density information (if survey region data was
+  supplied, else \code{NULL}).}
 }
 \description{
   Some blurb here about distance sampling analysis.
@@ -140,7 +143,7 @@
 }
 
 \section{Monotonicity}{
-  BLURB
+
 }
 \examples{
 # An example from mrds, the golf tee data.

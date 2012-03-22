@@ -65,8 +65,11 @@
 #'        "correct" already.)
 #'        
 #'
-#' @return
-#' TKTKTK need to think about this!!
+#' @return a list with elements:
+#'        \tabular{ll}{\code{dsmodel} \tab a detection function model object.\cr
+#'                     \code{dht} \tab abundance/density information (if survey
+#'                      region data was supplied, else \code{NULL}).}
+#'   
 #' @section Details:
 #'
 #'  If abundance estimates are required the \code{data.frame}s \code{region.table},
@@ -101,7 +104,7 @@
 #'  .1 to convert km to 100m units).
 #'
 #' @section Monotonicity:
-#'   BLURB
+#'   
 #' @author David L. Miller
 #' @export
 #'
