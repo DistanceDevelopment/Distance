@@ -4,6 +4,7 @@
 #' detailed information use \code{\link{summary}}.
 #'
 #' @param x a distance sampling analysis (result from calling \code{\link{ds}}).
+#' @param ... not passed through, just for S3 compatibility.
 #' @S3method print distance
 #' @method print distance
 #' @aliases print.distance

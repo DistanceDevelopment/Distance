@@ -15,21 +15,21 @@
 #' @method summary distance
 #' @aliases summary.distance
 #' @param object a distance analysis
-# @param se if TRUE, computes standard errors
-# @param N if TRUE, computes abundance in covered (sampled) region
 #' @param \dots unspecified and unused arguments for S3 consistency
 #' @return list of extracted and summarized objects
 #' @note This function just calls \code{\link{summary.ds}} and 
-#'       \code{\link{summary.dht}}, collates and prints the results in a nice
+#'       \code{\link{dht}}, collates and prints the results in a nice
 #'       way.
 #' @author David L. Miller
 #' @keywords utility
 #' @export
-summary.distance <- function(object,se=TRUE,N=TRUE,...){
-# based on summary.ds from mrds
-# Uses: predict.ds (via predict), DeltaMethod, coef.ds (via coef)
+summary.distance <- function(object,...){
 
-  ans <- list(ds=summary(object$dsmodel), dht=object$dht, dsmodel=object$dsmodel)
+  #  se if TRUE, computes standard errors
+  #  N if TRUE, computes abundance in covered (sampled) region
+  ans <- list(ds=summary(object$dsmodel,se=TRUE,N=TRUE), 
+              dht=object$dht, 
+              dsmodel=object$dsmodel)
 
   class(ans) <- "summary.distance"
   return(ans)
