@@ -25,8 +25,8 @@ create.bins <- function(data,cutpoints){
   # catch anything in the first bin that was recorded as the
   # bottom cutpoint 
   ind0 <- which(d==cp[1])
-  distbegin[ind0] <- cp[0]
-  distend[ind0] <- cp[1]
+  distbegin[ind0] <- cp[1]
+  distend[ind0] <- cp[2]
 
   for(i in 1:(length(cp)-1)){
     # which elements of d lie between cutpoints i and i+1

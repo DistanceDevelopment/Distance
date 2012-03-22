@@ -4,20 +4,23 @@
 \usage{
   ds(data, truncation = NULL, transect = "line",
     formula = ~1, key = "hn", adjustment = "cos",
-    order = NULL, scale = "scale", bins = NULL,
-    monotonicity = FALSE, truncation.percentage = NULL,
-    region.table = NULL, sample.table = NULL,
-    obs.table = NULL, convert.units = 1)
+    order = NULL, scale = "scale", cutpoints = NULL,
+    monotonicity = FALSE, region.table = NULL,
+    sample.table = NULL, obs.table = NULL,
+    convert.units = 1)
 }
 \arguments{
   \item{data}{a \code{data.frame} containing at least a
   column called \code{distance}.}
 
-  \item{truncation}{truncation distance. Can be supplied as
-  a \code{list} with elements \code{left} and \code{right}
-  if left truncation is required. Truncation can be
-  specified as a percentage of the largest distances to
-  discard. See \code{truncation.percentage}, below.}
+  \item{truncation}{either truncation distance (numeric,
+  e.g. 5) or percentage (as a string, e.g. "15\%"). Can be
+  supplied as a \code{list} with elements \code{left} and
+  \code{right} if left truncation is required (e.g.
+  \code{list(left=1,right=20)} or
+  \code{list(left="1\%",right="15\%")} or even When
+  specified as a percentage, the largest \code{right} and
+  smallest \code{left} percent distances are discarded.}
 
   \item{transect}{indicates transect type "line" (default)
   or "point".}
@@ -45,22 +48,20 @@
   scale parameter of the detection function. Other option
   is "width" which scales by the truncation distance.}
 
-  \item{bins}{if the data are binned, this vector gives the
-  cutpoints of the bins. Ensure that the first element is 0
-  (or the left truncation distance) and the last is the
-  distance to the end of the furthest bin.  (Default
-  \code{NULL}, no binning.)}
+  \item{cutpoints}{if the data are binned, this vector
+  gives the cutpoints of the bins. Ensure that the first
+  element is 0 (or the left truncation distance) and the
+  last is the distance to the end of the furthest bin.
+  (Default \code{NULL}, no binning.)  Note that if
+  \code{data} has columns \code{distbegin} and
+  \code{distend} then these will be used as bins if
+  \code{cutpoints} is not specified. If both are specified,
+  \code{cutpoints} has precedence.}
 
   \item{monotonicity}{should the detection function be
   constrained for monotonicity weakly ("weak"), strictly
   ("strict") or not at all ("none" or \code{FALSE}). See
   Montonicity, below. (Default \code{FALSE}).}
-
-  \item{truncation.percentage}{percentage of the largest
-  distances to discard. Must be n number between 0 (no
-  truncation) and slightly less than 100. Note if you use
-  \code{truncation.percentage} then left truncation can't
-  be specified.}
 
   \item{region.table}{\code{data.frame} with two columns:
   \tabular{ll}{ \code{Region.Label} \tab label for the
@@ -93,7 +94,7 @@
   TKTKTK need to think about this!!
 }
 \description{
-  BLURB
+  Some blurb here about distance sampling analysis.
 }
 \section{Details}{
   If abundance estimates are required the
@@ -169,7 +170,7 @@
 
  # truncate the largest 10\% of the data and fit only a hazard-rate
  # detection function
- ds.model.hr.trunc<-ds(tee.data,truncation.percentage=10,key="hr",adjustment=NULL)
+ ds.model.hr.trunc<-ds(tee.data,truncation="10\%",key="hr",adjustment=NULL)
  summary(ds.model.hr.trunc)
 }
 \author{

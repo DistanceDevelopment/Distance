@@ -1,13 +1,17 @@
 #' Fit detection functions to line or point transect data
 #'
-#' BLURB
+#' Some blurb here about distance sampling analysis. 
 #'
 #' @param data a \code{data.frame} containing at least a column called
 #'        \code{distance}.
-#' @param truncation truncation distance. Can be supplied as a \code{list}
+#' @param truncation either truncation distance (numeric, e.g. 5) or percentage
+#'        (as a string, e.g. "15\%"). Can be supplied as a \code{list}
 #'        with elements \code{left} and \code{right} if left truncation is
-#'        required. Truncation can be specified as a percentage of the largest
-#'        distances to discard. See \code{truncation.percentage}, below.
+#'        required (e.g. \code{list(left=1,right=20)} or 
+#'        \code{list(left="1\%",right="15\%")} or even 
+#         \code{list(left="1",right="15\%")}).
+#'        When specified as a percentage, the largest \code{right} and 
+#'        smallest \code{left} percent distances are discarded. 
 #' @param transect indicates transect type "line" (default) or "point".
 #' @param formula formula for the scale parameter. For a CDS analysis leave 
 #'        this as its default \code{~1}.
@@ -16,26 +20,27 @@
 #' @param adjustment adjustment terms to use; "cos" gives cosine (default),
 #'        "herm" gives Hermite polynomial and "poly" gives simple polynomial.
 #'        "cos" is recommended.
-#' @param order orders of the adjustment terms to fit (as a vector/scalar), the default 
-#'        value (\code{NULL}) will select via AIC. For cosine adjustments, valid orders
-#'        are integers greater than 2. For Hermite polynomials, even integers
-#'        equal or greater than 4 are allowed. For simple polynomials even integers
-#'        equal or greater than 2 are allowed.
+#' @param order orders of the adjustment terms to fit (as a vector/scalar), the
+#'        default value (\code{NULL}) will select via AIC. For cosine 
+#'        adjustments, valid orders are integers greater than 2. For Hermite 
+#'        polynomials, even integers equal or greater than 4 are allowed. For 
+#'        simple polynomials even integers equal or greater than 2 are allowed.
 #' @param scale the scale by which the distances in the adjustment terms are
 #'        divided. Defaults to "scale", the scale parameter of the detection
 #'        function. Other option is "width" which scales by the truncation
 #'        distance.
-#' @param bins if the data are binned, this vector gives the cutpoints of the 
-#'        bins. Ensure that the first element is 0 (or the left truncation
+#' @param cutpoints if the data are binned, this vector gives the cutpoints of 
+#'        the bins. Ensure that the first element is 0 (or the left truncation
 #'        distance) and the last is the distance to the end of the furthest bin.
 #'        (Default \code{NULL}, no binning.)
-#' @param monotonicity should the detection function be constrained for monotonicity
-#'        weakly ("weak"), strictly ("strict") or not at all ("none" or 
-#'        \code{FALSE}). See Montonicity, below. (Default \code{FALSE}).
-#' @param truncation.percentage percentage of the largest distances to discard. Must be
-#'        n number between 0 (no truncation) and slightly less than 100. Note 
-#'        if you use \code{truncation.percentage} then left truncation can't be 
-#'        specified.
+#'        Note that if \code{data} has columns \code{distbegin} and 
+#'        \code{distend} then these will be used as bins if \code{cutpoints}
+#'        is not specified. If both are specified, \code{cutpoints} has
+#'        precedence.
+#' @param monotonicity should the detection function be constrained for 
+#'        monotonicity weakly ("weak"), strictly ("strict") or not at all 
+#'        ("none" or \code{FALSE}). See Montonicity, below. (Default 
+#'        \code{FALSE}).
 #' @param region.table \code{data.frame} with two columns: 
 #'        \tabular{ll}{ \code{Region.Label} \tab label for the region\cr
 #'                     \code{Area} \tab area of the region\cr} 
@@ -129,16 +134,17 @@
 #'
 #'  # truncate the largest 10% of the data and fit only a hazard-rate
 #'  # detection function
-#'  ds.model.hr.trunc<-ds(tee.data,truncation.percentage=10,key="hr",adjustment=NULL)
+#'  ds.model.hr.trunc<-ds(tee.data,truncation="10%",key="hr",adjustment=NULL)
 #'  summary(ds.model.hr.trunc)
+#'
 ds<-function(data, truncation=NULL, transect="line", formula=~1, key="hn",
-             adjustment="cos", order=NULL, scale="scale", bins=NULL,
-             monotonicity=FALSE,truncation.percentage=NULL,
+             adjustment="cos", order=NULL, scale="scale", cutpoints=NULL,
+             monotonicity=FALSE,
              region.table=NULL,sample.table=NULL,obs.table=NULL,
              convert.units=1){
   
   # this routine just creates a call to mrds, it's not very exciting
-  # or fancy
+  # or fancy, it does do a lot of error checking though
 
   ## make sure that the data are in the right format first
   if(is.null(data$distance)){
@@ -160,34 +166,52 @@ ds<-function(data, truncation=NULL, transect="line", formula=~1, key="hn",
   }
   
   # truncation
-  if(is.null(truncation) & is.null(truncation.percentage)){
+  if(is.null(truncation)){
     stop("Please supply truncation distance or percentage.")
-  }
-  if(!is.null(truncation)){
+  }else{
+    # if we have left truncation too...
     if(is.list(truncation)){
-      if((names(truncation)=="left" || names(truncation)=="right") &
-        length(truncation==2)){
-        width <- truncation$right
-        left<-truncation$left
+      if((any(names(truncation)=="left") & any(names(truncation)=="right")) &
+          length(truncation)==2){
+
+        # check for each of left and right that we have % or distance...
+        # left
+        if(is.double(truncation$left) & length(truncation$left)==1){
+          left <- truncation$left
+        }else if(is.character(truncation$left) & length(truncation$left)==1){
+          # % string to number
+          truncation$left<-as.numeric(sub("%","",truncation$left))
+          left <- quantile(data$distance,probs=(truncation$left/100))
+        }else{
+          stop("Truncation must be supplied as a single number/string or a list with elements \"left\" and \"right\".")
+        }
+        # right
+        if(is.double(truncation$right) & length(truncation$right)==1){
+          width <- truncation$right
+        }else if(is.character(truncation$right) & length(truncation$right)==1){
+          # % string to number
+          truncation$right<-as.numeric(sub("%","",truncation$right))
+          width <- quantile(data$distance,probs=1-(truncation$right/100))
+        }else{
+          stop("Truncation must be supplied as a single number/string or a list with elements \"left\" and \"right\".")
+        }
       }else{
-        stop("Truncation list must have elements \"left\" and \"right\".")
+        stop("Truncation must be supplied as a single number/string or a list with elements \"left\" and \"right\".")
       }
+
+    # just right truncation
     }else if(is.double(truncation) & length(truncation)==1){
       width <- truncation
       left <- NULL
+    }else if(is.character(truncation) & length(truncation)==1){
+      # % string to number
+      truncation<-as.numeric(sub("%","",truncation))
+      width <- quantile(data$distance,probs=1-(truncation/100))
+      left <- NULL
     }else{
-      stop("Truncation must be supplied as a single number or a list with elements \"left\" and \"right\".")
+      stop("Truncation must be supplied as a single number/string or a list with elements \"left\" and \"right\".")
     }
-  }else if(!is.null(truncation.percentage)){
-    if(truncation.percentage<0 | truncation.percentage>=100){
-      stop("Truncation percentage must be more than 0 and less than 100!")
-    }
-
-    # find the new truncation
-    width <- quantile(data$distance,probs=1-(truncation.percentage/100))
-    left <- NULL
   }
-
 
   # transect type 
   if(transect=="line"){
@@ -245,30 +269,32 @@ ds<-function(data, truncation=NULL, transect="line", formula=~1, key="hn",
     aic.search<-FALSE
   }
 
-
-
   # binning
-  if(is.null(bins)){
-    binned <- FALSE
+  if(is.null(cutpoints)){
     if(any(names(data)=="distend") & any(names(data)=="distbegin")){
-      warning("No bins specified but distbegin and distend are columns in data, removing them and doing an unbinned analysis.")
-      data$distend<-NULL
-      data$distbegin<-NULL
+      warning("No cutpoints specified but distbegin and distend are columns in data. Doing a binned analysis...")
+      binned <- TRUE
+    }else{
+      binned <- FALSE
     }
   }else{
-    # make sure that the smallest bin is 0 or left
-    if(bins[1]!=0 | bins[1]!=left){
-      stop("The first bin must be 0 or the left truncation distance!")
+    # make sure that the first bin starts 0 or left
+    if(!is.null(left)){
+      if(cutpoints[1]!=left){
+        stop("The first cutpoint must be 0 or the left truncation distance!")
+      }
+    }else if(cutpoints[1]!=0){
+      stop("The first cutpoint must be 0 or the left truncation distance!")
     }
 
     # remove distbegin and distend if they already exist
     if(any(names(data)=="distend") & any(names(data)=="distbegin")){
-      warning("data already has distend and distbegin columns, removing them and appling binning as specified by bins.")
+      warning("data already has distend and distbegin columns, removing them and appling binning as specified by cutpoints.")
       data$distend<-NULL
       data$distbegin<-NULL
     }
     # send off to create.bins to make the correct columns in data
-    data <- create.bins(data,bins)
+    data <- create.bins(data,cutpoints)
     binned <- TRUE
   }
 
@@ -371,7 +397,7 @@ ds<-function(data, truncation=NULL, transect="line", formula=~1, key="hn",
     # the detection function stuff
     dht.res<-NULL
 
-    warning("No survey area information supplied, detection function information only.")
+    cat("No survey area information supplied, only estimating detection function.\n")
   }
 
   # construct return object
