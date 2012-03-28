@@ -1,8 +1,8 @@
-\name{print.summary.distance}
-\alias{print.summary.distance}
+\name{print.summary.dsmodel}
+\alias{print.summary.dsmodel}
 \title{Print summary of distance detection function model object}
 \usage{
-  \method{print}{summary.distance} (x, ...)
+  \method{print}{summary.dsmodel} (x, ...)
 }
 \arguments{
   \item{x}{a summary of distance sampling analysis}

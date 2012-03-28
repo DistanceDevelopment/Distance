@@ -1,6 +1,6 @@
 \name{ds}
 \alias{ds}
-\title{Fit detection functions to line or point transect data}
+\title{Fit detection functions and calculate abundance from line or point transect data}
 \usage{
   ds(data, truncation = NULL, transect = "line",
     formula = ~1, key = "hn", adjustment = "cos",
@@ -91,13 +91,17 @@
   implying all of the units are "correct" already.)}
 }
 \value{
-  a list with elements: \tabular{ll}{\code{dsmodel} \tab a
+  a list with elements: \tabular{ll}{\code{ddf} \tab a
   detection function model object.\cr \code{dht} \tab
   abundance/density information (if survey region data was
   supplied, else \code{NULL}).}
 }
 \description{
-  Some blurb here about distance sampling analysis.
+  This function fits detection functions to line or point
+  transect data and then (provided that survey information
+  is supplied) calculates abundance and density estimates.
+  The examples below illustrate some basic types of
+  analysis using \code{ds()}.
 }
 \section{Details}{
   If abundance estimates are required the
@@ -135,7 +139,7 @@
   multiplied by \code{convert.units}, so it should be
   chosen such that the result is in the same units as
   \code{Area}.  For example, if \code{Effort} was entered
-  in kilometers, \code{Area|} in hectares (100m x 100m) and
+  in kilometers, \code{Area} in hectares (100m x 100m) and
   \code{distance} in meters, then using
   \code{convert.units=10} will convert \code{a} to units of
   hectares (100 to convert meters to 100 meters for
@@ -143,15 +147,30 @@
 }
 
 \section{Monotonicity}{
+  When adjustment terms are used, it is possible for the
+  detection function to not always decrease with increasing
+  distance.  This is unrealistic and can lead to bias. To
+  avoid this, the detection function can be constrained for
+  monotonicity.
 
+  Monotonicity constraints are supported in a similar way
+  to that described in Buckland et al (2001). 20 equally
+  spaced points over the range of the detection function
+  (left to right truncation) are evaluated at each round of
+  the optimisation and the function is constrained to be
+  either always less than it's value at zero
+  (\code{"weak"}) or such that each value is less than or
+  equal to the previous point (monotonically decreasing;
+  \code{"strict"}).
 }
 \examples{
 # An example from mrds, the golf tee data.
- library(distance)
+ library(Distance)
  data(book.tee.data)
- tee.data<-book.tee.data$book.tee.dataframe
- ds.model<-ds(tee.data,4)
+ tee.data<-book.tee.data$book.tee.dataframe[book.tee.data$book.tee.dataframe$observer==1,]
+ ds.model<-ds(tee.data,4,monotonicity="strict")
  summary(ds.model)
+ plot(ds.model)
 
  # same model, but calculating abundance
  # need to supply the region, sample and observation tables
@@ -159,7 +178,7 @@
  samples<-book.tee.data$book.tee.samples
  obs<-book.tee.data$book.tee.obs
 
- ds.dht.model<-ds(tee.data,4,region.table=region,
+ ds.dht.model<-ds(tee.data,4,region.table=region,monotonicity="strict",
               sample.table=samples,obs.table=obs)
  summary(ds.dht.model)
 
@@ -167,8 +186,8 @@
  ds.model.cos2<-ds(tee.data,4,adjustment="cos",order=2)
  summary(ds.model.cos2)
 
- # specify order 2 and 4 cosine adjustments
- ds.model.cos24<-ds(tee.data,4,adjustment="cos",order=c(2,4))
+ # specify order 2 and 3 cosine adjustments - LOTS of non-monotonicity!
+ ds.model.cos24<-ds(tee.data,4,adjustment="cos",order=c(2,3))
  summary(ds.model.cos24)
 
  # truncate the largest 10\% of the data and fit only a hazard-rate
@@ -178,5 +197,14 @@
 }
 \author{
   David L. Miller
+}
+\references{
+  Buckland, S.T., Anderson, D.R., Burnham, K.P., Laake,
+  J.L., Borchers, D.L., and Thomas, L. (2001). Distance
+  Sampling. Oxford University Press. Oxford, UK.
+
+  Buckland, S.T., Anderson, D.R., Burnham, K.P., Laake,
+  J.L., Borchers, D.L., and Thomas, L. (2004). Advanced
+  Distance Sampling. Oxford University Press. Oxford, UK.
 }
 

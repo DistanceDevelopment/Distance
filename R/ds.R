@@ -1,6 +1,9 @@
-#' Fit detection functions to line or point transect data
+#' Fit detection functions and calculate abundance from line or point transect data
 #'
-#' Some blurb here about distance sampling analysis. 
+#' This function fits detection functions to line or point transect data and 
+#' then (provided that survey information is supplied) calculates abundance
+#' and density estimates. The examples below illustrate some basic types of
+#' analysis using \code{ds()}.
 #'
 #' @param data a \code{data.frame} containing at least a column called
 #'        \code{distance}.
@@ -66,7 +69,7 @@
 #'        
 #'
 #' @return a list with elements:
-#'        \tabular{ll}{\code{dsmodel} \tab a detection function model object.\cr
+#'        \tabular{ll}{\code{ddf} \tab a detection function model object.\cr
 #'                     \code{dht} \tab abundance/density information (if survey
 #'                      region data was supplied, else \code{NULL}).}
 #'   
@@ -98,24 +101,41 @@
 #'  \code{Effort * distance}.  The sampled region \code{a} is multiplied by 
 #'   \code{convert.units}, so it should be chosen such that the result is in 
 #'  the same units as \code{Area}.  For example, if \code{Effort} was entered 
-#'  in kilometers, \code{Area|} in hectares (100m x 100m) and \code{distance} 
+#'  in kilometers, \code{Area} in hectares (100m x 100m) and \code{distance} 
 #'  in meters, then using \code{convert.units=10} will convert \code{a} to 
 #'  units of hectares (100 to convert meters to 100 meters for distance and 
 #'  .1 to convert km to 100m units).
 #'
-#' @section Monotonicity:
+#'  @section Monotonicity: When adjustment terms are used, it is possible for
+#'  the detection function to not always decrease with increasing distance.
+#'  This is unrealistic and can lead to bias. To avoid this, the detection
+#'  function can be constrained for monotonicity. 
+#'
+#'  Monotonicity constraints are supported in a similar way to that described 
+#'  in Buckland et al (2001). 20 equally spaced points over the range of the 
+#'  detection function (left to right truncation) are evaluated at each round 
+#'  of the optimisation and the function is constrained to be either always 
+#'  less than it's value at zero (\code{"weak"}) or such that each value is 
+#'  less than or equal to the previous point (monotonically decreasing; 
+#'  \code{"strict"}).
 #'   
 #' @author David L. Miller
 #' @export
 #'
+#' @references
+#' Buckland, S.T., Anderson, D.R., Burnham, K.P., Laake, J.L., Borchers, D.L., and Thomas, L. (2001). Distance Sampling. Oxford University Press. Oxford, UK.
+#'
+#' Buckland, S.T., Anderson, D.R., Burnham, K.P., Laake, J.L., Borchers, D.L., and Thomas, L. (2004). Advanced Distance Sampling. Oxford University Press. Oxford, UK.
+#'
 #' @examples
 #'
 #'  # An example from mrds, the golf tee data.
-#'  library(distance)
+#'  library(Distance)
 #'  data(book.tee.data)
-#'  tee.data<-book.tee.data$book.tee.dataframe
-#'  ds.model<-ds(tee.data,4)
+#'  tee.data<-book.tee.data$book.tee.dataframe[book.tee.data$book.tee.dataframe$observer==1,]
+#'  ds.model<-ds(tee.data,4,monotonicity="strict")
 #'  summary(ds.model)
+#'  plot(ds.model)
 #'
 #'  # same model, but calculating abundance
 #'  # need to supply the region, sample and observation tables
@@ -123,7 +143,7 @@
 #'  samples<-book.tee.data$book.tee.samples
 #'  obs<-book.tee.data$book.tee.obs
 #' 
-#'  ds.dht.model<-ds(tee.data,4,region.table=region,
+#'  ds.dht.model<-ds(tee.data,4,region.table=region,monotonicity="strict",
 #'               sample.table=samples,obs.table=obs)
 #'  summary(ds.dht.model)
 #'
@@ -131,8 +151,8 @@
 #'  ds.model.cos2<-ds(tee.data,4,adjustment="cos",order=2)
 #'  summary(ds.model.cos2)
 #'
-#'  # specify order 2 and 4 cosine adjustments
-#'  ds.model.cos24<-ds(tee.data,4,adjustment="cos",order=c(2,4))
+#'  # specify order 2 and 3 cosine adjustments - LOTS of non-monotonicity!
+#'  ds.model.cos24<-ds(tee.data,4,adjustment="cos",order=c(2,3))
 #'  summary(ds.model.cos24)
 #'
 #'  # truncate the largest 10% of the data and fit only a hazard-rate
@@ -302,24 +322,26 @@ ds<-function(data, truncation=NULL, transect="line", formula=~1, key="hn",
   }
 
   # monotonicity
-  if(monotonicity=="none" | !monotonicity){
+  if(is.logical(monotonicity)){
+    if(!monotonicity){
+      mono<-FALSE
+      mono.strict<-FALSE
+    }
+  }else if(monotonicity=="none"){
     mono<-FALSE
     mono.strict<-FALSE
   }else if(monotonicity=="weak"){
     mono<-TRUE
-    mono.struct<-FALSE
+    mono.strict<-FALSE
   }else if(monotonicity=="strict"){
     mono<-TRUE
-    mono.struct<-TRUE
+    mono.strict<-TRUE
   }else{
     stop("monotonicity must be one of \"none\", FALSE, \"weak\" or \"strict\".")
   } 
     
   ### Actually fit some models here
   
-  models<-list()
-  aics<-c()
-
   # construct the meta data object...
   meta.data <- list(width = width,point = point,binned = binned, 
                     mono=mono, mono.strict=mono.strict)
@@ -330,34 +352,38 @@ ds<-function(data, truncation=NULL, transect="line", formula=~1, key="hn",
   # if we are doing an AIC-based search then, create the indices for the
   # for loop to work along, else just give the length of the order object
   if(aic.search){
-    for.ind <- seq(along=order)
+    for.ind <- c(0,seq(along=order))
   }else if(!is.null(adjustment)){
     for.ind <- length(order)
   }else{
     for.ind <- 1
   }
 
+  # dummy last model
+  last.model<-list(criterion=Inf)
+
   # loop over the orders of adjustments
   for(i in for.ind){ 
     # construct model formulae
-
-
     # CDS model
     if(as.character(formula)[2]=="1"){
       model.formula <- paste("~cds(key =\"", key,"\", formula = ~1",sep="")
     # MCDS model
     }else{
       model.formula <- paste("~mcds(key = \"",key,"\",", 
-                                   "formula =~",as.character(formula)[2],sep="") 
+                                  "formula =~",as.character(formula)[2],sep="") 
     }
 
     # adjustments?
-    if(!is.null(adjustment)){
-      if(length(order[1:i])>1){
-        order.str<-paste("c(",paste(order[1:i],collapse=","),")",sep="")
-      }else{
+    # this handles the case when we have adjustments but are doing AIC search
+    # so want to fit a key function alone to begin with.
+    if(!is.null(adjustment) & i!=0){
+      if(length(order[1:i])==1){
         order.str<-order[1:i]
+      }else{
+        order.str<-paste("c(",paste(order[1:i],collapse=","),")",sep="")
       }
+
       model.formula<-paste(model.formula,",", 
                            "adj.series=\"",adjustment,
                            "\",adj.order=",order.str,",",
@@ -368,18 +394,21 @@ ds<-function(data, truncation=NULL, transect="line", formula=~1, key="hn",
 
 
     # actually fit a model
-    models[[i]]<-ddf(dsmodel = as.formula(model.formula),data = data, 
-               method = "ds", meta.data = meta.data) 
+    model<-ddf(dsmodel = as.formula(model.formula),data = data, 
+                method = "ds", meta.data = meta.data) 
 
-    aics<-c(aics,models[[i]]$criterion)
-  }
+    model$call$dsmodel<-as.formula(model.formula)
 
-  # for AIC search, find the best fitting model
-  if(aic.search){
-    model<-models[[which.min(aics)]]
-  }else{
-    # otherwise just push the model back
-    model<-models[[i]]
+    if(aic.search){
+      # if this models AIC is worse (bigger) than the last return the last and
+      # stop looking.
+      if(model$criterion>last.model$criterion){
+        model<-last.model
+        break
+      }else{
+        last.model<-model
+      }
+    }
   }
 
   ## Now calculate abundance/density using dht()
@@ -404,10 +433,10 @@ ds<-function(data, truncation=NULL, transect="line", formula=~1, key="hn",
   }
 
   # construct return object
-  ret.obj<-list(dsmodel=model,dht=dht.res)
+  ret.obj<-list(ddf=model,dht=dht.res)
 
   # give it some class
-  class(ret.obj)<-"distance"
+  class(ret.obj)<-"dsmodel"
 
   return(ret.obj)
 

@@ -1,12 +1,16 @@
-Package: distance
+Package: Distance
 Maintainer: David L Miller <dave@ninepointeightone.net>
 License: GPL version 2 or later
 Title: A simple way to fit detection functions to distance sampling data and
     calculate abundance/density for biological populations.
 LazyLoad: yes
 Author: David L. Miller
-Description: 
-Version: 1.0
+Description: A library that provides a simple way of fitting detection
+    functions to distance sampling data for both line and point transects.
+    Adjustment term selection, left and right truncation as well as
+    monotonicity constraints and binning are supported. Abundance and density
+    estimates can also be calculated if survey area information is provided.
+Version: 0.5
 URL: 
 Date: 2012-04-18
 Depends:
@@ -21,7 +25,8 @@ Suggests:
 Collate:
     'ds.R'
     'create.bins.R'
-    'summary.distance.R'
-    'print.summary.distance.R'
-    'print.distance.R'
     'model.description.R'
+    'plot.dsmodel.R'
+    'print.dsmodel.R'
+    'print.summary.dsmodel.R'
+    'summary.dsmodel.R'

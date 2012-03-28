@@ -11,9 +11,9 @@
 # \code{ds} model object and a mark-recapture model object. The corresponding
 # print function is called to print the summary results.
 # 
-#' @S3method summary distance
-#' @method summary distance
-#' @aliases summary.distance
+#' @S3method summary dsmodel
+#' @method summary dsmodel
+#' @aliases summary.dsmodel
 #' @param object a distance analysis
 #' @param \dots unspecified and unused arguments for S3 consistency
 #' @return list of extracted and summarized objects
@@ -23,14 +23,14 @@
 #' @author David L. Miller
 #' @keywords utility
 #' @export
-summary.distance <- function(object,...){
+summary.dsmodel <- function(object,...){
 
   #  se if TRUE, computes standard errors
   #  N if TRUE, computes abundance in covered (sampled) region
-  ans <- list(ds=summary(object$dsmodel,se=TRUE,N=TRUE), 
+  ans <- list(ds=summary(object$ddf,se=TRUE,N=TRUE), 
               dht=object$dht, 
-              dsmodel=object$dsmodel)
+              ddf=object$ddf)
 
-  class(ans) <- "summary.distance"
+  class(ans) <- "summary.dsmodel"
   return(ans)
 }

@@ -4,9 +4,9 @@
 #' function parameters, model selection criterion, and optionally abundance in the
 #' covered (sampled) region and its standard error.
 #' 
-#' @S3method print summary.distance
-#' @aliases print.summary.distance
-#' @method print summary.distance
+#' @S3method print summary.dsmodel
+#' @aliases print.summary.dsmodel
+#' @method print summary.dsmodel
 #' @param x a summary of distance sampling analysis
 #' @param \dots unspecified and unused arguments for S3 consistency
 #' @return Nothing, just prints the summary.
@@ -14,11 +14,11 @@
 #' @seealso \code{\link{summary.ds}}
 #' @keywords utility
 #' @export
-print.summary.distance <- function (x,...){
+print.summary.dsmodel <- function (x,...){
 
   # split up the object
   dht.obj <- x$dht
-  model <- x$dsmodel
+  model <- x$ddf
   x <- x$ds
 
   # routine from dht to print the tables...

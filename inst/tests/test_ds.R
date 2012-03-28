@@ -1,6 +1,6 @@
 # test ds()
 
-library(distance)
+library(Distance)
 library(mrds)
 
 context("Testing ds()")

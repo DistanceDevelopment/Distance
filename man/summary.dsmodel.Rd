@@ -1,8 +1,8 @@
-\name{summary.distance}
-\alias{summary.distance}
+\name{summary.dsmodel}
+\alias{summary.dsmodel}
 \title{Summary of distance sampling analysis}
 \usage{
-  \method{summary}{distance} (object, ...)
+  \method{summary}{dsmodel} (object, ...)
 }
 \arguments{
   \item{object}{a distance analysis}

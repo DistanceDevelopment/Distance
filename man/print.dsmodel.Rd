@@ -1,8 +1,8 @@
-\name{print.distance}
-\alias{print.distance}
+\name{print.dsmodel}
+\alias{print.dsmodel}
 \title{Simple pretty printer for distance sampling analyses}
 \usage{
-  \method{print}{distance} (x, ...)
+  \method{print}{dsmodel} (x, ...)
 }
 \arguments{
   \item{x}{a distance sampling analysis (result from
