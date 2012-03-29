@@ -6,7 +6,9 @@
 #' analysis using \code{ds()}.
 #'
 #' @param data a \code{data.frame} containing at least a column called
-#'        \code{distance}.
+#'        \code{distance}. NOTE! If there is a column called \code{size} in 
+#'        the data then it will be interpreted as group/cluster size, see the
+#'        section "Clusters/groups", below.
 #' @param truncation either truncation distance (numeric, e.g. 5) or percentage
 #'        (as a string, e.g. "15\%"). Can be supplied as a \code{list}
 #'        with elements \code{left} and \code{right} if left truncation is
@@ -18,8 +20,8 @@
 #' @param transect indicates transect type "line" (default) or "point".
 #' @param formula formula for the scale parameter. For a CDS analysis leave 
 #'        this as its default \code{~1}.
-#' @param key key function to use; "hn" gives half-normal (default) or "hr"
-#'        gives hazard-rate.
+#' @param key key function to use; "hn" gives half-normal (default), "hr"
+#'        gives hazard-rate and "unif" gives uniform.
 #' @param adjustment adjustment terms to use; "cos" gives cosine (default),
 #'        "herm" gives Hermite polynomial and "poly" gives simple polynomial.
 #'        "cos" is recommended.
@@ -31,7 +33,7 @@
 #' @param scale the scale by which the distances in the adjustment terms are
 #'        divided. Defaults to "scale", the scale parameter of the detection
 #'        function. Other option is "width" which scales by the truncation
-#'        distance.
+#'        distance. If the key is uniform only "width" will be used.
 #' @param cutpoints if the data are binned, this vector gives the cutpoints of 
 #'        the bins. Ensure that the first element is 0 (or the left truncation
 #'        distance) and the last is the distance to the end of the furthest bin.
@@ -77,6 +79,12 @@
 #'
 #'  If abundance estimates are required the \code{data.frame}s \code{region.table},
 #'  \code{sample.table} and \code{obs.table} must be supplied.
+#'
+#' @section Clusters/groups:
+#'  Note that if the data contains a column named \code{size}, cluster size will
+#'  be estimated and density/abundance will be based on a clustered analsis of
+#'  the data. Setting this column to be \code{NULL} will perform a non-clustred
+#'  analysis (for example if "size" means something else if your dataset).
 #'
 # THIS IS STOLEN FROM mrds, sorry Jeff!
 #' @section Units:   
@@ -246,12 +254,20 @@ ds<-function(data, truncation=NULL, transect="line", formula=~1, key="hn",
   }
 
   # key and adjustments
-  if(!(key %in% c("hn","hr"))){
-    stop("key function must be \"hn\" or \"hr\".\n")
+  if(!(key %in% c("hn","hr","unif"))){
+    stop("key function must be \"hn\", \"hr\" or \"unif\".")
+  }
+  # no uniform key with no adjustments
+  if(is.null(adjustment) & key=="unif"){
+    stop("Can't use uniform key with no adjustments.")
+  }
+  # uniform key must use width scaling
+  if(key=="unif"){
+    scale <- "width"
   }
   if(!is.null(adjustment)){
     if(!(adjustment %in% c("cos","herm","poly"))){
-      stop("adjustment terms must be one of NULL, \"cos\", \"herm\" or \"poly\".\n")
+      stop("adjustment terms must be one of NULL, \"cos\", \"herm\" or \"poly\".")
     }
   }
   if(!is.null(adjustment)){
@@ -352,7 +368,11 @@ ds<-function(data, truncation=NULL, transect="line", formula=~1, key="hn",
   # if we are doing an AIC-based search then, create the indices for the
   # for loop to work along, else just give the length of the order object
   if(aic.search){
-    for.ind <- c(0,seq(along=order))
+    if(key!="unif"){
+      for.ind <- c(0,seq(along=order))
+    }else{
+      for.ind <- seq(along=order)
+    }
   }else if(!is.null(adjustment)){
     for.ind <- length(order)
   }else{
@@ -394,21 +414,28 @@ ds<-function(data, truncation=NULL, transect="line", formula=~1, key="hn",
 
 
     # actually fit a model
-    model<-ddf(dsmodel = as.formula(model.formula),data = data, 
-                method = "ds", meta.data = meta.data) 
+    model<-try(ddf(dsmodel = as.formula(model.formula),data = data, 
+                method = "ds", meta.data = meta.data),silent=TRUE)
 
-    model$call$dsmodel<-as.formula(model.formula)
-
-    if(aic.search){
-      # if this models AIC is worse (bigger) than the last return the last and
-      # stop looking.
-      if(model$criterion>last.model$criterion){
-        model<-last.model
-        break
-      }else{
-        last.model<-model
+    # if that worked
+    if(any(class(model)!="try-error")){
+      model$call$dsmodel<-as.formula(model.formula)
+      
+      if(aic.search){
+        # if this models AIC is worse (bigger) than the last return the last and
+        # stop looking.
+        if(model$criterion>last.model$criterion){
+          model<-last.model
+          break
+        }else{
+          last.model<-model
+        }
       }
     }
+  }
+
+  if(is.null(model)){
+    stop("No models could be fitted.")
   }
 
   ## Now calculate abundance/density using dht()

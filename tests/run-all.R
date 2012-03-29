@@ -1,4 +1,4 @@
 library(testthat)
-library(distance)
+library(Distance)
 
 test_package("mrds")

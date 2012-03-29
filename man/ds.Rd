@@ -11,7 +11,10 @@
 }
 \arguments{
   \item{data}{a \code{data.frame} containing at least a
-  column called \code{distance}.}
+  column called \code{distance}. NOTE! If there is a column
+  called \code{size} in the data then it will be
+  interpreted as group/cluster size, see the section
+  "Clusters/groups", below.}
 
   \item{truncation}{either truncation distance (numeric,
   e.g. 5) or percentage (as a string, e.g. "15\%"). Can be
@@ -29,7 +32,8 @@
   analysis leave this as its default \code{~1}.}
 
   \item{key}{key function to use; "hn" gives half-normal
-  (default) or "hr" gives hazard-rate.}
+  (default), "hr" gives hazard-rate and "unif" gives
+  uniform.}
 
   \item{adjustment}{adjustment terms to use; "cos" gives
   cosine (default), "herm" gives Hermite polynomial and
@@ -46,7 +50,8 @@
   \item{scale}{the scale by which the distances in the
   adjustment terms are divided. Defaults to "scale", the
   scale parameter of the detection function. Other option
-  is "width" which scales by the truncation distance.}
+  is "width" which scales by the truncation distance. If
+  the key is uniform only "width" will be used.}
 
   \item{cutpoints}{if the data are binned, this vector
   gives the cutpoints of the bins. Ensure that the first
@@ -108,6 +113,15 @@
   \code{data.frame}s \code{region.table},
   \code{sample.table} and \code{obs.table} must be
   supplied.
+}
+
+\section{Clusters/groups}{
+  Note that if the data contains a column named
+  \code{size}, cluster size will be estimated and
+  density/abundance will be based on a clustered analsis of
+  the data. Setting this column to be \code{NULL} will
+  perform a non-clustred analysis (for example if "size"
+  means something else if your dataset).
 }
 
 \section{Units}{
