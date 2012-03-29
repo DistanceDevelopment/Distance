@@ -1,6 +1,6 @@
 Package: Distance
 Maintainer: David L Miller <dave@ninepointeightone.net>
-License: GPL version 2 or later
+License: GPL (>= 2) 
 Title: A simple way to fit detection functions to distance sampling data and
     calculate abundance/density for biological populations.
 LazyLoad: yes
