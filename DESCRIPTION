@@ -10,8 +10,8 @@ Description: A library that provides a simple way of fitting detection
     Adjustment term selection, left and right truncation as well as
     monotonicity constraints and binning are supported. Abundance and density
     estimates can also be calculated if survey area information is provided.
-Version: 0.5
-URL: 
+Version: 0.6
+URL: http://github.com/dill/Distance/wiki
 Date: 2012-04-18
 Depends:
     R (>= 2.10.0),
@@ -19,9 +19,7 @@ Depends:
     optimx,
     Rsolnp
 Suggests:
-    mmds,
-    testthat,
-    dsm
+    testthat
 Collate:
     'ds.R'
     'create.bins.R'
