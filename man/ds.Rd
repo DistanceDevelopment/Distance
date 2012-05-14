@@ -7,7 +7,7 @@
     order = NULL, scale = "scale", cutpoints = NULL,
     monotonicity = FALSE, region.table = NULL,
     sample.table = NULL, obs.table = NULL,
-    convert.units = 1)
+    convert.units = 1, quiet = FALSE)
 }
 \arguments{
   \item{data}{a \code{data.frame} containing at least a
@@ -94,6 +94,9 @@
   \item{convert.units}{conversion between units for
   abundance estimation, see "Units", below. (Defaults to 1,
   implying all of the units are "correct" already.)}
+
+  \item{quiet}{surpress non-warning messages (useful for
+  bootstraps etc).  Default value FALSE.}
 }
 \value{
   a list with elements: \tabular{ll}{\code{ddf} \tab a

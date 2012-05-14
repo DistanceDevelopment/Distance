@@ -68,6 +68,9 @@
 #' @param convert.units conversion between units for abundance estimation, 
 #'        see "Units", below. (Defaults to 1, implying all of the units are 
 #'        "correct" already.)
+#'
+#' @param quiet surpress non-warning messages (useful for bootstraps etc).
+#'              Default value FALSE.
 #'        
 #'
 #' @return a list with elements:
@@ -172,7 +175,7 @@ ds<-function(data, truncation=NULL, transect="line", formula=~1, key="hn",
              adjustment="cos", order=NULL, scale="scale", cutpoints=NULL,
              monotonicity=FALSE,
              region.table=NULL,sample.table=NULL,obs.table=NULL,
-             convert.units=1){
+             convert.units=1,quiet=FALSE){
   
   # this routine just creates a call to mrds, it's not very exciting
   # or fancy, it does do a lot of error checking though
@@ -456,7 +459,9 @@ ds<-function(data, truncation=NULL, transect="line", formula=~1, key="hn",
     # the detection function stuff
     dht.res<-NULL
 
-    cat("No survey area information supplied, only estimating detection function.\n")
+    if(!quiet){
+      cat("No survey area information supplied, only estimating detection function.\n")
+    }
   }
 
   # construct return object
