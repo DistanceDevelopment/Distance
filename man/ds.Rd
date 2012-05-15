@@ -4,7 +4,7 @@
 \usage{
   ds(data, truncation = NULL, transect = "line",
     formula = ~1, key = "hn", adjustment = "cos",
-    order = NULL, scale = "scale", cutpoints = NULL,
+    order = NULL, scale = "width", cutpoints = NULL,
     monotonicity = FALSE, region.table = NULL,
     sample.table = NULL, obs.table = NULL,
     convert.units = 1, quiet = FALSE)
@@ -48,10 +48,10 @@
   allowed.}
 
   \item{scale}{the scale by which the distances in the
-  adjustment terms are divided. Defaults to "scale", the
-  scale parameter of the detection function. Other option
-  is "width" which scales by the truncation distance. If
-  the key is uniform only "width" will be used.}
+  adjustment terms are divided. Defaults to "width",
+  scaling by the truncation distance. If the key is uniform
+  only "width" will be used. The other option is "scale":
+  the scale parameter of the detection}
 
   \item{cutpoints}{if the data are binned, this vector
   gives the cutpoints of the bins. Ensure that the first

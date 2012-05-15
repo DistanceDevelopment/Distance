@@ -31,9 +31,9 @@
 #'        polynomials, even integers equal or greater than 4 are allowed. For 
 #'        simple polynomials even integers equal or greater than 2 are allowed.
 #' @param scale the scale by which the distances in the adjustment terms are
-#'        divided. Defaults to "scale", the scale parameter of the detection
-#'        function. Other option is "width" which scales by the truncation
-#'        distance. If the key is uniform only "width" will be used.
+#'        divided. Defaults to "width", scaling by the truncation
+#'        distance. If the key is uniform only "width" will be used. The other
+#'        option is "scale": the scale parameter of the detection
 #' @param cutpoints if the data are binned, this vector gives the cutpoints of 
 #'        the bins. Ensure that the first element is 0 (or the left truncation
 #'        distance) and the last is the distance to the end of the furthest bin.
@@ -172,7 +172,7 @@
 #'  summary(ds.model.hr.trunc)
 #'
 ds<-function(data, truncation=NULL, transect="line", formula=~1, key="hn",
-             adjustment="cos", order=NULL, scale="scale", cutpoints=NULL,
+             adjustment="cos", order=NULL, scale="width", cutpoints=NULL,
              monotonicity=FALSE,
              region.table=NULL,sample.table=NULL,obs.table=NULL,
              convert.units=1,quiet=FALSE){
