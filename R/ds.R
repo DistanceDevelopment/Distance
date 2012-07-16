@@ -271,7 +271,7 @@ ds<-function(data, truncation=NULL, transect="line", formula=~1, key="hn",
   }
   if(!is.null(adjustment)){
     if(!(adjustment %in% c("cos","herm","poly"))){
-      stop("adjustment terms must be one of NULL, \"cos\", \"herm\", \"poly\" or NULL.")
+      stop("adjustment terms must be one of NULL, \"cos\", \"herm\" or \"poly\".")
     }
   }
   if(!is.null(adjustment)){
