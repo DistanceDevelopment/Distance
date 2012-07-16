@@ -37,7 +37,9 @@
 
   \item{adjustment}{adjustment terms to use; "cos" gives
   cosine (default), "herm" gives Hermite polynomial and
-  "poly" gives simple polynomial.  "cos" is recommended.}
+  "poly" gives simple polynomial.  "cos" is recommended. A
+  value of \code{NULL} indicates that no adjustments are to
+  be fitted.}
 
   \item{order}{orders of the adjustment terms to fit (as a
   vector/scalar), the default value (\code{NULL}) will

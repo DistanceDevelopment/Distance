@@ -24,7 +24,8 @@
 #'        gives hazard-rate and "unif" gives uniform.
 #' @param adjustment adjustment terms to use; "cos" gives cosine (default),
 #'        "herm" gives Hermite polynomial and "poly" gives simple polynomial.
-#'        "cos" is recommended.
+#'        "cos" is recommended. A value of \code{NULL} indicates that no 
+#'        adjustments are to be fitted.
 #' @param order orders of the adjustment terms to fit (as a vector/scalar), the
 #'        default value (\code{NULL}) will select via AIC. For cosine 
 #'        adjustments, valid orders are integers greater than 2. For Hermite 
@@ -270,7 +271,7 @@ ds<-function(data, truncation=NULL, transect="line", formula=~1, key="hn",
   }
   if(!is.null(adjustment)){
     if(!(adjustment %in% c("cos","herm","poly"))){
-      stop("adjustment terms must be one of NULL, \"cos\", \"herm\" or \"poly\".")
+      stop("adjustment terms must be one of NULL, \"cos\", \"herm\", \"poly\" or NULL.")
     }
   }
   if(!is.null(adjustment)){
