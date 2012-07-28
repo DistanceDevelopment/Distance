@@ -315,10 +315,12 @@ ds<-function(data, truncation=NULL, transect="line", formula=~1, key="hn",
   # binning
   if(is.null(cutpoints)){
     if(any(names(data)=="distend") & any(names(data)=="distbegin")){
-      warning("No cutpoints specified but distbegin and distend are columns in data. Doing a binned analysis...")
+      warning("No cutpoints specified but distbegin and distend are columns in data. Guessing bins and performing a binned analysis...")
       binned <- TRUE
+      breaks <- sort(unqiue(c(data$distend,data$distbegin)))
     }else{
       binned <- FALSE
+      breaks <- NULL
     }
   }else{
     # make sure that the first bin starts 0 or left
@@ -339,6 +341,7 @@ ds<-function(data, truncation=NULL, transect="line", formula=~1, key="hn",
     # send off to create.bins to make the correct columns in data
     data <- create.bins(data,cutpoints)
     binned <- TRUE
+    breaks <- cutpoints
   }
 
   # monotonicity
@@ -367,6 +370,9 @@ ds<-function(data, truncation=NULL, transect="line", formula=~1, key="hn",
                     mono=mono, mono.strict=mono.strict)
   if(!is.null(left)){
     meta.data$left<-left
+  }
+  if(binned){
+    meta.data$breaks <- breaks
   }
 
   # if we are doing an AIC-based search then, create the indices for the
