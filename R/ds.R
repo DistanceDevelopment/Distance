@@ -411,6 +411,7 @@ ds<-function(data, truncation=NULL, transect="line", formula=~1, key="hn",
     }else{
       for.ind <- seq(along=order)
     }
+    message("Starting AIC adjustment term selection.")
   }else if(!is.null(adjustment)){
     for.ind <- length(order)
   }else{
@@ -469,7 +470,7 @@ ds<-function(data, truncation=NULL, transect="line", formula=~1, key="hn",
     if(any(class(model)!="try-error") & model$ds$converge==0){
       model$call$dsmodel<-as.formula(model.formula)
 
-      message(paste("AIC=",model$criterion))
+      message(paste("AIC=",round(model$criterion,3)))
       
       if(aic.search){
         # if this models AIC is worse (bigger) than the last return the last and
