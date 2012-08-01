@@ -249,6 +249,11 @@ ds<-function(data, truncation=NULL, transect="line", formula=~1, key="hn",
   }
 
   # transect type 
+  #point<-switch(transect,
+  #              "line"=FALSE,
+  #              "point"=TRUE,
+  #              stop("Only \"point\" or \"line\" transects may be supplied.")
+  #             )
   if(transect=="line"){
     point <- FALSE
   }else if(transect=="point"){
@@ -260,7 +265,15 @@ ds<-function(data, truncation=NULL, transect="line", formula=~1, key="hn",
   # key and adjustments
   if(!(key %in% c("hn","hr","unif"))){
     stop("key function must be \"hn\", \"hr\" or \"unif\".")
+  }else{
+    # keep the name for the key function
+    key.name <- switch(key,
+                       hn="half-normal",
+                       hr="hazard-rate",
+                       unif="uniform"
+                      )
   }
+
   # no uniform key with no adjustments
   if(is.null(adjustment) & key=="unif"){
     stop("Can't use uniform key with no adjustments.")
@@ -275,6 +288,7 @@ ds<-function(data, truncation=NULL, transect="line", formula=~1, key="hn",
     }
   }
   if(!is.null(adjustment)){
+
     if(!is.null(order)){
       aic.search <- FALSE
       if(any(order != ceiling(order))){
@@ -308,16 +322,24 @@ ds<-function(data, truncation=NULL, transect="line", formula=~1, key="hn",
         order <- order[order<=max.order]
       }
     }
+  
+    # keep the name for the adjustments
+    adj.name <- switch(adjustment,
+                       cos="cosine",
+                       herm="Hermite",
+                       poly="simple polynomial"
+                      )
+
   }else{
     aic.search<-FALSE
   }
 
-  # binning
+  ### binning
   if(is.null(cutpoints)){
     if(any(names(data)=="distend") & any(names(data)=="distbegin")){
       warning("No cutpoints specified but distbegin and distend are columns in data. Guessing bins and performing a binned analysis...")
       binned <- TRUE
-      breaks <- sort(unqiue(c(data$distend,data$distbegin)))
+      breaks <- sort(unique(c(data$distend,data$distbegin)))
     }else{
       binned <- FALSE
       breaks <- NULL
@@ -362,6 +384,12 @@ ds<-function(data, truncation=NULL, transect="line", formula=~1, key="hn",
   }else{
     stop("monotonicity must be one of \"none\", FALSE, \"weak\" or \"strict\".")
   } 
+
+  # can't do monotonicity and covariates, turn that off!
+  if(mono & formula!=as.formula("~1")){
+    warning("Monotonicity cannot be enforced with covariates.")
+    mono <- mono.strict <- FALSE
+  }
     
   ### Actually fit some models here
   
@@ -396,7 +424,7 @@ ds<-function(data, truncation=NULL, transect="line", formula=~1, key="hn",
   for(i in for.ind){ 
     # construct model formulae
     # CDS model
-    if(as.character(formula)[2]=="1"){
+    if(formula==as.formula("~1")){
       model.formula <- paste("~cds(key =\"", key,"\", formula = ~1",sep="")
     # MCDS model
     }else{
@@ -422,14 +450,26 @@ ds<-function(data, truncation=NULL, transect="line", formula=~1, key="hn",
 
     model.formula<-paste(model.formula,")",sep="")
 
+    this.message <- paste("Fitting ",key.name," key function",sep="")
+    if(!is.null(adjustment)){
+      this.message <- paste(this.message, 
+                            " with ", adj.name,"(",
+                            paste(order[1:i],collapse=","),
+                            ") adjustments", sep="")
+    }
+
+    message(this.message)
 
     # actually fit a model
-    model<-try(ddf(dsmodel = as.formula(model.formula),data = data, 
-                method = "ds", meta.data = meta.data),silent=TRUE)
+    model<-suppressWarnings(try(ddf(dsmodel = as.formula(model.formula),
+                                    data = data, method = "ds", 
+                                    meta.data = meta.data),silent=TRUE))
 
     # if that worked
-    if(any(class(model)!="try-error")){
+    if(any(class(model)!="try-error") & model$ds$converge==0){
       model$call$dsmodel<-as.formula(model.formula)
+
+      message(paste("AIC=",model$criterion))
       
       if(aic.search){
         # if this models AIC is worse (bigger) than the last return the last and
@@ -467,7 +507,7 @@ ds<-function(data, truncation=NULL, transect="line", formula=~1, key="hn",
     dht.res<-NULL
 
     if(!quiet){
-      cat("No survey area information supplied, only estimating detection function.\n")
+      message("No survey area information supplied, only estimating detection function.\n")
     }
   }
 
