@@ -44,10 +44,11 @@
   \item{order}{orders of the adjustment terms to fit (as a
   vector/scalar), the default value (\code{NULL}) will
   select via AIC. For cosine adjustments, valid orders are
-  integers greater than 2. For Hermite polynomials, even
-  integers equal or greater than 4 are allowed. For simple
-  polynomials even integers equal or greater than 2 are
-  allowed.}
+  integers greater than 2 (except when a uniform key is
+  used, when the minimum order is 1). For Hermite
+  polynomials, even integers equal or greater than 4 are
+  allowed. For simple polynomials even integers equal or
+  greater than 2 are allowed.}
 
   \item{scale}{the scale by which the distances in the
   adjustment terms are divided. Defaults to "width",

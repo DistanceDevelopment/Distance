@@ -28,7 +28,8 @@
 #'        adjustments are to be fitted.
 #' @param order orders of the adjustment terms to fit (as a vector/scalar), the
 #'        default value (\code{NULL}) will select via AIC. For cosine 
-#'        adjustments, valid orders are integers greater than 2. For Hermite 
+#'        adjustments, valid orders are integers greater than 2 (except when a 
+#'        uniform key is used, when the minimum order is 1). For Hermite 
 #'        polynomials, even integers equal or greater than 4 are allowed. For 
 #'        simple polynomials even integers equal or greater than 2 are allowed.
 #' @param scale the scale by which the distances in the adjustment terms are
@@ -302,7 +303,7 @@ ds<-function(data, truncation=NULL, transect="line", formula=~1, key="hn",
           stop("Adjustment orders must be even for Hermite and simple polynomials.")
         }
       }
-      if(adjustment=="herm" | adjustment=="cos"){
+      if((adjustment=="herm" | adjustment=="cos") & key!="unif"){
         if(any(order==1)){
           stop("Adjustment orders for Hermite polynomials and cosines must start at 2.")
         }
@@ -317,6 +318,12 @@ ds<-function(data, truncation=NULL, transect="line", formula=~1, key="hn",
       }else{
         order <- seq(2,max.order)
       }
+
+      # for Fourier...
+      if(key=="unif" & adjustment=="cos"){
+        order <- c(1,order)
+      }
+
       if(adjustment=="herm" | adjustment=="poly"){
         order <- 2*order
         order <- order[order<=max.order]
@@ -462,13 +469,19 @@ ds<-function(data, truncation=NULL, transect="line", formula=~1, key="hn",
     message(this.message)
 
     # actually fit a model
-    model<-suppressWarnings(try(ddf(dsmodel = as.formula(model.formula),
+    # wrap everything around this so we don't print out a lot of useless
+    # stuff...
+    model<-suppressPackageStartupMessages(suppressWarnings(try(
+                                ddf(dsmodel = as.formula(model.formula),
                                     data = data, method = "ds", 
-                                    meta.data = meta.data),silent=TRUE))
+                                    meta.data = meta.data),silent=TRUE)))
 
     # if that worked
     if(any(class(model)!="try-error") & model$ds$converge==0){
       model$call$dsmodel<-as.formula(model.formula)
+      model$call$ddfcall<-paste("ddf(dsmodel =",as.formula(model.formula),",",
+                                "data = data, method = \"ds\",", 
+                                 "meta.data =", meta.data,")",sep="")
 
       message(paste("AIC=",round(model$criterion,3)))
       
