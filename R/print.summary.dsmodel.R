@@ -97,7 +97,7 @@ print.summary.dsmodel <- function (x,...){
       cat("\nSummary for individuals\n")
       print.tables(x$individuals,bysample)
       cat("\nExpected cluster size\n")
-      #Added CV as an output LJT 14/10/09
+      # Added CV as an output LJT 14/10/09
       S<-x$Expected.S
       if(!is.null(S$se.Expected.S)){
         S$cv.Expected.S<-S$se.Expected.S/S$Expected.S

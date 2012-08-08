@@ -513,7 +513,7 @@ ds<-function(data, truncation=NULL, transect="line", formula=~1, key="hn",
     # observation(‘group=FALSE’ in ‘options’).
 
     dht.res<-dht(model,region.table,sample.table,obs.table,
-                 options=list(varflag=0,group=TRUE,
+                 options=list(#varflag=0,group=TRUE,
                               convert.units=convert.units),se=TRUE)
   }else{
     # if no information on the survey area was supplied just return 
