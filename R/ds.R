@@ -200,6 +200,19 @@ ds<-function(data, truncation=NULL, transect="line", formula=~1, key="hn",
   if(!any(names(data)=="object")){
     data<-cbind(data,object=1:nrow(data))
   }
+
+  # check that dht info has the right column titles
+  if(!is.null(region.table) & !is.null(sample.table) & !is.null(obs.table)){
+    if(!all(c("Region.Label","Area") %in% names(region.table))){
+      stop("region.table must have columns named 'Region.Label' and 'Area'")
+    }
+    if(!all(c("Region.Label","Sample.Label","Effort") %in% names(sample.table))){
+      stop("sample.table must have columns named 'Region.Label', 'Sample.Label' and 'Effort'")
+    }
+    if(!all(c("Region.Label","Sample.Label","object") %in% names(obs.table))){
+      stop("obs.table must have columns names 'Region.Label', 'Sample.Label' and 'object'")
+    }
+  }
   
   # truncation
   if(is.null(truncation)){
@@ -440,6 +453,9 @@ ds<-function(data, truncation=NULL, transect="line", formula=~1, key="hn",
                                   "formula =~",as.character(formula)[2],sep="") 
     }
 
+    # build a message to let the user know what is being fitted
+    this.message <- paste("Fitting ",key.name," key function",sep="")
+
     # adjustments?
     # this handles the case when we have adjustments but are doing AIC search
     # so want to fit a key function alone to begin with.
@@ -454,18 +470,16 @@ ds<-function(data, truncation=NULL, transect="line", formula=~1, key="hn",
                            "adj.series=\"",adjustment,
                            "\",adj.order=",order.str,",",
                            "adj.scale=\"",scale,"\"",sep="")
-    }
 
-    model.formula<-paste(model.formula,")",sep="")
-
-    this.message <- paste("Fitting ",key.name," key function",sep="")
-    if(!is.null(adjustment)){
       this.message <- paste(this.message, 
                             " with ", adj.name,"(",
                             paste(order[1:i],collapse=","),
                             ") adjustments", sep="")
     }
 
+    model.formula<-paste(model.formula,")",sep="")
+
+    # tell the user what is being fitted
     message(this.message)
 
     # actually fit a model
