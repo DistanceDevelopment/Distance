@@ -477,22 +477,24 @@ ds<-function(data, truncation=NULL, transect="line", formula=~1, key="hn",
                                     meta.data = meta.data),silent=TRUE)))
 
     # if that worked
-    if(any(class(model)!="try-error") & model$ds$converge==0){
-      model$call$dsmodel<-as.formula(model.formula)
-      model$call$ddfcall<-paste("ddf(dsmodel =",as.formula(model.formula),",",
-                                "data = data, method = \"ds\",", 
-                                 "meta.data =", meta.data,")",sep="")
+    if(any(class(model)!="try-error")){
+      if(model$ds$converge==0){
+        model$call$dsmodel<-as.formula(model.formula)
+        model$call$ddfcall<-paste("ddf(dsmodel =",as.formula(model.formula),",",
+                                  "data = data, method = \"ds\",", 
+                                   "meta.data =", meta.data,")",sep="")
 
-      message(paste("AIC=",round(model$criterion,3)))
-      
-      if(aic.search){
-        # if this models AIC is worse (bigger) than the last return the last and
-        # stop looking.
-        if(model$criterion>last.model$criterion){
-          model<-last.model
-          break
-        }else{
-          last.model<-model
+        message(paste("AIC=",round(model$criterion,3)))
+        
+        if(aic.search){
+          # if this models AIC is worse (bigger) than the last 
+          # return the last and stop looking.
+          if(model$criterion>last.model$criterion){
+            model<-last.model
+            break
+          }else{
+            last.model<-model
+          }
         }
       }
     }
