@@ -493,10 +493,6 @@ ds<-function(data, truncation=NULL, transect="line", formula=~1, key="hn",
     # if that worked
     if(any(class(model)!="try-error")){
       if(model$ds$converge==0){
-        model$call$dsmodel<-as.formula(model.formula)
-        model$call$ddfcall<-paste("ddf(dsmodel =",as.formula(model.formula),",",
-                                  "data = data, method = \"ds\",", 
-                                   "meta.data =", meta.data,")",sep="")
 
         message(paste("AIC=",round(model$criterion,3)))
         
@@ -542,7 +538,11 @@ ds<-function(data, truncation=NULL, transect="line", formula=~1, key="hn",
   }
 
   # construct return object
-  ret.obj<-list(ddf=model,dht=dht.res)
+  ret.obj<-list(ddf = model,
+                dht = dht.res,
+                ddfcall = paste("ddf(dsmodel =",as.formula(model.formula),",",
+                                "data = data, method = \"ds\",", 
+                                "meta.data =", meta.data,")",sep=""))
 
   # give it some class
   class(ret.obj)<-"dsmodel"
