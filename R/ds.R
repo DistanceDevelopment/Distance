@@ -494,6 +494,9 @@ ds<-function(data, truncation=NULL, transect="line", formula=~1, key="hn",
     if(any(class(model)!="try-error")){
       if(model$ds$converge==0){
 
+        # need this to get plotting to work!
+        model$call$dsmodel<-as.formula(model.formula)
+
         message(paste("AIC=",round(model$criterion,3)))
         
         if(aic.search){
