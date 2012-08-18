@@ -539,10 +539,7 @@ ds<-function(data, truncation=NULL, transect="line", formula=~1, key="hn",
 
   # construct return object
   ret.obj<-list(ddf = model,
-                dht = dht.res,
-                ddfcall = paste("ddf(dsmodel =",as.formula(model.formula),",",
-                                "data = data, method = \"ds\",", 
-                                "meta.data =", meta.data,")",sep=""))
+                dht = dht.res)
 
   # give it some class
   class(ret.obj)<-"dsmodel"
