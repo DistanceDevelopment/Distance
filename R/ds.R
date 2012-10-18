@@ -71,15 +71,22 @@
 #'        see "Units", below. (Defaults to 1, implying all of the units are 
 #'        "correct" already.)
 #'
+#' @param method optimization method to use (any method usable by 
+#'        \code{\link{optim}} or \code{\link{optimx}}). Defaults to 
+#'        "nlminb".
+#'
+#' @param debug.level print debugging output. 0=none, 1-3 increasing level of
+#'        debugging output.
+#'
 #' @param quiet surpress non-warning messages (useful for bootstraps etc).
 #'              Default value FALSE.
-#'        
+#'
 #'
 #' @return a list with elements:
 #'        \tabular{ll}{\code{ddf} \tab a detection function model object.\cr
 #'                     \code{dht} \tab abundance/density information (if survey
 #'                      region data was supplied, else \code{NULL}).}
-#'   
+#'
 #' @section Details:
 #'
 #'  If abundance estimates are required the \code{data.frame}s \code{region.table},
@@ -92,7 +99,7 @@
 #'  analysis (for example if "size" means something else if your dataset).
 #'
 # THIS IS STOLEN FROM mrds, sorry Jeff!
-#' @section Units:   
+#' @section Units:
 #'  In extrapolating to the entire survey region it is important that
 #'  the unit measurements be consistent or converted for consistency.
 #'  A conversion factor can be specified with the \code{convert.units}
@@ -177,8 +184,8 @@ ds<-function(data, truncation=NULL, transect="line", formula=~1, key="hn",
              adjustment="cos", order=NULL, scale="width", cutpoints=NULL,
              monotonicity=FALSE,
              region.table=NULL,sample.table=NULL,obs.table=NULL,
-             convert.units=1,quiet=FALSE){
-  
+             convert.units=1,method="nlminb",quiet=FALSE,debug.level=0){
+
   # this routine just creates a call to mrds, it's not very exciting
   # or fancy, it does do a lot of error checking though
 
@@ -213,7 +220,7 @@ ds<-function(data, truncation=NULL, transect="line", formula=~1, key="hn",
       stop("obs.table must have columns names 'Region.Label', 'Sample.Label' and 'object'")
     }
   }
-  
+
   # truncation
   if(is.null(truncation)){
     stop("Please supply truncation distance or percentage.")
@@ -308,7 +315,11 @@ ds<-function(data, truncation=NULL, transect="line", formula=~1, key="hn",
       if(any(order != ceiling(order))){
           stop("Adjustment orders must be integers.")
       } 
-      
+
+      if(formula != ~1){
+        stop("Cannot use both adjustments and covariates, choose one!")
+      }
+
       # check for each adjustment type
       order<-sort(order)
       if(adjustment=="herm" | adjustment=="poly"){
@@ -322,27 +333,35 @@ ds<-function(data, truncation=NULL, transect="line", formula=~1, key="hn",
         }
       }
     }else{
-      aic.search <- TRUE
-      max.order <- 3
 
-      # this is according to p. 47 of IDS.
-      if(adjustment=="poly"){
-        order <- seq(1,max.order)
+      # if there are covariates then don't do the AIC search
+      if(formula != ~1){
+        aic.search <- FALSE
       }else{
-        order <- seq(2,max.order)
-      }
+      # otherwise go ahead and set up the candidate adjustment orders
+        aic.search <- TRUE
+        max.order <- 3
 
-      # for Fourier...
-      if(key=="unif" & adjustment=="cos"){
-        order <- c(1,order)
-      }
+        # this is according to p. 47 of IDS.
+        if(adjustment=="poly"){
+          order <- seq(1,max.order)
+        }else{
+          order <- seq(2,max.order)
+        }
 
-      if(adjustment=="herm" | adjustment=="poly"){
-        order <- 2*order
-        order <- order[order<=max.order]
+        # for Fourier...
+        if(key=="unif" & adjustment=="cos"){
+          order <- c(1,order)
+        }
+
+        if(adjustment=="herm" | adjustment=="poly"){
+          order <- 2*order
+          order <- order[order<=max.order]
+        }
+
       }
     }
-  
+
     # keep the name for the adjustments
     adj.name <- switch(adjustment,
                        cos="cosine",
@@ -403,18 +422,21 @@ ds<-function(data, truncation=NULL, transect="line", formula=~1, key="hn",
     mono.strict<-TRUE
   }else{
     stop("monotonicity must be one of \"none\", FALSE, \"weak\" or \"strict\".")
-  } 
+  }
 
   # can't do monotonicity and covariates, turn that off!
   if(mono & formula!=as.formula("~1")){
     warning("Monotonicity cannot be enforced with covariates.")
     mono <- mono.strict <- FALSE
   }
-    
+
+  # set up the control options
+  control <- list(optimx.method=method, showit=debug.level)
+
   ### Actually fit some models here
-  
+
   # construct the meta data object...
-  meta.data <- list(width = width,point = point,binned = binned, 
+  meta.data <- list(width = width,point = point,binned = binned,
                     mono=mono, mono.strict=mono.strict)
   if(!is.null(left)){
     meta.data$left<-left
@@ -442,14 +464,14 @@ ds<-function(data, truncation=NULL, transect="line", formula=~1, key="hn",
   last.model<-list(criterion=Inf)
 
   # loop over the orders of adjustments
-  for(i in for.ind){ 
+  for(i in for.ind){
     # construct model formulae
     # CDS model
     if(formula==as.formula("~1")){
       model.formula <- paste("~cds(key =\"", key,"\", formula = ~1",sep="")
     # MCDS model
     }else{
-      model.formula <- paste("~mcds(key = \"",key,"\",", 
+      model.formula <- paste("~mcds(key = \"",key,"\",",
                                   "formula =~",as.character(formula)[2],sep="") 
     }
 
@@ -466,12 +488,12 @@ ds<-function(data, truncation=NULL, transect="line", formula=~1, key="hn",
         order.str<-paste("c(",paste(order[1:i],collapse=","),")",sep="")
       }
 
-      model.formula<-paste(model.formula,",", 
+      model.formula<-paste(model.formula,",",
                            "adj.series=\"",adjustment,
                            "\",adj.order=",order.str,",",
                            "adj.scale=\"",scale,"\"",sep="")
 
-      this.message <- paste(this.message, 
+      this.message <- paste(this.message,
                             " with ", adj.name,"(",
                             paste(order[1:i],collapse=","),
                             ") adjustments", sep="")
@@ -487,7 +509,8 @@ ds<-function(data, truncation=NULL, transect="line", formula=~1, key="hn",
     # stuff...
     model<-suppressPackageStartupMessages(suppressWarnings(try(
                                 ddf(dsmodel = as.formula(model.formula),
-                                    data = data, method = "ds", 
+                                    data = data, method = "ds",
+                                    control=control,
                                     meta.data = meta.data),silent=TRUE)))
 
     # if that worked
@@ -498,9 +521,9 @@ ds<-function(data, truncation=NULL, transect="line", formula=~1, key="hn",
         model$call$dsmodel<-as.formula(model.formula)
 
         message(paste("AIC=",round(model$criterion,3)))
-        
+
         if(aic.search){
-          # if this models AIC is worse (bigger) than the last 
+          # if this models AIC is worse (bigger) than the last
           # return the last and stop looking.
           if(model$criterion>last.model$criterion){
             model<-last.model
@@ -510,6 +533,8 @@ ds<-function(data, truncation=NULL, transect="line", formula=~1, key="hn",
           }
         }
       }
+    }else{
+      model<-NULL
     }
   }
 

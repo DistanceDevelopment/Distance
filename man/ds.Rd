@@ -7,7 +7,8 @@
     order = NULL, scale = "width", cutpoints = NULL,
     monotonicity = FALSE, region.table = NULL,
     sample.table = NULL, obs.table = NULL,
-    convert.units = 1, quiet = FALSE)
+    convert.units = 1, method = "L-BFGS-B", quiet = FALSE,
+    debug.level = 0)
 }
 \arguments{
   \item{data}{a \code{data.frame} containing at least a
@@ -97,6 +98,13 @@
   \item{convert.units}{conversion between units for
   abundance estimation, see "Units", below. (Defaults to 1,
   implying all of the units are "correct" already.)}
+
+  \item{method}{optimization method to use (any method
+  usable by \code{\link{optim}} or \code{\link{optimx}}).
+  Defaults to "L-BFGS-B".}
+
+  \item{debug.level}{print debugging output. 0=none, 1-3
+  increasing level of debugging output.}
 
   \item{quiet}{surpress non-warning messages (useful for
   bootstraps etc).  Default value FALSE.}
