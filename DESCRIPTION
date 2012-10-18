@@ -10,7 +10,7 @@ Description: A library that provides a simple way of fitting detection
     Adjustment term selection, left and right truncation as well as
     monotonicity constraints and binning are supported. Abundance and density
     estimates can also be calculated if survey area information is provided.
-Version: 0.6.2
+Version: 0.7.1
 URL: http://github.com/dill/Distance/wiki
 Date: 2012-08-06
 Depends:
