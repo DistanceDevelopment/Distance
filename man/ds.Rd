@@ -7,7 +7,7 @@
     order = NULL, scale = "width", cutpoints = NULL,
     monotonicity = FALSE, region.table = NULL,
     sample.table = NULL, obs.table = NULL,
-    convert.units = 1, method = "L-BFGS-B", quiet = FALSE,
+    convert.units = 1, method = "nlminb", quiet = FALSE,
     debug.level = 0)
 }
 \arguments{
@@ -101,7 +101,7 @@
 
   \item{method}{optimization method to use (any method
   usable by \code{\link{optim}} or \code{\link{optimx}}).
-  Defaults to "L-BFGS-B".}
+  Defaults to "nlminb".}
 
   \item{debug.level}{print debugging output. 0=none, 1-3
   increasing level of debugging output.}
