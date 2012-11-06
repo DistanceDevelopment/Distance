@@ -356,7 +356,7 @@ ds<-function(data, truncation=NULL, transect="line", formula=~1, key="hn",
 
         if(adjustment=="herm" | adjustment=="poly"){
           order <- 2*order
-          order <- order[order<=max.order]
+          order <- order[order<=2*max.order]
         }
 
       }
