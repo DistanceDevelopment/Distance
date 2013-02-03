@@ -376,7 +376,7 @@ ds<-function(data, truncation=NULL, transect="line", formula=~1, key="hn",
   ### binning
   if(is.null(cutpoints)){
     if(any(names(data)=="distend") & any(names(data)=="distbegin")){
-      warning("No cutpoints specified but distbegin and distend are columns in data. Guessing bins and performing a binned analysis...")
+      warning("No cutpoints specified but distbegin and distend are columns in data. Performing a binned analysis...")
       binned <- TRUE
       breaks <- sort(unique(c(data$distend,data$distbegin)))
     }else{
