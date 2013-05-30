@@ -130,12 +130,13 @@
 }
 
 \section{Clusters/groups}{
-  Note that if the data contains a column named
-  \code{size}, cluster size will be estimated and
-  density/abundance will be based on a clustered analsis of
-  the data. Setting this column to be \code{NULL} will
-  perform a non-clustred analysis (for example if "size"
-  means something else if your dataset).
+  Note that if the data contains a column named \code{size}
+  and \code{region.table}, \code{sample.table} and
+  \code{obs.table} are supplied, cluster size will be
+  estimated and density/abundance will be based on a
+  clustered analsis of the data. Setting this column to be
+  \code{NULL} will perform a non-clustred analysis (for
+  example if "size" means something else if your dataset).
 }
 
 \section{Units}{
