@@ -509,11 +509,12 @@ ds<-function(data, truncation=NULL, transect="line", formula=~1, key="hn",
     # actually fit a model
     # wrap everything around this so we don't print out a lot of useless
     # stuff...
-    model<-suppressPackageStartupMessages(suppressWarnings(try(
-                                ddf(dsmodel = as.formula(model.formula),
-                                    data = data, method = "ds",
-                                    control=control,
-                                    meta.data = meta.data),silent=TRUE)))
+    model <- suppressPackageStartupMessages(
+               suppressWarnings(try(
+                                  ddf(dsmodel = as.formula(model.formula),
+                                      data = data, method = "ds",
+                                      control=control,
+                                      meta.data = meta.data),silent=TRUE)))
 
     # if that worked
     if(any(class(model)!="try-error")){
@@ -526,17 +527,22 @@ ds<-function(data, truncation=NULL, transect="line", formula=~1, key="hn",
 
         if(aic.search){
           # if this models AIC is worse (bigger) than the last
-          # return the last and stop looking.
+          # return the last model and stop looking.
           if(model$criterion>last.model$criterion){
             model<-last.model
             break
           }else{
+            # otherwise keep this, best model
             last.model<-model
           }
         }
+      }else{
+        message("  Model failed to converge.")
       }
     }else{
-      model<-NULL
+      message("  Error in model fitting, returning previous model.")
+      model <- last.model
+      break
     }
   }
 
