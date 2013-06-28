@@ -1,4 +1,7 @@
-Distance version 0.7
+Distance version 0.7.1
+ * message tells the user the model that was selected
+
+Distance version 0.7.1
  * debugging options
  * bug fixes (see github for further details)
    - automatic generation of adjustments did not generate any for poly/herm.

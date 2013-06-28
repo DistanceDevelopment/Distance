@@ -516,6 +516,8 @@ ds<-function(data, truncation=NULL, transect="line", formula=~1, key="hn",
                                       control=control,
                                       meta.data = meta.data),silent=TRUE)))
 
+    model$name.message <- sub("^Fitting ","",this.message)
+
     # if that worked
     if(any(class(model)!="try-error")){
       if(model$ds$converge==0){
@@ -530,6 +532,7 @@ ds<-function(data, truncation=NULL, transect="line", formula=~1, key="hn",
           # return the last model and stop looking.
           if(model$criterion>last.model$criterion){
             model<-last.model
+            message(paste0("\n\n",model$name.message," selected!"))
             break
           }else{
             # otherwise keep this, best model
@@ -540,7 +543,7 @@ ds<-function(data, truncation=NULL, transect="line", formula=~1, key="hn",
         message("  Model failed to converge.")
       }
     }else{
-      message("  Error in model fitting, returning previous model.")
+      message(paste0("\n\nError in model fitting, returning: ",model$name.message))
       model <- last.model
       break
     }
