@@ -1,5 +1,5 @@
 Package: Distance
-Maintainer: David L Miller <dave@ninepointeightone.net>
+Maintainer: David Lawrence Miller <dave@ninepointeightone.net>
 License: GPL (>= 2)
 Title: A simple way to fit detection functions to distance sampling data and
     calculate abundance/density for biological populations.
