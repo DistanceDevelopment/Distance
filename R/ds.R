@@ -516,11 +516,12 @@ ds<-function(data, truncation=NULL, transect="line", formula=~1, key="hn",
                                       control=control,
                                       meta.data = meta.data),silent=TRUE)))
 
-    model$name.message <- sub("^Fitting ","",this.message)
 
     # if that worked
     if(any(class(model)!="try-error")){
       if(model$ds$converge==0){
+
+        model$name.message <- sub("^Fitting ","",this.message)
 
         # need this to get plotting to work!
         model$call$dsmodel<-as.formula(model.formula)
