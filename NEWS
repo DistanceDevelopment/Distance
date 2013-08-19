@@ -1,3 +1,8 @@
+Distance version 0.7.3
+ * remove annoying crash when mrds failed to fit a model
+ * NB the optimiser underlying mrds (optimx) has changed, update both of these
+    packages to avoid issues.
+
 Distance version 0.7.2
  * message tells the user the model that was selected
 
