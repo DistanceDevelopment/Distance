@@ -316,7 +316,7 @@ ds<-function(data, truncation=NULL, transect="line", formula=~1, key="hn",
       aic.search <- FALSE
       if(any(order != ceiling(order))){
           stop("Adjustment orders must be integers.")
-      } 
+      }
 
       if(formula != ~1){
         stop("Cannot use both adjustments and covariates, choose one!")
@@ -544,7 +544,10 @@ ds<-function(data, truncation=NULL, transect="line", formula=~1, key="hn",
         message("  Model failed to converge.")
       }
     }else{
-      message(paste0("\n\nError in model fitting, returning: ",model$name.message))
+      message(paste0("\n\nError in model fitting, returning: ",
+                     sub("^Fitting ","",this.message)))
+      message(paste0("\n  Error: ",model[1],"\n"))
+      model <- NULL
       model <- last.model
       break
     }

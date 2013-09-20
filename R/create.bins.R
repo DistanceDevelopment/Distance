@@ -19,11 +19,16 @@ create.bins <- function(data,cutpoints){
   # pull out the distances
   d<-data$distance
 
+  # check to see if any of the distances lie outside of the cutpoints
+  if(any(d<cp[1]) | any(d>cp[length(cp)])){
+    stop("Some distances lie outside of the binning cutpoints. Remove and then re-try analysis.")
+  }
+
   distbegin<-rep(NA,length(d))
   distend<-rep(NA,length(d))
 
   # catch anything in the first bin that was recorded as the
-  # bottom cutpoint 
+  # bottom cutpoint
   ind0 <- which(d==cp[1])
   distbegin[ind0] <- cp[1]
   distend[ind0] <- cp[2]
@@ -31,7 +36,7 @@ create.bins <- function(data,cutpoints){
   for(i in 1:(length(cp)-1)){
     # which elements of d lie between cutpoints i and i+1
     ind <- which(d>cp[i] & d<=cp[i+1])
-    
+
     distbegin[ind] <- cp[i]
     distend[ind]   <- cp[i+1]
   }
