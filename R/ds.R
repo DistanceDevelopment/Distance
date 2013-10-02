@@ -78,9 +78,10 @@
 #' @param debug.level print debugging output. 0=none, 1-3 increasing level of
 #'        debugging output.
 #'
-#' @param quiet surpress non-warning messages (useful for bootstraps etc).
+#' @param quiet surpress non-essential messages (useful for bootstraps etc).
 #'              Default value FALSE.
 #'
+#' @param initial.values a \code{list} of named starting values, see \code{\link{ddf}}. Only allowed when AIC term selection is not used.
 #'
 #' @return a list with elements:
 #'        \tabular{ll}{\code{ddf} \tab a detection function model object.\cr
@@ -186,7 +187,8 @@ ds<-function(data, truncation=NULL, transect="line", formula=~1, key="hn",
              adjustment="cos", order=NULL, scale="width", cutpoints=NULL,
              monotonicity=FALSE,
              region.table=NULL,sample.table=NULL,obs.table=NULL,
-             convert.units=1,method="nlminb",quiet=FALSE,debug.level=0){
+             convert.units=1,method="nlminb",quiet=FALSE,debug.level=0,
+             initial.values=NULL){
 
   # this routine just creates a call to mrds, it's not very exciting
   # or fancy, it does do a lot of error checking though
@@ -339,6 +341,7 @@ ds<-function(data, truncation=NULL, transect="line", formula=~1, key="hn",
       # if there are covariates then don't do the AIC search
       if(formula != ~1){
         aic.search <- FALSE
+        messages("Cannot perfrom AIC adjustment term selection when covariates are used.")
       }else{
       # otherwise go ahead and set up the candidate adjustment orders
         aic.search <- TRUE
@@ -378,7 +381,7 @@ ds<-function(data, truncation=NULL, transect="line", formula=~1, key="hn",
   ### binning
   if(is.null(cutpoints)){
     if(any(names(data)=="distend") & any(names(data)=="distbegin")){
-      warning("No cutpoints specified but distbegin and distend are columns in data. Performing a binned analysis...")
+      message("No cutpoints specified but distbegin and distend are columns in data. Performing a binned analysis...")
       binned <- TRUE
       breaks <- sort(unique(c(data$distend,data$distbegin)))
     }else{
@@ -397,7 +400,7 @@ ds<-function(data, truncation=NULL, transect="line", formula=~1, key="hn",
 
     # remove distbegin and distend if they already exist
     if(any(names(data)=="distend") & any(names(data)=="distbegin")){
-      warning("data already has distend and distbegin columns, removing them and appling binning as specified by cutpoints.")
+      message("data already has distend and distbegin columns, removing them and appling binning as specified by cutpoints.")
       data$distend<-NULL
       data$distbegin<-NULL
     }
@@ -426,14 +429,21 @@ ds<-function(data, truncation=NULL, transect="line", formula=~1, key="hn",
     stop("monotonicity must be one of \"none\", FALSE, \"weak\" or \"strict\".")
   }
 
-  # can't do monotonicity and covariates, turn that off!
+  # can't do monotonicity and covariates, fail!
   if(mono & formula!=as.formula("~1")){
-    warning("Monotonicity cannot be enforced with covariates.")
+    stop("Monotonicity cannot be enforced with covariates.")
     mono <- mono.strict <- FALSE
   }
 
   # set up the control options
   control <- list(optimx.method=method, showit=debug.level)
+
+  # if initial values were supplied, pass them on
+  if(!is.null(initial.values) & !aic.search){
+    control$initial <- initial.values
+  }else if(!is.null(initial.values) & aic.search){
+    stop("Cannot supply initial values when using AIC term selection")
+  }
 
   ### Actually fit some models here
 

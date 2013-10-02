@@ -8,7 +8,7 @@
     monotonicity = FALSE, region.table = NULL,
     sample.table = NULL, obs.table = NULL,
     convert.units = 1, method = "nlminb", quiet = FALSE,
-    debug.level = 0)
+    debug.level = 0, initial.values = NULL)
 }
 \arguments{
   \item{data}{a \code{data.frame} containing at least a
@@ -108,6 +108,10 @@
 
   \item{quiet}{surpress non-warning messages (useful for
   bootstraps etc).  Default value FALSE.}
+
+  \item{initial.values}{a \code{list} of named starting
+  values, see \code{\link{ddf}}. Only allowed when AIC term
+  selection is not used.}
 }
 \value{
   a list with elements: \tabular{ll}{\code{ddf} \tab a
