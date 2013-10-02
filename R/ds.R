@@ -341,7 +341,7 @@ ds<-function(data, truncation=NULL, transect="line", formula=~1, key="hn",
       # if there are covariates then don't do the AIC search
       if(formula != ~1){
         aic.search <- FALSE
-        messages("Cannot perfrom AIC adjustment term selection when covariates are used.")
+        message("Cannot perfrom AIC adjustment term selection when covariates are used.")
       }else{
       # otherwise go ahead and set up the candidate adjustment orders
         aic.search <- TRUE
