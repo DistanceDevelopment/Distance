@@ -1,3 +1,6 @@
+Distance version 0.7.4
+ * new initial values argument
+
 Distance version 0.7.3
  * remove annoying crash when mrds failed to fit a model
  * NB the optimiser underlying mrds (optimx) has changed, update both of these
