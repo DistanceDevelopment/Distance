@@ -554,11 +554,16 @@ ds<-function(data, truncation=NULL, transect="line", formula=~1, key="hn",
         message("  Model failed to converge.")
       }
     }else{
-      message(paste0("\n\nError in model fitting, returning: ",
-                     sub("^Fitting ","",this.message)))
-      message(paste0("\n  Error: ",model[1],"\n"))
-      model <- NULL
-      model <- last.model
+      if(last.model$criterion == Inf & length(last.model)==1){
+        message("\n\nAll models failed to fit!\n")
+        model <- NULL
+      }else{
+        message(paste0("\n\nError in model fitting, returning: ",
+                       sub("^Fitting ","",this.message)))
+        message(paste0("\n  Error: ",model[1],"\n"))
+        model <- NULL
+        model <- last.model
+      }
       break
     }
   }
