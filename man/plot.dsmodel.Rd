@@ -2,7 +2,7 @@
 \alias{plot.dsmodel}
 \title{Plot a fitted detection function}
 \usage{
-  \method{plot}{dsmodel} (x, ...)
+\method{plot}{dsmodel}(x, ...)
 }
 \arguments{
   \item{x}{an object of class \code{dsmodel}.}
@@ -11,13 +11,12 @@
   \code{\link{plot.ds}}.}
 }
 \value{
-  \code{NULL}, just produces a plot.
+\code{NULL}, just produces a plot.
 }
 \description{
-  This is just a simple wrapper around
-  \code{\link{plot.ds}}.
+This is just a simple wrapper around \code{\link{plot.ds}}.
 }
 \author{
-  David L. Miller
+David L. Miller
 }
 

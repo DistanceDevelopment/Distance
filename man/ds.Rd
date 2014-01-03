@@ -2,20 +2,21 @@
 \alias{ds}
 \title{Fit detection functions and calculate abundance from line or point transect data}
 \usage{
-  ds(data, truncation = NULL, transect = "line",
-    formula = ~1, key = "hn", adjustment = "cos",
-    order = NULL, scale = "width", cutpoints = NULL,
-    monotonicity = FALSE, region.table = NULL,
-    sample.table = NULL, obs.table = NULL,
-    convert.units = 1, method = "nlminb", quiet = FALSE,
-    debug.level = 0, initial.values = NULL)
+ds(data, truncation = NULL, transect = "line", formula = ~1, key = "hn",
+  adjustment = "cos", order = NULL, scale = "width", cutpoints = NULL,
+  monotonicity = FALSE, region.table = NULL, sample.table = NULL,
+  obs.table = NULL, convert.units = 1, method = "nlminb", quiet = FALSE,
+  debug.level = 0, initial.values = NULL)
 }
 \arguments{
   \item{data}{a \code{data.frame} containing at least a
   column called \code{distance}. NOTE! If there is a column
   called \code{size} in the data then it will be
   interpreted as group/cluster size, see the section
-  "Clusters/groups", below.}
+  "Clusters/groups", below. One can supply data as a "flat
+  file" and not supply \code{region.table},
+  \code{sample.table} and \code{obs.table}, see "Data
+  format", below.}
 
   \item{truncation}{either truncation distance (numeric,
   e.g. 5) or percentage (as a string, e.g. "15\%"). Can be
@@ -106,7 +107,7 @@
   \item{debug.level}{print debugging output. 0=none, 1-3
   increasing level of debugging output.}
 
-  \item{quiet}{surpress non-warning messages (useful for
+  \item{quiet}{surpress non-essential messages (useful for
   bootstraps etc).  Default value FALSE.}
 
   \item{initial.values}{a \code{list} of named starting
@@ -114,17 +115,17 @@
   selection is not used.}
 }
 \value{
-  a list with elements: \tabular{ll}{\code{ddf} \tab a
-  detection function model object.\cr \code{dht} \tab
-  abundance/density information (if survey region data was
-  supplied, else \code{NULL}).}
+a list with elements: \tabular{ll}{\code{ddf} \tab a
+detection function model object.\cr \code{dht} \tab
+abundance/density information (if survey region data was
+supplied, else \code{NULL}).}
 }
 \description{
-  This function fits detection functions to line or point
-  transect data and then (provided that survey information
-  is supplied) calculates abundance and density estimates.
-  The examples below illustrate some basic types of
-  analysis using \code{ds()}.
+This function fits detection functions to line or point
+transect data and then (provided that survey information is
+supplied) calculates abundance and density estimates. The
+examples below illustrate some basic types of analysis
+using \code{ds()}.
 }
 \section{Details}{
   If abundance estimates are required the
@@ -196,48 +197,63 @@
   equal to the previous point (monotonically decreasing;
   \code{"strict"}).
 }
+
+\section{Data format}{
+  One can supply \code{data} only to simply fit a detection
+  function. However, if abundance/density estimates are
+  necessary further information is required. Either the
+  \code{region.table}, \code{sample.table} and
+  \code{obs.table} \code{data.frame}s can be supplied or
+  all data can be supplied as a "flat file" in the
+  \code{data} argument. In this format each row in data has
+  additional information that would ordinarily be in the
+  other tables. This usually means that there are
+  additional columns named: \code{Sample.Label},
+  \code{Region.Label}, \code{Effort} and \code{Area} for
+  each observation.
+}
 \examples{
 # An example from mrds, the golf tee data.
- library(Distance)
- data(book.tee.data)
- tee.data<-book.tee.data$book.tee.dataframe[book.tee.data$book.tee.dataframe$observer==1,]
- ds.model<-ds(tee.data,4,monotonicity="strict")
- summary(ds.model)
- plot(ds.model)
+library(Distance)
+data(book.tee.data)
+tee.data<-book.tee.data$book.tee.dataframe[book.tee.data$book.tee.dataframe$observer==1,]
+ds.model<-ds(tee.data,4,monotonicity="strict")
+summary(ds.model)
+plot(ds.model)
 
- # same model, but calculating abundance
- # need to supply the region, sample and observation tables
- region<-book.tee.data$book.tee.region
- samples<-book.tee.data$book.tee.samples
- obs<-book.tee.data$book.tee.obs
+# same model, but calculating abundance
+# need to supply the region, sample and observation tables
+region<-book.tee.data$book.tee.region
+samples<-book.tee.data$book.tee.samples
+obs<-book.tee.data$book.tee.obs
 
- ds.dht.model<-ds(tee.data,4,region.table=region,monotonicity="strict",
-              sample.table=samples,obs.table=obs)
- summary(ds.dht.model)
+ds.dht.model<-ds(tee.data,4,region.table=region,monotonicity="strict",
+             sample.table=samples,obs.table=obs)
+summary(ds.dht.model)
 
- # specify order 2 cosine adjustments
- ds.model.cos2<-ds(tee.data,4,adjustment="cos",order=2)
- summary(ds.model.cos2)
+# specify order 2 cosine adjustments
+ds.model.cos2<-ds(tee.data,4,adjustment="cos",order=2)
+summary(ds.model.cos2)
 
- # specify order 2 and 3 cosine adjustments - LOTS of non-monotonicity!
- ds.model.cos24<-ds(tee.data,4,adjustment="cos",order=c(2,3))
- summary(ds.model.cos24)
+# specify order 2 and 3 cosine adjustments - LOTS of non-monotonicity!
+ds.model.cos24<-ds(tee.data,4,adjustment="cos",order=c(2,3))
+summary(ds.model.cos24)
 
- # truncate the largest 10\% of the data and fit only a hazard-rate
- # detection function
- ds.model.hr.trunc<-ds(tee.data,truncation="10\%",key="hr",adjustment=NULL)
- summary(ds.model.hr.trunc)
+# truncate the largest 10\% of the data and fit only a hazard-rate
+# detection function
+ds.model.hr.trunc<-ds(tee.data,truncation="10\%",key="hr",adjustment=NULL)
+summary(ds.model.hr.trunc)
 }
 \author{
-  David L. Miller
+David L. Miller
 }
 \references{
-  Buckland, S.T., Anderson, D.R., Burnham, K.P., Laake,
-  J.L., Borchers, D.L., and Thomas, L. (2001). Distance
-  Sampling. Oxford University Press. Oxford, UK.
+Buckland, S.T., Anderson, D.R., Burnham, K.P., Laake, J.L.,
+Borchers, D.L., and Thomas, L. (2001). Distance Sampling.
+Oxford University Press. Oxford, UK.
 
-  Buckland, S.T., Anderson, D.R., Burnham, K.P., Laake,
-  J.L., Borchers, D.L., and Thomas, L. (2004). Advanced
-  Distance Sampling. Oxford University Press. Oxford, UK.
+Buckland, S.T., Anderson, D.R., Burnham, K.P., Laake, J.L.,
+Borchers, D.L., and Thomas, L. (2004). Advanced Distance
+Sampling. Oxford University Press. Oxford, UK.
 }
 

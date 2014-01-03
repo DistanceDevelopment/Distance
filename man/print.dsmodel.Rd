@@ -2,7 +2,7 @@
 \alias{print.dsmodel}
 \title{Simple pretty printer for distance sampling analyses}
 \usage{
-  \method{print}{dsmodel} (x, ...)
+\method{print}{dsmodel}(x, ...)
 }
 \arguments{
   \item{x}{a distance sampling analysis (result from
@@ -12,11 +12,11 @@
   compatibility.}
 }
 \description{
-  Simply prints out a brief description of the model which
-  was fitted. For more detailed information use
-  \code{\link{summary}}.
+Simply prints out a brief description of the model which
+was fitted. For more detailed information use
+\code{\link{summary}}.
 }
 \author{
-  David L. Miller
+David L. Miller
 }
 

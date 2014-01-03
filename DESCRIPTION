@@ -20,11 +20,3 @@ Depends:
     Rsolnp
 Suggests:
     testthat
-Collate:
-    'ds.R'
-    'create.bins.R'
-    'model.description.R'
-    'plot.dsmodel.R'
-    'print.dsmodel.R'
-    'print.summary.dsmodel.R'
-    'summary.dsmodel.R'

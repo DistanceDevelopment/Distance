@@ -2,7 +2,7 @@
 \alias{create.bins}
 \title{Create bins from a set of binned distances and a set of cutpoints.}
 \usage{
-  create.bins(data, cutpoints)
+create.bins(data, cutpoints)
 }
 \arguments{
   \item{data}{\code{data.frame} with at least the column
@@ -11,14 +11,14 @@
   \item{cutpoints}{vector of cutpoints for the bins}
 }
 \value{
-  data \code{data} with two extra columns \code{distbegin}
-  and \code{distend}.
+data \code{data} with two extra columns \code{distbegin}
+and \code{distend}.
 }
 \description{
-  This is a service routine and shouldn't be necessary in
-  normal analyses.
+This is a service routine and shouldn't be necessary in
+normal analyses.
 }
 \author{
-  David L. Miller
+David L. Miller
 }
 
