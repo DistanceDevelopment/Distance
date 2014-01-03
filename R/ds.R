@@ -208,10 +208,10 @@ ds<-function(data, truncation=NULL, transect="line", formula=~1, key="hn",
 
   # check that the data is okay
   data <- checkdata(data,region.table,sample.table,obs.table)
-  data         <- data$data
   region.table <- data$region.table
   sample.table <- data$sample.table
   obs.table    <- data$obs.table
+  data         <- data$data
 
   # truncation
   if(is.null(truncation)){
