@@ -35,7 +35,7 @@ create.bins <- function(data,cutpoints){
 
   for(i in 1:(length(cp)-1)){
     # which elements of d lie between cutpoints i and i+1
-    ind <- which(d>cp[i] & d<=cp[i+1])
+    ind <- which(d>=cp[i] & d<cp[i+1])
 
     distbegin[ind] <- cp[i]
     distend[ind]   <- cp[i+1]

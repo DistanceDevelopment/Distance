@@ -145,6 +145,11 @@
 #'  less than or equal to the previous point (monotonically decreasing;
 #'  \code{"strict"}).
 #'
+#'  @section Binning: Note that binning is performed such that bin 1 is all
+#'  distances greater or equal to cutpoint 1 (>=0 or left truncation distance)
+#'  and less than cutpoint 2. Bin 2 is then distances greater or equal to
+#'  cutpoint 2 and less than cutpoint 3 and so on.
+#'
 #'  @section Data format: One can supply \code{data} only to simply fit a
 #'  detection function. However, if abundance/density estimates are necessary
 #'  further information is required. Either the \code{region.table},
