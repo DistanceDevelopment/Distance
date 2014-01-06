@@ -221,6 +221,11 @@ ds<-function(data, truncation=NULL, transect="line", formula=~1, key="hn",
   # truncation
   if(is.null(truncation)){
     stop("Please supply truncation distance or percentage.")
+  }else if(any(unlist(lapply(truncation,is.character))) &
+           (!is.null(cutpoints) |
+            any(c("distbegin","distend") %in% colnames(data))
+           )){
+    stop("Truncation cannot be supplied as a percentage with binned data")
   }else{
     # if we have left truncation too...
     if(is.list(truncation)){
