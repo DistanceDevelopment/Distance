@@ -1,6 +1,7 @@
 Distance version 0.8.0
  * new simplified table data format (see ?ds)
  * bug in binning from cutpoints (thanks to Colin Beale for finding this)
+ * removed percentage truncation for binned data, as it doesn't really make sense
 
 Distance version 0.7.4
  * new initial values argument
