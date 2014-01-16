@@ -50,6 +50,11 @@
 #'        monotonicity weakly ("weak"), strictly ("strict") or not at all
 #'        ("none" or \code{FALSE}). See Montonicity, below. (Default
 #'        \code{FALSE}).
+#' @param dht.group should density abundance estimates consider all groups to be
+#'        size 1 (abundance of groups) \code{dht.group=TRUE} or should the
+#'        abundance of individuals (group size is taken into account),
+#'        \code{dht.group=FALSE}. Default is \code{FALSE} (abundance of
+#'        individuals is calculated).
 #' @param region.table \code{data.frame} with two columns:
 #'        \tabular{ll}{ \code{Region.Label} \tab label for the region\cr
 #'                     \code{Area} \tab area of the region\cr}
@@ -93,8 +98,10 @@
 #'
 #' @section Details:
 #'
-#'  If abundance estimates are required the \code{data.frame}s \code{region.table},
-#'  \code{sample.table} and \code{obs.table} must be supplied.
+#' If abundance estimates are required then the \code{data.frame}s
+#' \code{region.table} and \code{sample.table} must be supplied. If \code{data}
+#' does not contain the columns \code{Region.Label} and \code{Sample.Label} then
+#' the \code{data.frame} \code{obs.table} must also be supplied.
 #'
 #' @section Clusters/groups:
 #'  Note that if the data contains a column named \code{size} and
@@ -205,7 +212,7 @@
 #'
 ds<-function(data, truncation=NULL, transect="line", formula=~1, key="hn",
              adjustment="cos", order=NULL, scale="width", cutpoints=NULL,
-             monotonicity=FALSE,
+             monotonicity=FALSE,dht.group=FALSE,
              region.table=NULL,sample.table=NULL,obs.table=NULL,
              convert.units=1,method="nlminb",quiet=FALSE,debug.level=0,
              initial.values=NULL){
@@ -573,20 +580,29 @@ ds<-function(data, truncation=NULL, transect="line", formula=~1, key="hn",
   }
 
   ## Now calculate abundance/density using dht()
-  if(!is.null(region.table) & !is.null(sample.table) & !is.null(obs.table)){
+  if(!is.null(region.table) & !is.null(sample.table)){
+
+    # if obs.table is not supplied, then data must have the Region.Label and
+    # Sample.Label columns
+    if(is.null(obs.table)){
+      if(c("Region.Label","Sample.Label") %in% names(data)){
+        message("No obs.table supplied but data does not have Region.Label or Sample.Label columns, only estimating detection function.\n")
+      }
+    }
 
     # from ?dht:
-    # For animals observed in tight clusters, that estimator gives the 
-    # abundance of groups (‘group=TRUE’ in ‘options’) and the abundance of 
-    # individuals is estimated as s_1/p_1 + s_2/p_2 + ... + s_n/p_n, where 
-    # s_i is the size (e.g., number of animals in the group) of each 
-    # observation(‘group=FALSE’ in ‘options’).
+    # For animals observed in tight clusters, that estimator gives the
+    # abundance of groups (‘group=TRUE’ in ‘options’) and the abundance of
+    # individuals is estimated as s_1/p_1 + s_2/p_2 + ... + s_n/p_n, where
+    # s_i is the size (e.g., number of animals in the group) of each
+    # observation(‘group=FALSE’ in ‘options’).
 
     dht.res<-dht(model,region.table,sample.table,obs.table,
                  options=list(#varflag=0,group=TRUE,
+                              group=dht.group,
                               convert.units=convert.units),se=TRUE)
   }else{
-    # if no information on the survey area was supplied just return 
+    # if no information on the survey area was supplied just return
     # the detection function stuff
     dht.res<-NULL
 

@@ -4,9 +4,10 @@
 \usage{
 ds(data, truncation = NULL, transect = "line", formula = ~1, key = "hn",
   adjustment = "cos", order = NULL, scale = "width", cutpoints = NULL,
-  monotonicity = FALSE, region.table = NULL, sample.table = NULL,
-  obs.table = NULL, convert.units = 1, method = "nlminb", quiet = FALSE,
-  debug.level = 0, initial.values = NULL)
+  monotonicity = FALSE, dht.group = FALSE, region.table = NULL,
+  sample.table = NULL, obs.table = NULL, convert.units = 1,
+  method = "nlminb", quiet = FALSE, debug.level = 0,
+  initial.values = NULL)
 }
 \arguments{
   \item{data}{a \code{data.frame} containing at least a
@@ -73,6 +74,13 @@ ds(data, truncation = NULL, transect = "line", formula = ~1, key = "hn",
   ("strict") or not at all ("none" or \code{FALSE}). See
   Montonicity, below. (Default \code{FALSE}).}
 
+  \item{dht.group}{should density abundance estimates
+  consider all groups to be size 1 (abundance of groups)
+  \code{dht.group=TRUE} or should the abundance of
+  individuals (group size is taken into account),
+  \code{dht.group=FALSE}. Default is \code{FALSE}
+  (abundance of individuals is calculated).}
+
   \item{region.table}{\code{data.frame} with two columns:
   \tabular{ll}{ \code{Region.Label} \tab label for the
   region\cr \code{Area} \tab area of the region\cr}
@@ -128,10 +136,12 @@ examples below illustrate some basic types of analysis
 using \code{ds()}.
 }
 \section{Details}{
-  If abundance estimates are required the
-  \code{data.frame}s \code{region.table},
-  \code{sample.table} and \code{obs.table} must be
-  supplied.
+  If abundance estimates are required then the
+  \code{data.frame}s \code{region.table} and
+  \code{sample.table} must be supplied. If \code{data} does
+  not contain the columns \code{Region.Label} and
+  \code{Sample.Label} then the \code{data.frame}
+  \code{obs.table} must also be supplied.
 }
 
 \section{Clusters/groups}{
