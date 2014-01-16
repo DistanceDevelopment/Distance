@@ -15,6 +15,7 @@
 }
 \description{
 This is just a simple wrapper around \code{\link{plot.ds}}.
+See the manual page for that function for more information.
 }
 \author{
 David L. Miller

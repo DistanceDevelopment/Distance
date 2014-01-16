@@ -229,6 +229,7 @@ ds.model<-ds(tee.data,4,monotonicity="strict")
 summary(ds.model)
 plot(ds.model)
 
+\dontrun{
 # same model, but calculating abundance
 # need to supply the region, sample and observation tables
 region<-book.tee.data$book.tee.region
@@ -251,6 +252,7 @@ summary(ds.model.cos24)
 # detection function
 ds.model.hr.trunc<-ds(tee.data,truncation="10\%",key="hr",adjustment=NULL)
 summary(ds.model.hr.trunc)
+}
 }
 \author{
 David L. Miller

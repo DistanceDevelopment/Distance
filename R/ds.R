@@ -178,6 +178,7 @@
 #' summary(ds.model)
 #' plot(ds.model)
 #'
+#' \dontrun{
 #' # same model, but calculating abundance
 #' # need to supply the region, sample and observation tables
 #' region<-book.tee.data$book.tee.region
@@ -200,6 +201,7 @@
 #' # detection function
 #' ds.model.hr.trunc<-ds(tee.data,truncation="10%",key="hr",adjustment=NULL)
 #' summary(ds.model.hr.trunc)
+#'}
 #'
 ds<-function(data, truncation=NULL, transect="line", formula=~1, key="hn",
              adjustment="cos", order=NULL, scale="width", cutpoints=NULL,
