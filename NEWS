@@ -1,3 +1,6 @@
+Distance version 0.8.1
+ * another fix to binning (redundant code/inconsistent definition between docs and code). (Thanks to Jason Roberts for finding this.)
+
 Distance version 0.8.0
  * new simplified table data format (see ?ds)
  * bug in binning from cutpoints (thanks to Colin Beale for finding this)
