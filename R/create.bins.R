@@ -14,10 +14,10 @@
 create.bins <- function(data,cutpoints){
 
   # lazy typist
-  cp<-cutpoints
+  cp <- cutpoints
 
-  # pull out the distances
-  d<-data$distance
+  # pull out the distances (removing the NAs for now)
+  d <- data$distance[!is.na(data$distance)]
 
   # check to see if any of the distances lie outside of the cutpoints
   if(any(d<cp[1]) | any(d>=cp[length(cp)])){
@@ -35,7 +35,16 @@ create.bins <- function(data,cutpoints){
     distend[ind]   <- cp[i+1]
   }
 
-  data <- cbind(data,distbegin=distbegin,distend=distend)
+  # handle NA distances, that we need to preserve
+  distbegin.na <- rep(NA,length(data$distance))
+  distend.na <- rep(NA,length(data$distance))
+  distbegin.na[!is.na(data$distance)] <- distbegin
+  distend.na[!is.na(data$distance)] <- distend
+
+  # put all that together and make a data.frame
+  data <- cbind(data,
+                distbegin=distbegin.na,
+                distend=distend.na)
   data <- data.frame(data)
 
   return(data)
