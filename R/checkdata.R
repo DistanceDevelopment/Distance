@@ -48,6 +48,14 @@ checkdata<-function(data,region.table=NULL,sample.table=NULL,obs.table=NULL){
 
       ## construct sample table
       sample.table <- unique(data[,c("Sample.Label", "Region.Label", "Effort")])
+
+      # possible that Effort is not the same for a given
+      # Sample.Label+Region.Label -- this is BAD.
+      if(nrow(sample.table)!=nrow(unique(sample.table[,c("Sample.Label",
+                                                  "Region.Label")]))){
+        stop("A sample has a non-unique \"Effort\", check data!")
+      }
+
       rownames(sample.table) <- 1:nrow(sample.table)
       # drop Effort column
       data <- data[,!c(colnames(data) %in% "Effort")]

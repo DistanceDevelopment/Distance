@@ -140,8 +140,10 @@ using \code{ds()}.
   \code{data.frame}s \code{region.table} and
   \code{sample.table} must be supplied. If \code{data} does
   not contain the columns \code{Region.Label} and
-  \code{Sample.Label} then the \code{data.frame}
-  \code{obs.table} must also be supplied.
+  \code{Sample.Label} thenthe \code{data.frame}
+  \code{obs.table} must also be supplied. Note that
+  stratification only applies to abundance estimates and
+  not at the detection function level.
 }
 
 \section{Clusters/groups}{

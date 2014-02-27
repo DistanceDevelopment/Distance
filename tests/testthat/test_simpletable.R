@@ -24,7 +24,6 @@ flatdat <- merge(flatdat,egdata,by="object",all.x=TRUE)
 
 test_that("Recover structure for tee data",{
 
-
   ## check we can recover the 4 data frames
   sepdat <- Distance:::checkdata(flatdat)
 
@@ -39,6 +38,15 @@ test_that("Recover structure for tee data",{
 
 })
 
+test_that("Errors work",{
+
+  flatdat[nrow(flatdat)+1,] <- flatdat[1,]
+  flatdat[nrow(flatdat),]$Effort <- 1322
+
+  expect_error(Distance:::checkdata(flatdat))
+
+
+})
 #test_that("Extra regions",{
 #
 #  # add an extra region
