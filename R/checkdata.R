@@ -64,9 +64,13 @@ checkdata<-function(data,region.table=NULL,sample.table=NULL,obs.table=NULL){
       ## construct obs
       obs.table <- unique(data[,c("object", "Region.Label","Sample.Label")])
       rownames(obs.table) <- 1:nrow(obs.table)
+
       # drop Region and Sample label columns
       data <- data[,!c(colnames(data) %in% c("Region.Label","Sample.Label"))]
       rownames(data) <- 1:nrow(data)
+
+      # remove the NA rows
+      data <- data[!is.na(data$distance),]
     }
 
   }else{

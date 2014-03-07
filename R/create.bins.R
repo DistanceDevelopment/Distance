@@ -20,9 +20,14 @@ create.bins <- function(data,cutpoints){
   d <- data$distance[!is.na(data$distance)]
 
   # check to see if any of the distances lie outside of the cutpoints
-  if(any(d<cp[1]) | any(d>=cp[length(cp)])){
-    stop("Some distances lie outside of the binning cutpoints. Remove and then re-try analysis.")
-  }
+  #if(any(d<cp[1]) | any(d>=cp[length(cp)])){
+  #  stop("Some distances lie outside of the binning cutpoints. Remove and then re-try analysis.")
+  #}
+
+  # indicator for distances inside of the cutpoints
+  in.cp.ind <- d>=cp[1] | d<=cp[length(cp)]
+
+  d <- d[in.cp.ind]
 
   distbegin<-rep(NA,length(d))
   distend<-rep(NA,length(d))
@@ -42,7 +47,7 @@ create.bins <- function(data,cutpoints){
   distend.na[!is.na(data$distance)] <- distend
 
   # put all that together and make a data.frame
-  data <- cbind(data,
+  data <- cbind(data[in.cp.ind,],
                 distbegin=distbegin.na,
                 distend=distend.na)
   data <- data.frame(data)

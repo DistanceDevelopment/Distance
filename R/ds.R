@@ -217,12 +217,6 @@ ds<-function(data, truncation=NULL, transect="line", formula=~1, key="hn",
   # this routine just creates a call to mrds, it's not very exciting
   # or fancy, it does do a lot of error checking though
 
-  # check that the data is okay
-  data <- checkdata(data,region.table,sample.table,obs.table)
-  region.table <- data$region.table
-  sample.table <- data$sample.table
-  obs.table    <- data$obs.table
-  data         <- data$data
 
   # truncation
   if(is.null(truncation)){
@@ -276,6 +270,45 @@ ds<-function(data, truncation=NULL, transect="line", formula=~1, key="hn",
     }else{
       stop("Truncation must be supplied as a single number/string or a list with elements \"left\" and \"right\".")
     }
+  }
+
+  # check the data, format into the correct tables if we have a flat file
+  data <- checkdata(data,region.table,sample.table,obs.table)
+  region.table <- data$region.table
+  sample.table <- data$sample.table
+  obs.table    <- data$obs.table
+  data         <- data$data
+
+  ### binning
+  if(is.null(cutpoints)){
+    if(any(names(data)=="distend") & any(names(data)=="distbegin")){
+      message("Columns \"distbegin\" and \"distend\" in data: performing a binned analysis...")
+      binned <- TRUE
+      breaks <- sort(unique(c(data$distend,data$distbegin)))
+    }else{
+      binned <- FALSE
+      breaks <- NULL
+    }
+  }else{
+    # make sure that the first bin starts 0 or left
+    if(!is.null(left)){
+      if(cutpoints[1]!=left){
+        stop("The first cutpoint must be 0 or the left truncation distance!")
+      }
+    }else if(cutpoints[1]!=0){
+      stop("The first cutpoint must be 0 or the left truncation distance!")
+    }
+
+    # remove distbegin and distend if they already exist
+    if(any(names(data)=="distend") & any(names(data)=="distbegin")){
+      message("data already has distend and distbegin columns, removing them and appling binning as specified by cutpoints.")
+      data$distend<-NULL
+      data$distbegin<-NULL
+    }
+    # send off to create.bins to make the correct columns in data
+    data <- create.bins(data,cutpoints)
+    binned <- TRUE
+    breaks <- cutpoints
   }
 
   # transect type 
@@ -383,37 +416,6 @@ ds<-function(data, truncation=NULL, transect="line", formula=~1, key="hn",
     aic.search<-FALSE
   }
 
-  ### binning
-  if(is.null(cutpoints)){
-    if(any(names(data)=="distend") & any(names(data)=="distbegin")){
-      message("No cutpoints specified but distbegin and distend are columns in data. Performing a binned analysis...")
-      binned <- TRUE
-      breaks <- sort(unique(c(data$distend,data$distbegin)))
-    }else{
-      binned <- FALSE
-      breaks <- NULL
-    }
-  }else{
-    # make sure that the first bin starts 0 or left
-    if(!is.null(left)){
-      if(cutpoints[1]!=left){
-        stop("The first cutpoint must be 0 or the left truncation distance!")
-      }
-    }else if(cutpoints[1]!=0){
-      stop("The first cutpoint must be 0 or the left truncation distance!")
-    }
-
-    # remove distbegin and distend if they already exist
-    if(any(names(data)=="distend") & any(names(data)=="distbegin")){
-      message("data already has distend and distbegin columns, removing them and appling binning as specified by cutpoints.")
-      data$distend<-NULL
-      data$distbegin<-NULL
-    }
-    # send off to create.bins to make the correct columns in data
-    data <- create.bins(data,cutpoints)
-    binned <- TRUE
-    breaks <- cutpoints
-  }
 
   # monotonicity
   if(is.logical(monotonicity)){
