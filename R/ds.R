@@ -350,6 +350,12 @@ ds<-function(data, truncation=NULL, transect="line", formula=~1, key="hn",
       stop("adjustment terms must be one of NULL, \"cos\", \"herm\" or \"poly\".")
     }
   }
+
+  # if the user supplied order=0, that's equivalent to adjustment=NULL
+  if(all(order==0)){
+    adjustment <- NULL
+  }
+
   if(!is.null(adjustment)){
 
     if(!is.null(order)){

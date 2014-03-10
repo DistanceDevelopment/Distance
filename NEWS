@@ -3,6 +3,8 @@ Distance version 0.8.1
  * binning would fail if there were NA distances, which might occur when using the simplified data tables
  * check implemented to ensure that samples have consistent (i.e. the same) effort (Eric Rexstad found this bug)
  * clarification that stratification only occurs at the abundance/density estimation stage (dht), rather than at the detection function modelling stage (thanks to Filipe Dias for this suggestion)
+ * Setting order=0 is equivalent to adjustment=NULL to specify a detection function without adjustments. (Eric Rexstad brought this to my attention.)
+
 
 Distance version 0.8.0
  * new simplified table data format (see ?ds)
