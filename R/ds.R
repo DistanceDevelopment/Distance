@@ -352,7 +352,7 @@ ds<-function(data, truncation=NULL, transect="line", formula=~1, key="hn",
   }
 
   # if the user supplied order=0, that's equivalent to adjustment=NULL
-  if(all(order==0)){
+  if(!is.null(order) & all(order==0)){
     adjustment <- NULL
   }
 
