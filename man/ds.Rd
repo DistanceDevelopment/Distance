@@ -230,7 +230,8 @@ using \code{ds()}.
   other tables. This usually means that there are
   additional columns named: \code{Sample.Label},
   \code{Region.Label}, \code{Effort} and \code{Area} for
-  each observation.
+  each observation. See \code{\link{flatfile}} for an
+  example.
 }
 \examples{
 # An example from mrds, the golf tee data.

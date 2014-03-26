@@ -1,3 +1,7 @@
+Distance version 0.9
+ * Flat file support example, see ?flatfile
+ * New data set: simulated minke whale data, see ?minke and ?flatfile for an example analysis
+
 Distance version 0.8.1
  * another fix to binning (redundant code/inconsistent definition between docs and code). (Thanks to Jason Roberts for finding this.)
  * binning would fail if there were NA distances, which might occur when using the simplified data tables

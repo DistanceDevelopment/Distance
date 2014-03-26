@@ -154,15 +154,7 @@
 #'  and less than cutpoint 2. Bin 2 is then distances greater or equal to
 #'  cutpoint 2 and less than cutpoint 3 and so on.
 #'
-#'  @section Data format: One can supply \code{data} only to simply fit a
-#'  detection function. However, if abundance/density estimates are necessary
-#'  further information is required. Either the \code{region.table},
-#'  \code{sample.table} and \code{obs.table} \code{data.frame}s can be supplied
-#'  or all data can be supplied as a "flat file" in the \code{data} argument. In
-#'  this format each row in data has additional information that would
-#'  ordinarily be in the other tables. This usually means that there are
-#'  additional columns named: \code{Sample.Label}, \code{Region.Label},
-#'  \code{Effort} and \code{Area} for each observation.
+#'  @section Data format: One can supply \code{data} only to simply fit a detection function. However, if abundance/density estimates are necessary further information is required. Either the \code{region.table}, \code{sample.table} and \code{obs.table} \code{data.frame}s can be supplied or all data can be supplied as a "flat file" in the \code{data} argument. In this format each row in data has additional information that would ordinarily be in the other tables. This usually means that there are additional columns named: \code{Sample.Label}, \code{Region.Label}, \code{Effort} and \code{Area} for each observation. See \code{\link{flatfile}} for an example.
 #'
 #' @author David L. Miller
 #' @export
