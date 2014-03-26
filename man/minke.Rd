@@ -21,7 +21,7 @@ Data simulated by David Borchers.
 \details{
 Data are included here as both R data and as an Excel
 spreadsheet to illustrate the "flat file" input method. See
-\code{\link{flatfile}} for hwo to load this data and an
+\code{\link{flatfile}} for how to load this data and an
 example analysis.
 }
 \examples{
@@ -36,7 +36,7 @@ Cetacean Research and Management 3(2): 143-174
 
 Hedley, S.L., and S.T. Buckland. Spatial Models for Line
 Transect Sampling. Journal of Agricultural, Biological, and
-Environmental Statistics 9, no. 2 (2004): 181–199.
+Environmental Statistics 9, no. 2 (2004): 181-199.
 doi:10.1198/1085711043578.
 }
 \keyword{datasets}

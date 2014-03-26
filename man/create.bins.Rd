@@ -15,7 +15,7 @@ data \code{data} with two extra columns \code{distbegin}
 and \code{distend}.
 }
 \description{
-This is a service routine and shouldn't be necessary in
+This is an internal routine and shouldn't be necessary in
 normal analyses.
 }
 \author{

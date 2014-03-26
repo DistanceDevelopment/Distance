@@ -7,7 +7,7 @@
 and analyse data (and obtain abundance estimates) straight
 away, provided that the format of the flat file is correct.
 One can provide the file as, for example, an Excel
-spreadsheet using \code{\link{gdata}} or CSV using
+spreadsheet using \pkg{gdata} or CSV using
 \code{\link{read.csv}}.
 }
 \details{

@@ -15,9 +15,6 @@ test_that("Input errors are thrown correctly",{
   expect_error(ds())
   expect_error(ds(list()))
 
-  # data but no truncation?
-  expect_error(ds(egdata))
-
   # incorrect key definition?
   expect_error(ds(egdata,4,key="bananas"))
 
@@ -30,7 +27,7 @@ test_that("Input errors are thrown correctly",{
 })
 
 
-test_that("Simple models",{
+test_that("Simple models work",{
 
   # same model, but calculating abundance
   # need to supply the region, sample and observation tables
@@ -79,5 +76,23 @@ test_that("Simple models",{
   expect_equal(ds.model.hr$ddf$par, tp, tol=1e-7)
   expect_equal(ds.model.hr$ddf$lnl, -215.2384, tol=1e-6)
   expect_equal(ds.model.hr$dht$individuals$N$Estimate[3], 661.9913, tol=1e-6)
+
+})
+
+
+test_that("Truncation is handled",{
+
+  # setting the truncation is correct
+  expect_equal(ds(egdata,4,key="hn",order=0)$ddf$meta.data$width,4)
+
+  # largest observed distance
+  expect_equal(ds(egdata,key="hn",order=0)$ddf$meta.data$width,3.84)
+
+  # largest cutpoint
+  expect_equal(ds(egdata,key="hn",order=0,cutpoints=c(0,1,2,3,3.8))$ddf$meta.data$width,3.8)
+
+  # largest bin
+  bin.data <- Distance:::create.bins(egdata,c(0,1,2,3,3.8))
+  expect_equal(ds(bin.data,key="hn",order=0)$ddf$meta.data$width,3.8)
 
 })

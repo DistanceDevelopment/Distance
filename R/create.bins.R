@@ -1,6 +1,6 @@
 #' Create bins from a set of binned distances and a set of cutpoints.
 #'
-#' This is a service routine and shouldn't be necessary in normal analyses.
+#' This is an internal routine and shouldn't be necessary in normal analyses.
 #'
 #' @param data \code{data.frame} with at least the column \code{distance}.
 #' @param cutpoints vector of cutpoints for the bins
@@ -9,25 +9,19 @@
 #'        \code{distend}.
 #'
 #' @author David L. Miller
-#'
-#'
+#' @export
 create.bins <- function(data,cutpoints){
 
   # lazy typist
   cp <- cutpoints
 
+  # remove distances outside bins
+  in.cp.ind <- data>=cp[1] & data<=cp[length(cp)]
+  data <- data[in.cp.ind,]
+
   # pull out the distances (removing the NAs for now)
-  d <- data$distance[!is.na(data$distance)]
-
-  # check to see if any of the distances lie outside of the cutpoints
-  #if(any(d<cp[1]) | any(d>=cp[length(cp)])){
-  #  stop("Some distances lie outside of the binning cutpoints. Remove and then re-try analysis.")
-  #}
-
-  # indicator for distances inside of the cutpoints
-  in.cp.ind <- d>=cp[1] | d<=cp[length(cp)]
-
-  d <- d[in.cp.ind]
+  na.ind <- is.na(data$distance)
+  d <- data$distance[!na.ind]
 
   distbegin<-rep(NA,length(d))
   distend<-rep(NA,length(d))
@@ -43,11 +37,11 @@ create.bins <- function(data,cutpoints){
   # handle NA distances, that we need to preserve
   distbegin.na <- rep(NA,length(data$distance))
   distend.na <- rep(NA,length(data$distance))
-  distbegin.na[!is.na(data$distance)] <- distbegin
-  distend.na[!is.na(data$distance)] <- distend
+  distbegin.na[!na.ind] <- distbegin
+  distend.na[!na.ind] <- distend
 
   # put all that together and make a data.frame
-  data <- cbind(data[in.cp.ind,],
+  data <- cbind(data,
                 distbegin=distbegin.na,
                 distend=distend.na)
   data <- data.frame(data)
