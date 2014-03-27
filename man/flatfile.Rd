@@ -3,11 +3,11 @@
 \alias{flatfile}
 \title{Flat files}
 \description{
-\code{Distance} allows one to load data as a "flat file"
+\code{Distance} allows loading data as a "flat file"
 and analyse data (and obtain abundance estimates) straight
 away, provided that the format of the flat file is correct.
 One can provide the file as, for example, an Excel
-spreadsheet using \pkg{gdata} or CSV using
+spreadsheet using \code{\link{read.xls}} in \pkg{gdata} or CSV using
 \code{\link{read.csv}}.
 }
 \details{
@@ -21,7 +21,7 @@ point transect was visited) \cr \code{Region.Label} \tab
 code for regional strata (see below) \cr \code{Area} \tab
 area of the strata}
 
-Note that in the simplest case (one area surveyed only one)
+Note that in the simplest case (one area surveyed only once)
 there is only one \code{Region.Label} and a single
 corresponding \code{Area} duplicated for each observation.
 
@@ -50,7 +50,7 @@ pooled.exact <- ds(minke, truncation=1.5, key="hr", order=0)
 summary(pooled.exact)
 
 
-## Try a binned analyis
+## Try a binned analysis
 # first define the bins
 dist.bins <- c(0,.214, .428,.643,.857,1.071,1.286,1.5)
 pooled.binned <- ds(minke, truncation=1.5, cutpoints=dist.bins, key="hr", order=0)
