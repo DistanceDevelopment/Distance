@@ -50,7 +50,7 @@ NULL
 
 #' Flat files
 #'
-#' \code{Distance} allows one to load data as a "flat file" and analyse data (and obtain abundance estimates) straight away, provided that the format of the flat file is correct. One can provide the file as, for example, an Excel spreadsheet using \pkg{gdata} or CSV using \code{\link{read.csv}}.
+#' \code{Distance} allows loading data as a "flat file" and analyse data (and obtain abundance estimates) straight away, provided that the format of the flat file is correct. One can provide the file as, for example, an Excel spreadsheet using \code{\link{read.xls}} in \pkg{gdata} or CSV using \code{\link{read.csv}}.
 #'
 #' Each row of the data table corresponds to one observation and must have a the following columns:
 #' \tabular{ll}{\code{distance} \tab observed distance to object \cr
@@ -59,7 +59,7 @@ NULL
 #' \code{Region.Label} \tab code for regional strata (see below) \cr
 #' \code{Area} \tab area of the strata}
 #'
-#' Note that in the simplest case (one area surveyed only one) there is only one \code{Region.Label} and a single corresponding \code{Area} duplicated for each observation.
+#' Note that in the simplest case (one area surveyed only once) there is only one \code{Region.Label} and a single corresponding \code{Area} duplicated for each observation.
 #'
 #' The example given below was provided by Eric Rexstad.
 #'
@@ -88,7 +88,7 @@ NULL
 #' summary(pooled.exact)
 #'
 #'
-#' ## Try a binned analyis
+#' ## Try a binned analysis
 #' # first define the bins
 #' dist.bins <- c(0,.214, .428,.643,.857,1.071,1.286,1.5)
 #' pooled.binned <- ds(minke, truncation=1.5, cutpoints=dist.bins, key="hr", order=0)
@@ -111,6 +111,8 @@ NULL
 #'                                   strat.covar.binned$ddf$criterion,
 #'                                   full.strat.binned.North$ddf$criterion+
 #'                                   full.strat.binned.South$ddf$criterion))
+#'
+#' # Note model with stratum as covariate is most parsimonious
 #' print(model.sel.bin)
 #' }
 NULL

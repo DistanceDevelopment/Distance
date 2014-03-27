@@ -3,12 +3,12 @@
 \alias{flatfile}
 \title{Flat files}
 \description{
-\code{Distance} allows loading data as a "flat file"
-and analyse data (and obtain abundance estimates) straight
+\code{Distance} allows loading data as a "flat file" and
+analyse data (and obtain abundance estimates) straight
 away, provided that the format of the flat file is correct.
 One can provide the file as, for example, an Excel
-spreadsheet using \code{\link{read.xls}} in \pkg{gdata} or CSV using
-\code{\link{read.csv}}.
+spreadsheet using \code{\link{read.xls}} in \pkg{gdata} or
+CSV using \code{\link{read.csv}}.
 }
 \details{
 Each row of the data table corresponds to one observation
@@ -21,8 +21,8 @@ point transect was visited) \cr \code{Region.Label} \tab
 code for regional strata (see below) \cr \code{Area} \tab
 area of the strata}
 
-Note that in the simplest case (one area surveyed only once)
-there is only one \code{Region.Label} and a single
+Note that in the simplest case (one area surveyed only
+once) there is only one \code{Region.Label} and a single
 corresponding \code{Area} duplicated for each observation.
 
 The example given below was provided by Eric Rexstad.
@@ -73,8 +73,9 @@ model.sel.bin <- data.frame(name=c("Pooled f(0)", "Stratum covariate",
                                   strat.covar.binned$ddf$criterion,
                                   full.strat.binned.North$ddf$criterion+
                                   full.strat.binned.South$ddf$criterion))
-print(model.sel.bin)
+
 # Note model with stratum as covariate is most parsimonious
+print(model.sel.bin)
 }
 }
 
