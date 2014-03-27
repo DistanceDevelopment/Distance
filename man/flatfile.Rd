@@ -74,6 +74,7 @@ model.sel.bin <- data.frame(name=c("Pooled f(0)", "Stratum covariate",
                                   full.strat.binned.North$ddf$criterion+
                                   full.strat.binned.South$ddf$criterion))
 print(model.sel.bin)
+# Note model with stratum as covariate is most parsimonious
 }
 }
 
