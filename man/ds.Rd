@@ -6,7 +6,7 @@ ds(data, truncation = ifelse(is.null(cutpoints), ifelse(is.null(data$distend),
   max(data$distance), max(data$distend)), max(cutpoints)),
   transect = c("line", "point"), formula = ~1, key = c("hn", "hr",
   "unif"), adjustment = c("cos", "herm", "poly"), order = NULL,
-  scale = c("width", "scale"), cutpoints = NULL, monotonicity = FALSE,
+  scale = c("width", "scale"), cutpoints = NULL, monotonicity = "strict",
   dht.group = FALSE, region.table = NULL, sample.table = NULL,
   obs.table = NULL, convert.units = 1, method = "nlminb", quiet = FALSE,
   debug.level = 0, initial.values = NULL)
@@ -75,9 +75,10 @@ ds(data, truncation = ifelse(is.null(cutpoints), ifelse(is.null(data$distend),
   \code{cutpoints} has precedence.}
 
   \item{monotonicity}{should the detection function be
-  constrained for monotonicity weakly ("weak"), strictly
-  ("strict") or not at all ("none" or \code{FALSE}). See
-  Montonicity, below. (Default \code{FALSE}).}
+  constrained for monotonicity weakly (\code{"weak"}),
+  strictly (\code{"strict"}) or not at all (\code{"none"}
+  or \code{FALSE}). See Montonicity, below. (Default
+  \code{"strict"}).}
 
   \item{dht.group}{should density abundance estimates
   consider all groups to be size 1 (abundance of groups)
@@ -261,7 +262,7 @@ using \code{ds()}.
 library(Distance)
 data(book.tee.data)
 tee.data<-book.tee.data$book.tee.dataframe[book.tee.data$book.tee.dataframe$observer==1,]
-ds.model<-ds(tee.data,4,monotonicity="strict")
+ds.model<-ds(tee.data,4)
 summary(ds.model)
 plot(ds.model)
 
@@ -272,7 +273,7 @@ region<-book.tee.data$book.tee.region
 samples<-book.tee.data$book.tee.samples
 obs<-book.tee.data$book.tee.obs
 
-ds.dht.model<-ds(tee.data,4,region.table=region,monotonicity="strict",
+ds.dht.model<-ds(tee.data,4,region.table=region,
              sample.table=samples,obs.table=obs)
 summary(ds.dht.model)
 
@@ -280,9 +281,12 @@ summary(ds.dht.model)
 ds.model.cos2<-ds(tee.data,4,adjustment="cos",order=2)
 summary(ds.model.cos2)
 
-# specify order 2 and 3 cosine adjustments - LOTS of non-monotonicity!
-ds.model.cos24<-ds(tee.data,4,adjustment="cos",order=c(2,3))
-summary(ds.model.cos24)
+# specify order 2 and 3 cosine adjustments, turning monotonicity
+# constraints off
+ds.model.cos24<-ds(tee.data,4,adjustment="cos",order=c(2,3),
+                   monotonicity=FALSE)
+# check for non-monotonicity -- actually no problems
+check.mono(ds.model.cos24$ddf,plot=TRUE,n.pts=100)
 
 # truncate the largest 10\% of the data and fit only a hazard-rate
 # detection function

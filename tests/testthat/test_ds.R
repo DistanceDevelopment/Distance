@@ -45,7 +45,7 @@ test_that("Simple models work",{
 
   # specify order 2 cosine adjustments
   ds.model.cos2<-ds(egdata,4,adjustment="cos",order=2, region.table=region,
-                    sample.table=samples,obs.table=obs)
+                    sample.table=samples,obs.table=obs,monotonicity=FALSE)
   # pars and lnl
   #result <- ddf(dsmodel=~mcds(key="hn", formula=~1, adj.series="cos",
   #                            adj.order=2), data=egdata, method="ds",
@@ -58,7 +58,8 @@ test_that("Simple models work",{
 
   # specify order 2 and 4 cosine adjustments
   ds.model.cos24<-ds(egdata,4,adjustment="cos",order=c(2,4),
-                     region.table=region, sample.table=samples, obs.table=obs)
+                     region.table=region, sample.table=samples, obs.table=obs,
+                     monotonicity=FALSE)
   tp <- c(0.92121582, -0.03712634, -0.03495348)
   names(tp) <- c("X.Intercept.","V2","V3")
   expect_equal(ds.model.cos24$ddf$par, tp)

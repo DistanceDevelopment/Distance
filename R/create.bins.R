@@ -16,7 +16,10 @@ create.bins <- function(data,cutpoints){
   cp <- cutpoints
 
   # remove distances outside bins
-  in.cp.ind <- data>=cp[1] & data<=cp[length(cp)]
+  in.cp.ind <- data$distance>=cp[1] & data$distance<=cp[length(cp)]
+  if(!all(in.cp.ind)){
+    warning("Some distances were outside bins and have been removed.")
+  }
   data <- data[in.cp.ind,]
 
   # pull out the distances (removing the NAs for now)
@@ -33,6 +36,12 @@ create.bins <- function(data,cutpoints){
     distbegin[ind] <- cp[i]
     distend[ind]   <- cp[i+1]
   }
+  # last cutpoint, include those observations AT the truncation point
+  ind <- which(d>=cp[i] & d<=cp[i+1])
+
+  distbegin[ind] <- cp[i]
+  distend[ind]   <- cp[i+1]
+
 
   # handle NA distances, that we need to preserve
   distbegin.na <- rep(NA,length(data$distance))

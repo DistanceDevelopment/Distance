@@ -35,10 +35,7 @@
 #'        \code{distend} then these will be used as bins if \code{cutpoints}
 #'        is not specified. If both are specified, \code{cutpoints} has
 #'        precedence.
-#' @param monotonicity should the detection function be constrained for
-#'        monotonicity weakly ("weak"), strictly ("strict") or not at all
-#'        ("none" or \code{FALSE}). See Montonicity, below. (Default
-#'        \code{FALSE}).
+#' @param monotonicity should the detection function be constrained for monotonicity weakly (\code{"weak"}), strictly (\code{"strict"}) or not at all (\code{"none"} or \code{FALSE}). See Montonicity, below. (Default \code{"strict"}).
 #' @param dht.group should density abundance estimates consider all groups to be
 #'        size 1 (abundance of groups) \code{dht.group=TRUE} or should the
 #'        abundance of individuals (group size is taken into account),
@@ -147,7 +144,7 @@
 #' library(Distance)
 #' data(book.tee.data)
 #' tee.data<-book.tee.data$book.tee.dataframe[book.tee.data$book.tee.dataframe$observer==1,]
-#' ds.model<-ds(tee.data,4,monotonicity="strict")
+#' ds.model<-ds(tee.data,4)
 #' summary(ds.model)
 #' plot(ds.model)
 #'
@@ -158,7 +155,7 @@
 #' samples<-book.tee.data$book.tee.samples
 #' obs<-book.tee.data$book.tee.obs
 #'
-#' ds.dht.model<-ds(tee.data,4,region.table=region,monotonicity="strict",
+#' ds.dht.model<-ds(tee.data,4,region.table=region,
 #'              sample.table=samples,obs.table=obs)
 #' summary(ds.dht.model)
 #'
@@ -166,9 +163,12 @@
 #' ds.model.cos2<-ds(tee.data,4,adjustment="cos",order=2)
 #' summary(ds.model.cos2)
 #'
-#' # specify order 2 and 3 cosine adjustments - LOTS of non-monotonicity!
-#' ds.model.cos24<-ds(tee.data,4,adjustment="cos",order=c(2,3))
-#' summary(ds.model.cos24)
+#' # specify order 2 and 3 cosine adjustments, turning monotonicity
+#' # constraints off
+#' ds.model.cos24<-ds(tee.data,4,adjustment="cos",order=c(2,3),
+#'                    monotonicity=FALSE)
+#' # check for non-monotonicity -- actually no problems
+#' check.mono(ds.model.cos24$ddf,plot=TRUE,n.pts=100)
 #'
 #' # truncate the largest 10% of the data and fit only a hazard-rate
 #' # detection function
@@ -185,7 +185,7 @@ ds<-function(data, truncation=ifelse(is.null(cutpoints),
              formula=~1, key=c("hn","hr","unif"),
              adjustment=c("cos","herm","poly"),
              order=NULL, scale=c("width","scale"),
-             cutpoints=NULL, monotonicity=FALSE, dht.group=FALSE,
+             cutpoints=NULL, monotonicity="strict", dht.group=FALSE,
              region.table=NULL, sample.table=NULL, obs.table=NULL,
              convert.units=1, method="nlminb", quiet=FALSE, debug.level=0,
              initial.values=NULL){
@@ -488,6 +488,9 @@ ds<-function(data, truncation=ifelse(is.null(cutpoints),
                             " with ", adj.name,"(",
                             paste(order[1:i],collapse=","),
                             ") adjustments", sep="")
+    }else{
+      # if we have only the key function, turn off monotonicity
+      meta.data$mono <- meta.data$mono.strict <- FALSE
     }
 
     model.formula<-paste(model.formula,")",sep="")
