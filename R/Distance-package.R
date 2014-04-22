@@ -80,13 +80,13 @@ NULL
 #' # Load the Excel file, note that header=FALSE and we add column names after
 #' minke <- read.xls(minke.filepath, stringsAsFactor=FALSE,header=FALSE)
 #' names(minke) <- c("Region.Label", "Area", "Sample.Label", "Effort","distance")
-#' minke$Effort <- as.numeric(minke$Effort)  # overcome problem in R 3.1.0
 #' # One may want to call edit(minke) or head(minke) at this point
 #' # to examine the data format
 #'
 #' # Due to the way the file was saved and the default behaviour in R
 #' # for numbers stored with many decimal places (they are read as strings
-#' # rather than numbers, see str(minke)).
+#' # rather than numbers, see str(minke)). We must coerce the Effort column
+#' # to numeric
 #' minke$Effort <- as.numeric(minke$Effort)
 #'
 #' ## perform an analysis using the exact distances

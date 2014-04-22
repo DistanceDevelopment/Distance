@@ -46,7 +46,8 @@ names(minke) <- c("Region.Label", "Area", "Sample.Label", "Effort","distance")
 
 # Due to the way the file was saved and the default behaviour in R
 # for numbers stored with many decimal places (they are read as strings
-# rather than numbers, see str(minke)).
+# rather than numbers, see str(minke)). We must coerce the Effort column
+# to numeric
 minke$Effort <- as.numeric(minke$Effort)
 
 ## perform an analysis using the exact distances
