@@ -7,8 +7,8 @@
 analyse data (and obtain abundance estimates) straight
 away, provided that the format of the flat file is correct.
 One can provide the file as, for example, an Excel
-spreadsheet using \code{\link{read.xls}} in \pkg{gdata} or
-CSV using \code{\link{read.csv}}.
+spreadsheet using \code{read.xls} in \pkg{gdata} or CSV
+using \code{\link{read.csv}}.
 }
 \details{
 Each row of the data table corresponds to one observation
@@ -44,6 +44,10 @@ names(minke) <- c("Region.Label", "Area", "Sample.Label", "Effort","distance")
 # One may want to call edit(minke) or head(minke) at this point
 # to examine the data format
 
+# Due to the way the file was saved and the default behaviour in R
+# for numbers stored with many decimal places (they are read as strings
+# rather than numbers, see str(minke)).
+minke$Effort <- as.numeric(minke$Effort)
 
 ## perform an analysis using the exact distances
 pooled.exact <- ds(minke, truncation=1.5, key="hr", order=0)

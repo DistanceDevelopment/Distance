@@ -115,8 +115,8 @@ ds(data, truncation = ifelse(is.null(cutpoints), ifelse(is.null(data$distend),
   implying all of the units are "correct" already.)}
 
   \item{method}{optimization method to use (any method
-  usable by \code{\link{optim}} or \code{\link{optimx}}).
-  Defaults to "nlminb".}
+  usable by \code{\link{optim}} or \pkg{optimx}). Defaults
+  to "nlminb".}
 
   \item{debug.level}{print debugging output. 0=none, 1-3
   increasing level of debugging output.}

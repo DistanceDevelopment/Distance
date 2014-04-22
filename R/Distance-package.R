@@ -5,6 +5,7 @@
 #' Underlying \code{Distance} is the package \code{mrds}, for more advanced analyses (such as those involving double observer surveys) one may find it necessary to use \code{mrds}.
 #'
 #' @name Distance-package
+#' @import mrds
 #' @aliases Distance-package Distance
 #' @docType package
 #' @author David L. Miller <dave@@ninepointeightone.net>
@@ -50,7 +51,7 @@ NULL
 
 #' Flat files
 #'
-#' \code{Distance} allows loading data as a "flat file" and analyse data (and obtain abundance estimates) straight away, provided that the format of the flat file is correct. One can provide the file as, for example, an Excel spreadsheet using \code{\link{read.xls}} in \pkg{gdata} or CSV using \code{\link{read.csv}}.
+#' \code{Distance} allows loading data as a "flat file" and analyse data (and obtain abundance estimates) straight away, provided that the format of the flat file is correct. One can provide the file as, for example, an Excel spreadsheet using \code{read.xls} in \pkg{gdata} or CSV using \code{\link{read.csv}}.
 #'
 #' Each row of the data table corresponds to one observation and must have a the following columns:
 #' \tabular{ll}{\code{distance} \tab observed distance to object \cr
@@ -82,6 +83,10 @@ NULL
 #' # One may want to call edit(minke) or head(minke) at this point
 #' # to examine the data format
 #'
+#' # Due to the way the file was saved and the default behaviour in R
+#' # for numbers stored with many decimal places (they are read as strings
+#' # rather than numbers, see str(minke)).
+#' minke$Effort <- as.numeric(minke$Effort)
 #'
 #' ## perform an analysis using the exact distances
 #' pooled.exact <- ds(minke, truncation=1.5, key="hr", order=0)

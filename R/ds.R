@@ -65,7 +65,7 @@
 #'        "correct" already.)
 #'
 #' @param method optimization method to use (any method usable by
-#'        \code{\link{optim}} or \code{\link{optimx}}). Defaults to
+#'        \code{\link{optim}} or \pkg{optimx}). Defaults to
 #'        "nlminb".
 #'
 #' @param debug.level print debugging output. 0=none, 1-3 increasing level of
