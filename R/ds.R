@@ -35,7 +35,7 @@
 #'        \code{distend} then these will be used as bins if \code{cutpoints}
 #'        is not specified. If both are specified, \code{cutpoints} has
 #'        precedence.
-#' @param monotonicity should the detection function be constrained for monotonicity weakly (\code{"weak"}), strictly (\code{"strict"}) or not at all (\code{"none"} or \code{FALSE}). See Montonicity, below. (Default \code{"strict"}).
+#' @param monotonicity should the detection function be constrained for monotonicity weakly (\code{"weak"}), strictly (\code{"strict"}) or not at all (\code{"none"} or \code{FALSE}). See Montonicity, below. (Default \code{"strict"}). By default it is on for models without covariates in the detection function, off when covariates are present.
 #' @param dht.group should density abundance estimates consider all groups to be
 #'        size 1 (abundance of groups) \code{dht.group=TRUE} or should the
 #'        abundance of individuals (group size is taken into account),
@@ -96,9 +96,11 @@
 #'
 #'  @section Binning: Note that binning is performed such that bin 1 is all distances greater or equal to cutpoint 1 (>=0 or left truncation distance) and less than cutpoint 2. Bin 2 is then distances greater or equal to cutpoint 2 and less than cutpoint 3 and so on.
 #'
-#' @section Monotonicity: When adjustment terms are used, it is possible for the detection function to not always decrease with increasing distance. This is unrealistic and can lead to bias. To avoid this, the detection function can be constrained for monotonicity.
+#' @section Monotonicity: When adjustment terms are used, it is possible for the detection function to not always decrease with increasing distance. This is unrealistic and can lead to bias. To avoid this, the detection function can be constrained for monotonicity (and is by default for detection functions without covariates).
 #'
 #'  Monotonicity constraints are supported in a similar way to that described in Buckland et al (2001). 20 equally spaced points over the range of the detection function (left to right truncation) are evaluated at each round of the optimisation and the function is constrained to be either always less than it's value at zero (\code{"weak"}) or such that each value is less than or equal to the previous point (monotonically decreasing; \code{"strict"}). See also \code{\link{check.mono}} in \code{mrds}.
+#'
+#' Even with no monotonicity constraints, checks are still made that the detection function is monotonic, see \code{\link{check.mono}}.
 #'
 # THIS IS STOLEN FROM mrds, sorry Jeff!
 #' @section Units:
@@ -185,7 +187,10 @@ ds<-function(data, truncation=ifelse(is.null(cutpoints),
              formula=~1, key=c("hn","hr","unif"),
              adjustment=c("cos","herm","poly"),
              order=NULL, scale=c("width","scale"),
-             cutpoints=NULL, monotonicity="strict", dht.group=FALSE,
+             cutpoints=NULL, dht.group=FALSE,
+             monotonicity=ifelse(formula==~1,
+                                 "strict",
+                                 "none"),
              region.table=NULL, sample.table=NULL, obs.table=NULL,
              convert.units=1, method="nlminb", quiet=FALSE, debug.level=0,
              initial.values=NULL){
@@ -331,9 +336,9 @@ ds<-function(data, truncation=ifelse(is.null(cutpoints),
           stop("Adjustment orders must be integers.")
       }
 
-      if(formula != ~1){
-        stop("Cannot use both adjustments and covariates, choose one!")
-      }
+      #if(formula != ~1){
+      #  stop("Cannot use both adjustments and covariates, choose one!")
+      #}
 
       # check for each adjustment type
       order<-sort(order)

@@ -6,10 +6,11 @@ ds(data, truncation = ifelse(is.null(cutpoints), ifelse(is.null(data$distend),
   max(data$distance), max(data$distend)), max(cutpoints)),
   transect = c("line", "point"), formula = ~1, key = c("hn", "hr",
   "unif"), adjustment = c("cos", "herm", "poly"), order = NULL,
-  scale = c("width", "scale"), cutpoints = NULL, monotonicity = "strict",
-  dht.group = FALSE, region.table = NULL, sample.table = NULL,
-  obs.table = NULL, convert.units = 1, method = "nlminb", quiet = FALSE,
-  debug.level = 0, initial.values = NULL)
+  scale = c("width", "scale"), cutpoints = NULL, dht.group = FALSE,
+  monotonicity = ifelse(formula == ~1, "strict", "none"),
+  region.table = NULL, sample.table = NULL, obs.table = NULL,
+  convert.units = 1, method = "nlminb", quiet = FALSE, debug.level = 0,
+  initial.values = NULL)
 }
 \arguments{
   \item{data}{a \code{data.frame} containing at least a
@@ -78,7 +79,9 @@ ds(data, truncation = ifelse(is.null(cutpoints), ifelse(is.null(data$distend),
   constrained for monotonicity weakly (\code{"weak"}),
   strictly (\code{"strict"}) or not at all (\code{"none"}
   or \code{FALSE}). See Montonicity, below. (Default
-  \code{"strict"}).}
+  \code{"strict"}). By default it is on for models without
+  covariates in the detection function, off when covariates
+  are present.}
 
   \item{dht.group}{should density abundance estimates
   consider all groups to be size 1 (abundance of groups)
@@ -192,7 +195,8 @@ using \code{ds()}.
   detection function to not always decrease with increasing
   distance. This is unrealistic and can lead to bias. To
   avoid this, the detection function can be constrained for
-  monotonicity.
+  monotonicity (and is by default for detection functions
+  without covariates).
 
   Monotonicity constraints are supported in a similar way
   to that described in Buckland et al (2001). 20 equally
@@ -204,6 +208,10 @@ using \code{ds()}.
   equal to the previous point (monotonically decreasing;
   \code{"strict"}). See also \code{\link{check.mono}} in
   \code{mrds}.
+
+  Even with no monotonicity constraints, checks are still
+  made that the detection function is monotonic, see
+  \code{\link{check.mono}}.
 }
 
 \section{Units}{
