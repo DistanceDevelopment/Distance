@@ -133,6 +133,7 @@
 #'  @section Data format: One can supply \code{data} only to simply fit a detection function. However, if abundance/density estimates are necessary further information is required. Either the \code{region.table}, \code{sample.table} and \code{obs.table} \code{data.frame}s can be supplied or all data can be supplied as a "flat file" in the \code{data} argument. In this format each row in data has additional information that would ordinarily be in the other tables. This usually means that there are additional columns named: \code{Sample.Label}, \code{Region.Label}, \code{Effort} and \code{Area} for each observation. See \code{\link{flatfile}} for an example.
 #'
 #' @author David L. Miller
+#' @seealso \code{\link{flatfile}}
 #' @export
 #'
 #' @references
@@ -167,10 +168,16 @@
 #'
 #' # specify order 2 and 3 cosine adjustments, turning monotonicity
 #' # constraints off
-#' ds.model.cos24<-ds(tee.data,4,adjustment="cos",order=c(2,3),
+#' ds.model.cos23<-ds(tee.data,4,adjustment="cos",order=c(2,3),
 #'                    monotonicity=FALSE)
 #' # check for non-monotonicity -- actually no problems
-#' check.mono(ds.model.cos24$ddf,plot=TRUE,n.pts=100)
+#' check.mono(ds.model.cos23$ddf,plot=TRUE,n.pts=100)
+#'
+#' # include both a covariate and adjustment terms in the model
+#' ds.model.cos2.sex <- ds(tee.data,4,adjustment="cos",order=2,
+#'                         monotonicity=FALSE, formula=~as.factor(sex))
+#' # check for non-monotonicity -- actually no problems
+#' check.mono(ds.model.cos2.sex$ddf,plot=TRUE,n.pts=100)
 #'
 #' # truncate the largest 10% of the data and fit only a hazard-rate
 #' # detection function

@@ -291,10 +291,16 @@ summary(ds.model.cos2)
 
 # specify order 2 and 3 cosine adjustments, turning monotonicity
 # constraints off
-ds.model.cos24<-ds(tee.data,4,adjustment="cos",order=c(2,3),
+ds.model.cos23<-ds(tee.data,4,adjustment="cos",order=c(2,3),
                    monotonicity=FALSE)
 # check for non-monotonicity -- actually no problems
-check.mono(ds.model.cos24$ddf,plot=TRUE,n.pts=100)
+check.mono(ds.model.cos23$ddf,plot=TRUE,n.pts=100)
+
+# include both a covariate and adjustment terms in the model
+ds.model.cos2.sex <- ds(tee.data,4,adjustment="cos",order=2,
+                        monotonicity=FALSE, formula=~as.factor(sex))
+# check for non-monotonicity -- actually no problems
+check.mono(ds.model.cos2.sex$ddf,plot=TRUE,n.pts=100)
 
 # truncate the largest 10\% of the data and fit only a hazard-rate
 # detection function
@@ -313,5 +319,8 @@ Oxford University Press. Oxford, UK.
 Buckland, S.T., Anderson, D.R., Burnham, K.P., Laake, J.L.,
 Borchers, D.L., and Thomas, L. (2004). Advanced Distance
 Sampling. Oxford University Press. Oxford, UK.
+}
+\seealso{
+\code{\link{flatfile}}
 }
 
