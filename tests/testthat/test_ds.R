@@ -24,6 +24,9 @@ test_that("Input errors are thrown correctly",{
   # first cutpoint not zero when no left truncation
   expect_error(ds(egdata,4,cutpoints=c(2,3,4)))
 
+  # uniform with covariates?
+  expect_error(ds(egdata,4,key="unif",formula=~size))
+
 })
 
 

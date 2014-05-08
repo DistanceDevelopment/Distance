@@ -42,7 +42,8 @@ ds(data, truncation = ifelse(is.null(cutpoints), ifelse(is.null(data$distend),
 
   \item{key}{key function to use; "hn" gives half-normal
   (default), "hr" gives hazard-rate and "unif" gives
-  uniform.}
+  uniform. Note that if uniform key is used, covariates
+  cannot be included in the model.}
 
   \item{adjustment}{adjustment terms to use; "cos" gives
   cosine (default), "herm" gives Hermite polynomial and

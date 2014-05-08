@@ -12,7 +12,7 @@
 #' By default for exact distances the maximum observed distance is used as the right truncation. When the data is binned, the right truncation is the largest bin end point. Default left truncation is set to zero.
 #' @param transect indicates transect type "line" (default) or "point".
 #' @param formula formula for the scale parameter. For a CDS analysis leave this as its default \code{~1}.
-#' @param key key function to use; "hn" gives half-normal (default), "hr" gives hazard-rate and "unif" gives uniform.
+#' @param key key function to use; "hn" gives half-normal (default), "hr" gives hazard-rate and "unif" gives uniform. Note that if uniform key is used, covariates cannot be included in the model.
 #' @param adjustment adjustment terms to use; "cos" gives cosine (default),
 #'        "herm" gives Hermite polynomial and "poly" gives simple polynomial.
 #'        "cos" is recommended. A value of \code{NULL} indicates that no
@@ -318,6 +318,10 @@ ds<-function(data, truncation=ifelse(is.null(cutpoints),
   # no uniform key with no adjustments
   if(is.null(adjustment) & key=="unif"){
     stop("Can't use uniform key with no adjustments.")
+  }
+  # no covariates with uniform
+  if((as.formula(formula)!=~1) & key=="unif"){
+    stop("Can't use uniform key with covariates.")
   }
   # uniform key must use width scaling
   scale <- match.arg(scale)
