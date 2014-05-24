@@ -557,7 +557,7 @@ ds<-function(data, truncation=ifelse(is.null(cutpoints),
         model <- NULL
       }else{
         message(paste0("\n\nError in model fitting, returning: ",
-                       sub("^Fitting ","",this.message)))
+                       sub("^Fitting ","",last.model$name.message)))
         message(paste0("\n  Error: ",model[1],"\n"))
         model <- NULL
         model <- last.model
