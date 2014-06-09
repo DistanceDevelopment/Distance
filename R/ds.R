@@ -75,7 +75,7 @@
 #'              Default value FALSE.
 #'
 #' @param initial.values a \code{list} of named starting values, see
-#'        \code{\link{ddf}}. Only allowed when AIC term selection is not used.
+#'        \code{\link{mrds-opt}}. Only allowed when AIC term selection is not used.
 #'
 #' @return a list with elements:
 #'        \tabular{ll}{\code{ddf} \tab a detection function model object.\cr
