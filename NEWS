@@ -1,3 +1,8 @@
+Distance version 0.9.1
+ * Models with both covariates and adjustment terms can actually be specified -- this was not fully implemented in previous version.
+ * ds() now tells the user the models which is returned (rather than previously fitted model)
+ * links to mrds documentation on optimisation issues
+
 Distance version 0.9
  * Flat file support example, see ?flatfile
  * New data set: simulated minke whale data, see ?minke and ?flatfile for an example analysis
