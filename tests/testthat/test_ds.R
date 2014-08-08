@@ -3,6 +3,10 @@
 library(Distance)
 library(mrds)
 
+par.tol <- 1e-5
+N.tol <- 1e-3
+lnl.tol <- 1e-4
+
 context("Testing ds()")
 
 # data setup
@@ -42,9 +46,9 @@ test_that("Simple models work",{
   ds.dht.model<-ds(egdata,4,region.table=region,
                sample.table=samples,obs.table=obs)
   # pars and lnl
-  expect_equal(ds.dht.model$ddf$par, 0.9229255)
-  expect_equal(ds.dht.model$ddf$lnl, -215.1466, tol=1e-6)
-  expect_equal(ds.dht.model$dht$individuals$N$Estimate[3], 712.6061, tol=1e-6)
+  expect_equal(ds.dht.model$ddf$par, 0.9229255,tol=par.tol)
+  expect_equal(ds.dht.model$ddf$lnl, -215.1466, tol=lnl.tol)
+  expect_equal(ds.dht.model$dht$individuals$N$Estimate[3], 712.6061, tol=N.tol)
 
   # specify order 2 cosine adjustments
   ds.model.cos2<-ds(egdata,4,adjustment="cos",order=2, region.table=region,
@@ -55,9 +59,9 @@ test_that("Simple models work",{
   #              meta.data=list(width=4))
   tp <- c(0.92098796, -0.04225286)
   names(tp) <- c("X.Intercept.","V2")
-  expect_equal(ds.model.cos2$ddf$par, tp)
+  expect_equal(ds.model.cos2$ddf$par, tp, tol=par.tol)
   expect_equal(ds.model.cos2$ddf$lnl, -215.0763, tol=1e-6)
-  expect_equal(ds.model.cos2$dht$individuals$N$Estimate[3], 682.5572, tol=1e-6)
+  expect_equal(ds.model.cos2$dht$individuals$N$Estimate[3], 682.5572, tol=N.tol)
 
   # specify order 2 and 4 cosine adjustments
   ds.model.cos24<-ds(egdata,4,adjustment="cos",order=c(2,4),
@@ -65,9 +69,9 @@ test_that("Simple models work",{
                      monotonicity=FALSE)
   tp <- c(0.92121582, -0.03712634, -0.03495348)
   names(tp) <- c("X.Intercept.","V2","V3")
-  expect_equal(ds.model.cos24$ddf$par, tp)
-  expect_equal(ds.model.cos24$ddf$lnl, -215.0277, tol=1e-6)
-  expect_equal(ds.model.cos24$dht$individuals$N$Estimate[3], 661.1458, tol=1e-6)
+  expect_equal(ds.model.cos24$ddf$par, tp, tol=par.tol)
+  expect_equal(ds.model.cos24$ddf$lnl, -215.0277, tol=lnl.tol)
+  expect_equal(ds.model.cos24$dht$individuals$N$Estimate[3],661.1458,tol=N.tol)
 
   # hazard rate
   ds.model.hr<-ds(egdata,4,key="hr",
@@ -77,9 +81,9 @@ test_that("Simple models work",{
   #              meta.data=list(width=4))
   tp <- c(0.7833921, 0.9495860)
   names(tp) <- c("p1","p2")
-  expect_equal(ds.model.hr$ddf$par, tp, tol=1e-7)
-  expect_equal(ds.model.hr$ddf$lnl, -215.2384, tol=1e-6)
-  expect_equal(ds.model.hr$dht$individuals$N$Estimate[3], 661.9913, tol=1e-6)
+  expect_equal(ds.model.hr$ddf$par, tp, tol=par.tol)
+  expect_equal(ds.model.hr$ddf$lnl, -215.2384, tol=lnl.tol)
+  expect_equal(ds.model.hr$dht$individuals$N$Estimate[3], 661.9913, tol=N.tol)
 
 })
 
