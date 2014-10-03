@@ -88,6 +88,21 @@ test_that("Simple models work",{
 })
 
 
+test_that("Uniform does work after all",{
+
+  # should select unif+cos(1)
+  dd <- ds(egdata,4,key="unif")
+  expect_equal(dd$ddf$par,  0.4736092, tol=par.tol)
+
+  # try to fit with unif+cos(1,2)
+  dd <- ds(egdata,4,key="unif",order=c(1,2))
+  expect_equal(dd$ddf$par, c(0.4517276, -0.1129667), tol=par.tol)
+
+
+})
+
+
+
 test_that("Truncation is handled",{
 
   # setting the truncation is correct
