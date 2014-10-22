@@ -4,9 +4,7 @@
 #' function parameters, model selection criterion, and optionally abundance in the
 #' covered (sampled) region and its standard error.
 #' 
-#' @S3method print summary.dsmodel
 #' @aliases print.summary.dsmodel
-#' @method print summary.dsmodel
 #' @param x a summary of distance sampling analysis
 #' @param \dots unspecified and unused arguments for S3 consistency
 #' @return Nothing, just prints the summary.

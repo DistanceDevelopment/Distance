@@ -6,8 +6,6 @@
 #' @param x an object of class \code{dsmodel}.
 #' @param ... extra arguments to be passed to \code{\link{plot.ds}}.
 #' @return \code{NULL}, just produces a plot.
-#' @S3method plot dsmodel
-#' @method plot dsmodel
 #' @aliases plot.dsmodel
 #' @export
 #' @author David L. Miller

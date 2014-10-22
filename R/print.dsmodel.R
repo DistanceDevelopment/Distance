@@ -5,8 +5,6 @@
 #'
 #' @param x a distance sampling analysis (result from calling \code{\link{ds}}).
 #' @param ... not passed through, just for S3 compatibility.
-#' @S3method print dsmodel
-#' @method print dsmodel
 #' @aliases print.dsmodel
 #'
 #' @author David L. Miller

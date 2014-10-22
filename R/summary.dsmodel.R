@@ -11,8 +11,6 @@
 # \code{ds} model object and a mark-recapture model object. The corresponding
 # print function is called to print the summary results.
 # 
-#' @S3method summary dsmodel
-#' @method summary dsmodel
 #' @aliases summary.dsmodel
 #' @param object a distance analysis
 #' @param \dots unspecified and unused arguments for S3 consistency
