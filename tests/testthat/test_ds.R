@@ -79,7 +79,7 @@ test_that("Simple models work",{
                   sample.table=samples, obs.table=obs)
   #result <- ddf(dsmodel=~mcds(key="hr", formula=~1), data=egdata, method="ds",
   #              meta.data=list(width=4))
-  tp <- c(0.7833921, 0.9495860)
+  tp <- c(0.7819477, 0.9486042)
   names(tp) <- c("p1","p2")
   expect_equal(ds.model.hr$ddf$par, tp, tol=par.tol)
   expect_equal(ds.model.hr$ddf$lnl, -215.2384, tol=lnl.tol)
@@ -90,6 +90,7 @@ test_that("Simple models work",{
 
 test_that("Uniform does work after all",{
 
+  par.tol <- 1e-4
   # should select unif+cos(1)
   dd <- ds(egdata,4,key="unif")
   expect_equal(dd$ddf$par,  0.4736092, tol=par.tol)

@@ -66,7 +66,8 @@ checkdata<-function(data,region.table=NULL,sample.table=NULL,obs.table=NULL){
       rownames(obs.table) <- 1:nrow(obs.table)
 
       # drop Region and Sample label columns
-      data <- data[,!c(colnames(data) %in% c("Region.Label","Sample.Label"))]
+      # actually don't do this because then we can't use subset= in dht
+      #data <- data[,!c(colnames(data) %in% c("Region.Label","Sample.Label"))]
       rownames(data) <- 1:nrow(data)
 
       # remove the NA rows

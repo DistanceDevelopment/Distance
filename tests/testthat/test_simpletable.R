@@ -22,6 +22,7 @@ flatdat <- merge(flatdat,egdata,by="object",all.x=TRUE)
 
 
 
+
 test_that("Recover structure for tee data",{
 
   ## check we can recover the 4 data frames
@@ -29,6 +30,10 @@ test_that("Recover structure for tee data",{
 
   # this should be a factor really, as is elsewhere
   obs$Region.Label <- as.factor(obs$Region.Label)
+
+  ## now egdata should actually have the Region.Label and Sample.Label columns
+  egdata <- merge(egdata, obs)
+  egdata <- egdata[,c(1,9,8,2:7)]
 
   expect_equivalent(sepdat$region.table,region)
   expect_equivalent(sepdat$obs.table,obs)
