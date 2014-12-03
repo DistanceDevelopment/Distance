@@ -5,11 +5,11 @@ Title: A simple way to fit detection functions to distance sampling data and
     calculate abundance/density for biological populations.
 LazyLoad: yes
 Author: David Lawrence Miller
-Description: A library that provides a simple way of fitting detection
-    functions to distance sampling data for both line and point transects.
-    Adjustment term selection, left and right truncation as well as
-    monotonicity constraints and binning are supported. Abundance and density
-    estimates can also be calculated if survey area information is provided.
+Description: A simple way of fitting detection functions to distance sampling
+    data for both line and point transects. Adjustment term selection, left and
+    right truncation as well as monotonicity constraints and binning are
+    supported. Abundance and density estimates can also be calculated (via a
+    Horvitz-Thompson-like estimator) if survey area information is provided.
 Version: 0.9.2
 URL: http://github.com/DistanceDevelopment/Distance/
 Date: 2014-10-15
