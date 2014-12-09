@@ -67,7 +67,7 @@ NULL
 #' @name flatfile
 #' @docType methods
 #' @examples
-#' \donttest{
+#' \dontrun{
 #' library(Distance)
 #' # Need to have the gdata library installed from CRAN, requires a system
 #' # with perl installed (usually fine for Linux/Mac)

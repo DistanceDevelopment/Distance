@@ -19,7 +19,7 @@ Note that in the simplest case (one area surveyed only once) there is only one \
 The example given below was provided by Eric Rexstad.
 }
 \examples{
-\donttest{
+\dontrun{
 library(Distance)
 # Need to have the gdata library installed from CRAN, requires a system
 # with perl installed (usually fine for Linux/Mac)
