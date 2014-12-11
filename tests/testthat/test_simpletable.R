@@ -50,6 +50,10 @@ test_that("Errors work",{
 
   expect_error(Distance:::checkdata(flatdat))
 
+  # check we get an error if the columns are right but their case is wrong
+  flatdat$effort <- flatdat$Effort
+  flatdat$Effort <- NULL
+  expect_error(Distance:::checkdata(flatdat))
 
 })
 #test_that("Extra regions",{

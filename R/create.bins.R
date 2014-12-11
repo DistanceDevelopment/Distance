@@ -12,6 +12,11 @@
 #' @export
 create.bins <- function(data,cutpoints){
 
+  # don't do anything if there are NAs in the distance column
+  if(any(is.na(data$distance))){
+    stop("Some distances are NA, can't create bins.")
+  }
+
   # lazy typist
   cp <- cutpoints
 

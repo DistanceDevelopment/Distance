@@ -72,8 +72,11 @@ checkdata<-function(data,region.table=NULL,sample.table=NULL,obs.table=NULL){
 
       # remove the NA rows
       data <- data[!is.na(data$distance),]
+    }else if(all(tolower(c("Region.Label", "Area", "Sample.Label",
+                           "Effort", "object")) %in%
+                 tolower(colnames(data)))){
+      stop("flatfile column names detected but with incorrect cAsE, correct the names and re-run. See ?flatfile for details.")
     }
-
   }else{
     # check that dht info has the right column titles
     if(!is.null(region.table) & !is.null(sample.table) & !is.null(obs.table)){

@@ -1,3 +1,6 @@
+Distance version 0.9.2
+ * Now warning when columns are correctly named but not in the correct case. Thanks to Richard Borthwick for reporting this bug.
+
 Distance version 0.9.1
  * Models with both covariates and adjustment terms can actually be specified -- this was not fully implemented in previous version.
  * ds() now tells the user the models which is returned (rather than previously fitted model)
