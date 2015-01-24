@@ -31,6 +31,11 @@ checkdata<-function(data,region.table=NULL,sample.table=NULL,obs.table=NULL){
   }
   if(!any(names(data)=="object")){
     data<-cbind(data,object=1:nrow(data))
+  }else{
+    # check that the object IDs are unique
+    if(length(data$object)!=length(unique(data$object))){
+      stop("Not all object IDs are unique, check data.")
+    }
   }
 
   if(is.null(region.table) & is.null(sample.table) & is.null(obs.table)){
