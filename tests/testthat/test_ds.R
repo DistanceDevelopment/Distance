@@ -42,62 +42,67 @@ test_that("Simple models work",{
   samples<-book.tee.data$book.tee.samples
   obs<-book.tee.data$book.tee.obs
 
+  egdata <- egdata[egdata$observer==1,]
+
   # half-normal key should get selected
-  ds.dht.model<-ds(egdata,4,region.table=region,
-               sample.table=samples,obs.table=obs)
+  ds.dht.model <- suppressMessages(ds(egdata,4,region.table=region,
+               sample.table=samples,obs.table=obs))
   # pars and lnl
-  expect_equal(ds.dht.model$ddf$par, 0.9229255,tol=par.tol)
-  expect_equal(ds.dht.model$ddf$lnl, -215.1466, tol=lnl.tol)
-  expect_equal(ds.dht.model$dht$individuals$N$Estimate[3], 712.6061, tol=N.tol)
+  expect_equal(ds.dht.model$ddf$par, 0.6632435,tol=par.tol)
+  expect_equal(ds.dht.model$ddf$lnl, -154.5692, tol=lnl.tol)
+  expect_equal(ds.dht.model$dht$individuals$N$Estimate[3], 652.0909, tol=N.tol)
 
   # specify order 2 cosine adjustments
-  ds.model.cos2<-ds(egdata,4,adjustment="cos",order=2, region.table=region,
-                    sample.table=samples,obs.table=obs,monotonicity=FALSE)
+  ds.model.cos2<-suppressMessages(ds(egdata,4,adjustment="cos",order=2,
+                                     region.table=region, sample.table=samples,
+                                     obs.table=obs,monotonicity=FALSE))
   # pars and lnl
   #result <- ddf(dsmodel=~mcds(key="hn", formula=~1, adj.series="cos",
   #                            adj.order=2), data=egdata, method="ds",
   #              meta.data=list(width=4))
-  tp <- c(0.92098796, -0.04225286)
+  tp <- c(0.66068510, -0.01592872)
   names(tp) <- c("X.Intercept.","V2")
   expect_equal(ds.model.cos2$ddf$par, tp, tol=par.tol)
-  expect_equal(ds.model.cos2$ddf$lnl, -215.0763, tol=1e-6)
-  expect_equal(ds.model.cos2$dht$individuals$N$Estimate[3], 682.5572, tol=N.tol)
+  expect_equal(ds.model.cos2$ddf$lnl, -154.5619, tol=1e-6)
+  expect_equal(ds.model.cos2$dht$individuals$N$Estimate[3], 642.9442, tol=N.tol)
 
   # specify order 2 and 4 cosine adjustments
-  ds.model.cos24<-ds(egdata,4,adjustment="cos",order=c(2,4),
+  ds.model.cos24<-suppressMessages(ds(egdata,4,adjustment="cos",order=c(2,4),
                      region.table=region, sample.table=samples, obs.table=obs,
-                     monotonicity=FALSE)
-  tp <- c(0.92121582, -0.03712634, -0.03495348)
+                     monotonicity=FALSE))
+  tp <- c(0.661391356, -0.008769883, -0.041465153)
   names(tp) <- c("X.Intercept.","V2","V3")
   expect_equal(ds.model.cos24$ddf$par, tp, tol=par.tol)
-  expect_equal(ds.model.cos24$ddf$lnl, -215.0277, tol=lnl.tol)
-  expect_equal(ds.model.cos24$dht$individuals$N$Estimate[3],661.1458,tol=N.tol)
+  expect_equal(ds.model.cos24$ddf$lnl, -154.5084, tol=lnl.tol)
+  expect_equal(ds.model.cos24$dht$individuals$N$Estimate[3],620.0747,tol=N.tol)
 
   # hazard rate
-  ds.model.hr<-ds(egdata,4,key="hr",
+  ds.model.hr<-suppressMessages(ds(egdata,4,key="hr",
                   adjustment=NULL, region.table=region,
-                  sample.table=samples, obs.table=obs)
+                  sample.table=samples, obs.table=obs))
   #result <- ddf(dsmodel=~mcds(key="hr", formula=~1), data=egdata, method="ds",
   #              meta.data=list(width=4))
-  tp <- c(0.7819477, 0.9486042)
+  tp <- c(0.9375891, 0.7245641)
   names(tp) <- c("p1","p2")
   expect_equal(ds.model.hr$ddf$par, tp, tol=par.tol)
-  expect_equal(ds.model.hr$ddf$lnl, -215.2384, tol=lnl.tol)
-  expect_equal(ds.model.hr$dht$individuals$N$Estimate[3], 661.9913, tol=N.tol)
+  expect_equal(ds.model.hr$ddf$lnl, -155.2894, tol=lnl.tol)
+  expect_equal(ds.model.hr$dht$individuals$N$Estimate[3], 591.8193, tol=N.tol)
 
 })
 
 
 test_that("Uniform does work after all",{
 
+  egdata <- egdata[egdata$observer==1,]
+
   par.tol <- 1e-4
   # should select unif+cos(1)
-  dd <- ds(egdata,4,key="unif")
-  expect_equal(dd$ddf$par,  0.4736092, tol=par.tol)
+  dd <- suppressMessages(ds(egdata,4,key="unif"))
+  expect_equal(dd$ddf$par,  0.7384736, tol=par.tol)
 
   # try to fit with unif+cos(1,2)
-  dd <- ds(egdata,4,key="unif",order=c(1,2))
-  expect_equal(dd$ddf$par, c(0.4517276, -0.1129667), tol=par.tol)
+  dd <- suppressMessages(ds(egdata,4,key="unif",order=c(1,2)))
+  expect_equal(dd$ddf$par, c(0.7050144, -0.1056291), tol=par.tol)
 
 
 })
@@ -106,17 +111,20 @@ test_that("Uniform does work after all",{
 
 test_that("Truncation is handled",{
 
+  egdata <- egdata[egdata$observer==1,]
+
   # setting the truncation is correct
-  expect_equal(ds(egdata,4,key="hn",order=0)$ddf$meta.data$width,4)
+  expect_equal(suppressMessages(ds(egdata,4,key="hn",order=0))$ddf$meta.data$width,4)
 
   # largest observed distance
-  expect_equal(ds(egdata,key="hn",order=0)$ddf$meta.data$width,3.84)
+  expect_equal(suppressMessages(ds(egdata,key="hn",order=0))$ddf$meta.data$width,3.84)
 
   # largest cutpoint
-  expect_equal(ds(egdata,key="hn",order=0,cutpoints=c(0,1,2,3,3.8))$ddf$meta.data$width,3.8)
+  expect_equal(suppressMessages(ds(egdata,key="hn",order=0,
+                  cutpoints=c(0,1,2,3,3.8)))$ddf$meta.data$width,3.8)
 
   # largest bin
   bin.data <- Distance:::create.bins(egdata,c(0,1,2,3,3.8))
-  expect_equal(ds(bin.data,key="hn",order=0)$ddf$meta.data$width,3.8)
+  expect_equal(suppressMessages(ds(bin.data,key="hn",order=0))$ddf$meta.data$width,3.8)
 
 })

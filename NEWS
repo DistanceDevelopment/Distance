@@ -1,3 +1,7 @@
+Distance version 0.9.3
+ * Updated tests to work with new unoque object ID code.
+ * Liberally sprinkled tests with suppressMessages()
+
 Distance version 0.9.2
  * Now warning when columns are correctly named but not in the correct case. Thanks to Richard Borthwick for reporting this bug.
  * Now checks that object IDs are unique. Thanks to Ricardo Lima & Francisco Azevedo for highlighting this issue.
