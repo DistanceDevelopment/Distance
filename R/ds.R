@@ -583,10 +583,10 @@ ds<-function(data, truncation=ifelse(is.null(cutpoints),
 
     # from ?dht:
     # For animals observed in tight clusters, that estimator gives the
-    # abundance of groups (‘group=TRUE’ in ‘options’) and the abundance of
+    # abundance of groups (group=TRUE in options) and the abundance of
     # individuals is estimated as s_1/p_1 + s_2/p_2 + ... + s_n/p_n, where
     # s_i is the size (e.g., number of animals in the group) of each
-    # observation(‘group=FALSE’ in ‘options’).
+    # observation(group=FALSE in options).
 
     dht.res<-dht(model,region.table,sample.table,obs.table,
                  options=list(#varflag=0,group=TRUE,
