@@ -1,5 +1,8 @@
+Distance version 0.9.4
+ * Object ID uniqueness stopped abundance estimation from working (since NA IDs were "not unique".
+
 Distance version 0.9.3
- * Updated tests to work with new unoque object ID code.
+ * Updated tests to work with new unique object ID code.
  * Liberally sprinkled tests with suppressMessages()
 
 Distance version 0.9.2

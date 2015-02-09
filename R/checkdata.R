@@ -33,7 +33,10 @@ checkdata<-function(data,region.table=NULL,sample.table=NULL,obs.table=NULL){
     data<-cbind(data,object=1:nrow(data))
   }else{
     # check that the object IDs are unique
-    if(length(data$object)!=length(unique(data$object))){
+    # first need to remove the rows with NA distances used for padding
+    # below
+    data_no_NA <- data[!is.na(data$distance),]
+    if(length(data_no_NA$object)!=length(unique(data_no_NA$object))){
       stop("Not all object IDs are unique, check data.")
     }
   }
