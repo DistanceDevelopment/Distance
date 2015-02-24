@@ -50,6 +50,12 @@ checkdata<-function(data,region.table=NULL,sample.table=NULL,obs.table=NULL){
            colnames(data))){
       ## construct region table
       region.table <- unique(data[,c("Region.Label", "Area")])
+      # make sure that the region areas are consistent -- the above can
+      # lead to duplicate labels if the areas are not the same for a given
+      # region label
+      if(nrow(region.table) != length(unique(data$Region.Label))){
+        stop("Region areas are not consistent.")
+      }
       rownames(region.table) <- 1:nrow(region.table)
       # drop Area column
       data <- data[,!c(colnames(data) %in% "Area")]
