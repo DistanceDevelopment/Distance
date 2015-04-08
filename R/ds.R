@@ -504,9 +504,6 @@ ds<-function(data, truncation=ifelse(is.null(cutpoints),
                             " with ", adj.name,"(",
                             paste(order[1:i],collapse=","),
                             ") adjustments", sep="")
-    }else{
-      # if we have only the key function, turn off monotonicity
-      meta.data$mono <- meta.data$mono.strict <- FALSE
     }
 
     model.formula<-paste(model.formula,")",sep="")

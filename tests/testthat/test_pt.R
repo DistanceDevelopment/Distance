@@ -4,7 +4,7 @@ library(Distance)
 library(testthat)
 
 par.tol <- 1e-5
-p.tol <- 1e-5
+p.tol <- 1e-4
 lnl.tol <- 1e-4
 
 context("Point transects")
@@ -20,7 +20,7 @@ test_that("ptexample.distance from mrds gives same results",{
 
   expect_that(xx$ddf$par,equals(2.283007,tol=par.tol))
   expect_that(xx$ddf$lnl,equals(-458.5701,tol=lnl.tol))
-  expect_that(summary(xx$ddf)$average.p,equals(0.1644288,tol=p.tol))
+  expect_that(summary(xx$ddf)$average.p,equals(0.1644303,tol=p.tol))
 
 })
 

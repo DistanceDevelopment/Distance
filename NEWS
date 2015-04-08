@@ -1,6 +1,7 @@
 Distance version 0.9.4
  * Object ID uniqueness stopped abundance estimation from working (since NA IDs were "not unique").
  * Check that areas are consistently entered. This was problematic when areas were not entered identically for each region, but unique was used to extract the region table. Thanks to Katy Echave for finding this bug!
+ * Monotonicity constraints were not applied during automated model selection. Thanks to Tiago Marques for spotting this.
 
 Distance version 0.9.3
  * Updated tests to work with new unique object ID code.
