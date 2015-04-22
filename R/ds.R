@@ -425,10 +425,10 @@ ds<-function(data, truncation=ifelse(is.null(cutpoints),
     stop("monotonicity must be one of \"none\", FALSE, \"weak\" or \"strict\".")
   }
 
-  ## can't do monotonicity and covariates, fail!
-  #if(mono & formula!=as.formula("~1")){
-  #  stop("Monotonicity cannot be enforced with covariates.")
-  #}
+  # can't do monotonicity and covariates, fail!
+  if(mono & formula!=as.formula("~1")){
+    stop("Monotonicity cannot be enforced with covariates.")
+  }
 
   # set up the control options
   control <- list(optimx.method=method, showit=debug.level)
