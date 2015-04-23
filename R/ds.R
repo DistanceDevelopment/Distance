@@ -261,7 +261,7 @@ ds<-function(data, truncation=ifelse(is.null(cutpoints),
   }
 
   # check the data, format into the correct tables if we have a flat file
-  data <- checkdata(data,region.table,sample.table,obs.table)
+  data <- checkdata(data, region.table, sample.table, obs.table, formula)
   region.table <- data$region.table
   sample.table <- data$sample.table
   obs.table    <- data$obs.table

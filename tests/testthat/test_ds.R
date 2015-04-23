@@ -11,25 +11,37 @@ context("Testing ds()")
 
 # data setup
 data(book.tee.data)
-egdata<-book.tee.data$book.tee.dataframe
+egdata <- book.tee.data$book.tee.dataframe
+egdata <- egdata[!duplicated(egdata$object),]
 
 test_that("Input errors are thrown correctly",{
 
   # what if we don't supply any distance data?
-  expect_error(ds())
-  expect_error(ds(list()))
+  expect_error(ds(),
+               "argument \"data\" is missing, with no default")
+  expect_error(ds(list()),
+               "Your data must \\(at least\\) have a column called 'distance'!")
 
   # incorrect key definition?
-  expect_error(ds(egdata,4,key="bananas"))
+  expect_error(ds(egdata,4,key="bananas"),
+               "'arg' should be one of \"hn\", \"hr\", \"unif\"")
 
   # incorrect adjustment definition?
-  expect_error(ds(egdata,4,key="hn",adjustment="bananas"))
+  expect_error(ds(egdata,4,key="hn",adjustment="bananas"),
+               "'arg' should be one of \"cos\", \"herm\", \"poly\"")
 
   # first cutpoint not zero when no left truncation
-  expect_error(ds(egdata,4,cutpoints=c(2,3,4)))
+  expect_error(ds(egdata,4,cutpoints=c(2,3,4)),
+               "The first cutpoint must be 0 or the left truncation distance!")
 
   # uniform with covariates?
-  expect_error(ds(egdata,4,key="unif",formula=~size))
+  expect_error(ds(egdata,4,key="unif",formula=~size),
+               "Can't use uniform key with covariates.")
+
+  # use a covariate that doesn't exist
+  expect_error(ds(egdata,4,key="hn",formula=~banana),
+               "Variable\\(s\\): banana are in the model formula but not in the data.")
+
 
 })
 
