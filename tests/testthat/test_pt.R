@@ -28,6 +28,8 @@ test_that("ptexample.single from mrds gives same results -- binned",{
 
   data(ptdata.single)
 
+  set.seed(345)
+
   # mrds code for the same example
   #ptdata.single$distbegin <- (as.numeric(cut(ptdata.single$distance,10*(0:10)))-1)*10
   #ptdata.single$distend <- (as.numeric(cut(ptdata.single$distance,10*(0:10))))*10
