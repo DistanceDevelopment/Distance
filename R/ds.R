@@ -22,7 +22,7 @@
 #'        adjustments, valid orders are integers greater than 2 (except when a
 #'        uniform key is used, when the minimum order is 1). For Hermite
 #'        polynomials, even integers equal or greater than 4 are allowed. For
-#'        simple polynomials even integers equal or greater than 2 are allowed.
+#'        simple polynomials even integers equal or greater than 2 are allowed. By default, AIC selection will try up to 5 adjustments, beyond that you must specify these manually, e.g. \code{order=2:6} and perform your own AIC selection.
 #' @param scale the scale by which the distances in the adjustment terms are
 #'        divided. Defaults to "width", scaling by the truncation
 #'        distance. If the key is uniform only "width" will be used. The other
@@ -372,7 +372,7 @@ ds<-function(data, truncation=ifelse(is.null(cutpoints),
       }else{
       # otherwise go ahead and set up the candidate adjustment orders
         aic.search <- TRUE
-        max.order <- 3
+        max.order <- 5
 
         # this is according to p. 47 of IDS.
         if(adjustment=="poly"){
