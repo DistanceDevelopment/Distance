@@ -147,28 +147,28 @@
 #' library(Distance)
 #' data(book.tee.data)
 #' tee.data<-book.tee.data$book.tee.dataframe[book.tee.data$book.tee.dataframe$observer==1,]
-#' ds.model<-ds(tee.data,4)
+#' ds.model <- ds(tee.data,4)
 #' summary(ds.model)
 #' plot(ds.model)
 #'
 #' \dontrun{
 #' # same model, but calculating abundance
 #' # need to supply the region, sample and observation tables
-#' region<-book.tee.data$book.tee.region
-#' samples<-book.tee.data$book.tee.samples
-#' obs<-book.tee.data$book.tee.obs
+#' region <- book.tee.data$book.tee.region
+#' samples <- book.tee.data$book.tee.samples
+#' obs <- book.tee.data$book.tee.obs
 #'
-#' ds.dht.model<-ds(tee.data,4,region.table=region,
+#' ds.dht.model <- ds(tee.data,4,region.table=region,
 #'              sample.table=samples,obs.table=obs)
 #' summary(ds.dht.model)
 #'
 #' # specify order 2 cosine adjustments
-#' ds.model.cos2<-ds(tee.data,4,adjustment="cos",order=2)
+#' ds.model.cos2 <- ds(tee.data,4,adjustment="cos",order=2)
 #' summary(ds.model.cos2)
 #'
 #' # specify order 2 and 3 cosine adjustments, turning monotonicity
 #' # constraints off
-#' ds.model.cos23<-ds(tee.data,4,adjustment="cos",order=c(2,3),
+#' ds.model.cos23 <- ds(tee.data,4,adjustment="cos",order=c(2,3),
 #'                    monotonicity=FALSE)
 #' # check for non-monotonicity -- actually no problems
 #' check.mono(ds.model.cos23$ddf,plot=TRUE,n.pts=100)
@@ -181,11 +181,11 @@
 #'
 #' # truncate the largest 10% of the data and fit only a hazard-rate
 #' # detection function
-#' ds.model.hr.trunc<-ds(tee.data,truncation="10%",key="hr",adjustment=NULL)
+#' ds.model.hr.trunc <- ds(tee.data,truncation="10%",key="hr",adjustment=NULL)
 #' summary(ds.model.hr.trunc)
 #'}
 #'
-ds<-function(data, truncation=ifelse(is.null(cutpoints),
+ds <- function(data, truncation=ifelse(is.null(cutpoints),
                                      ifelse(is.null(data$distend),
                                             max(data$distance),
                                             max(data$distend)),
@@ -227,7 +227,7 @@ ds<-function(data, truncation=ifelse(is.null(cutpoints),
           left <- truncation$left
         }else if(is.character(truncation$left) & length(truncation$left)==1){
           # % string to number
-          truncation$left<-as.numeric(sub("%","",truncation$left))
+          truncation$left <- as.numeric(sub("%","",truncation$left))
           left <- quantile(data$distance,probs=(truncation$left/100))
         }else{
           stop("Truncation must be supplied as a single number/string or a list with elements \"left\" and \"right\".")
@@ -237,7 +237,7 @@ ds<-function(data, truncation=ifelse(is.null(cutpoints),
           width <- truncation$right
         }else if(is.character(truncation$right) & length(truncation$right)==1){
           # % string to number
-          truncation$right<-as.numeric(sub("%","",truncation$right))
+          truncation$right <- as.numeric(sub("%","",truncation$right))
           width <- quantile(data$distance,probs=1-(truncation$right/100))
         }else{
           stop("Truncation must be supplied as a single number/string or a list with elements \"left\" and \"right\".")
@@ -252,7 +252,7 @@ ds<-function(data, truncation=ifelse(is.null(cutpoints),
       left <- NULL
     }else if(is.character(truncation) & length(truncation)==1){
       # % string to number
-      truncation<-as.numeric(sub("%","",truncation))
+      truncation <- as.numeric(sub("%","",truncation))
       width <- quantile(data$distance,probs=1-(truncation/100))
       left <- NULL
     }else{
@@ -290,8 +290,8 @@ ds<-function(data, truncation=ifelse(is.null(cutpoints),
     # remove distbegin and distend if they already exist
     if(any(names(data)=="distend") & any(names(data)=="distbegin")){
       message("data already has distend and distbegin columns, removing them and appling binning as specified by cutpoints.")
-      data$distend<-NULL
-      data$distbegin<-NULL
+      data$distend <- NULL
+      data$distbegin <- NULL
     }
     # send off to create.bins to make the correct columns in data
     data <- create.bins(data,cutpoints)
@@ -352,7 +352,7 @@ ds<-function(data, truncation=ifelse(is.null(cutpoints),
       #}
 
       # check for each adjustment type
-      order<-sort(order)
+      order <- sort(order)
       if(adjustment=="herm" | adjustment=="poly"){
         if(any(order/2 != ceiling(order/2))){
           stop("Adjustment orders must be even for Hermite and simple polynomials.")
@@ -402,25 +402,25 @@ ds<-function(data, truncation=ifelse(is.null(cutpoints),
                       )
 
   }else{
-    aic.search<-FALSE
+    aic.search <- FALSE
   }
 
 
   # monotonicity
   if(is.logical(monotonicity)){
     if(!monotonicity){
-      mono<-FALSE
-      mono.strict<-FALSE
+      mono <- FALSE
+      mono.strict <- FALSE
     }
   }else if(monotonicity=="none"){
-    mono<-FALSE
-    mono.strict<-FALSE
+    mono <- FALSE
+    mono.strict <- FALSE
   }else if(monotonicity=="weak"){
-    mono<-TRUE
-    mono.strict<-FALSE
+    mono <- TRUE
+    mono.strict <- FALSE
   }else if(monotonicity=="strict"){
-    mono<-TRUE
-    mono.strict<-TRUE
+    mono <- TRUE
+    mono.strict <- TRUE
   }else{
     stop("monotonicity must be one of \"none\", FALSE, \"weak\" or \"strict\".")
   }
@@ -446,7 +446,7 @@ ds<-function(data, truncation=ifelse(is.null(cutpoints),
   meta.data <- list(width = width,point = point,binned = binned,
                     mono=mono, mono.strict=mono.strict)
   if(!is.null(left)){
-    meta.data$left<-left
+    meta.data$left <- left
   }
   if(binned){
     meta.data$breaks <- breaks
@@ -490,12 +490,12 @@ ds<-function(data, truncation=ifelse(is.null(cutpoints),
     # so want to fit a key function alone to begin with.
     if(!is.null(adjustment) & i!=0){
       if(length(order[1:i])==1){
-        order.str<-order[1:i]
+        order.str <- order[1:i]
       }else{
-        order.str<-paste("c(",paste(order[1:i],collapse=","),")",sep="")
+        order.str <- paste("c(",paste(order[1:i],collapse=","),")",sep="")
       }
 
-      model.formula<-paste(model.formula,",",
+      model.formula <- paste(model.formula,",",
                            "adj.series=\"",adjustment,
                            "\",adj.order=",order.str,",",
                            "adj.scale=\"",scale,"\"",sep="")
@@ -506,7 +506,7 @@ ds<-function(data, truncation=ifelse(is.null(cutpoints),
                             ") adjustments", sep="")
     }
 
-    model.formula<-paste(model.formula,")",sep="")
+    model.formula <- paste(model.formula,")",sep="")
 
     # tell the user what is being fitted
     message(this.message)
@@ -529,7 +529,7 @@ ds<-function(data, truncation=ifelse(is.null(cutpoints),
         model$name.message <- sub("^Fitting ","",this.message)
 
         # need this to get plotting to work!
-        model$call$dsmodel<-as.formula(model.formula)
+        model$call$dsmodel <- as.formula(model.formula)
 
         message(paste("AIC=",round(model$criterion,3)))
 
@@ -537,12 +537,12 @@ ds<-function(data, truncation=ifelse(is.null(cutpoints),
           # if this models AIC is worse (bigger) than the last
           # return the last model and stop looking.
           if(model$criterion>last.model$criterion){
-            model<-last.model
+            model <- last.model
             message(paste0("\n\n",model$name.message," selected!"))
             break
           }else{
             # otherwise keep this, best model
-            last.model<-model
+            last.model <- model
           }
         }
       }else{
@@ -585,14 +585,14 @@ ds<-function(data, truncation=ifelse(is.null(cutpoints),
     # s_i is the size (e.g., number of animals in the group) of each
     # observation(group=FALSE in options).
 
-    dht.res<-dht(model,region.table,sample.table,obs.table,
+    dht.res <- dht(model,region.table,sample.table,obs.table,
                  options=list(#varflag=0,group=TRUE,
                               group=dht.group,
                               convert.units=convert.units),se=TRUE)
   }else{
     # if no information on the survey area was supplied just return
     # the detection function stuff
-    dht.res<-NULL
+    dht.res <- NULL
 
     if(!quiet){
       message("No survey area information supplied, only estimating detection function.\n")
@@ -600,11 +600,11 @@ ds<-function(data, truncation=ifelse(is.null(cutpoints),
   }
 
   # construct return object
-  ret.obj<-list(ddf = model,
+  ret.obj <- list(ddf = model,
                 dht = dht.res)
 
   # give it some class
-  class(ret.obj)<-"dsmodel"
+  class(ret.obj) <- "dsmodel"
 
   return(ret.obj)
 

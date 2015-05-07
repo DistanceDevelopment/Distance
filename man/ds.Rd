@@ -180,28 +180,28 @@ Even with no monotonicity constraints, checks are still made that the detection 
 library(Distance)
 data(book.tee.data)
 tee.data<-book.tee.data$book.tee.dataframe[book.tee.data$book.tee.dataframe$observer==1,]
-ds.model<-ds(tee.data,4)
+ds.model <- ds(tee.data,4)
 summary(ds.model)
 plot(ds.model)
 
 \dontrun{
 # same model, but calculating abundance
 # need to supply the region, sample and observation tables
-region<-book.tee.data$book.tee.region
-samples<-book.tee.data$book.tee.samples
-obs<-book.tee.data$book.tee.obs
+region <- book.tee.data$book.tee.region
+samples <- book.tee.data$book.tee.samples
+obs <- book.tee.data$book.tee.obs
 
-ds.dht.model<-ds(tee.data,4,region.table=region,
+ds.dht.model <- ds(tee.data,4,region.table=region,
              sample.table=samples,obs.table=obs)
 summary(ds.dht.model)
 
 # specify order 2 cosine adjustments
-ds.model.cos2<-ds(tee.data,4,adjustment="cos",order=2)
+ds.model.cos2 <- ds(tee.data,4,adjustment="cos",order=2)
 summary(ds.model.cos2)
 
 # specify order 2 and 3 cosine adjustments, turning monotonicity
 # constraints off
-ds.model.cos23<-ds(tee.data,4,adjustment="cos",order=c(2,3),
+ds.model.cos23 <- ds(tee.data,4,adjustment="cos",order=c(2,3),
                    monotonicity=FALSE)
 # check for non-monotonicity -- actually no problems
 check.mono(ds.model.cos23$ddf,plot=TRUE,n.pts=100)
@@ -214,7 +214,7 @@ check.mono(ds.model.cos2.sex$ddf,plot=TRUE,n.pts=100)
 
 # truncate the largest 10\% of the data and fit only a hazard-rate
 # detection function
-ds.model.hr.trunc<-ds(tee.data,truncation="10\%",key="hr",adjustment=NULL)
+ds.model.hr.trunc <- ds(tee.data,truncation="10\%",key="hr",adjustment=NULL)
 summary(ds.model.hr.trunc)
 }
 }
