@@ -1,8 +1,5 @@
 # point transect testing
 
-library(Distance)
-library(testthat)
-
 par.tol <- 1e-5
 p.tol <- 1e-4
 lnl.tol <- 1e-4
@@ -11,12 +8,13 @@ context("Point transects")
 
 test_that("ptexample.distance from mrds gives same results",{
 
+  set.seed(123)
   data(ptdata.distance)
   # mrds code for the same example
   #xx <- ddf(dsmodel=~cds(key="hn", formula=~1), data=ptdata.distance,
   #          method="ds",
   #          meta.data=list(point=TRUE,width=max(ptdata.distance$distance)))#,
-  xx <- suppressMessages(ds(ptdata.distance,key="hn",transect="point",order=0))
+  xx <- ds(ptdata.distance, key="hn", transect="point", adjustment=NULL)
 
   expect_that(xx$ddf$par,equals(2.283007,tol=par.tol))
   expect_that(xx$ddf$lnl,equals(-458.5701,tol=lnl.tol))

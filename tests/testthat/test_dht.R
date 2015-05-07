@@ -1,6 +1,3 @@
-library(Distance)
-library(mrds)
-
 context("Testing dht")
 
 ## first need to take the golf tee data

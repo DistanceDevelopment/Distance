@@ -18,11 +18,11 @@
 #'        "cos" is recommended. A value of \code{NULL} indicates that no
 #'        adjustments are to be fitted.
 #' @param order orders of the adjustment terms to fit (as a vector/scalar), the
-#'        default value (\code{NULL}) will select via AIC. For cosine
+#'        default value (\code{NULL}) will select via AIC up to order 5. If a single number is given, that number is expanded to be \code{seq(term_min, order, by=1)} where \code{term.min} is the appropriate minimum order for this type of adjustment. For cosine
 #'        adjustments, valid orders are integers greater than 2 (except when a
 #'        uniform key is used, when the minimum order is 1). For Hermite
-#'        polynomials, even integers equal or greater than 4 are allowed. For
-#'        simple polynomials even integers equal or greater than 2 are allowed. By default, AIC selection will try up to 5 adjustments, beyond that you must specify these manually, e.g. \code{order=2:6} and perform your own AIC selection.
+#'        polynomials, even integers equal or greater than 2 are allowed and for
+#'        simple polynomials even integers equal or greater than 2 are allowedi (though note these will be multiplied by 2, see Buckland et al, 2001 for details on their specification). By default, AIC selection will try up to 5 adjustments, beyond that you must specify these manually, e.g. \code{order=2:6} and perform your own AIC selection.
 #' @param scale the scale by which the distances in the adjustment terms are
 #'        divided. Defaults to "width", scaling by the truncation
 #'        distance. If the key is uniform only "width" will be used. The other
@@ -353,7 +353,7 @@ ds <- function(data, truncation=ifelse(is.null(cutpoints),
 
       # check for each adjustment type
       order <- sort(order)
-      if(adjustment=="herm" | adjustment=="poly"){
+      if(adjustment=="poly"){
         if(any(order/2 != ceiling(order/2))){
           stop("Adjustment orders must be even for Hermite and simple polynomials.")
         }
@@ -363,6 +363,28 @@ ds <- function(data, truncation=ifelse(is.null(cutpoints),
           stop("Adjustment orders for Hermite polynomials and cosines must start at 2.")
         }
       }
+
+      # if a single number is provided do adjmin:order
+      if(length(order)==1){
+        # this is according to p. 47 of IDS.
+        if(adjustment=="poly"){
+          order <- 1:order
+        }else{
+          order <- 2:order
+        }
+
+        # for Fourier...
+        if(key=="unif" & adjustment=="cos"){
+          order <- 1:order
+        }
+
+        if(adjustment=="herm" | adjustment=="poly"){
+          order <- 2*order
+          order <- order[order<=2*order]
+        }
+      }
+
+
     }else{
 
       # if there are covariates then don't do the AIC search

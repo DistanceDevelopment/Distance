@@ -37,11 +37,11 @@ By default for exact distances the maximum observed distance is used as the righ
 adjustments are to be fitted.}
 
 \item{order}{orders of the adjustment terms to fit (as a vector/scalar), the
-default value (\code{NULL}) will select via AIC. For cosine
+default value (\code{NULL}) will select via AIC up to order 5. If a single number is given, that number is expanded to be \code{seq(term_min, order, by=1)} where \code{term.min} is the appropriate minimum order for this type of adjustment. For cosine
 adjustments, valid orders are integers greater than 2 (except when a
 uniform key is used, when the minimum order is 1). For Hermite
-polynomials, even integers equal or greater than 4 are allowed. For
-simple polynomials even integers equal or greater than 2 are allowed. By default, AIC selection will try up to 5 adjustments, beyond that you must specify these manually, e.g. \code{order=2:6} and perform your own AIC selection.}
+polynomials, even integers equal or greater than 2 are allowed and for
+simple polynomials even integers equal or greater than 2 are allowedi (though note these will be multiplied by 2, see Buckland et al, 2001 for details on their specification). By default, AIC selection will try up to 5 adjustments, beyond that you must specify these manually, e.g. \code{order=2:6} and perform your own AIC selection.}
 
 \item{scale}{the scale by which the distances in the adjustment terms are
 divided. Defaults to "width", scaling by the truncation

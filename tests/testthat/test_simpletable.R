@@ -1,6 +1,3 @@
-library(Distance)
-library(mrds)
-
 context("Testing simplified data tables (tee data)")
 
 ## first need to take the golf tee data

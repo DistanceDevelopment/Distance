@@ -1,8 +1,5 @@
 # test ds()
 
-library(Distance)
-library(mrds)
-
 par.tol <- 1e-5
 N.tol <- 1e-3
 lnl.tol <- 1e-4
@@ -138,5 +135,27 @@ test_that("Truncation is handled",{
   # largest bin
   bin.data <- Distance:::create.bins(egdata,c(0,1,2,3,3.8))
   expect_equal(suppressMessages(ds(bin.data,key="hn",order=0))$ddf$meta.data$width,3.8)
+
+})
+
+test_that("adjustments expand correctly",{
+
+  egdata <- egdata[egdata$observer==1,]
+
+  # hn + cos(2)
+  expect_equal(summary(ds(egdata,4,key="hn",order=2))$ddf$name.message,
+               "half-normal key function with cosine(2) adjustments")
+
+  # hn + cos(2,3)
+  expect_equal(summary(ds(egdata,4,key="hn",order=2:3))$ddf$name.message,
+               "half-normal key function with cosine(2,3) adjustments")
+
+  # hn + cos(2,3,4,5)
+  expect_equal(summary(ds(egdata,4,key="hn",order=5))$ddf$name.message,
+               "half-normal key function with cosine(2,3,4,5) adjustments")
+
+  #unif + cos(1,2)
+  expect_equal(summary(ds(egdata,4,key="unif",order=2))$ddf$name.message,
+               "uniform key function with cosine(1,2) adjustments")
 
 })
