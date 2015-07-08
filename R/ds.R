@@ -136,6 +136,7 @@
 #' @seealso \code{\link{flatfile}}
 #' @export
 #'
+#' @importFrom stats quantile as.formula
 #' @references
 #' Buckland, S.T., Anderson, D.R., Burnham, K.P., Laake, J.L., Borchers, D.L., and Thomas, L. (2001). Distance Sampling. Oxford University Press. Oxford, UK.
 #'

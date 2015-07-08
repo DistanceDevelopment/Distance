@@ -9,6 +9,7 @@
 #' @aliases plot.dsmodel
 #' @export
 #' @author David L. Miller
+#' @importFrom graphics plot
 plot.dsmodel <- function(x,...){
 
   plot(x$ddf,...)
