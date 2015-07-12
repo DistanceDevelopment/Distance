@@ -11,7 +11,7 @@ before_install:
 
 install:
   - ./pkg-build.sh install_deps
-  - ./pkg-build.sh install_github DistanceDevelopment/mrds
+  - ./pkg-build.sh install_github DistanceDevelopment/mrds jimhester/covr jimhester/robustr
 
 script:
   - ./pkg-build.sh run_tests
@@ -29,7 +29,7 @@ notifications:
 
 env:
   matrix:
-    - RVERSION=3.1.3
-    - RVERSION=3.2.0
+    - RVERSION=oldel
+    - RVERSION=release
     - RVERSION=devel
 
