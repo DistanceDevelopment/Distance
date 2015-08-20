@@ -1,3 +1,6 @@
+Distance version 0.9.5
+ * Truncation by percentage now works when there are missing distances (i.e. when we are using flatfile). Thanks to Len Thomas for pointing out this bug.
+
 Distance version 0.9.4
  * Object ID uniqueness stopped abundance estimation from working (since NA IDs were "not unique").
  * Check that areas are consistently entered. This was problematic when areas were not entered identically for each region, but unique was used to extract the region table. Thanks to Katy Echave for finding this bug!

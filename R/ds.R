@@ -229,7 +229,8 @@ ds <- function(data, truncation=ifelse(is.null(cutpoints),
         }else if(is.character(truncation$left) & length(truncation$left)==1){
           # % string to number
           truncation$left <- as.numeric(sub("%","",truncation$left))
-          left <- quantile(data$distance,probs=(truncation$left/100))
+          left <- quantile(data$distance, probs=truncation$left/100,
+                           na.rm=TRUE)
         }else{
           stop("Truncation must be supplied as a single number/string or a list with elements \"left\" and \"right\".")
         }
@@ -238,8 +239,9 @@ ds <- function(data, truncation=ifelse(is.null(cutpoints),
           width <- truncation$right
         }else if(is.character(truncation$right) & length(truncation$right)==1){
           # % string to number
-          truncation$right <- as.numeric(sub("%","",truncation$right))
-          width <- quantile(data$distance,probs=1-(truncation$right/100))
+          truncation$right <- as.numeric(sub("%", "", truncation$right))
+          width <- quantile(data$distance, probs=1-(truncation$right/100),
+                            na.rm=TRUE)
         }else{
           stop("Truncation must be supplied as a single number/string or a list with elements \"left\" and \"right\".")
         }
@@ -254,7 +256,7 @@ ds <- function(data, truncation=ifelse(is.null(cutpoints),
     }else if(is.character(truncation) & length(truncation)==1){
       # % string to number
       truncation <- as.numeric(sub("%","",truncation))
-      width <- quantile(data$distance,probs=1-(truncation/100))
+      width <- quantile(data$distance, probs=1-(truncation/100), na.rm=TRUE)
       left <- NULL
     }else{
       stop("Truncation must be supplied as a single number/string or a list with elements \"left\" and \"right\".")

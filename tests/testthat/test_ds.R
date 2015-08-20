@@ -159,3 +159,12 @@ test_that("adjustments expand correctly",{
                "uniform key function with cosine(1,2) adjustments")
 
 })
+
+# reported by Len Thomas 20 August
+test_that("Percentage truncation works when distances are missing",{
+
+  data(minke)
+
+  expect_equal(ds(minke, truncation="15%", adjustment=NULL)$ddf$criterion,
+               -8.1705496, tol=1e-5)
+})
