@@ -15,9 +15,7 @@
 #' @param object a distance analysis
 #' @param \dots unspecified and unused arguments for S3 consistency
 #' @return list of extracted and summarized objects
-#' @note This function just calls \code{\link{summary.ds}} and 
-#'       \code{\link{dht}}, collates and prints the results in a nice
-#'       way.
+#' @note This function just calls \code{\link{summary.ds}} and \code{\link{dht}}, collates and prints the results in a nice way.
 #' @author David L. Miller
 #' @keywords utility
 #' @export
@@ -25,8 +23,8 @@ summary.dsmodel <- function(object,...){
 
   #  se if TRUE, computes standard errors
   #  N if TRUE, computes abundance in covered (sampled) region
-  ans <- list(ds=summary(object$ddf,se=TRUE,N=TRUE), 
-              dht=object$dht, 
+  ans <- list(ds=summary(object$ddf, se=TRUE, N=TRUE),
+              dht=object$dht,
               ddf=object$ddf)
 
   class(ans) <- "summary.dsmodel"
