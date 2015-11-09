@@ -1,5 +1,6 @@
 Distance version 0.9.6
  * Coefficients are called coefficients (not a mixture of coefficients and parameters) in summary() results
+ * Added gof_ds() for easy access to goodness of fit testing and q-q plotting
 
 Distance version 0.9.5
  * Truncation by percentage now works when there are missing distances (i.e. when we are using flatfile). Thanks to Len Thomas for pointing out this bug.
