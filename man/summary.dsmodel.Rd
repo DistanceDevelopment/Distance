@@ -18,9 +18,7 @@ list of extracted and summarized objects
 Provides a brief summary of a distance sampling analysis. This includes
 }
 \note{
-This function just calls \code{\link{summary.ds}} and
-      \code{\link{dht}}, collates and prints the results in a nice
-      way.
+This function just calls \code{\link{summary.ds}} and \code{\link{dht}}, collates and prints the results in a nice way.
 }
 \author{
 David L. Miller

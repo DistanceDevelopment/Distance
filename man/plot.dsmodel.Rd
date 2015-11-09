@@ -4,7 +4,7 @@
 \alias{plot.dsmodel}
 \title{Plot a fitted detection function}
 \usage{
-\method{plot}{dsmodel}(x, ...)
+\method{plot}{dsmodel}(x, pl.den = 0, ...)
 }
 \arguments{
 \item{x}{an object of class \code{dsmodel}.}
