@@ -10,9 +10,9 @@
 #' @export
 #' @author David L. Miller
 #' @importFrom graphics plot
-plot.dsmodel <- function(x,...){
+plot.dsmodel <- function(x, pl.den=0, ...){
 
-  plot(x$ddf,...)
+  plot(x$ddf, pl.den=pl.den, ...)
 
   invisible()
 }
