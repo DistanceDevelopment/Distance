@@ -13,6 +13,6 @@ Version: 0.9.5
 URL: http://github.com/DistanceDevelopment/Distance/
 Depends:
     R (>= 3.0),
-    mrds (>= 2.1.10)
+    mrds (>= 2.1.15)
 Suggests:
     testthat
