@@ -18,10 +18,10 @@ summarize_ds_models <- function(..., sort="AIC"){
     summ <- summary(model)
     ret <- c(model.description(model$ddf),
              model$ddf$ds$aux$ddfobj$scale$formula,
-             model$ddf$criterion,
              ddf.gof(model$ddf, qq=FALSE)$dsgof$CvM$p,
              summ$ds$average.p,
-             summ$ds$average.p.se
+             summ$ds$average.p.se,
+             model$ddf$criterion
             )
     return(ret)
   }
@@ -36,10 +36,10 @@ summarize_ds_models <- function(..., sort="AIC"){
   # giving the columns names
   colnames(res) <- c("Key function",
                      "Formula",
-                     "AIC",
                      "C-vM $p$-value",
                      "$\\hat{P_a}$",
-                     "se($\\hat{P_a}$)")
+                     "se($\\hat{P_a}$)",
+                     "AIC")
   # remove row names
   rownames(res) <- NULL
 
