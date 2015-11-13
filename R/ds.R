@@ -250,7 +250,7 @@ ds <- function(data, truncation=ifelse(is.null(cutpoints),
       }
 
     # just right truncation
-    }else if(is.double(truncation) & length(truncation)==1){
+    }else if(is.numeric(truncation) & length(truncation)==1){
       width <- truncation
       left <- NULL
     }else if(is.character(truncation) & length(truncation)==1){
