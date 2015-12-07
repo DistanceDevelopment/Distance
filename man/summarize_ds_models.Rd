@@ -12,7 +12,7 @@ summarize_ds_models(..., sort = "AIC")
 \item{sort}{column to sort by (default \code{"AIC"})}
 }
 \description{
-Provide a summary table of useful information about fitted detection functions. This can be useful when paired with \code{knitr}s \code{\link{kable}} function.
+Provide a summary table of useful information about fitted detection functions. This can be useful when paired with \code{knitr}s \code{kable} function.
 }
 \details{
 Note that the column names are in LaTeX format, so if you plan to manipulate the resulting \code{data.frame} in R, you may wish to rename the columns for ease of access.

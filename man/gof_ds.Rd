@@ -11,7 +11,9 @@ gof_ds(model, plot = TRUE, chisq = FALSE, ...)
 
 \item{plot}{if \code{TRUE} the Q-Q plot is plotted}
 
-\item{chisq}{if \code{TRUE} then chi-squared statistic is calculated even for models that use exact distances. Ignored for models that use binned distances.}
+\item{chisq}{if \code{TRUE} then chi-squared statistic is calculated even for models that use exact distances. Ignored for models that use binned distances}
+
+\item{...}{other arguments to be passed to \code{\link{ddf.gof}}}
 }
 \description{
 Computes goodness of fit tests for the detection function. For binned distances this is only chi-squared. For exact distances, Kolmogorov-Smirnov and Cramer-von Mises goodness of fit tests are computed (if \code{chisq=TRUE} then chi-squared is also computed). A quantile-quantile plot is for the fitted model is produced as a graphical representation of goodness of fit (this can be suppressed by setting \code{plot=FALSE}).

@@ -9,6 +9,8 @@
 \arguments{
 \item{x}{an object of class \code{dsmodel}.}
 
+\item{pl.den}{shading density for histogram (default \code{0}, no shading)}
+
 \item{...}{extra arguments to be passed to \code{\link{plot.ds}}.}
 }
 \value{

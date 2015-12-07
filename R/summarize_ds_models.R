@@ -1,6 +1,6 @@
 #' Make a table of summary statistics for detection function models
 #'
-#' Provide a summary table of useful information about fitted detection functions. This can be useful when paired with \code{knitr}s \code{\link{kable}} function.
+#' Provide a summary table of useful information about fitted detection functions. This can be useful when paired with \code{knitr}s \code{kable} function.
 #'
 #' Note that the column names are in LaTeX format, so if you plan to manipulate the resulting \code{data.frame} in R, you may wish to rename the columns for ease of access.
 #'

@@ -4,6 +4,7 @@
 #' page for that function for more information.
 #'
 #' @param x an object of class \code{dsmodel}.
+#' @param pl.den shading density for histogram (default \code{0}, no shading)
 #' @param ... extra arguments to be passed to \code{\link{plot.ds}}.
 #' @return \code{NULL}, just produces a plot.
 #' @aliases plot.dsmodel

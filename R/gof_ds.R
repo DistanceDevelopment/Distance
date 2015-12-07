@@ -6,7 +6,8 @@
 #'
 #' @param model a fitted detection function.
 #' @param plot if \code{TRUE} the Q-Q plot is plotted
-#' @param chisq if \code{TRUE} then chi-squared statistic is calculated even for models that use exact distances. Ignored for models that use binned distances.
+#' @param chisq if \code{TRUE} then chi-squared statistic is calculated even for models that use exact distances. Ignored for models that use binned distances
+#' @param ... other arguments to be passed to \code{\link{ddf.gof}}
 #' @export
 gof_ds <- function(model, plot=TRUE, chisq=FALSE, ...){
 
