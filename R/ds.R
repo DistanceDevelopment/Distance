@@ -13,78 +13,39 @@
 #' @param transect indicates transect type "line" (default) or "point".
 #' @param formula formula for the scale parameter. For a CDS analysis leave this as its default \code{~1}.
 #' @param key key function to use; "hn" gives half-normal (default), "hr" gives hazard-rate and "unif" gives uniform. Note that if uniform key is used, covariates cannot be included in the model.
-#' @param adjustment adjustment terms to use; "cos" gives cosine (default),
-#'        "herm" gives Hermite polynomial and "poly" gives simple polynomial.
-#'        "cos" is recommended. A value of \code{NULL} indicates that no
-#'        adjustments are to be fitted.
-#' @param order orders of the adjustment terms to fit (as a vector/scalar), the
-#'        default value (\code{NULL}) will select via AIC up to order 5. If a single number is given, that number is expanded to be \code{seq(term_min, order, by=1)} where \code{term.min} is the appropriate minimum order for this type of adjustment. For cosine
-#'        adjustments, valid orders are integers greater than 2 (except when a
-#'        uniform key is used, when the minimum order is 1). For Hermite
-#'        polynomials, even integers equal or greater than 2 are allowed and for
-#'        simple polynomials even integers equal or greater than 2 are allowedi (though note these will be multiplied by 2, see Buckland et al, 2001 for details on their specification). By default, AIC selection will try up to 5 adjustments, beyond that you must specify these manually, e.g. \code{order=2:6} and perform your own AIC selection.
-#' @param scale the scale by which the distances in the adjustment terms are
-#'        divided. Defaults to "width", scaling by the truncation
-#'        distance. If the key is uniform only "width" will be used. The other
-#'        option is "scale": the scale parameter of the detection
-#' @param cutpoints if the data are binned, this vector gives the cutpoints of
-#'        the bins. Ensure that the first element is 0 (or the left truncation
-#'        distance) and the last is the distance to the end of the furthest bin.
-#'        (Default \code{NULL}, no binning.)
-#'        Note that if \code{data} has columns \code{distbegin} and
-#'        \code{distend} then these will be used as bins if \code{cutpoints}
-#'        is not specified. If both are specified, \code{cutpoints} has
-#'        precedence.
+#' @param adjustment adjustment terms to use; \code{"cos"} gives cosine (default), \code{"herm"} gives Hermite polynomial and \code{"poly"} gives simple polynomial. \code{"cos"} is recommended. A value of \code{NULL} indicates that no adjustments are to be fitted.
+#' @param order orders of the adjustment terms to fit (as a vector/scalar), the default value (\code{NULL}) will select via AIC up to order 5. If a single number is given, that number is expanded to be \code{seq(term_min, order, by=1)} where \code{term.min} is the appropriate minimum order for this type of adjustment. For cosine adjustments, valid orders are integers greater than 2 (except when a uniform key is used, when the minimum order is 1). For Hermite polynomials, even integers equal or greater than 2 are allowed and for simple polynomials even integers equal or greater than 2 are allowed (though note these will be multiplied by 2, see Buckland et al, 2001 for details on their specification). By default, AIC selection will try up to 5 adjustments, beyond that you must specify these manually, e.g. \code{order=2:6} and perform your own AIC selection.
+#' @param scale the scale by which the distances in the adjustment terms are divided. Defaults to \code{"width"}, scaling by the truncation distance. If the key is uniform only \code{"width"} will be used. The other option is \code{"scale"}: the scale parameter of the detection
+#' @param cutpoints if the data are binned, this vector gives the cutpoints of the bins. Ensure that the first element is 0 (or the left truncation distance) and the last is the distance to the end of the furthest bin. (Default \code{NULL}, no binning.) Note that if \code{data} has columns \code{distbegin} and \code{distend} then these will be used as bins if \code{cutpoints} is not specified. If both are specified, \code{cutpoints} has precedence.
 #' @param monotonicity should the detection function be constrained for monotonicity weakly (\code{"weak"}), strictly (\code{"strict"}) or not at all (\code{"none"} or \code{FALSE}). See Montonicity, below. (Default \code{"strict"}). By default it is on for models without covariates in the detection function, off when covariates are present.
-#' @param dht.group should density abundance estimates consider all groups to be
-#'        size 1 (abundance of groups) \code{dht.group=TRUE} or should the
-#'        abundance of individuals (group size is taken into account),
-#'        \code{dht.group=FALSE}. Default is \code{FALSE} (abundance of
-#'        individuals is calculated).
+#' @param dht.group should density abundance estimates consider all groups to be size 1 (abundance of groups) \code{dht.group=TRUE} or should the abundance of individuals (group size is taken into account), \code{dht.group=FALSE}. Default is \code{FALSE} (abundance of individuals is calculated).
 #' @param region.table \code{data.frame} with two columns:
 #'        \tabular{ll}{ \code{Region.Label} \tab label for the region\cr
 #'                     \code{Area} \tab area of the region\cr}
-#'        \code{region.table} has one row for each stratum. If there is no
-#'        stratification then \code{region.table} has one entry with \code{Area}
-#'        corresponding to the total survey area.
-#' @param sample.table \code{data.frame} mapping the regions to the samples (
-#'        i.e. transects). There are three columns:
+#'        \code{region.table} has one row for each stratum. If there is no stratification then \code{region.table} has one entry with \code{Area} corresponding to the total survey area.
+#' @param sample.table \code{data.frame} mapping the regions to the samples (i.e. transects). There are three columns:
 #'        \tabular{ll}{\code{Sample.Label} \tab label for the sample\cr
 #'                     \code{Region.Label} \tab label for the region that the
 #'                          sample belongs to.\cr
 #'                     \code{Effort} \tab the effort expended in that sample
 #'                          (e.g. transect length).\cr}
-#' @param obs.table \code{data.frame} mapping the individual observations
-#'        (objects) to regions and samples. There should be three columns:
+#' @param obs.table \code{data.frame} mapping the individual observations (objects) to regions and samples. There should be three columns:
 #'        \tabular{ll}{\code{object} \tab \cr
 #'                     \code{Region.Label} \tab label for the region that the
 #'                          sample belongs to.\cr
 #'                     \code{Sample.Label} \tab label for the sample\cr}
-#' @param convert.units conversion between units for abundance estimation,
-#'        see "Units", below. (Defaults to 1, implying all of the units are
-#'        "correct" already.)
-#'
-#' @param method optimization method to use (any method usable by
-#'        \code{\link{optim}} or \pkg{optimx}). Defaults to
-#'        "nlminb".
-#'
-#' @param debug.level print debugging output. 0=none, 1-3 increasing level of
-#'        debugging output.
-#'
-#' @param quiet surpress non-essential messages (useful for bootstraps etc).
-#'              Default value FALSE.
-#'
-#' @param initial.values a \code{list} of named starting values, see
-#'        \code{\link{mrds-opt}}. Only allowed when AIC term selection is not used.
-#'
+#' @param convert.units conversion between units for abundance estimation, see "Units", below. (Defaults to 1, implying all of the units are "correct" already.)
+#' @param method optimization method to use (any method usable by \code{\link{optim}} or \pkg{optimx}). Defaults to \code{"nlminb"}.
+#' @param debug.level print debugging output. \code{0}=none, \code{1-3} increasing levels of debugging output.
+#' @param quiet surpress non-essential messages (useful for bootstraps etc). Default value \code{FALSE}.
+#' @param initial.values a \code{list} of named starting values, see \code{\link{mrds-opt}}. Only allowed when AIC term selection is not used.
 #' @return a list with elements:
 #'        \tabular{ll}{\code{ddf} \tab a detection function model object.\cr
 #'                     \code{dht} \tab abundance/density information (if survey
 #'                      region data was supplied, else \code{NULL}).}
 #'
 #' @section Details:
-#'
-#' If abundance estimates are required then the \code{data.frame}s \code{region.table} and \code{sample.table} must be supplied. If \code{data} does not contain the columns \code{Region.Label} and \code{Sample.Label} thenthe \code{data.frame} \code{obs.table} must also be supplied. Note that stratification only applies to abundance estimates and not at the detection function level.
+#' If abundance estimates are required then the \code{data.frame}s \code{region.table} and \code{sample.table} must be supplied. If \code{data} does not contain the columns \code{Region.Label} and \code{Sample.Label} then the \code{data.frame} \code{obs.table} must also be supplied. Note that stratification only applies to abundance estimates and not at the detection function level.
 #'
 #' @section Clusters/groups:
 #'  Note that if the data contains a column named \code{size} and \code{region.table}, \code{sample.table} and \code{obs.table} are supplied, cluster size will be estimated and density/abundance will be based on a clustered analsis of the data. Setting this column to be \code{NULL} will perform a non-clustred analysis (for example if "\code{size}" means something else in your dataset).

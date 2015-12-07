@@ -16,3 +16,4 @@ Depends:
     mrds (>= 2.1.15)
 Suggests:
     testthat
+RoxygenNote: 5.0.1
