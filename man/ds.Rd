@@ -179,6 +179,11 @@ check.mono(ds.model.cos2.sex$ddf,plot=TRUE,n.pts=100)
 # detection function
 ds.model.hr.trunc <- ds(tee.data,truncation="10\%",key="hr",adjustment=NULL)
 summary(ds.model.hr.trunc)
+
+# compare AICs between these models:
+AIC(ds.model)
+AIC(ds.model.cos2)
+AIC(ds.model.cos23)
 }
 
 }
