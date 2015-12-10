@@ -53,7 +53,7 @@ NULL
 #' head(minke)
 NULL
 
-#' Flat files
+#' The flatfile data format
 #'
 #' \code{Distance} allows loading data as a "flat file" and analyse data (and obtain abundance estimates) straight away, provided that the format of the flat file is correct. One can provide the file as, for example, an Excel spreadsheet using \code{read.xls} in \pkg{gdata} or CSV using \code{\link{read.csv}}.
 #'
@@ -61,7 +61,7 @@ NULL
 #' \tabular{ll}{\code{distance} \tab observed distance to object \cr
 #' \code{Sample.Label} \tab Identifier for the sample (transect id) \cr
 #' \code{Effort} \tab effort for this transect (e.g. line transect length or number of times point transect was visited) \cr
-#' \code{Region.Label} \tab code for regional strata (see below) \cr
+#' \code{Region.Label} \tab label for a given stratum (see below) \cr
 #' \code{Area} \tab area of the strata}
 #'
 #' Note that in the simplest case (one area surveyed only once) there is only one \code{Region.Label} and a single corresponding \code{Area} duplicated for each observation.
