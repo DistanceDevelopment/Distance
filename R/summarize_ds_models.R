@@ -16,8 +16,13 @@ summarize_ds_models <- function(..., sort="AIC"){
   # this function extracts the model data for a single model (row)
   extract_model_data <- function(model){
     summ <- summary(model)
+
+    # handle (uniform) no formula case
+    formula <- model$ddf$ds$aux$ddfobj$scale$formula
+    if(is.null(formula)) formula <- NA
+
     ret <- c(model.description(model$ddf),
-             model$ddf$ds$aux$ddfobj$scale$formula,
+             formula,
              ddf.gof(model$ddf, qq=FALSE)$dsgof$CvM$p,
              summ$ds$average.p,
              summ$ds$average.p.se,
