@@ -18,6 +18,12 @@ test_that("Input errors are thrown correctly",{
                "argument \"data\" is missing, with no default")
   expect_error(ds(list()),
                "Your data must \\(at least\\) have a column called 'distance'!")
+  
+  # incorrect data types
+  expect_error(ds("distance"),
+               "data is not of class data.frame nor are the values supplied numeric")
+  expect_error(ds(c(TRUE,FALSE)),
+               "data is not of class data.frame nor are the values supplied numeric")
 
   # incorrect key definition?
   expect_error(ds(egdata,4,key="bananas"),
@@ -44,6 +50,13 @@ test_that("Input errors are thrown correctly",{
 
 
 test_that("Simple models work",{
+  
+  #Test that ds can deal with a numeric vector as input
+  distances <- c(1.02,0.89,0.21,1.83,0.09,1.34,2.1,0.98,1.8,0.32,0.83,1.6,0.92,0.66,0.31,0.55,1.13,0.5,0.46,1)
+  numeric.test <- suppressMessages(ds(distances))
+  data.frame.test <- suppressMessages(ds(data.frame(distance = distances)))
+  #Passing in distances as a vector should be identical to passing them in a data.frame
+  expect_equal(numeric.test$ddf$par, data.frame.test$ddf$par)
 
   # same model, but calculating abundance
   # need to supply the region, sample and observation tables
