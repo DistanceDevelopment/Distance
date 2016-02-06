@@ -3,7 +3,8 @@
 #' This function fits detection functions to line or point transect data and then (provided that survey information is supplied) calculates abundance and density estimates. The examples below illustrate some basic types of analysis using \code{ds()}.
 #'
 #' @param data a \code{data.frame} containing at least a column called
-#'        \code{distance}. NOTE! If there is a column called \code{size} in
+#'        \code{distance} or a numeric vector containing the distances. 
+#'        NOTE! If there is a column called \code{size} in
 #'        the data then it will be interpreted as group/cluster size, see the
 #'        section "Clusters/groups", below. One can supply data as a "flat file"
 #'        and not supply \code{region.table}, \code{sample.table} and
@@ -171,7 +172,15 @@ ds <- function(data, truncation=ifelse(is.null(cutpoints),
 
   # this routine just creates a call to mrds, it's not very exciting
   # or fancy, it does do a lot of error checking though
-
+  
+  #Check if the user has passed in a numeric vector
+  if(class(data) != "data.frame"){
+    if(is.numeric(data)){
+      data <- data.frame(distance = data)
+    }else{
+      stop("data is not of class data.frame nor are the values supplied numeric")
+    }
+  }
 
   # truncation
   if(is.null(truncation)){

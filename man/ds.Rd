@@ -16,7 +16,8 @@ ds(data, truncation = ifelse(is.null(cutpoints), ifelse(is.null(data$distend),
 }
 \arguments{
 \item{data}{a \code{data.frame} containing at least a column called
-\code{distance}. NOTE! If there is a column called \code{size} in
+\code{distance} or a numeric vector containing the distances. 
+NOTE! If there is a column called \code{size} in
 the data then it will be interpreted as group/cluster size, see the
 section "Clusters/groups", below. One can supply data as a "flat file"
 and not supply \code{region.table}, \code{sample.table} and
