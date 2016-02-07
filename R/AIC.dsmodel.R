@@ -4,6 +4,7 @@
 #'
 #' @param object a fitted detection function object
 #' @param k penalty per parameter to be used; the default \code{k = 2} is the "classical" AIC
+#' @param \dots required for S3 but ignored
 #' @author David L Miller
 #' @export
 AIC.dsmodel <- function(object, ..., k=2){

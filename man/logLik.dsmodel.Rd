@@ -9,8 +9,7 @@
 \arguments{
 \item{object}{a fitted detection function model object}
 
-\item{...}{some methods for this generic function require additional
-   arguments.}
+\item{\dots}{included for S3 completeness, but ignored}
 }
 \value{
 a numeric value giving the log-likelihood with two attributes: \code{"df"} the "degrees of freedom" for the model (number of parameters) and \code{"nobs"} the number of observations used to fit the model
