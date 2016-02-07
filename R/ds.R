@@ -172,15 +172,6 @@ ds <- function(data, truncation=ifelse(is.null(cutpoints),
 
   # this routine just creates a call to mrds, it's not very exciting
   # or fancy, it does do a lot of error checking though
-  
-  #Check if the user has passed in a numeric vector
-  if(class(data) != "data.frame"){
-    if(is.numeric(data)){
-      data <- data.frame(distance = data)
-    }else{
-      stop("data is not of class data.frame nor are the values supplied numeric")
-    }
-  }
 
   # truncation
   if(is.null(truncation)){

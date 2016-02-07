@@ -16,7 +16,16 @@
 checkdata<-function(data, region.table=NULL, sample.table=NULL, obs.table=NULL,
                     formula=~1){
 
-   ## make sure that the data are in the right format first
+  #Check if the user has passed in a numeric vector
+    if(class(data) != "data.frame" & class(data) != "list"){
+      if(is.numeric(data)){
+        data <- data.frame(distance = data)
+      }else{
+        stop("data is not of class data.frame nor are the values supplied numeric")
+      }
+    }
+  
+  ## make sure that the data are in the right format first
   if(is.null(data$distance)){
     stop("Your data must (at least) have a column called 'distance'!")
   }
