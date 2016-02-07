@@ -173,6 +173,13 @@ ds <- function(data, truncation=ifelse(is.null(cutpoints),
   # this routine just creates a call to mrds, it's not very exciting
   # or fancy, it does do a lot of error checking though
 
+  # check the data, format into the correct tables if we have a flat file
+  data <- checkdata(data, region.table, sample.table, obs.table, formula)
+  region.table <- data$region.table
+  sample.table <- data$sample.table
+  obs.table    <- data$obs.table
+  data         <- data$data
+  
   # truncation
   if(is.null(truncation)){
     stop("Please supply truncation distance or percentage.")
@@ -228,13 +235,6 @@ ds <- function(data, truncation=ifelse(is.null(cutpoints),
       stop("Truncation must be supplied as a single number/string or a list with elements \"left\" and \"right\".")
     }
   }
-
-  # check the data, format into the correct tables if we have a flat file
-  data <- checkdata(data, region.table, sample.table, obs.table, formula)
-  region.table <- data$region.table
-  sample.table <- data$sample.table
-  obs.table    <- data$obs.table
-  data         <- data$data
 
   ### binning
   if(is.null(cutpoints)){
