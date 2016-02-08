@@ -12,6 +12,8 @@ summarize_ds_models <- function(..., sort="AIC"){
 
   # get the models
   models <- list(...)
+  # get the model names
+  model_names <- deparse(substitute(...))
 
   # this function extracts the model data for a single model (row)
   extract_model_data <- function(model){
@@ -35,11 +37,14 @@ summarize_ds_models <- function(..., sort="AIC"){
   res <- as.data.frame(t(as.data.frame(lapply(models, extract_model_data))),
                         stringsAsFactors=FALSE)
 
+  res <- cbind.data.frame(model_names, res)
+
   # making sure the correct columns are numeric
-  res[,3:6] <- apply(res[,3:6], 2, as.numeric)
+  res[,4:7] <- apply(res[,4:7], 2, as.numeric)
 
   # giving the columns names
-  colnames(res) <- c("Key function",
+  colnames(res) <- c("Model",
+                     "Key function",
                      "Formula",
                      "C-vM $p$-value",
                      "$\\hat{P_a}$",
