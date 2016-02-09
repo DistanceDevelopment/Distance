@@ -13,7 +13,8 @@ summarize_ds_models <- function(..., sort="AIC"){
   # get the models
   models <- list(...)
   # get the model names
-  model_names <- deparse(substitute(...))
+  model_names <- setdiff(as.character(match.call(expand.dots=TRUE)),
+                         as.character(match.call(expand.dots=FALSE)))
 
   # this function extracts the model data for a single model (row)
   extract_model_data <- function(model){
