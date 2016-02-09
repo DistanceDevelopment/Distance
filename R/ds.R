@@ -359,7 +359,7 @@ ds <- function(data, truncation=ifelse(is.null(cutpoints),
       # if there are covariates then don't do the AIC search
       if(formula != ~1){
         aic.search <- FALSE
-        message("Cannot perform AIC adjustment term selection when covariates are used.")
+        message("Model contains covariate term(s): no adjustment terms will be included.")
       }else{
       # otherwise go ahead and set up the candidate adjustment orders
         aic.search <- TRUE

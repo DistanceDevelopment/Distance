@@ -21,9 +21,9 @@ test_that("Input errors are thrown correctly",{
   
   # incorrect data types
   expect_error(ds("distance"),
-               "data is not of class data.frame nor are the values supplied numeric")
+               "data is not a data.frame nor are the values numeric")
   expect_error(ds(c(TRUE,FALSE)),
-               "data is not of class data.frame nor are the values supplied numeric")
+               "data is not a data.frame nor are the values numeric")
 
   # incorrect key definition?
   expect_error(ds(egdata,4,key="bananas"),

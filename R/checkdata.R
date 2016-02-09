@@ -21,7 +21,7 @@ checkdata<-function(data, region.table=NULL, sample.table=NULL, obs.table=NULL,
     if(is.numeric(data)){
       data <- data.frame(distance = data)
     }else{
-      stop("data is not a data.frame nor are the values supplied numeric")
+      stop("data is not a data.frame nor are the values numeric")
     }
   }
 
