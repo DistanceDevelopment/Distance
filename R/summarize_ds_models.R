@@ -6,9 +6,10 @@
 #'
 #' @param ... models to be summarised
 #' @param sort column to sort by (default \code{"AIC"})
+#' @param output should the output be given in \code{"latex"} compatible format or as \code{"plain"} text?
 #' @author David L Miller
 #' @export
-summarize_ds_models <- function(..., sort="AIC"){
+summarize_ds_models <- function(..., sort="AIC", output="latex"){
 
   # get the models
   models <- list(...)
@@ -38,24 +39,47 @@ summarize_ds_models <- function(..., sort="AIC"){
   res <- as.data.frame(t(as.data.frame(lapply(models, extract_model_data))),
                         stringsAsFactors=FALSE)
 
-  res <- cbind.data.frame(model_names, res)
+  if(output == "latex"){
+    model_names <- paste0("\\texttt{", model_names, "}")
+    res <- cbind.data.frame(model_names, res)
+  }else if(output=="plain"){
+    res <- cbind.data.frame(model_names, res)
+  }else{
+    stop("Invalid output format")
+  }
 
   # making sure the correct columns are numeric
   res[,4:7] <- apply(res[,4:7], 2, as.numeric)
 
   # giving the columns names
-  colnames(res) <- c("Model",
-                     "Key function",
-                     "Formula",
-                     "C-vM $p$-value",
-                     "$\\hat{P_a}$",
-                     "se($\\hat{P_a}$)",
-                     "AIC")
+  if(output == "latex"){
+    colnames(res) <- c("Model",
+                       "Key function",
+                       "Formula",
+                       "C-vM $p$-value",
+                       "$\\hat{P_a}$",
+                       "se($\\hat{P_a}$)",
+                       "AIC")
+  }else if(output=="plain"){
+    colnames(res) <- c("Model",
+                       "Key function",
+                       "Formula",
+                       "C-vM p-value",
+                       "Average detectability",
+                       "se(Average detectability)",
+                       "AIC")
+  }else{
+    stop("Invalid output format")
+  }
   # remove row names
   rownames(res) <- NULL
 
   # creating a new column for the AIC difference to the best model
-  res[["$\\Delta$AIC"]] <- res$AIC - min(res$AIC, na.rm=TRUE)
+  if(output == "latex"){
+    res[["$\\Delta$AIC"]] <- res$AIC - min(res$AIC, na.rm=TRUE)
+  }else if(output=="plain"){
+    res[["Delta AIC"]] <- res$AIC - min(res$AIC, na.rm=TRUE)
+  }
   # ordering the model by AIC score
   res <- res[order(res[[sort]]),]
 

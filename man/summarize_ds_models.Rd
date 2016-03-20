@@ -4,12 +4,14 @@
 \alias{summarize_ds_models}
 \title{Make a table of summary statistics for detection function models}
 \usage{
-summarize_ds_models(..., sort = "AIC")
+summarize_ds_models(..., sort = "AIC", output = "latex")
 }
 \arguments{
 \item{...}{models to be summarised}
 
 \item{sort}{column to sort by (default \code{"AIC"})}
+
+\item{output}{should the output be given in \code{"latex"} compatible format or as \code{"plain"} text?}
 }
 \description{
 Provide a summary table of useful information about fitted detection functions. This can be useful when paired with \code{knitr}s \code{kable} function.
