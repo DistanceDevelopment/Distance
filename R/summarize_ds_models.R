@@ -25,7 +25,8 @@ summarize_ds_models <- function(..., sort="AIC", output="latex"){
     formula <- model$ddf$ds$aux$ddfobj$scale$formula
     if(is.null(formula)) formula <- NA
 
-    ret <- c(model.description(model$ddf),
+    desc <- gsub(" key function","",model.description(model$ddf))
+    ret <- c(desc,
              formula,
              ddf.gof(model$ddf, qq=FALSE)$dsgof$CvM$p,
              summ$ds$average.p,
@@ -40,6 +41,7 @@ summarize_ds_models <- function(..., sort="AIC", output="latex"){
                         stringsAsFactors=FALSE)
 
   if(output == "latex"){
+    model_names <- gsub("_", '\\\\char`_', model_names)
     model_names <- paste0("\\texttt{", model_names, "}")
     res <- cbind.data.frame(model_names, res)
   }else if(output=="plain"){
