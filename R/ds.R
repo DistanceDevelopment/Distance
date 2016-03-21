@@ -529,7 +529,11 @@ ds <- function(data, truncation=ifelse(is.null(cutpoints),
           # return the last model and stop looking.
           if(model$criterion>last.model$criterion){
             model <- last.model
-            message(paste0("\n\n",model$name.message," selected!"))
+            # capitalise!
+            model_name <- model$name.message
+            model_name <- paste0(toupper(substring(model_name, 1, 1)),
+                                substring(model_name, 2))
+            message(paste0("\n", model_name, " selected."))
             break
           }else{
             # otherwise keep this, best model
