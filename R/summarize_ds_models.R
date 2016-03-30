@@ -7,9 +7,10 @@
 #' @param ... models to be summarised
 #' @param sort column to sort by (default \code{"AIC"})
 #' @param output should the output be given in \code{"latex"} compatible format or as \code{"plain"} text?
+#' @param delta_only only output AIC differences (default \code{TRUE})
 #' @author David L Miller
 #' @export
-summarize_ds_models <- function(..., sort="AIC", output="latex"){
+summarize_ds_models <- function(..., sort="AIC", output="latex", delta_only=TRUE){
 
   # get the models
   models <- list(...)
@@ -84,6 +85,11 @@ summarize_ds_models <- function(..., sort="AIC", output="latex"){
   }
   # ordering the model by AIC score
   res <- res[order(res[[sort]]),]
+
+  # remove the AIC column if asked and just return the deltas
+  if(delta_only){
+    res$AIC <- NULL
+  }
 
   # returning the data.frame
   return(res)
