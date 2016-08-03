@@ -57,7 +57,7 @@ By default for exact distances the maximum observed distance is used as the righ
                   (e.g. transect length).\cr}}
 
 \item{obs.table}{\code{data.frame} mapping the individual observations (objects) to regions and samples. There should be three columns:
-\tabular{ll}{\code{object} \tab \cr
+\tabular{ll}{\code{object} \tab unique numeric identifier for the observation\cr
              \code{Region.Label} \tab label for the region that the
                   sample belongs to.\cr
              \code{Sample.Label} \tab label for the sample\cr}}

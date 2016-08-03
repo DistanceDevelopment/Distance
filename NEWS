@@ -3,6 +3,8 @@ Distance version 0.9.6
  * Added gof_ds() for easy access to goodness of fit testing and q-q plotting
  * Checking of truncation distance was checking via is.double rather than is.numeric. Thanks to Tiago Marques for spotting this!
  * Functions AIC() and logLik() now exist for quick extraction of AIC and log-likelihood values. Thanks to Tiago Marques for this suggestion.
+ * Added amakihi (point transect) data
+ * add extra documentation for objects in obs.table, thanks to Olivier Devineau for spotting this
 
 Distance version 0.9.5
  * Truncation by percentage now works when there are missing distances (i.e. when we are using flatfile). Thanks to Len Thomas for pointing out this bug.
