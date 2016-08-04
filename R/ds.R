@@ -575,7 +575,7 @@ ds <- function(data, truncation=ifelse(is.null(cutpoints),
                                   convert.units=convert.units),se=TRUE)
 
       }else{
-        message("No obs.table supplied but data does not have Region.Label or Sample.Label columns, only estimating detection function.\n")
+        message("No obs.table supplied nor does data have Region.Label and Sample.Label columns, only estimating detection function.\n")
         dht.res <- NULL
       }
     }else{
