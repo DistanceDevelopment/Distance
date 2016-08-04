@@ -7,6 +7,7 @@
 #' @param \dots required for S3 but ignored
 #' @author David L Miller
 #' @export
+#' @importFrom stats logLik
 AIC.dsmodel <- function(object, ..., k=2){
 
   # see also logLik.dsmodel
