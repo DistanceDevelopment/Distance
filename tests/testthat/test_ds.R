@@ -141,6 +141,10 @@ test_that("Truncation is handled",{
   # largest observed distance
   expect_equal(suppressMessages(ds(egdata,key="hn",order=0))$ddf$meta.data$width,3.84)
 
+
+  # remove observations after 3.8
+  egdata <- egdata[egdata$distance <= 3.8,]
+
   # largest cutpoint
   expect_equal(suppressMessages(ds(egdata,key="hn",order=0,
                   cutpoints=c(0,1,2,3,3.8)))$ddf$meta.data$width,3.8)
