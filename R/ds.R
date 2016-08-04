@@ -568,7 +568,7 @@ ds <- function(data, truncation=ifelse(is.null(cutpoints),
     # if obs.table is not supplied, then data must have the Region.Label and
     # Sample.Label columns
     if(is.null(obs.table)){
-      if(c("Region.Label","Sample.Label") %in% names(data)){
+      if(!all(c("Region.Label","Sample.Label") %in% names(data))){
         message("No obs.table supplied but data does not have Region.Label or Sample.Label columns, only estimating detection function.\n")
       }
     }
