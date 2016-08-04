@@ -19,10 +19,11 @@ test_that("dht without obs.table",{
   expect_error(suppressMessages(ds(egdata,4,region.table=region, monotonicity="strict", sample.table=samples)))
 
   # test that the result is the same if we do the correct merge
-  dat <- merge(egdata,obs,by="object")
-  ds.dht.model2<-suppressMessages(ds(dat,4,region.table=region,monotonicity="strict",
-               sample.table=samples))
-  expect_equivalent(ds.dht.model$dht,ds.dht.model2$dht)
+  dat <- merge(egdata, obs, by="object")
+  ds.dht.model2 <- suppressMessages(ds(dat, 4, region.table=region,
+                                       monotonicity="strict",
+                                       sample.table=samples))
+  expect_equivalent(ds.dht.model$dht, ds.dht.model2$dht)
 
 })
 

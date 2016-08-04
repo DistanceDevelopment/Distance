@@ -568,22 +568,30 @@ ds <- function(data, truncation=ifelse(is.null(cutpoints),
     # if obs.table is not supplied, then data must have the Region.Label and
     # Sample.Label columns
     if(is.null(obs.table)){
-      if(!all(c("Region.Label","Sample.Label") %in% names(data))){
+      if(all(c("Region.Label","Sample.Label") %in% names(data))){
+        dht.res <- dht(model,region.table,sample.table,
+                     options=list(#varflag=0,group=TRUE,
+                                  group=dht.group,
+                                  convert.units=convert.units),se=TRUE)
+
+      }else{
         message("No obs.table supplied but data does not have Region.Label or Sample.Label columns, only estimating detection function.\n")
+        dht.res <- NULL
       }
+    }else{
+
+      # from ?dht:
+      # For animals observed in tight clusters, that estimator gives the
+      # abundance of groups (group=TRUE in options) and the abundance of
+      # individuals is estimated as s_1/p_1 + s_2/p_2 + ... + s_n/p_n, where
+      # s_i is the size (e.g., number of animals in the group) of each
+      # observation(group=FALSE in options).
+
+      dht.res <- dht(model,region.table,sample.table,obs.table,
+                   options=list(#varflag=0,group=TRUE,
+                                group=dht.group,
+                                convert.units=convert.units),se=TRUE)
     }
-
-    # from ?dht:
-    # For animals observed in tight clusters, that estimator gives the
-    # abundance of groups (group=TRUE in options) and the abundance of
-    # individuals is estimated as s_1/p_1 + s_2/p_2 + ... + s_n/p_n, where
-    # s_i is the size (e.g., number of animals in the group) of each
-    # observation(group=FALSE in options).
-
-    dht.res <- dht(model,region.table,sample.table,obs.table,
-                 options=list(#varflag=0,group=TRUE,
-                              group=dht.group,
-                              convert.units=convert.units),se=TRUE)
   }else{
     # if no information on the survey area was supplied just return
     # the detection function stuff
