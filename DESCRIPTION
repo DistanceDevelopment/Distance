@@ -11,6 +11,7 @@ Description: A simple way of fitting detection functions to distance sampling
     Horvitz-Thompson-like estimator) if survey area information is provided.
 Version: 0.9.6
 URL: http://github.com/DistanceDevelopment/Distance/
+BugReports: https://github.com/DistanceDevelopment/Distance/issues
 Depends:
     R (>= 3.0),
     mrds (>= 2.1.15)
