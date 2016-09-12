@@ -27,11 +27,11 @@ test_that("Input errors are thrown correctly",{
 
   # incorrect key definition?
   expect_error(ds(egdata,4,key="bananas"),
-               "'arg' should be one of \"hn\", \"hr\", \"unif\"")
+               suppressMessages(message("'arg' should be one of \"hn\", \"hr\", \"unif\"")))
 
   # incorrect adjustment definition?
   expect_error(ds(egdata,4,key="hn",adjustment="bananas"),
-               "'arg' should be one of \"cos\", \"herm\", \"poly\"")
+               suppressMessages(message("'arg' should be one of \"cos\", \"herm\", \"poly\"")))
 
   # first cutpoint not zero when no left truncation
   expect_error(ds(egdata,4,cutpoints=c(2,3,4)),
