@@ -7,6 +7,8 @@
 
 `Distance` is a simple way of fitting detection functions to distance sampling data for both line and point transects. Adjustment term selection, left and right truncation as well as monotonicity constraints and binning are supported. Abundance and density estimates can also be calculated (via a Horvitz-Thompson-like estimator) if survey area information is provided.
 
+# Using `Distance`
+
 For more information and examples of use [take a look at this preprint](http://biorxiv.org/content/early/2016/07/14/063891).
 
 # Getting `Distance`
