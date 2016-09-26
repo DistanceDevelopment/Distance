@@ -9,4 +9,15 @@
 
 For more information and examples of use [take a look at this preprint](http://biorxiv.org/content/early/2016/07/14/063891).
 
+# Getting `Distance`
+
+The easiest way to ensure you have the latest version of `Distance`, is to install Hadley Wickham's devtools package:
+
+      install.packages("devtools")
+
+then install `Distance` from github:
+
+      library(devtools)
+      install_github("DistanceDevelopment/Distance")
+
 
