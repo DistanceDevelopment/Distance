@@ -1,3 +1,6 @@
+Distance version 0.9.7
+  * If there are numerical issues that cause NAs in the Hessian, ds() will not try to run dht() to estimate abundance (as it will fail), instead throws a message and returns only the detection function. Thanks to Steve Ahlswede for bringing this to our attention.
+
 Distance version 0.9.6
  * Coefficients are called coefficients (not a mixture of coefficients and parameters) in summary() results
  * Added gof_ds() for easy access to goodness of fit testing and q-q plotting

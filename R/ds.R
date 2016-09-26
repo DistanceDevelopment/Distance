@@ -568,12 +568,18 @@ ds <- function(data, truncation=ifelse(is.null(cutpoints),
     # if obs.table is not supplied, then data must have the Region.Label and
     # Sample.Label columns
     if(is.null(obs.table)){
-      if(all(c("Region.Label","Sample.Label") %in% names(data))){
-        dht.res <- dht(model,region.table,sample.table,
-                     options=list(#varflag=0,group=TRUE,
-                                  group=dht.group,
-                                  convert.units=convert.units),se=TRUE)
+      if(all(c("Region.Label", "Sample.Label") %in% names(data))){
 
+        if(any(is.na(model$hessian))){
+          message("Some variance-covariance matrix elements were NA, possible numerical problems; only estimating detection function.\n")
+          dht.res <- NULL
+        }else{
+
+          dht.res <- dht(model, region.table, sample.table,
+                         options=list(#varflag=0,group=TRUE,
+                                    group=dht.group,
+                                    convert.units=convert.units), se=TRUE)
+        }
       }else{
         message("No obs.table supplied nor does data have Region.Label and Sample.Label columns, only estimating detection function.\n")
         dht.res <- NULL
@@ -587,10 +593,15 @@ ds <- function(data, truncation=ifelse(is.null(cutpoints),
       # s_i is the size (e.g., number of animals in the group) of each
       # observation(group=FALSE in options).
 
-      dht.res <- dht(model,region.table,sample.table,obs.table,
-                   options=list(#varflag=0,group=TRUE,
-                                group=dht.group,
-                                convert.units=convert.units),se=TRUE)
+      if(any(is.na(model$hessian))){
+        message("Some variance-covariance matrix elements were NA, possible numerical problems; only estimating detection function.\n")
+        dht.res <- NULL
+      }else{
+        dht.res <- dht(model, region.table, sample.table, obs.table,
+                       options=list(#varflag=0,group=TRUE,
+                                    group=dht.group,
+                                    convert.units=convert.units), se=TRUE)
+      }
     }
   }else{
     # if no information on the survey area was supplied just return
