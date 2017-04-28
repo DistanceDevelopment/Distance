@@ -24,4 +24,3 @@ This function just calls \code{\link{summary.ds}} and \code{\link{dht}}, collate
 David L. Miller
 }
 \keyword{utility}
-

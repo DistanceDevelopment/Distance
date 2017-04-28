@@ -20,4 +20,3 @@ Extract the log-likelihood from a fitted detection function.
 \author{
 David L Miller
 }
-

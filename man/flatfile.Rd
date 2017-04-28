@@ -75,4 +75,3 @@ model.sel.bin <- data.frame(name=c("Pooled f(0)", "Stratum covariate",
 print(model.sel.bin)
 }
 }
-

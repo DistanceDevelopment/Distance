@@ -2,8 +2,8 @@
 % Please edit documentation in R/Distance-package.R
 \docType{package}
 \name{Distance-package}
-\alias{Distance}
 \alias{Distance-package}
+\alias{Distance}
 \title{Distance sampling}
 \description{
 \code{Distance} is a simple way to fit detection functions and estimate abundance using distance sampling methodology.
@@ -14,9 +14,6 @@ Underlying \code{Distance} is the package \code{mrds}, for more advanced analyse
 Further information on distance sampling methods and example code is available at \url{http://distancesampling.org/R/}.
 
 For help with distance sampling and this package, there is a Google Group \url{https://groups.google.com/forum/#!forum/distance-sampling}.
-}
-\author{
-David L. Miller <dave@ninepointeightone.net>
 }
 \references{
 Laake, J.L. and D.L. Borchers. 2004. Methods for incomplete
@@ -29,6 +26,8 @@ Marques, F.F.C. and S.T. Buckland. 2004. Covariate models for the detection
   D.R.Anderson, K.P. Burnham, J.L. Laake, D.L. Borchers, and L. Thomas.
   Oxford University Press.
 }
+\author{
+David L. Miller <dave@ninepointeightone.net>
+}
 \keyword{Models}
 \keyword{Statistical}
-

@@ -1,6 +1,6 @@
 #' Make a table of summary statistics for detection function models
 #'
-#' Provide a summary table of useful information about fitted detection functions. This can be useful when paired with \code{knitr}s \code{kable} function.
+#' Provide a summary table of useful information about fitted detection functions. This can be useful when paired with \code{knitr}s \code{kable} function. By default models are sorted by AIC and will therefore not allow models with different truncations and distance binning.
 #'
 #' Note that the column names are in LaTeX format, so if you plan to manipulate the resulting \code{data.frame} in R, you may wish to rename the columns for ease of access.
 #'
@@ -14,9 +14,41 @@ summarize_ds_models <- function(..., sort="AIC", output="latex", delta_only=TRUE
 
   # get the models
   models <- list(...)
+
   # get the model names
   model_names <- setdiff(as.character(match.call(expand.dots=TRUE)),
                          as.character(match.call(expand.dots=FALSE)))
+
+
+  ## checking
+  # can't compare models with different truncations
+  r_truncs <- unlist(lapply(models, function(x) x$ddf$meta.data$width))
+  l_truncs <- unlist(lapply(models, function(x) x$ddf$meta.data$left))
+  if(!all(abs(c(r_truncs-mean(r_truncs),
+                l_truncs-mean(l_truncs))) < 1e-8)){
+    stop("All truncations must be the same for AIC comparison.")
+  }
+  # check all binned
+  binned <- unlist(lapply(models, function(x) x$ddf$meta.data$binned))
+  if((any(binned) & !all(binned)) | (any(!binned) & !all(!binned))){
+    stop("Can't compare binned and unbinned distances")
+  }
+  # check all binning is the same
+  if(all(binned)){
+    breaks <- lapply(models, function(x) x$ddf$meta.data$breaks)
+    # if the breaks aren't the same length it's easy
+    len_breaks <- unlist(lapply(breaks, length))
+    if(!all(abs(len_breaks-mean(len_breaks)) < 1e-8)){
+      stop("Distance binning must be the same for all models.")
+    }
+    # if not??? (WARNING: Byzantine process :( )
+    for(i in seq_along(breaks[[1]])){
+      this_set <- unlist(lapply(breaks, "[[", i))
+      if(!all(abs(this_set-mean(this_set)) < 1e-8)){
+        stop("Distance binning must be the same for all models.")
+      }
+    }
+  }
 
   # this function extracts the model data for a single model (row)
   extract_model_data <- function(model){
@@ -27,9 +59,15 @@ summarize_ds_models <- function(..., sort="AIC", output="latex", delta_only=TRUE
     if(is.null(formula)) formula <- NA
 
     desc <- gsub(" key function","",model.description(model$ddf))
+    # only get CvM if not binned
+    if(model$ddf$meta.data$binned){
+      gof <- NA
+    }else{
+      gof <- ddf.gof(model$ddf, qq=FALSE)$dsgof$CvM$p
+    }
     ret <- c(desc,
              formula,
-             ddf.gof(model$ddf, qq=FALSE)$dsgof$CvM$p,
+             gof,
              summ$ds$average.p,
              summ$ds$average.p.se,
              model$ddf$criterion
@@ -54,12 +92,21 @@ summarize_ds_models <- function(..., sort="AIC", output="latex", delta_only=TRUE
   # making sure the correct columns are numeric
   res[,4:7] <- apply(res[,4:7], 2, as.numeric)
 
+  # what test did we do?
+  if(all(binned)){
+    gof_name <- "Chi^2 p-value"
+    gof_latexname <- "$\\chi^2$ $p$-value"
+  }else{
+    gof_name <- "C-vM $p$-value"
+    gof_latexname <- "C-vM p-value"
+  }
+
   # giving the columns names
   if(output == "latex"){
     colnames(res) <- c("Model",
                        "Key function",
                        "Formula",
-                       "C-vM $p$-value",
+                       gof_latexname,
                        "$\\hat{P_a}$",
                        "se($\\hat{P_a}$)",
                        "AIC")
@@ -67,7 +114,7 @@ summarize_ds_models <- function(..., sort="AIC", output="latex", delta_only=TRUE
     colnames(res) <- c("Model",
                        "Key function",
                        "Formula",
-                       "C-vM p-value",
+                       gof_name,
                        "Average detectability",
                        "se(Average detectability)",
                        "AIC")

@@ -19,4 +19,3 @@ Fancy, SG, TJ Snetsinger, & JD Jacobi (1997). Translocation of the Palila, an En
 Marques, TA, L Thomas, S Fancy & ST Buckland (2007). Improving estimates of bird density using multiple-covariate distance sampling. The Auk, 124(4), 1229-1243.
 }
 \keyword{datasets}
-

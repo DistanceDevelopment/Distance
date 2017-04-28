@@ -19,11 +19,10 @@ Provides a brief summary of a distance sampling analysis. Including: detection
 function parameters, model selection criterion, and optionally abundance in the
 covered (sampled) region and its standard error.
 }
-\author{
-David L. Miller and Jeff Laake
-}
 \seealso{
 \code{\link{summary.ds}}
 }
+\author{
+David L. Miller and Jeff Laake
+}
 \keyword{utility}
-

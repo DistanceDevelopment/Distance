@@ -21,4 +21,3 @@ This is an internal routine and shouldn't be necessary in normal analyses.
 \author{
 David L. Miller
 }
-

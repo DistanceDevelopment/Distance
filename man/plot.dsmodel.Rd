@@ -23,4 +23,3 @@ page for that function for more information.
 \author{
 David L. Miller
 }
-

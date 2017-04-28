@@ -21,4 +21,3 @@ Computes goodness of fit tests for the detection function. For binned distances 
 \details{
 See \code{\link{ddf.gof}} for further details.
 }
-

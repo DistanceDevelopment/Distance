@@ -140,6 +140,7 @@ Even with no monotonicity constraints, checks are still made that the detection 
 
  @section Data format: One can supply \code{data} only to simply fit a detection function. However, if abundance/density estimates are necessary further information is required. Either the \code{region.table}, \code{sample.table} and \code{obs.table} \code{data.frame}s can be supplied or all data can be supplied as a "flat file" in the \code{data} argument. In this format each row in data has additional information that would ordinarily be in the other tables. This usually means that there are additional columns named: \code{Sample.Label}, \code{Region.Label}, \code{Effort} and \code{Area} for each observation. See \code{\link{flatfile}} for an example.
 }
+
 \examples{
 
 # An example from mrds, the golf tee data.
@@ -190,9 +191,6 @@ AIC(ds.model.cos23)
 }
 
 }
-\author{
-David L. Miller
-}
 \references{
 Buckland, S.T., Anderson, D.R., Burnham, K.P., Laake, J.L., Borchers, D.L., and Thomas, L. (2001). Distance Sampling. Oxford University Press. Oxford, UK.
 
@@ -201,4 +199,6 @@ Buckland, S.T., Anderson, D.R., Burnham, K.P., Laake, J.L., Borchers, D.L., and 
 \seealso{
 \code{\link{flatfile}}
 }
-
+\author{
+David L. Miller
+}

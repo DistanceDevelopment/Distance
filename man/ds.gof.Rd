@@ -23,11 +23,10 @@ List of test results and a plot.
 \description{
 Chi-square, Kolmogorov-Smirnov and Cramer-von Mises goodness of fit tests for detection function models.
 }
-\author{
-David L Miller
-}
 \seealso{
 qqplot.ddf ddf.gof
 }
+\author{
+David L Miller
+}
 \keyword{utility}
-

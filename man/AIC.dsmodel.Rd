@@ -9,9 +9,9 @@
 \arguments{
 \item{object}{a fitted detection function object}
 
-\item{k}{penalty per parameter to be used; the default \code{k = 2} is the "classical" AIC}
-
 \item{\dots}{required for S3 but ignored}
+
+\item{k}{penalty per parameter to be used; the default \code{k = 2} is the "classical" AIC}
 }
 \description{
 Extract the AIC from a fitted detection function.
@@ -19,4 +19,3 @@ Extract the AIC from a fitted detection function.
 \author{
 David L Miller
 }
-
