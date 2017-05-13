@@ -25,7 +25,7 @@ create.bins <- function(data,cutpoints){
   if(!all(in.cp.ind)){
     warning("Some distances were outside bins and have been removed.")
   }
-  data <- data[in.cp.ind,]
+  data <- data[in.cp.ind, , drop=FALSE]
 
   # pull out the distances (removing the NAs for now)
   na.ind <- is.na(data$distance)
