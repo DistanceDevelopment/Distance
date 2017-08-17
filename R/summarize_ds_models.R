@@ -61,7 +61,7 @@ summarize_ds_models <- function(..., sort="AIC", output="latex", delta_only=TRUE
     desc <- gsub(" key function","",model.description(model$ddf))
     # only get CvM if not binned
     if(model$ddf$meta.data$binned){
-      gof <- NA
+      gof <- gof_ds(model, chi=TRUE)$chisquare$chi1$p
     }else{
       gof <- ddf.gof(model$ddf, qq=FALSE)$dsgof$CvM$p
     }
