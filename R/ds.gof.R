@@ -12,6 +12,13 @@
 #' @author David L Miller
 #' @seealso qqplot.ddf ddf.gof
 #' @keywords utility
+#' @examples
+#' fit and test a simple model for the golf tee data
+#' library(Distance)
+#' data(book.tee.data)
+#' tee.data<-book.tee.data$book.tee.dataframe[book.tee.data$book.tee.dataframe$observer==1,]
+#' ds.model <- ds(tee.data,4)
+#' ds.gof(ds.model)
 ds.gof <- function(model, breaks=NULL, nc=NULL, qq=TRUE,...){
   return(ddf.gof(model$ddf, breaks=breaks, nc=nc, qq=qq,...))
 }
