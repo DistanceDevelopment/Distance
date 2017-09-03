@@ -10,7 +10,13 @@
 #'
 #' @author David L. Miller
 #' @export
-create.bins <- function(data,cutpoints){
+#' @examples
+#' library(Distance)
+#' data(minke)
+#'
+#' # put the minke data into bins 0-1, 1-2, 2-3 km
+#' minke_cuts <- create.bins(minke[!is.na(minke$distance),], c(0,1,2,3))
+create.bins <- function(data, cutpoints){
 
   # don't do anything if there are NAs in the distance column
   if(any(is.na(data$distance))){
