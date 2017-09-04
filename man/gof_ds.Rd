@@ -21,3 +21,14 @@ Computes goodness of fit tests for the detection function. For binned distances 
 \details{
 See \code{\link{ddf.gof}} for further details.
 }
+\examples{
+\dontrun{
+# fit and test a simple model for the golf tee data
+library(Distance)
+data(book.tee.data)
+tee.data<-book.tee.data$book.tee.dataframe[book.tee.data$book.tee.dataframe$observer==1,]
+ds.model <- ds(tee.data,4)
+# don't make plot
+gof_ds(ds.model, plot=FALSE)
+}
+}
