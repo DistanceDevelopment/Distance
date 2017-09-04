@@ -1,5 +1,6 @@
 Distance version 0.9.8
   * AIC now works for multiple models at once (as it does for other model classes) thanks to Tiago Marques and Len Thomas for this suggestion.
+  * Added examples to create.bins, ds.gof, gof_ds, summarize_ds_models, logLik.dsmodel and AIC.dsmodel. Thanks to a reviewer of our Journal of Statistical Software paper.
 
 Distance version 0.9.7
   * summarize_ds_models now will only compare models that are allowed by AIC (all binning and truncation must be the same). Thanks to Carolin Tröger and Eric Rextad for highlighting this issue.
