@@ -1,3 +1,6 @@
+Distance version 0.9.8
+  * AIC now works for multiple models at once (as it does for other model classes) thanks to Tiago Marques and Len Thomas for this suggestion.
+
 Distance version 0.9.7
   * summarize_ds_models now will only compare models that are allowed by AIC (all binning and truncation must be the same). Thanks to Carolin Tröger and Eric Rextad for highlighting this issue.
   * If there are numerical issues that cause NAs in the Hessian, ds() will not try to run dht() to estimate abundance (as it will fail), instead throws a message and returns only the detection function. Thanks to Steve Ahlswede for bringing this to our attention.
