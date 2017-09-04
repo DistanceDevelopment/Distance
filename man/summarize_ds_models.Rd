@@ -22,6 +22,17 @@ Provide a summary table of useful information about fitted detection functions. 
 \details{
 Note that the column names are in LaTeX format, so if you plan to manipulate the resulting \code{data.frame} in R, you may wish to rename the columns for ease of access.
 }
+\examples{
+\dontrun{
+# fit some models to the golf tee data
+library(Distance)
+data(book.tee.data)
+tee.data<-book.tee.data$book.tee.dataframe[book.tee.data$book.tee.dataframe$observer==1,]
+model_hn <- ds(tee.data,4)
+model_hr <- ds(tee.data,4, key="hr")
+summarize_ds_models(model_hr, model_hn, output="plain")
+}
+}
 \author{
 David L Miller
 }
