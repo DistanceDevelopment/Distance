@@ -8,6 +8,14 @@
 #' @author David L Miller
 #' @export
 #' @importFrom stats logLik
+#' @examples
+#' \dontrun{
+#' library(Distance)
+#' data(minke)
+#' model <- ds(minke, truncation=4)
+#' # extract the log likelihood
+#' AIC(model)
+#' }
 AIC.dsmodel <- function(object, ..., k=2){
 
   # see also logLik.dsmodel

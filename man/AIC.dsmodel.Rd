@@ -16,6 +16,15 @@
 \description{
 Extract the AIC from a fitted detection function.
 }
+\examples{
+\dontrun{
+library(Distance)
+data(minke)
+model <- ds(minke, truncation=4)
+# extract the log likelihood
+AIC(model)
+}
+}
 \author{
 David L Miller
 }
