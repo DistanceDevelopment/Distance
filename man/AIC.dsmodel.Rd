@@ -9,7 +9,7 @@
 \arguments{
 \item{object}{a fitted detection function object}
 
-\item{\dots}{required for S3 but ignored}
+\item{\dots}{optionally more fitted model objects.}
 
 \item{k}{penalty per parameter to be used; the default \code{k = 2} is the "classical" AIC}
 }
@@ -21,8 +21,9 @@ Extract the AIC from a fitted detection function.
 library(Distance)
 data(minke)
 model <- ds(minke, truncation=4)
-# extract the log likelihood
-AIC(model)
+model_hr <- ds(minke, truncation=4, key="hr")
+# extract the AIC for 2 models
+AIC(model, model_hr)
 }
 }
 \author{
