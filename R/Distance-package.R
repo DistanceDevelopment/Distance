@@ -40,7 +40,7 @@ NULL
 #'
 #' @name minke
 #' @keywords datasets
-#' @source Shipped with the DISTANCE Windows application.
+#' @source Shipped with the Distance for Windows.
 #' @docType data
 #' @format \code{data.frame} with 99 observations of 5 variables:
 #' \tabular{ll}{\code{Region.Label} \tab stratum label (\code{"North"} or \code{"South"}) \cr

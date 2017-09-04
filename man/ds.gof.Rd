@@ -24,12 +24,14 @@ List of test results and a plot.
 Chi-square, Kolmogorov-Smirnov and Cramer-von Mises goodness of fit tests for detection function models.
 }
 \examples{
-fit and test a simple model for the golf tee data
+\dontrun{
+# fit and test a simple model for the golf tee data
 library(Distance)
 data(book.tee.data)
 tee.data<-book.tee.data$book.tee.dataframe[book.tee.data$book.tee.dataframe$observer==1,]
 ds.model <- ds(tee.data,4)
 ds.gof(ds.model)
+}
 }
 \seealso{
 qqplot.ddf ddf.gof

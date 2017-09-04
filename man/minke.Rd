@@ -11,7 +11,7 @@
 \code{Effort} \tab transect length\cr
 \code{distance} \tab observed distance}}
 \source{
-Shipped with the DISTANCE Windows application.
+Shipped with the Distance for Windows.
 }
 \description{
 Data simulated from models fitted to 1992/1993 Southern Hemisphere minke whale data collected by the International Whaling Commission. See Branch and Butterworth (2001) for survey details (survey design is shown in figure 1(e)). Data simulated by David Borchers.

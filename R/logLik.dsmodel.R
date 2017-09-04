@@ -8,11 +8,13 @@
 #' @export
 #' @author David L Miller
 #' @examples
+#' \dontrun{
 #' library(Distance)
 #' data(minke)
 #' model <- ds(minke, truncation=4)
 #' # extract the log likelihood
 #' logLik(model)
+#' }
 logLik.dsmodel <- function(object, ...){
 
   # see ?logLik for information on why

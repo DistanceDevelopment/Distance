@@ -18,11 +18,13 @@ a numeric value giving the log-likelihood with two attributes: \code{"df"} the "
 Extract the log-likelihood from a fitted detection function.
 }
 \examples{
+\dontrun{
 library(Distance)
 data(minke)
 model <- ds(minke, truncation=4)
 # extract the log likelihood
 logLik(model)
+}
 }
 \author{
 David L Miller

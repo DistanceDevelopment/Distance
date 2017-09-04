@@ -19,11 +19,13 @@ data \code{data} with two extra columns \code{distbegin} and
 This is an internal routine and shouldn't be necessary in normal analyses.
 }
 \examples{
+\dontrun{
 library(Distance)
 data(minke)
 
 # put the minke data into bins 0-1, 1-2, 2-3 km
 minke_cuts <- create.bins(minke[!is.na(minke$distance),], c(0,1,2,3))
+}
 }
 \author{
 David L. Miller
