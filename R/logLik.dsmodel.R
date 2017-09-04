@@ -7,6 +7,12 @@
 #' @return a numeric value giving the log-likelihood with two attributes: \code{"df"} the "degrees of freedom" for the model (number of parameters) and \code{"nobs"} the number of observations used to fit the model
 #' @export
 #' @author David L Miller
+#' @examples
+#' library(Distance)
+#' data(minke)
+#' model <- ds(minke, truncation=4)
+#' # extract the log likelihood
+#' logLik(model)
 logLik.dsmodel <- function(object, ...){
 
   # see ?logLik for information on why
