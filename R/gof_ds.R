@@ -21,7 +21,7 @@
 #'}
 gof_ds <- function(model, plot=TRUE, chisq=FALSE, ...){
 
-  gof <- ddf.gof(model$ddf, qq=plot, ...)
+  gof <- suppressMessages(ddf.gof(model$ddf, qq=plot, ...))
 
   if(model$ddf$meta.data$binned | chisq){
     return(gof)
