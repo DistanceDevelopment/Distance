@@ -14,7 +14,7 @@ URL: http://github.com/DistanceDevelopment/Distance/
 BugReports: https://github.com/DistanceDevelopment/Distance/issues
 Depends:
     R (>= 3.0),
-    mrds (>= 2.1.15)
+    mrds (>= 2.2.0)
 Suggests:
     testthat
 RoxygenNote: 6.0.1
