@@ -4,7 +4,7 @@
 \alias{ds.gof}
 \title{Goodness of fit tests for distance sampling models}
 \usage{
-ds.gof(model, breaks = NULL, nc = NULL, qq = TRUE, ...)
+ds.gof(model, breaks = NULL, nc = NULL, qq = TRUE, ks = FALSE, ...)
 }
 \arguments{
 \item{model}{fitted model object}
@@ -15,13 +15,15 @@ ds.gof(model, breaks = NULL, nc = NULL, qq = TRUE, ...)
 
 \item{qq}{Flag to indicate whether quantile-quantile plot is desired}
 
+\item{ks}{perform the Kolmogorov-Smirnov test (this involves many bootstraps so can take a while)}
+
 \item{\dots}{Graphics parameters to pass into qqplot function}
 }
 \value{
 List of test results and a plot.
 }
 \description{
-Chi-square, Kolmogorov-Smirnov and Cramer-von Mises goodness of fit tests for detection function models.
+Chi-square, Kolmogorov-Smirnov (if \code{ks=TRUE}) and Cramer-von Mises goodness of fit tests for detection function models.
 }
 \examples{
 \dontrun{
