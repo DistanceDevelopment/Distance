@@ -9,7 +9,7 @@ Description: A simple way of fitting detection functions to distance sampling
     right truncation as well as monotonicity constraints and binning are
     supported. Abundance and density estimates can also be calculated (via a
     Horvitz-Thompson-like estimator) if survey area information is provided.
-Version: 0.9.7
+Version: 0.9.8
 URL: http://github.com/DistanceDevelopment/Distance/
 BugReports: https://github.com/DistanceDevelopment/Distance/issues
 Depends:

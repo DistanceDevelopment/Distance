@@ -497,6 +497,21 @@ ds <- function(data, truncation=ifelse(is.null(cutpoints),
                             " with ", adj.name,"(",
                             paste(order[1:i],collapse=","),
                             ") adjustments", sep="")
+
+      # use the last parameter values as starting values...
+      lastpar <- last.model$par
+      control$initial <- list()
+      if(key == "hr"){
+        control$initial$shape <- lastpar[1]
+        lastpar <- lastpar[-1]
+      }
+      if(key != "unif"){
+        control$initial$scale <- lastpar[1]
+        lastpar <- lastpar[-1]
+      }
+      if(length(lastpar)>0){
+        control$initial$adjustment <- lastpar
+      }
     }
 
     model.formula <- paste(model.formula,")",sep="")
