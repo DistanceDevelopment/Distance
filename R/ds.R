@@ -181,7 +181,7 @@ ds <- function(data, truncation=ifelse(is.null(cutpoints),
   sample.table <- data$sample.table
   obs.table    <- data$obs.table
   data         <- data$data
-  
+
   # truncation
   if(is.null(truncation)){
     stop("Please supply truncation distance or percentage.")
@@ -512,6 +512,9 @@ ds <- function(data, truncation=ifelse(is.null(cutpoints),
       if(length(lastpar)>0){
         control$initial$adjustment <- lastpar
       }
+
+      # add a space for a new parameter
+      control$initial$adjustment <- c(control$initial$adjustment, 0)
     }
 
     model.formula <- paste(model.formula,")",sep="")
