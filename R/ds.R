@@ -498,23 +498,26 @@ ds <- function(data, truncation=ifelse(is.null(cutpoints),
                             paste(order[1:i],collapse=","),
                             ") adjustments", sep="")
 
-      # use the last parameter values as starting values...
-      lastpar <- last.model$par
-      control$initial <- list()
-      if(key == "hr"){
-        control$initial$shape <- lastpar[1]
-        lastpar <- lastpar[-1]
-      }
-      if(key != "unif"){
-        control$initial$scale <- lastpar[1]
-        lastpar <- lastpar[-1]
-      }
-      if(length(lastpar)>0){
-        control$initial$adjustment <- lastpar
-      }
+      # use the last parameter values as starting values if
+      # we are doing AIC search and we're at step 2 and onwards
+      if(aic.search && length(order[1:i]) > 1){
+        lastpar <- last.model$par
+        control$initial <- list()
+        if(key == "hr"){
+          control$initial$shape <- lastpar[1]
+          lastpar <- lastpar[-1]
+        }
+        if(key != "unif"){
+          control$initial$scale <- lastpar[1]
+          lastpar <- lastpar[-1]
+        }
+        if(length(lastpar)>0){
+          control$initial$adjustment <- lastpar
+        }
 
-      # add a space for a new parameter
-      control$initial$adjustment <- c(control$initial$adjustment, 0)
+        # add a space for a new parameter
+        control$initial$adjustment <- c(control$initial$adjustment, 0)
+      }
     }
 
     model.formula <- paste(model.formula,")",sep="")
