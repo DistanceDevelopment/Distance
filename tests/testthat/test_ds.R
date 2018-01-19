@@ -17,8 +17,8 @@ test_that("Input errors are thrown correctly",{
   expect_error(ds(),
                "argument \"data\" is missing, with no default")
   expect_error(ds(list()),
-               "Your data must \\(at least\\) have a column called 'distance'!")
-  
+               "Your data must \\(at least\\) have a column called 'distance' or 'distbegin' and 'distend'!")
+
   # incorrect data types
   expect_error(ds("distance"),
                "data is not a data.frame nor are the values numeric")
@@ -184,4 +184,15 @@ test_that("Percentage truncation works when distances are missing",{
 
   expect_equal(ds(minke, truncation="15%", adjustment=NULL)$ddf$criterion,
                -8.1705496, tol=1e-5)
+})
+
+
+# just distend and distbegin can be supplied
+
+test_that("just distend and distbegin can be supplied", {
+  # make some data
+  bin.data <- Distance:::create.bins(egdata, c(0, 1, 2, 3, 4))
+  bin.data$distance <- NULL
+  expect_message(ds.model <- ds(bin.data, 4),
+                 "^Columns \"distbegin\" and \"distend\" in data: performing a binned analysis....*")
 })

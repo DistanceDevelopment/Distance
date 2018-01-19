@@ -27,7 +27,11 @@ checkdata<-function(data, region.table=NULL, sample.table=NULL, obs.table=NULL,
 
   ## make sure that the data are in the right format first
   if(is.null(data$distance)){
-    stop("Your data must (at least) have a column called 'distance'!")
+    if(is.null(data$distend) & is.null(data$distbegin)){
+      stop("Your data must (at least) have a column called 'distance' or 'distbegin' and 'distend'!")
+    }else{
+      data$distance <- data$distend - data$distbegin
+    }
   }
 
   # make sure that we have a data.frame()
