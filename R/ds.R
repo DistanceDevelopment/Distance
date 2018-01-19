@@ -243,7 +243,7 @@ ds <- function(data, truncation=ifelse(is.null(cutpoints),
     if(any(names(data)=="distend") & any(names(data)=="distbegin")){
       message("Columns \"distbegin\" and \"distend\" in data: performing a binned analysis...")
       binned <- TRUE
-      breaks <- sort(unique(c(data$distend,data$distbegin)))
+      breaks <- sort(unique(c(data$distend, data$distbegin)))
     }else{
       binned <- FALSE
       breaks <- NULL
@@ -265,7 +265,7 @@ ds <- function(data, truncation=ifelse(is.null(cutpoints),
       data$distbegin <- NULL
     }
     # send off to create.bins to make the correct columns in data
-    data <- create.bins(data,cutpoints)
+    data <- create.bins(data, cutpoints)
     binned <- TRUE
     breaks <- cutpoints
   }
@@ -281,9 +281,9 @@ ds <- function(data, truncation=ifelse(is.null(cutpoints),
   key <- match.arg(key)
   # keep the name for the key function
   key.name <- switch(key,
-                     hn="half-normal",
-                     hr="hazard-rate",
-                     unif="uniform"
+                     hn   = "half-normal",
+                     hr   = "hazard-rate",
+                     unif = "uniform"
                     )
 
   # no uniform key with no adjustments
