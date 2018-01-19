@@ -30,7 +30,7 @@ checkdata<-function(data, region.table=NULL, sample.table=NULL, obs.table=NULL,
     if(is.null(data$distend) & is.null(data$distbegin)){
       stop("Your data must (at least) have a column called 'distance' or 'distbegin' and 'distend'!")
     }else{
-      data$distance <- data$distend - data$distbegin
+      data$distance <- (data$distend + data$distbegin)/2
     }
   }
 
