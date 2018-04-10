@@ -23,6 +23,6 @@
 #' ds.gof(ds.model)
 #'}
 ds.gof <- function(model, breaks=NULL, nc=NULL, qq=TRUE, ks=FALSE, ...){
-  return(suppressMesages(ddf.gof(model$ddf, breaks=breaks, nc=nc, qq=qq, ks=ks,
+  return(suppressMessages(ddf.gof(model$ddf, breaks=breaks, nc=nc, qq=qq, ks=ks,
                                  ...)))
 }
