@@ -58,9 +58,11 @@
 #'
 #' For left truncation, there are two options: (1) fit a detection function to the truncated data as is (this is what happens when you set \code{left}). This does not assume that g(x)=1 at the truncation point. (2) manually remove data with distances less than the left truncation distance -- effectively move the centreline out to be the truncation distance (this needs to be done before calling \code{ds}). This then assumes that detection is certain at the left truncation distance. The former strategy has a weaker assumption, but will give higher variance as the detection function close to the line has no data to tell it where to fit -- it will be relying on the data from after the left truncation point and the assumed shape of the detection function. The latter is most appropriate in the case of aerial surveys, where some area under the plane is not visible to the observers, but their probability of detection is certain at the smallest distance.
 #'
-#'  @section Binning: Note that binning is performed such that bin 1 is all distances greater or equal to cutpoint 1 (>=0 or left truncation distance) and less than cutpoint 2. Bin 2 is then distances greater or equal to cutpoint 2 and less than cutpoint 3 and so on.
+#' @section Binning:
+#' Note that binning is performed such that bin 1 is all distances greater or equal to cutpoint 1 (>=0 or left truncation distance) and less than cutpoint 2. Bin 2 is then distances greater or equal to cutpoint 2 and less than cutpoint 3 and so on.
 #'
-#' @section Monotonicity: When adjustment terms are used, it is possible for the detection function to not always decrease with increasing distance. This is unrealistic and can lead to bias. To avoid this, the detection function can be constrained for monotonicity (and is by default for detection functions without covariates).
+#' @section Monotonicity: 
+#' When adjustment terms are used, it is possible for the detection function to not always decrease with increasing distance. This is unrealistic and can lead to bias. To avoid this, the detection function can be constrained for monotonicity (and is by default for detection functions without covariates).
 #'
 #'  Monotonicity constraints are supported in a similar way to that described in Buckland et al (2001). 20 equally spaced points over the range of the detection function (left to right truncation) are evaluated at each round of the optimisation and the function is constrained to be either always less than it's value at zero (\code{"weak"}) or such that each value is less than or equal to the previous point (monotonically decreasing; \code{"strict"}). See also \code{\link{check.mono}} in \code{mrds}.
 #'
@@ -94,7 +96,8 @@
 #'  units of hectares (100 to convert meters to 100 meters for distance and
 #'  .1 to convert km to 100m units).
 #'
-#'  @section Data format: One can supply \code{data} only to simply fit a detection function. However, if abundance/density estimates are necessary further information is required. Either the \code{region.table}, \code{sample.table} and \code{obs.table} \code{data.frame}s can be supplied or all data can be supplied as a "flat file" in the \code{data} argument. In this format each row in data has additional information that would ordinarily be in the other tables. This usually means that there are additional columns named: \code{Sample.Label}, \code{Region.Label}, \code{Effort} and \code{Area} for each observation. See \code{\link{flatfile}} for an example.
+#' @section Data format:
+#' One can supply \code{data} only to simply fit a detection function. However, if abundance/density estimates are necessary further information is required. Either the \code{region.table}, \code{sample.table} and \code{obs.table} \code{data.frame}s can be supplied or all data can be supplied as a "flat file" in the \code{data} argument. In this format each row in data has additional information that would ordinarily be in the other tables. This usually means that there are additional columns named: \code{Sample.Label}, \code{Region.Label}, \code{Effort} and \code{Area} for each observation. See \code{\link{flatfile}} for an example.
 #'
 #' @author David L. Miller
 #' @seealso \code{\link{flatfile}}
