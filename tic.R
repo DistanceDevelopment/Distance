@@ -1,5 +1,8 @@
 add_package_checks()
 
+get_stage("before_install") %>%
+  add_code_step(remotes::install_github("DistanceDevelopment/mrds"))
+
 if (Sys.getenv("id_rsa") != "") {
   # pkgdown documentation can be built optionally. Other example criteria:
   # - `inherits(ci(), "TravisCI")`: Only for Travis CI
