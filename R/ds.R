@@ -15,7 +15,7 @@
 #' @param formula formula for the scale parameter. For a CDS analysis leave this as its default \code{~1}.
 #' @param key key function to use; "hn" gives half-normal (default), "hr" gives hazard-rate and "unif" gives uniform. Note that if uniform key is used, covariates cannot be included in the model.
 #' @param adjustment adjustment terms to use; \code{"cos"} gives cosine (default), \code{"herm"} gives Hermite polynomial and \code{"poly"} gives simple polynomial. \code{"cos"} is recommended. A value of \code{NULL} indicates that no adjustments are to be fitted.
-#' @param order orders of the adjustment terms to fit (as a vector/scalar), the default value (\code{NULL}) will select via AIC up to order 5. If a single number is given, that number is expanded to be \code{seq(term_min, order, by=1)} where \code{term.min} is the appropriate minimum order for this type of adjustment. For cosine adjustments, valid orders are integers greater than 2 (except when a uniform key is used, when the minimum order is 1). For Hermite polynomials, even integers equal or greater than 2 are allowed and for simple polynomials even integers equal or greater than 2 are allowed (though note these will be multiplied by 2, see Buckland et al, 2001 for details on their specification). By default, AIC selection will try up to 5 adjustments, beyond that you must specify these manually, e.g. \code{order=2:6} and perform your own AIC selection.
+#' @param order orders of the adjustment terms to fit (as a vector/scalar), the default value (\code{NULL}) will select via AIC up to \code{max.adjustments} adjustments. If a single number is given, that number is expanded to be \code{seq(term_min, order, by=1)} where \code{term.min} is the appropriate minimum order for this type of adjustment. For cosine adjustments, valid orders are integers greater than 2 (except when a uniform key is used, when the minimum order is 1). For Hermite polynomials, even integers equal or greater than 2 are allowed and for simple polynomials even integers equal or greater than 2 are allowed (though note these will be multiplied by 2, see Buckland et al, 2001 for details on their specification).
 #' @param scale the scale by which the distances in the adjustment terms are divided. Defaults to \code{"width"}, scaling by the truncation distance. If the key is uniform only \code{"width"} will be used. The other option is \code{"scale"}: the scale parameter of the detection
 #' @param cutpoints if the data are binned, this vector gives the cutpoints of the bins. Ensure that the first element is 0 (or the left truncation distance) and the last is the distance to the end of the furthest bin. (Default \code{NULL}, no binning.) Note that if \code{data} has columns \code{distbegin} and \code{distend} then these will be used as bins if \code{cutpoints} is not specified. If both are specified, \code{cutpoints} has precedence.
 #' @param monotonicity should the detection function be constrained for monotonicity weakly (\code{"weak"}), strictly (\code{"strict"}) or not at all (\code{"none"} or \code{FALSE}). See Montonicity, below. (Default \code{"strict"}). By default it is on for models without covariates in the detection function, off when covariates are present.
@@ -40,6 +40,7 @@
 #' @param debug.level print debugging output. \code{0}=none, \code{1-3} increasing levels of debugging output.
 #' @param quiet surpress non-essential messages (useful for bootstraps etc). Default value \code{FALSE}.
 #' @param initial.values a \code{list} of named starting values, see \code{\link{mrds-opt}}. Only allowed when AIC term selection is not used.
+#' @param max.adjustments maximum number of adjustments to try (default 5) only used when \code{order=NULL}.
 #' @return a list with elements:
 #'        \tabular{ll}{\code{ddf} \tab a detection function model object.\cr
 #'                     \code{dht} \tab abundance/density information (if survey
@@ -114,8 +115,8 @@
 #' # An example from mrds, the golf tee data.
 #' library(Distance)
 #' data(book.tee.data)
-#' tee.data<-book.tee.data$book.tee.dataframe[book.tee.data$book.tee.dataframe$observer==1,]
-#' ds.model <- ds(tee.data,4)
+#' tee.data<-book.tee.data$book.tee.dataframe[book.tee.data$book.tee.dataframe$observer==1, ]
+#' ds.model <- ds(tee.data, 4)
 #' summary(ds.model)
 #' plot(ds.model)
 #'
@@ -126,30 +127,31 @@
 #' samples <- book.tee.data$book.tee.samples
 #' obs <- book.tee.data$book.tee.obs
 #'
-#' ds.dht.model <- ds(tee.data,4,region.table=region,
-#'              sample.table=samples,obs.table=obs)
+#' ds.dht.model <- ds(tee.data, 4, region.table=region,
+#'                    sample.table=samples, obs.table=obs)
 #' summary(ds.dht.model)
 #'
 #' # specify order 2 cosine adjustments
-#' ds.model.cos2 <- ds(tee.data,4,adjustment="cos",order=2)
+#' ds.model.cos2 <- ds(tee.data, 4, adjustment="cos", order=2)
 #' summary(ds.model.cos2)
 #'
 #' # specify order 2 and 3 cosine adjustments, turning monotonicity
 #' # constraints off
-#' ds.model.cos23 <- ds(tee.data,4,adjustment="cos",order=c(2,3),
+#' ds.model.cos23 <- ds(tee.data, 4, adjustment="cos", order=c(2, 3),
 #'                    monotonicity=FALSE)
 #' # check for non-monotonicity -- actually no problems
-#' check.mono(ds.model.cos23$ddf,plot=TRUE,n.pts=100)
+#' check.mono(ds.model.cos23$ddf, plot=TRUE, n.pts=100)
 #'
 #' # include both a covariate and adjustment terms in the model
-#' ds.model.cos2.sex <- ds(tee.data,4,adjustment="cos",order=2,
+#' ds.model.cos2.sex <- ds(tee.data, 4, adjustment="cos", order=2,
 #'                         monotonicity=FALSE, formula=~as.factor(sex))
 #' # check for non-monotonicity -- actually no problems
-#' check.mono(ds.model.cos2.sex$ddf,plot=TRUE,n.pts=100)
+#' check.mono(ds.model.cos2.sex$ddf, plot=TRUE, n.pts=100)
 #'
 #' # truncate the largest 10% of the data and fit only a hazard-rate
 #' # detection function
-#' ds.model.hr.trunc <- ds(tee.data,truncation="10%",key="hr",adjustment=NULL)
+#' ds.model.hr.trunc <- ds(tee.data, truncation="10%", key="hr",
+#'                         adjustment=NULL)
 #' summary(ds.model.hr.trunc)
 #'
 #' # compare AICs between these models:
@@ -173,7 +175,7 @@ ds <- function(data, truncation=ifelse(is.null(cutpoints),
                                  "none"),
              region.table=NULL, sample.table=NULL, obs.table=NULL,
              convert.units=1, method="nlminb", quiet=FALSE, debug.level=0,
-             initial.values=NULL){
+             initial.values=NULL, max.adjustments=5){
 
   # this routine just creates a call to mrds, it's not very exciting
   # or fancy, it does do a lot of error checking though
@@ -309,7 +311,7 @@ ds <- function(data, truncation=ifelse(is.null(cutpoints),
   }
 
   # if the user supplied order=0, that's equivalent to adjustment=NULL
-  if(!is.null(order) & all(order==0)){
+  if((!is.null(order) & all(order==0)) | max.adjustments==0){
     adjustment <- NULL
   }
 
@@ -368,33 +370,34 @@ ds <- function(data, truncation=ifelse(is.null(cutpoints),
       }else{
       # otherwise go ahead and set up the candidate adjustment orders
         aic.search <- TRUE
-        max.order <- 5
 
-        # this is according to p. 47 of IDS.
-        if(adjustment=="poly"){
-          order <- seq(1,max.order)
-        }else{
-          order <- seq(2,max.order)
-        }
-
-        # for Fourier...
+        # this is according to p. 47 of IDS
         if(key=="unif" & adjustment=="cos"){
-          order <- c(1,order)
-        }
-
-        if(adjustment=="herm" | adjustment=="poly"){
+          # for Fourier...
+          order <- seq(2, max.adjustments)
+          order <- c(1, order)
+        }else if(adjustment=="poly"){
+          # polynomials: even from 2
+          order <- seq(2, 2*max.adjustments, by=2)
+        }else if(adjustment=="herm"){
+          # hermite: even from 4
+          order <- seq(2, max.adjustments)
           order <- 2*order
-          order <- order[order<=2*max.order]
+          order <- order[1:max.adjustments]
+        }else if(adjustment=="cos"){
+          # cosine: by 1 from 2
+          order <- seq(2, max.adjustments+1)
+        }else{
+          error("Bad adjustment term definition")
         }
-
       }
     }
 
     # keep the name for the adjustments
     adj.name <- switch(adjustment,
-                       cos="cosine",
-                       herm="Hermite",
-                       poly="simple polynomial"
+                       cos  = "cosine",
+                       herm = "Hermite",
+                       poly = "simple polynomial"
                       )
 
   }else{

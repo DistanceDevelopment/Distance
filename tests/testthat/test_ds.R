@@ -196,3 +196,44 @@ test_that("just distend and distbegin can be supplied", {
   expect_message(ds.model <- ds(bin.data, 4),
                  "^Columns \"distbegin\" and \"distend\" in data: performing a binned analysis....*")
 })
+
+# max adjustments arg
+test_that("max.adjustments works",{
+
+  egdata <- egdata[egdata$observer==1,]
+
+  # setting max.adjustments=0 gives no adjustments
+  expect_equal(summary(ds(egdata, 4, key="hn", max.adjustments=0,
+                          adjustment="cos"))$ddf$name.message,
+               "half-normal key function")
+
+  # some delicious stake
+  data(stake77)
+  dists <- stake77$PD[stake77$Obs2==1]
+  dists <- c(dists, dists[dists>10])
+  dists <- c(dists, dists[dists<5])
+  dists <- c(dists, dists[dists<5])
+
+  expect_equal(summary(ds(dists, 20, key="hn", max.adjustments=3,
+                          adjustment="cos"))$ddf$name.message,
+               "half-normal key function with cosine(2,3,4) adjustments")
+
+  expect_equal(summary(ds(dists, 20, key="hn", max.adjustments=2,
+                          adjustment="cos"))$ddf$name.message,
+               "half-normal key function with cosine(2,3) adjustments")
+
+  expect_equal(summary(ds(dists, 20, key="hn", max.adjustments=1,
+                          adjustment="cos"))$ddf$name.message,
+               "half-normal key function with cosine(2) adjustments")
+
+
+  expect_equal(summary(ds(dists, 20, key="hn", max.adjustments=6,
+                          adjustment="cos"))$ddf$name.message,
+               "half-normal key function with cosine(2,3,4) adjustments")
+
+
+})
+
+
+
+
