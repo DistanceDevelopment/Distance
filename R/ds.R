@@ -388,7 +388,7 @@ ds <- function(data, truncation=ifelse(is.null(cutpoints),
           # cosine: by 1 from 2
           order <- seq(2, max.adjustments+1)
         }else{
-          error("Bad adjustment term definition")
+          stop("Bad adjustment term definition")
         }
       }
     }
