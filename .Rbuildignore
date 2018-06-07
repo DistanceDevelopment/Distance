@@ -1,6 +1,8 @@
+.DS_Store
 .travis.yml
 tests
 LICENSE
 ^\.travis\.yml$
 ^appveyor\.yml$
 ^tic\.R$
+.git
