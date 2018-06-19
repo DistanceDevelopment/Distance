@@ -603,11 +603,15 @@ ds <- function(data, truncation=ifelse(is.null(cutpoints),
           message("Some variance-covariance matrix elements were NA, possible numerical problems; only estimating detection function.\n")
           dht.res <- NULL
         }else{
-
+          ervar <- "R2"
+          if(transect=="point"){
+            ervar <- "P3"
+          }
           dht.res <- dht(model, region.table, sample.table,
-                         options=list(#varflag=0,group=TRUE,
-                                    group=dht.group,
-                                    convert.units=convert.units), se=TRUE)
+                         options=list(#varflag=0,
+                                      group         = dht.group,
+                                      ervar         = ervar,
+                                      convert.units = convert.units), se=TRUE)
         }
       }else{
         message("No obs.table supplied nor does data have Region.Label and Sample.Label columns, only estimating detection function.\n")
