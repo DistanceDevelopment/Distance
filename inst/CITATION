@@ -1,0 +1,27 @@
+bibentry(bibtype = "Article",
+  title        = "Distance Sampling in {R}",
+  author       = c(person(given = c("David", "L."),
+                          family = "Miller",
+                          email = "dave@ninepointeightone.net"),
+                   person(given = "Eric",
+                          family = "Rexstad",
+                          email = "Eric.Rexstad@st-andrews.ac.uk"),
+                   person(given = "Len",
+                          family = "Thomas",
+                          email = "len.thomas@st-andrews.ac.uk"),
+                   person(given = "Laura",
+                          family = "Marshall",
+                          email = "lhm@st-andrews.ac.uk"),
+                   person(given = c("Jeffrey", "L."),
+                          family = "Laake",
+                          email = "Jeff.Laake@noaa.gov")),
+  journal      = "Journal of Statistical Software",
+  year         = "2019",
+  volume       = "89",
+  number       = "1",
+  pages        = "1--28",
+  doi          = "10.18637/jss.v089.i01",
+
+  header       = "To cite Distance in publications use:"
+)
+
