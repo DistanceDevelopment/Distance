@@ -604,7 +604,7 @@ ds <- function(data, truncation=ifelse(is.null(cutpoints),
           dht.res <- NULL
         }else{
           ervar <- "R2"
-          if(transect=="point"){
+          if(point){
             ervar <- "P3"
           }
           dht.res <- dht(model, region.table, sample.table,
