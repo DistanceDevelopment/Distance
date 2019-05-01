@@ -1,4 +1,5 @@
 Distance version 0.9.8
+  * Includes reference and citation for paper on 'Distance Sampling in R'.
   * AIC now works for multiple models at once (as it does for other model classes) thanks to Tiago Marques and Len Thomas for this suggestion.
   * Added examples to create.bins, ds.gof, gof_ds, summarize_ds_models, logLik.dsmodel and AIC.dsmodel. Thanks to a reviewer of our Journal of Statistical Software paper.
   * Parameters from previous fit are used as starting values for the next fit when AIC is used to select adjustments
