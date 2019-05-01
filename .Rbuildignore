@@ -6,3 +6,5 @@ LICENSE
 ^appveyor\.yml$
 ^tic\.R$
 .git
+^.*\.Rproj$
+^\.Rproj\.user$
