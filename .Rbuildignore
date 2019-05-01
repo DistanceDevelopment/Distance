@@ -8,3 +8,4 @@ LICENSE
 .git
 ^.*\.Rproj$
 ^\.Rproj\.user$
+cran-comments.md
