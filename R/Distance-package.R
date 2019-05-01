@@ -13,9 +13,15 @@
 #' @aliases Distance-package Distance
 #' @docType package
 #' @author David L. Miller <dave@@ninepointeightone.net>
-#' @references Miller DL, Rexstad E, Thomas L, Marshall L, Laake JL (2019).
+#' @references 
+#' 
+#' \strong{Key References:}
+#' 
+#' Miller D.L., E. Rexstad, L. Thomas, L. Marshall and J.L. Laake. 2019.
 #'   Distance Sampling in R. Journal of Statistical Software, 89(1), 1-28. 
-#'   doi: 10.18637/jss.v089.i01, http://doi.org/10.18637/jss.v089.i01).
+#'   \url{http://doi.org/10.18637/jss.v089.i01}.
+#' 
+#' \strong{Background References:}
 #' 
 #' Laake, J.L. and D.L. Borchers. 2004. Methods for incomplete
 #'   detection at distance zero. In: Advanced Distance Sampling, eds. S.T.
