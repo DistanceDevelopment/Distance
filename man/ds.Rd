@@ -43,7 +43,7 @@ By default for exact distances the maximum observed distance is used as the righ
 
 \item{dht.group}{should density abundance estimates consider all groups to be size 1 (abundance of groups) \code{dht.group=TRUE} or should the abundance of individuals (group size is taken into account), \code{dht.group=FALSE}. Default is \code{FALSE} (abundance of individuals is calculated).}
 
-\item{monotonicity}{should the detection function be constrained for monotonicity weakly (\code{"weak"}), strictly (\code{"strict"}) or not at all (\code{"none"} or \code{FALSE}). See Montonicity, below. (Default \code{"strict"}). By default it is on for models without covariates in the detection function, off when covariates are present.}
+\item{monotonicity}{should the detection function be constrained for monotonicity weakly (\code{"weak"}), strictly (\code{"strict"}) or not at all (\code{"none"} or \code{FALSE}). See Monotonicity, below. (Default \code{"strict"}). By default it is on for models without covariates in the detection function, off when covariates are present.}
 
 \item{region.table}{\code{data.frame} with two columns:
 \tabular{ll}{ \code{Region.Label} \tab label for the region\cr
@@ -67,7 +67,7 @@ By default for exact distances the maximum observed distance is used as the righ
 
 \item{method}{optimization method to use (any method usable by \code{\link{optim}} or \pkg{optimx}). Defaults to \code{"nlminb"}.}
 
-\item{quiet}{surpress non-essential messages (useful for bootstraps etc). Default value \code{FALSE}.}
+\item{quiet}{suppress non-essential messages (useful for bootstraps etc). Default value \code{FALSE}.}
 
 \item{debug.level}{print debugging output. \code{0}=none, \code{1-3} increasing levels of debugging output.}
 
@@ -91,7 +91,7 @@ If abundance estimates are required then the \code{data.frame}s \code{region.tab
 
 \section{Clusters/groups}{
 
- Note that if the data contains a column named \code{size} and \code{region.table}, \code{sample.table} and \code{obs.table} are supplied, cluster size will be estimated and density/abundance will be based on a clustered analsis of the data. Setting this column to be \code{NULL} will perform a non-clustred analysis (for example if "\code{size}" means something else in your dataset).
+ Note that if the data contains a column named \code{size} and \code{region.table}, \code{sample.table} and \code{obs.table} are supplied, cluster size will be estimated and density/abundance will be based on a clustered analysis of the data. Setting this column to be \code{NULL} will perform a non-clustered analysis (for example if "\code{size}" means something else in your dataset).
 }
 
 \section{Truncation}{
