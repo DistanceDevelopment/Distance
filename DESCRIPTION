@@ -17,4 +17,4 @@ Depends:
     mrds (>= 2.2.0)
 Suggests:
     testthat
-RoxygenNote: 6.0.1
+RoxygenNote: 6.1.1
