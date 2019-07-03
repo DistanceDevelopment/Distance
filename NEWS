@@ -1,3 +1,6 @@
+Distance version 0.9.9
+  * call now saved in the model object as $call
+
 Distance version 0.9.8
   * Includes reference and citation for paper on 'Distance Sampling in R'.
   * AIC now works for multiple models at once (as it does for other model classes) thanks to Tiago Marques and Len Thomas for this suggestion.

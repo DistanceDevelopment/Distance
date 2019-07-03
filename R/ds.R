@@ -177,6 +177,9 @@ ds <- function(data, truncation=ifelse(is.null(cutpoints),
              convert.units=1, method="nlminb", quiet=FALSE, debug.level=0,
              initial.values=NULL, max.adjustments=5){
 
+  # capture the call
+  this_call <- match.call(expand.dots = FALSE)
+
   # this routine just creates a call to mrds, it's not very exciting
   # or fancy, it does do a lot of error checking though
 
@@ -647,8 +650,9 @@ ds <- function(data, truncation=ifelse(is.null(cutpoints),
   }
 
   # construct return object
-  ret.obj <- list(ddf = model,
-                dht = dht.res)
+  ret.obj <- list(ddf  = model,
+                  dht  = dht.res,
+                  call = this_call)
 
   # give it some class
   class(ret.obj) <- "dsmodel"
