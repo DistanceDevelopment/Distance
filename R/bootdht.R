@@ -112,10 +112,7 @@ bootdht <- function(model,
       df_call$data <- bootdat
 
       # fit that and update what's in models
-      models[[i]] <- try(#suppressMessages(
-eval(df_call, parent.frame(n=3))
-#)
-)
+      models[[i]] <- try(suppressMessages(eval(df_call, parent.frame(n=3))))
 
       if(any(class(models[[i]]) == "try-error")){
         aics[i] <- NA
