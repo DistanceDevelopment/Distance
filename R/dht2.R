@@ -1,0 +1,685 @@
+#' Abundance estimation for distance sampling models
+#'
+#' Once a detection function is fitted to data, this function can be used to compute abundance estimates over required areas. The function also allows for stratification and variance estimation via various schemes (see below).
+#'
+#' @param ddf mode fitted by \code{\link[Distance]{ds}} or \code{\link[mrds]{ddf}}
+#' @param strat_formula a formula giving the stratification structure (see "Stratification" below)
+#' @param observations \code{data.frame} to link detection function data (indexed by \code{object} column IDs) to the transects (indexed by \code{Sample.Label} column IDs). See "Data" below.
+#' @param transects \code{data.frame} with information about samples (points or line transects). See "Data" below.
+#' @param geo_strat \code{data.frame} with information about any geographical stratification. See "Data" below.
+#' @param flatfile data in the flatfile format, see \code{link[Distance]{flatfile}}
+#' @param convert_units conversion factor between units for the distances, effort and area. See "Units" below.
+#' @param er_est encounter rate variance estimator to be used. See "Variance" below and \code{\link{varn}}.
+#' @param multipliers \code{list} of \code{data.frame}s. See "Multipliers" below.
+#' @param sample_fraction what proportion of the transects was covered (e.g., 0.5 for one-sided line transects)
+#' @param ci_width for use with confidence interval calculation (alpha/2).
+#' @param innes logical flag for computing encounter rate variance using either the method of Innes et al (2002) where estimated abundance per transect divided by effort is used as the encounter rate, vs. (when \code{innes=FALSE}) using the number of observations divided by the effort (as in Buckland et al., 2001)
+#' @param total_area for options \code{stratification="within"} and \code{stratification="outwith"} the area to use as the total for combined, weighted final estimates.
+#' @return a \code{data.frame} with estimates and attributes containing additional information
+#'
+#' @export
+#' @importFrom stats qt na.omit predict terms var
+#' @importFrom dplyr group_by group_by_at mutate ungroup select distinct mutate_if if_else summarize_all "%>%" filter_at inner_join anti_join bind_rows left_join arrange
+#' @importFrom mrds DeltaMethod
+#compute.df
+#' @section Data:
+#' The data format allows for complex stratification schemes to be set-up. Before going into this detail, three objects are always required:
+#' \describe{
+#' \item{ddf}{the detection function (see \code{Distance::ds} or \code{mrds::ddf} for information on the format of their inputs).}
+#' \item{\code{observations}}{has one row per observation and links the observations to the transects. Required columns: \code{object} (unique ID for the observation, which must match with the data in the detection function) and \code{Sample.Label} (unique ID for the transect). Additional columns for strata which are not included in the detection function are required (stratification covariates that are included in the detection function do not need to be included here). The important case here is group size, which must have column name \code{size} (but does not need to be in the detection function).}
+#' \item{\code{transects}}{has one row per sample (point or line transect). At least one row is required. Required columns: \code{Sample.Label} (unique ID for the transect), \code{Effort} (line length for line transects, number of visits for point transects), if there is more than one geographical stratum.}
+#' }
+#' With only these three arguments, abundance can only be calculated for the covered area. Including additional information on the area we wish to extrapolate to (i.e., the study area), we can obtain abundance estimates:
+#' \describe{
+#' \item{\code{geo_strat}}{has one row for each stratum that we wish to estimate abundance for. For abundance in the study area, at least one row is required. Required columns: \code{Area} (the area of that stratum). If there is >1 row, then additional columns, named in \code{strat_formula}.}
+#' }
+#' @section Multipliers:
+#' It is often the case that we cannot measure distances to individuals or groups directly, but instead need to estimate distances to something they produce (e.g., for whales, their blows; for elephants their dung) -- this is referred to as indirect sampling. We may need to use estimates of production rate and decay rate for these estimates (in the case of dung or nests) or just production rates (in the case of songbird calls or whale blows). We refer to these conversions between "number of cues" and "number of animals" as "multipliers".
+#' The \code{multipliers} argument is a \code{list}, with 2 possible elements (\code{creation} and \code{decay} Each element of which is a \code{data.frame} and must have at least a column named \code{rate}, which abundance estimates will be divided by (the term "multiplier" is a misnomer, but kept for compatibility with Distance for Windows). Additional columns can be added to give the standard error and degrees of freedom for the rate if known as \code{SE} and \code{df}, respectively.
+#' @section Stratification:
+#' There are four stratificaton options:
+#' \describe{
+#'  \item{geographical}{if each strata represents a different geographical areas and you want the total over all the areas}
+#'  \item{within}{if your strata are in fact from replicate surveys (perhaps using different designs) but you don't have many replicates and/or want an estimate of "average variance".}
+#'  \item{outwith}{if you have replicate surveys but have many of them, this calculates the average abundance and the variance between those many surveys (think of a population of surveys)}
+#'  \item{object}{if the stratification is really about the type of object observed, for example sex, species or life stage and what you want is the total number of individuals accross all the classes of objects. For example, if you have stratified by sex and have males and females, but also want a total number of animals, you should use this option.}
+#' }
+#' @section Variance:
+#' Variance in the estimated abundance comes from multiple sources. Depending on the data used to fit the model and estimate abundance, different components will be included in the estimated variances. In the simplest case, the detection function and encounter rate variance need to be combined. If group size varies, then this too must be included. Finally, if mutlipliers are used and have corresponding standard errors given, this are also included. Variances are combined by assuming independence between the measures and adding variances. A brief summary of how each component is calculated is given here, though see references for more details.
+#' \describe{
+#' \item{detection function}{variance from the detection function parameters is transformed to variance about the abundance via a sandwich estimator (see e.g., Appendix C of Borchers et al (2002)).}
+#' \item{encounter rate}{for strata with >1 transect in them, the encounter rate estimators given in Fewster et al (2009) can be specified via the \code{er_est} argument. If the argument \code{innes=TRUE} then calculations use the estimated number of individuals in the transect (rather than the observed), which was give by Innes et al (2002) as a superior estimator. When there is only one transect in a stratum, Poisson variance is assumed. Information on the Fewster encounter rate variance estimators are given in \code{\link{varn}}}
+#' \item{group size}{if objects occur in groups (sometimes "clusters"), then the empirical variance of the group sizes is added to the total variance.}
+#' \item{multipliers}{if multipliers with standard errors are given, their corresponding variances are added. If no standard errors are supplied, then their contribution to variance is assumed to be 0.}
+#' }
+#' @section Units:
+#' It is often the case that distances are recorded in one convenient set of units, whereas the study area and effort are recorded in some other units. To ensure that the results from this function are in the expected units, we use the \code{convert_units} argument to supply a single number to convert the units of the covered area to those of the study/stratification area (results are always returned in the units of the study area). For line transects, the covered area is calculated as \code{2 * width * length} where \code{width} is the effective (half)width of the transect (often referred to as w in the literature) and \code{length} is the line length (referred to as L). If \code{width} and \code{length} are measured in kilometres and the study area in square kilometres, then all is fine and \code{convert_units} is 1 (and can be ignored). If, for example, line length and distances were measured in metres, we instead need to convert this to be kilometres, by dividing by 1000 for each of distance and length, hence \code{convert_units=1e-6}. For point transects, this is slightly easier as we only have the radius and study area to consider, so the conversion is just such that the units of the truncation radius are the square root of the study area units.
+#'
+#' @references
+#' Borchers, D.L., S.T. Buckland, and W. Zucchini. 2002 \emph{Estimating Animal Abundance: Closed Populations}. Statistics for Biology and Health. Springer London.
+#'
+#' Buckland, S.T., E.A. Rexstad, T.A. Marques, and C.S. Oedekoven. 2015 \emph{Distance Sampling: Methods and Applications}. Methods in Statistical Ecology. Springer International Publishing.
+#'
+#' Buckland, S.T., D.R. Anderson, K. Burnham, J.L. Laake, D.L. Borchers, and L. Thomas. 2001 \emph{Introduction to Distance Sampling: Estimating Abundance of Biological Populations}. Oxford University Press.
+#'
+#' Innes, S., M. P. Heide-Jorgensen, J.L. Laake, K.L. Laidre, H.J. Cleator, P. Richard, and R.E.A. Stewart. 2002 Surveys of belugas and narwhals in the Canadian high arctic in 1996. \emph{NAMMCO Scientific Publications} \bold{4}, 169–-190.
+#' @name dht2
+dht2 <- function(ddf, observations=NULL, transects=NULL, geo_strat=NULL,
+                 flatfile=NULL,
+                 strat_formula, convert_units=1, er_est=c("R2", "P2"),
+                 multipliers=NULL, sample_fraction=1,
+                 ci_width=0.025, innes=FALSE,
+                 stratification="geographical",
+                 total_area=NULL){
+
+  # just get the ds model if we have Distance::ds output
+  if(inherits(ddf, "dsmodel")){
+    ddf <- ddf$ddf
+  }
+
+  # get default variance estimation
+  if(all(er_est == c("R2", "P2"))){
+    if(ddf$ds$aux$point){
+      er_est <- "P2"
+    }else{
+      er_est <- "R2"
+    }
+  }
+
+  # grouped estimation
+  # time to recurse
+  if(!is.null(ddf$data$size) & !all(ddf$data$size==1) ){
+    mc <- match.call(expand.dots = FALSE)
+    dddf <- ddf
+    dddf$data$size <- 1
+    mc$ddf <- dddf
+    if(!is.null(flatfile)){
+      ff <- flatfile
+      ff$size <- 1
+      mc$flatfile <- ff
+    }
+    grouped <- eval(mc, parent.frame())
+    rm(dddf, mc)
+  }else{
+    grouped <- NULL
+  }
+  # ^^ we'll save this output later on
+
+  # holder of transect type
+  transect_type <- if(ddf$ds$aux$point) "point" else "line"
+
+  # what are the stratum labels specicied in strat_formula?
+  stratum_labels <- attr(terms(strat_formula), "term.labels")
+
+  if(!is.null(observations) & !is.null(transects)){
+    if(!is.null(geo_strat)){
+      # which occur at the geo level?
+      geo_stratum_labels <- stratum_labels[stratum_labels %in%
+                                           colnames(geo_strat)]
+    }else{
+      geo_stratum_labels <- NULL
+    }
+
+# list of protected column names that can't be in the data
+# protected <- c("p", ".Label", )
+
+
+    # TODO: do some data checking at this point
+    # - check duplicate column names (e.g., obs$sex and df$data$sex)
+    # - check column names don't conflict with columns created below
+    # check the data
+    dht2_checkdata(ddf, observations, transects, geo_strat, strat_formula,
+                   stratum_labels, geo_stratum_labels)
+
+    # prepare data
+    obj_keep <- ddf$data$object[ddf$data$distance <= ddf$ds$aux$width &
+                                ddf$data$distance >= ddf$ds$aux$left]
+    bigdat <- ddf$data[ddf$data$object %in% obj_keep, ]
+    observations <- observations[observations$object %in% obj_keep, ]
+
+
+    # get probabilities of detection
+    bigdat$p <- predict(ddf)$fitted
+
+    bigdat <- merge(bigdat, observations, all.x=TRUE, by="object")
+
+    # remove Sample.Label dupes
+    if(!is.null(bigdat[["Sample.Label.x"]])){
+      bigdat[["Sample.Label"]] <- bigdat[["Sample.Label.x"]]
+      bigdat[["Sample.Label.x"]] <- NULL
+      bigdat[["Sample.Label.y"]] <- NULL
+    }
+
+    # merge onto transects
+    bigdat <- merge(bigdat, transects, all.x=TRUE, all.y=TRUE,
+                    by="Sample.Label")
+
+    # merge on the geographical strata
+    if(!is.null(geo_strat)){
+      # if we have ~1 we ignore stratification
+      if(strat_formula==~1){
+        geo_strat$Area <- sum(geo_strat$Area)
+        geo_strat$.Label <- "Total"
+        geo_strat <- unique(geo_strat[, c(".Label", "Area")])
+
+        bigdat$.Label <- "Total"
+        stratum_labels <- ".Label"
+        geo_stratum_labels <- ".Label"
+      }
+      # TODO: do something here with strat_formula
+      bigdat <- merge(bigdat, geo_strat, all.x=TRUE, by=geo_stratum_labels)
+    }else{
+      bigdat$Area <- NA
+      bigdat$Label <- "Total"
+      stratum_labels <- c("Label", stratum_labels)
+    }
+  }else if(!is.null(flatfile)){
+    # if we have a flatfile
+    # TODO: check flatfile format here
+    # TODO: check that unqiue(Area, stratum_labels) make sense
+    flatfile <- flatfile[(flatfile$distance <= ddf$meta.data$width &
+                          flatfile$distance >= ddf$meta.data$left) |
+                          is.na(flatfile$distance), ]
+    ddf$data <- ddf$data[(ddf$data$distance <= ddf$meta.data$width &
+                          ddf$data$distance >= ddf$meta.data$left) |
+                          is.na(ddf$data$distance), ]
+    bigdat <- suppressMessages(left_join(flatfile, ddf$data))
+
+    # get probabilities of detection
+    pp <- predict(ddf)$fitted
+    bigdat$p <- NA
+    bigdat$p[!is.na(bigdat$distance)] <- pp
+
+    if(strat_formula==~1){
+      bigdat$Area <- sum(unique(bigdat[, c("Area", "Region.Label")])$Area)
+      bigdat$Region.Label <- NULL
+      bigdat$.Label <- "Total"
+
+      stratum_labels <- ".Label"
+      geo_stratum_labels <- ".Label"
+    }else{
+      geo_stratum_labels <- c()
+    }
+
+    # TODO: unchecked for multiple stratification
+    if(stratification=="object"){
+      # what are all the possible combinations of obs level stratum
+      # levels and sample labels?
+      ex <- expand.grid(lapply(bigdat[, c("Sample.Label", stratum_labels)],
+                               function(x) unique(na.omit(x))),
+                        stringsAsFactors=FALSE)
+      # which are not represented in the data?
+      aj <- anti_join(ex, bigdat, by=c("Sample.Label", stratum_labels))
+
+      # remove the transects with no stratum data
+      # TODO: this probably doesn't work for multiple strat
+      bigdat2 <- filter_at(bigdat, stratum_labels, function(x) !is.na(x))
+      # get the unique combinations in those
+      bigdat3 <- select(bigdat2, Sample.Label, Area, Effort) %>%
+        distinct()
+      # join the unrepresented sample combinations to the extra cols
+      # (i.e., add Area, Effort data to aj)
+      jj <- inner_join(aj, bigdat3, by="Sample.Label")
+
+      # rbind that onto the original data
+      bigdat <- bind_rows(bigdat2, jj)
+    }
+  }else{
+    stop("Need to supply either observations, transects and geo_strat OR flatfile")
+  }
+
+  # merge-in multipliers
+  if(!is.null(multipliers)){
+    if(!is.list(multipliers)){
+      stop("multipliers must be a list")
+    }
+    if(!all(names(multipliers) %in% c("creation", "decay")) |
+       is.null(names(multipliers))){
+      stop("Multipliers must be named \"creation\" and \"decay\"")
+    }
+    if(length(multipliers)>2){
+      stop("Only one creation and one decay rate may be provided")
+    }
+
+    # base multipliers
+    bigmult <- data.frame(rate = 1,
+                          rate_df = Inf,
+                          rate_SE = 0,
+                          rate_CV = 0)
+
+    for(ii in names(multipliers)){
+      if(!is.data.frame(multipliers[[ii]])){
+        stop(paste0("multipliers[[", ii, "]] must be a data.frame"))
+      }
+      # check multipliers has at least a rate column
+      if(!("rate" %in% names(multipliers[[ii]]))){
+        stop(paste("You need at least a column named \"rate\" in",
+                   names(multipliers)[ii], "multiplier"))
+      }
+
+      if(is.null(multipliers[[ii]]$df)){
+        multipliers[[ii]]$df <- Inf
+      }
+      if(is.null(multipliers[[ii]]$SE)){
+        multipliers[[ii]]$SE <- 0
+      }
+
+      bigmult$rate_CV <- bigmult$rate_CV + (multipliers[[ii]]$SE/
+                          multipliers[[ii]]$rate)^2
+      # since we are dividing, use the sandwich estimator,
+      # var(1/x) = 1/x^2 * var(x) * 1/x^2 => se(1/x) = se(x)/x^2
+      if(ii=="decay" && 
+multipliers[[ii]]$SE!=0){
+        multipliers[[ii]]$SE <- multipliers[[ii]]$SE/multipliers[[ii]]$rate^2
+      }
+
+      bigmult$rate <- bigmult$rate*multipliers[[ii]]$rate
+      bigmult$rate_SE <- sqrt(bigmult$rate_SE^2 + multipliers[[ii]]$SE^2)
+      bigmult$rate_df <- bigmult$rate_df + multipliers[[ii]]$df
+
+    }
+    bigmult$rate_CV <- sqrt(bigmult$rate_CV)
+    bigdat <- merge(bigdat, bigmult, all.x=TRUE)
+    mult <- TRUE
+  }else{
+    # setup "fake" data for when we don't have multipliers
+    # this makes the calculations cleaner below
+    mult <- FALSE
+    bigdat <- bigdat %>%
+      mutate(Nc_cuecorrected = NA,
+             rate = 1,
+             rate_df = 1,
+             rate_SE = 0,
+             rate_CV = 0)
+  }
+
+  # make group size 1 if not in the data
+  if(is.null(bigdat$size)){
+    # ensure that there isn't a size in the data if this is a
+    # placeholder row for a sample unit
+    bigdat$size <- NA
+    bigdat$size[!is.na(bigdat$object)] <- 1
+  }
+
+  # now do some calculations
+  bigdat$Nhat <- bigdat$size/bigdat$p
+
+  df_width <- (ddf$ds$aux$width - ddf$ds$aux$left)*convert_units
+
+#TODO: check that sample_fraction is positive and a single number
+  area_calc <- function(width, effort, transect_type, sample_fraction){
+    if(transect_type=="point"){
+      return(effort*pi*width^2*sample_fraction)
+    }else{
+      return(effort*2*width*sample_fraction)
+    }
+  }
+
+
+
+  # TODO: clean-up the data, removing stratum labels with zero observations
+  #       or NA labels (and warning)
+
+  # dplyr cheatsheet:
+  # - group_by : subsequent commands operate per group
+  # - mutate   : adds a new column
+  # - distinct : select only the unique row combinations
+  # - select   : retain only these columns
+
+  res <- bigdat %>%
+    ## first do transect level calculations
+    group_by(Sample.Label) %>%
+      # *observations* per transect
+      mutate(transect_n = sum(size, na.rm=TRUE),
+             # abundance estimate per transect in covered area
+             transect_Nc = sum(Nhat, na.rm=TRUE)) %>%
+      # encounter rate per transect (ignoring group size)
+      # TODO: is this ever needed?
+      #mutate(transect_ER = ifelse(transect_n, 1, 0)/Effort) %>%
+      # covered area per transect
+      mutate(transect_Covered_area =
+               area_calc(df_width, Effort, transect_type, sample_fraction)) %>%
+    ungroup()
+
+  # save the sample-level stats
+  res_sample <- res
+  res_sample$distance <- res_sample$object <- NULL
+  res_sample <- unique(res_sample)
+
+  ## now at at the stratum level, calculate the abundance in the covered area,
+  ## number of observations
+  res <- res %>%
+    group_by_at(.vars=stratum_labels) %>%
+      # calculate various summary stats
+      mutate(
+             # individuals and observations per stratum
+             n_individuals = sum(size, na.rm=TRUE),
+             n_observations = length(na.omit(unique(object))),
+             # abundance estimate per stratum in covered area
+             Nc = sum(Nhat, na.rm=TRUE),
+             # covered area per transect
+             Covered_area = area_calc(df_width, Effort, transect_type,
+                                      sample_fraction),
+             # get group size stats
+             group_var  = var(size, na.rm=TRUE)/sum(!is.na(size)),
+             group_mean = mean(size, na.rm=TRUE)) %>%
+      # report n as n_observations
+      mutate(n = n_observations)
+  # if we didn't have any areas, then set to 1 and estimate density
+  est_density <- FALSE
+  if(all(res$Area == 0) | all(is.na(res$Area))){
+    res$Area <- 1
+    est_density <- TRUE
+  }
+
+# TODO: make this more elegant
+# TODO: include cue count summary info?
+if(mult){
+  res <- res %>%
+    mutate(Nc_cuecorrected = Nc/rate)
+}else{
+  res <- res %>%
+    mutate(Nc_cuecorrected = NA)
+}
+
+  # detection function uncertainty
+  # do this sans-pipe, as we need cross-terms and to get the matrix
+  df_unc <- varNhat(res, ddf)
+  df_Nhat_unc <- df_unc$Nhat
+
+  # extract groupings
+  vardat <- attr(df_unc, "vardat_str")
+  vardat$.rows <- NULL
+  vardat$df_var <- diag(df_Nhat_unc$variance)
+
+  # detection function p uncertainty
+  vardat$p_var <- summary(ddf)$average.p.se[1,1]^2
+  vardat$p_average <- summary(ddf)$average.p
+
+  # we interrupt your regularly-scheduled grouping to bring you...
+  # detection function uncertainty
+  res <- res %>% ungroup()
+
+  # merge variances back into res
+  res <- merge(res, vardat, all.x=TRUE)
+
+  # normal programming resumed
+  res <- res %>%
+    group_by_at(.vars=stratum_labels) %>%
+      # now we're done with observation level stuff, so remove the columns
+      # that we don't need
+      select(!!stratum_labels, Sample.Label, Area, n, Nc, transect_n, Effort,
+             Covered_area, df_var, transect_Nc, group_var, group_mean,
+             Nc_cuecorrected, rate_SE, rate, rate_df, rate_CV, p_var, p_average) %>%
+      # keep only unique rows
+      distinct()
+
+# TODO: fix
+if(mult){
+  res <- res %>%
+    mutate(Nc = Nc_cuecorrected) %>%
+    mutate(transect_Nc = transect_Nc/rate)
+}
+  # save ungrouped version for summary calculation later
+  resT <- ungroup(res)
+
+  # calculate ER variance
+  res <- ER_var_f(res, innes=innes, er_est=er_est, est_density)
+
+  # calculate final summaries
+  res <- res %>%
+    # number of transects, total effort and covered area per stratum
+    mutate(k = length(Sample.Label),
+           Effort = sum(Effort),
+           Covered_area = sum(Covered_area)) %>%
+    ## keep only these columns
+    select(!!stratum_labels, Area, Nc, n, ER_var, Effort, k,
+           Covered_area, df_var, group_var, group_mean, ER_var_Nhat,
+           rate_SE, rate, rate_df, rate_CV, p_var, p_average) %>%
+    ## now just get the distinct cases
+    distinct() %>%
+    # calculate stratum encounter rate
+    mutate(ER = n/Effort,
+           ER_CV = sqrt(ER_var)/ER,
+           ER_df = compute_df(k, type=er_est)) %>%
+    # var/CV 0 if there was only one transect
+    mutate(ER_var = ifelse(k==1, 0, ER_var),
+           ER_CV  = ifelse(k==1, 0, ER_CV)) %>%
+    # calculate stratum abundance estimate
+    mutate(Abundance = (Area/Covered_area) * Nc) %>%
+    mutate(df_CV = sqrt(df_var)/Abundance)
+
+
+  # se and CV
+  res <- res %>%
+    mutate(Abundance_CV = sqrt(sum(c(ER_CV^2,
+                                     df_CV^2,
+                                     rate_CV^2,
+                                     group_var/group_mean^2),
+                                   na.rm=TRUE)))%>%
+    mutate(Abundance_se = Abundance_CV*Abundance) %>%
+    distinct()
+
+  # total degrees of freedom and CI calculation
+  res <- res %>%
+    mutate(df = Abundance_CV^4/
+                  sum(c(if_else(k==1, 0, (ER_CV^4/ER_df)),
+                        (df_CV^4/(length(ddf$fitted) - length(ddf$par))),
+                        (sqrt(group_var)/group_mean)^4,
+                        (rate_CV)^4/rate_df),
+                   na.rm=TRUE)) %>%
+    # adjust if df is too small
+    mutate(df=if_else(df < 1 & df >0, 1, df)) %>%
+    mutate(df=if_else(Abundance_CV==0, 1, df)) %>%
+    # big C for Satterthwaite
+    mutate(bigC = exp((abs(qt(ci_width, df)) *
+                   sqrt(log(1 + Abundance_CV^2))))) %>%
+    # actually calculate the cis
+    mutate(LCI = if_else(Abundance_CV==0, Abundance, Abundance/bigC),
+           UCI = if_else(Abundance_CV==0, Abundance, Abundance*bigC)) %>%
+    # done!
+    ungroup()
+
+## TODO: summary stuff, this is BAD code
+  # make a summary
+  res <- as.data.frame(res)
+# TODO: this is untested for multiple labels
+  for(this_stratum in stratum_labels){
+    dat_row <- res
+
+    # remove NA labels
+    iind <- which(is.na(dat_row[, this_stratum]))
+    if(length(iind)>0) dat_row <- dat_row[-iind, ]
+
+    # save row names
+    stra_row <- dat_row[, stratum_labels, drop=FALSE]
+    # remove labels
+    dat_row[, stratum_labels] <- NULL
+
+    if(length(stra_row[[this_stratum]]) > 1){
+      this_stra_row <- stra_row[1, , drop=FALSE]
+      this_stra_row[] <- NA
+      this_stra_row[[this_stratum]] <- "Total"
+
+# from mrds:
+    # df for total estimate assuming sum of indep region estimates; uses
+    # variances instead of cv's because it is a sum of means for encounter
+    # rate portion of variance (df.total)
+
+      dat_row <- dat_row %>%
+        mutate(n  = sum(n))
+      #### stratification options
+      ## in Distance for Windows these are in density
+      if(stratification=="geographical"){
+        # "weighting by area"
+        #  which is adding up the abundances
+        dat_row <- dat_row %>%
+          mutate(ER_var       = sum(ER_var, na.rm=TRUE)) %>%
+          mutate(ER_var_Nhat  = sum(ER_var_Nhat, na.rm=TRUE)) %>%
+          mutate(weight       = 1,
+                 Area         = sum(Area),
+                 Covered_area = sum(Covered_area),
+                 Effort       = sum(Effort),
+                 k            = sum(k)) %>%
+          mutate(df = ER_var_Nhat^2/sum((res$ER_var_Nhat^2/df)))
+      }else if(stratification %in% c("within", "outwith")){
+        # TODO: this is clumsy and should check that Area are all identical?
+        if(is.null(total_area)){
+          total_area <- 1
+          xt <- 1
+        }else{
+          xt <- total_area/dat_row$Area
+        }
+        # replicates, 2 different ways
+        dat_row <- dat_row %>%
+          mutate(weight       = xt * Effort/sum(Effort)) %>%
+          mutate(ER_var       = sum((Effort/sum(Effort))^2*ER_var,
+                                    na.rm=TRUE)) %>%
+          mutate(ER_var_Nhat  = sum(weight^2*ER_var_Nhat,
+                                    na.rm=TRUE)) %>%
+          mutate(df           = ER_var_Nhat^2/sum((weight^4 *
+                                  res$ER_var_Nhat^2/df)))%>%
+          mutate(Area         = total_area,
+                 Covered_area = sum(Covered_area),
+                 Effort       = sum(Effort),
+                 k            = sum(k))
+      }else if(stratification=="object"){
+        # things you want to add up like object type
+        dat_row <- dat_row %>%
+          mutate(ER_var       = sum(ER_var, na.rm=TRUE)) %>%
+          mutate(ER_var_Nhat  = sum(ER_var_Nhat, na.rm=TRUE)) %>%
+          mutate(weight       = 1,
+                 Covered_area = Covered_area[1],
+                 Area         = Area[1],
+                 Effort       = Effort[1],
+                 k            = k[1]) %>%
+          mutate(df           = ER_var_Nhat^2/sum((res$ER_var_Nhat^2/df)))
+      }else{
+        # TODO: move to top
+        stop("Invalid weighting option")
+      }
+
+      # calculate the weighted abundance
+      dat_row <- dat_row %>%
+        mutate(ER         = n/Effort) %>%
+        mutate(ER_CV      = if_else(ER==0, 0, sqrt(ER_var)/ER)) %>%
+        mutate(Abundance  = sum(weight*Abundance)) %>%
+        mutate(group_mean = mean(group_mean),
+               group_var  = sum(group_var))
+
+      # calculate total variance for detection function
+      vcov <- df_Nhat_unc$variance
+      # vvv could do this if we wanted to ignore covariance
+      #vcov[] <- 0
+      #diag(vcov) <- diag(df_Nhat_unc$variance)
+      df_tvar <- matrix(dat_row$weight, nrow=1) %*%
+                  vcov %*%
+                  matrix(dat_row$weight, ncol=1)
+      dat_row <- dat_row %>%
+        mutate(df_CV  = sqrt(df_tvar[1,1])/dat_row$Abundance[1])
+
+      if(stratification=="outwith"){
+        # get "between" variance (empirical variance of strata)
+        tvar <- sum((dat_row$Abundance[-nrow(dat_row)] -
+                     dat_row$Abundance[nrow(dat_row)])^2)/(nrow(dat_row)-2)
+      }else if(stratification=="within"){
+        # add the pre-weighted CVs
+        tvar <- dat_row$Abundance[1]^2 *
+                 sum(c(dat_row$ER_CV[1]^2,
+                       dat_row$df_CV[1]^2,
+                       dat_row$rate_CV[1]^2,
+                       dat_row$group_var[1]/dat_row$group_mean[1]^2),
+                     na.rm=TRUE)
+      }else{
+        # add all sources of variance (weighted as above)
+        tvar <- sum(dat_row$weight^2*dat_row$Abundance_se^2, na.rm=TRUE)
+      }
+
+
+      dat_row <- dat_row %>%
+        mutate(Nc = sum(weight*Nc),
+               df_var = df_tvar[1,1]) %>%
+        mutate(Abundance_se = sqrt(tvar)) %>%
+        mutate(Abundance_CV = Abundance_se/Abundance) %>%
+        mutate(ER_df = NA,
+               bigC = NA,
+               LCI = NA,
+               UCI = NA)
+      # drop weights as we don't need them any more
+      dat_row$weight <- NULL
+      # drop unwanted rows
+      dat_row <- dat_row %>%
+        distinct()
+
+      dat_row <- dat_row %>%
+        # compute degrees of freedom
+        # CV weights for Satterthwaite df
+        mutate(wtcv = sum(((sqrt(ER_var_Nhat)/ER)^4)/df,
+                          (df_CV^4)/(length(ddf$fitted) - length(ddf$par)),
+                          (rate_CV^4)/rate_df,
+                          ((sqrt(group_var)/group_mean)^4)/df, na.rm=TRUE)) %>%
+        # calculate Satterthwaite df
+        mutate(df = (sum((sqrt(ER_var_Nhat)/ER)^2,
+                         df_CV[1]^2 +
+                         rate_CV[1]^2 +
+                         (group_var[1]/group_mean[1]^2), na.rm=TRUE)^2)/wtcv)
+      # rop that weight
+      dat_row$wtcv <- NULL
+
+      # actually calculate the CIs
+      dat_row <- dat_row %>%
+        mutate(bigC = exp((abs(qt(ci_width, df)) *
+                       sqrt(log(1 + Abundance_CV^2))))) %>%
+        mutate(LCI = Abundance/bigC,
+               UCI = Abundance*bigC)
+
+      this_stra_row <- as.data.frame(c(this_stra_row, dat_row))
+
+      res <- rbind(res, this_stra_row)
+    }
+  }
+
+
+  ## last bit of formatting
+  res <- as.data.frame(res)
+  res <- unique(res)
+
+  # fix area == covered area for compatibility with mrds::dht
+  if(est_density){
+    res$Area <- res$Covered_area
+  }else{
+    # generate density results too!
+    dens_res <- res %>%
+      mutate(Density = Abundance/Area,
+             df_var = df_var/Area^2) %>%
+      mutate(Density_se = sqrt(Abundance_se^2/Area^2)) %>%
+      mutate(Density_CV = Density_se/Density) %>%
+      mutate(bigC = exp((abs(qt(ci_width, df)) *
+                     sqrt(log(1 + Density_CV^2))))) %>%
+      mutate(LCI = Density/bigC,
+             UCI = Density*bigC,
+             Area =Covered_area) %>%
+      select(!!stratum_labels, Area, n, ER_var, Effort, k,
+             Density, Density_CV, Density_se, UCI, LCI, df,
+             Covered_area, df_var, group_var, group_mean,
+             rate_SE, rate, rate_df, rate_CV, p_var, p_average)
+
+    # store this
+    attr(res, "density") <- dens_res
+  }
+
+
+  # save stratum labels
+  attr(res, "stratum_labels") <- stratum_labels
+  # were we really estimating density?
+  attr(res, "density_only") <- est_density
+  # save the sample level estimates
+  attr(res, "sample_res") <- res_sample
+  # save the variance proportions
+  attr(res, "prop_var") <- variance_contributions(res)
+  # save grouped analysis (might be NULL)
+  attr(res, "grouped") <- grouped
+
+  class(res) <- c("dht_result", "data.frame")
+  return(res)
+}
