@@ -13,6 +13,7 @@ ER_var_f <- function(erdat, innes, er_est, est_density){
       drop(pdot)
   }else{
 
+    # sort the data if we use O2/O3 estimators
     if(er_est %in% c("O2", "O3")){
       warning(paste("Using the", er_est, "encounter rate variance estimator, assuming that sorting on Sample.Label is meaningful"))
       if(!is.numeric(erdat$Sample.Label)){
@@ -22,6 +23,7 @@ ER_var_f <- function(erdat, innes, er_est, est_density){
         mutate(.originalorder = 1:nrow(erdat)) %>%
         arrange(Sample.Label)
     }
+
     if(innes){
       # this is the "varflag=2"
       erdat <- erdat %>%
@@ -33,21 +35,24 @@ ER_var_f <- function(erdat, innes, er_est, est_density){
         # if any strata only had one transect:
         mutate(ER_var_Nhat = ifelse(length(unique(Sample.Label))>1,
                                      ER_var_Nhat,
-                                     transect_Nc^2/transect_Nc))
+                                     transect_Nc^2/transect_Nc)) %>%
+        mutate(ER_var_Nhat = ifelse(length(unique(Sample.Label))>1,
+                                    ER_var_Nhat,
+                                    Nc^2* (1/Nc +
+                                           group_var/group_mean^2)))
     }else{
       # this is the "varflag=1"
       erdat <- erdat %>%
         mutate(ER_var = varn(Effort, transect_n, type=er_est)) %>%
         # put ER var on the Nhat scale
-        mutate(ER_var_Nhat = (Area/sum(Covered_area))^2 *
-                              (Nc*sum(Effort))^2 *
-                                ER_var/sum(transect_n)^2) %>%
-        # if any strata only had one transect:
-        # this seems like it should be transect_n given the above, but
-        # isn't in mrds::dht anyway
+        mutate(ER_var_Nhat = ((Area/sum(Covered_area))*Nc*sum(Effort))^2 *
+                                ER_var/
+                                  sum(transect_n)^2 +
+                               Nc^2 * group_var/group_mean^2) %>%
         mutate(ER_var_Nhat = ifelse(length(unique(Sample.Label))>1,
                                     ER_var_Nhat,
-                                    transect_Nc^2/transect_Nc))
+                                    Nc^2* (1/transect_n +
+                                           group_var/group_mean^2)))
 
     }
   }

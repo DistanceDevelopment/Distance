@@ -521,7 +521,7 @@ if(mult){
                  Covered_area = sum(Covered_area),
                  Effort       = sum(Effort),
                  k            = sum(k)) %>%
-          mutate(df = ER_var_Nhat^2/sum((res$ER_var_Nhat^2/df)))
+          mutate(ER_df = ER_var_Nhat^2/sum((res$ER_var_Nhat^2/ER_df)))
       }else if(stratification %in% c("within", "outwith")){
         # TODO: this is clumsy and should check that Area are all identical?
         if(is.null(total_area)){
@@ -537,8 +537,8 @@ if(mult){
                                     na.rm=TRUE)) %>%
           mutate(ER_var_Nhat  = sum(weight^2*ER_var_Nhat,
                                     na.rm=TRUE)) %>%
-          mutate(df           = ER_var_Nhat^2/sum((weight^4 *
-                                  res$ER_var_Nhat^2/df)))%>%
+          mutate(ER_df        = ER_var_Nhat^2/sum((weight^4 *
+                                  res$ER_var_Nhat^2/ER_df)))%>%
           mutate(Area         = total_area,
                  Covered_area = sum(Covered_area),
                  Effort       = sum(Effort),
@@ -553,7 +553,7 @@ if(mult){
                  Area         = Area[1],
                  Effort       = Effort[1],
                  k            = k[1]) %>%
-          mutate(df           = ER_var_Nhat^2/sum((res$ER_var_Nhat^2/df)))
+          mutate(ER_df        = ER_var_Nhat^2/sum((res$ER_var_Nhat^2/ER_df)))
       }else{
         # TODO: move to top
         stop("Invalid weighting option")
@@ -601,7 +601,7 @@ if(mult){
                df_var = df_tvar[1,1]) %>%
         mutate(Abundance_se = sqrt(tvar)) %>%
         mutate(Abundance_CV = Abundance_se/Abundance) %>%
-        mutate(ER_df = NA,
+        mutate(df=NA,
                bigC = NA,
                LCI = NA,
                UCI = NA)
@@ -614,16 +614,19 @@ if(mult){
       dat_row <- dat_row %>%
         # compute degrees of freedom
         # CV weights for Satterthwaite df
-        mutate(wtcv = sum(((sqrt(ER_var_Nhat)/ER)^4)/df,
-                          (df_CV^4)/(length(ddf$fitted) - length(ddf$par)),
-                          (rate_CV^4)/rate_df,
-                          ((sqrt(group_var)/group_mean)^4)/df, na.rm=TRUE)) %>%
+        mutate(wtcv = sum(c((sqrt(ER_var_Nhat)/Abundance)^4/ER_df,
+                            (df_tvar/Abundance^2)^2/(length(ddf$fitted) - length(ddf$par)),
+                            rate_CV^4/rate_df,
+                            ((sqrt(group_var)/group_mean)^4)/ER_df),
+                          na.rm=TRUE)) %>%
         # calculate Satterthwaite df
-        mutate(df = (sum((sqrt(ER_var_Nhat)/ER)^2,
-                         df_CV[1]^2 +
-                         rate_CV[1]^2 +
-                         (group_var[1]/group_mean[1]^2), na.rm=TRUE)^2)/wtcv)
-      # rop that weight
+        mutate(df = sum(c((sqrt(ER_var_Nhat)/Abundance)^2,
+                          (sqrt(df_tvar)/Abundance)^2,
+                          (rate_CV^2),
+                          ((sqrt(group_var)/group_mean)^2)),
+                        na.rm=TRUE)^2) %>%
+        mutate(df = df/wtcv)
+      # drop weight column
       dat_row$wtcv <- NULL
 
       # actually calculate the CIs
