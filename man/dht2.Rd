@@ -6,8 +6,8 @@
 \usage{
 dht2(ddf, observations = NULL, transects = NULL, geo_strat = NULL,
   flatfile = NULL, strat_formula, convert_units = 1, er_est = c("R2",
-  "P2"), multipliers = NULL, sample_fraction = 1, ci_width = 0.025,
-  innes = FALSE, stratification = "geographical", total_area = 0)
+  "P2"), multipliers = NULL, sample_fraction = 1, ci_width = 0.95,
+  innes = FALSE, stratification = "geographical", total_area = NULL)
 }
 \arguments{
 \item{ddf}{mode fitted by \code{\link[Distance]{ds}} or \code{\link[mrds]{ddf}}}
@@ -30,7 +30,7 @@ dht2(ddf, observations = NULL, transects = NULL, geo_strat = NULL,
 
 \item{sample_fraction}{what proportion of the transects was covered (e.g., 0.5 for one-sided line transects)}
 
-\item{ci_width}{for use with confidence interval calculation (alpha/2).}
+\item{ci_width}{for use with confidence interval calculation (defined as 1-alpha, so the default 95 will give a 95% confidence interval).}
 
 \item{innes}{logical flag for computing encounter rate variance using either the method of Innes et al (2002) where estimated abundance per transect divided by effort is used as the encounter rate, vs. (when \code{innes=FALSE}) using the number of observations divided by the effort (as in Buckland et al., 2001)}
 
