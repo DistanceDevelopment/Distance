@@ -605,9 +605,8 @@ if(mult){
         # variance, which includes a covar term
         tvar <- sum(dat_row$weight^2*(
                       (dat_row$Abundance_se^2-
-                        dat_row$df_var -
-                        dat_row$group_var)),
-                    na.rm=TRUE) + df_tvar + group_var
+                        dat_row$df_var)),
+                    na.rm=TRUE) + df_tvar
       }
 
 
