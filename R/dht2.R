@@ -535,7 +535,7 @@ if(mult){
           mutate(ER_df = ER_var_Nhat^2/sum((res$ER_var_Nhat^2/ER_df)))
       }else if(stratification %in% c("within", "outwith")){
         # check that all areas are the same value
-        if(length(unique(dat_row$Area))>1 & 
+        if(length(unique(dat_row$Area))>1 &
            is.null(total_area)){
           stop(paste0("More than 1 Area value in data, need a single Area for stratification=\"",
                       stratification, "\", fix or supply \"total_area\""))
@@ -584,7 +584,9 @@ if(mult){
         mutate(ER_CV      = if_else(ER==0, 0, sqrt(ER_var)/ER)) %>%
         mutate(Abundance  = sum(weight*Abundance)) %>%
         mutate(group_mean = mean(group_mean),
-               group_var  = sum(group_var))
+               group_var  = sum(group_var)) %>%
+        mutate(group_CV = if_else(all(group_var==0), 0,
+                                  sqrt(group_var[1])/group_mean[1]))
 
       # calculate total variance for detection function
       vcov <- df_Nhat_unc$variance
@@ -607,12 +609,10 @@ if(mult){
                  sum(c(dat_row$ER_CV[1]^2,
                        dat_row$df_CV[1]^2,
                        dat_row$rate_CV[1]^2,
-                       dat_row$group_var[1]/dat_row$group_mean[1]^2),
+                       dat_row$group_CV[1]^2),
                      na.rm=TRUE)
       }else{
         # add all sources of variance (weighted as above)
-        #tvar <- sum(dat_row$weight^2*dat_row$Abundance_se^2, na.rm=TRUE)
-
         # here we subtract the detection function variance and add-in the total
         # variance, which includes a covar term
         tvar <- sum(dat_row$weight^2*(
@@ -642,14 +642,14 @@ if(mult){
         # CV weights for Satterthwaite df
         mutate(wtcv = sum(c((sqrt(ER_var_Nhat)/Abundance)^4/ER_df,
                             (df_tvar/Abundance^2)^2/(length(ddf$fitted) - length(ddf$par)),
-                            rate_CV^4/rate_df,
-                            ((sqrt(group_var)/group_mean)^4)/ER_df),
+                            (rate_SE/Abundance)^4/rate_df,
+                            (group_var/Abundance^2)^2/ER_df),
                           na.rm=TRUE)) %>%
         # calculate Satterthwaite df
         mutate(df = sum(c((sqrt(ER_var_Nhat)/Abundance)^2,
                           (sqrt(df_tvar)/Abundance)^2,
-                          (rate_CV^2),
-                          ((sqrt(group_var)/group_mean)^2)),
+                          (rate_SE/Abundance)^2,
+                          (sqrt(group_var)/Abundance)^2),
                         na.rm=TRUE)^2) %>%
         mutate(df = df/wtcv)
       # drop weight column
@@ -685,9 +685,9 @@ if(mult){
       mutate(Density_CV = Density_se/Density) %>%
       mutate(bigC = exp((abs(qt(ci_width, df)) *
                      sqrt(log(1 + Density_CV^2))))) %>%
-      mutate(LCI = Density/bigC,
-             UCI = Density*bigC,
-             Area =Covered_area) %>%
+      mutate(LCI   = Density/bigC,
+             UCI   = Density*bigC,
+             Area  = Covered_area) %>%
       select(!!stratum_labels, Area, n, ER_var, Effort, k,
              Density, Density_CV, Density_se, UCI, LCI, df,
              Covered_area, df_var, group_var, group_mean,
