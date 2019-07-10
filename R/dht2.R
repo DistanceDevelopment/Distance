@@ -193,9 +193,10 @@ dht2 <- function(ddf, observations=NULL, transects=NULL, geo_strat=NULL,
     bigdat <- suppressMessages(left_join(flatfile, ddf$data))
 
     # get probabilities of detection
-    pp <- predict(ddf)$fitted
-    bigdat$p <- NA
-    bigdat$p[!is.na(bigdat$distance)] <- pp
+    pp <- predict(ddf, bigdat, compute=TRUE)$fitted
+    #bigdat$p <- NA
+    #bigdat$p[!is.na(bigdat$distance)] <- pp
+    bigdat$p <- pp
 
     if(strat_formula==~1){
       bigdat$Area <- sum(unique(bigdat[, c("Area", "Region.Label")])$Area)
