@@ -250,7 +250,9 @@ dht2 <- function(ddf, observations=NULL, transects=NULL, geo_strat=NULL,
 
     # base multipliers
     bigmult <- data.frame(rate = 1,
-                          rate_df = Inf,
+                          # need to set df to zero here as we will
+                          # add later on...
+                          rate_df = 0,
                           rate_SE = 0,
                           rate_CV = 0)
 
@@ -265,6 +267,7 @@ dht2 <- function(ddf, observations=NULL, transects=NULL, geo_strat=NULL,
       }
 
       if(is.null(multipliers[[ii]]$df)){
+        # this deals with the no df case
         multipliers[[ii]]$df <- Inf
       }
       if(is.null(multipliers[[ii]]$SE)){
@@ -275,8 +278,7 @@ dht2 <- function(ddf, observations=NULL, transects=NULL, geo_strat=NULL,
                           multipliers[[ii]]$rate)^2
       # since we are dividing, use the sandwich estimator,
       # var(1/x) = 1/x^2 * var(x) * 1/x^2 => se(1/x) = se(x)/x^2
-      if(ii=="decay" && 
-multipliers[[ii]]$SE!=0){
+      if(ii=="decay" && multipliers[[ii]]$SE!=0){
         multipliers[[ii]]$SE <- multipliers[[ii]]$SE/multipliers[[ii]]$rate^2
       }
 
@@ -454,7 +456,9 @@ if(mult){
            ER_CV  = ifelse(k==1, 0, ER_CV)) %>%
     # calculate stratum abundance estimate
     mutate(Abundance = (Area/Covered_area) * Nc) %>%
-    mutate(df_CV = sqrt(df_var)/Abundance)
+    mutate(df_CV = sqrt(df_var)/Abundance) %>%
+    mutate(group_CV = if_else(all(group_var==0), 0,
+                              sqrt(group_var)/group_mean))
 
 
   # se and CV
@@ -462,7 +466,7 @@ if(mult){
     mutate(Abundance_CV = sqrt(sum(c(ER_CV^2,
                                      df_CV^2,
                                      rate_CV^2,
-                                     group_var/group_mean^2),
+                                     group_CV^2),
                                    na.rm=TRUE)))%>%
     mutate(Abundance_se = Abundance_CV*Abundance) %>%
     distinct()
@@ -470,10 +474,10 @@ if(mult){
   # total degrees of freedom and CI calculation
   res <- res %>%
     mutate(df = Abundance_CV^4/
-                  sum(c(if_else(k==1, 0, (ER_CV^4/ER_df)),
-                        (df_CV^4/(length(ddf$fitted) - length(ddf$par))),
-                        (sqrt(group_var)/group_mean)^4,
-                        (rate_CV)^4/rate_df),
+                  sum(c(if_else(k==1, 0, ER_CV^4/ER_df),
+                        df_CV^4/(length(ddf$fitted) - length(ddf$par)),
+                        group_CV^4/ER_df,
+                        rate_CV^4/rate_df),
                    na.rm=TRUE)) %>%
     # adjust if df is too small
     mutate(df=if_else(df < 1 & df >0, 1, df)) %>%
@@ -533,7 +537,8 @@ if(mult){
         # check that all areas are the same value
         if(length(unique(dat_row$Area))>1 & 
            is.null(total_area)){
-          stop(paste0("More than 1 Area value in data, need a single Area for stratification=\"", stratification,"\", fix or supply \"total_area\""))
+          stop(paste0("More than 1 Area value in data, need a single Area for stratification=\"",
+                      stratification, "\", fix or supply \"total_area\""))
         }
         # if the user didn't supply total_area, but the areas are the same
         # use that as the area
@@ -552,6 +557,7 @@ if(mult){
                                     na.rm=TRUE)) %>%
           mutate(ER_df        = ER_var_Nhat^2/sum((weight^4 *
                                   res$ER_var_Nhat^2/ER_df)))%>%
+          #mutate(ER_df        = compute_df(sum(k), er_est)) %>%
           mutate(Area         = total_area,
                  Covered_area = sum(Covered_area),
                  Effort       = sum(Effort),
