@@ -585,8 +585,8 @@ if(mult){
         mutate(Abundance  = sum(weight*Abundance)) %>%
         mutate(group_mean = mean(group_mean),
                group_var  = sum(group_var)) %>%
-        mutate(group_CV = if_else(all(group_var==0), 0,
-                                  sqrt(group_var[1])/group_mean[1]))
+        mutate(group_CV   = if_else(all(group_var==0), 0,
+                                    sqrt(group_var[1])/group_mean[1]))
 
       # calculate total variance for detection function
       vcov <- df_Nhat_unc$variance
@@ -617,8 +617,11 @@ if(mult){
         # variance, which includes a covar term
         tvar <- sum(dat_row$weight^2*(
                       (dat_row$Abundance_se^2-
+                       res$Abundance^2*res$rate_CV^2 -
                         dat_row$df_var)),
-                    na.rm=TRUE) + df_tvar
+                    na.rm=TRUE) +
+                    df_tvar +
+                    dat_row$Abundance[1]^2*dat_row$rate_CV[1]^2
       }
 
 
