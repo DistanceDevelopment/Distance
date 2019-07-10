@@ -12,7 +12,7 @@
 #' @param er_est encounter rate variance estimator to be used. See "Variance" below and \code{\link{varn}}.
 #' @param multipliers \code{list} of \code{data.frame}s. See "Multipliers" below.
 #' @param sample_fraction what proportion of the transects was covered (e.g., 0.5 for one-sided line transects)
-#' @param ci_width for use with confidence interval calculation (defined as 1-alpha, so the default 95 will give a 95% confidence interval).
+#' @param ci_width for use with confidence interval calculation (defined as 1-alpha, so the default 95 will give a 95\% confidence interval).
 #' @param innes logical flag for computing encounter rate variance using either the method of Innes et al (2002) where estimated abundance per transect divided by effort is used as the encounter rate, vs. (when \code{innes=FALSE}) using the number of observations divided by the effort (as in Buckland et al., 2001)
 #' @param total_area for options \code{stratification="within"} and \code{stratification="outwith"} the area to use as the total for combined, weighted final estimates.
 #' @return a \code{data.frame} with estimates and attributes containing additional information
@@ -530,9 +530,14 @@ if(mult){
                  k            = sum(k)) %>%
           mutate(ER_df = ER_var_Nhat^2/sum((res$ER_var_Nhat^2/ER_df)))
       }else if(stratification %in% c("within", "outwith")){
-        # TODO: this is clumsy and should check that Area are all identical?
+        # check that all areas are the same value
+        if(length(unique(dat_row$Area))>1){
+          stop(paste0("More than 1 Area value in data, need a single Area for stratification=\"", stratification,"\", fix or supply \"total_area\""))
+        }
+        # if the user didn't supply total_area, but the areas are the same
+        # use that as the area
         if(is.null(total_area)){
-          total_area <- 1
+          total_area <- dat_row$Area[1]
           xt <- 1
         }else{
           xt <- total_area/dat_row$Area
