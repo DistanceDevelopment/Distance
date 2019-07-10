@@ -531,7 +531,8 @@ if(mult){
           mutate(ER_df = ER_var_Nhat^2/sum((res$ER_var_Nhat^2/ER_df)))
       }else if(stratification %in% c("within", "outwith")){
         # check that all areas are the same value
-        if(length(unique(dat_row$Area))>1){
+        if(length(unique(dat_row$Area))>1 & 
+           is.null(total_area)){
           stop(paste0("More than 1 Area value in data, need a single Area for stratification=\"", stratification,"\", fix or supply \"total_area\""))
         }
         # if the user didn't supply total_area, but the areas are the same
