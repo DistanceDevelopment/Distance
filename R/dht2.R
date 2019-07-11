@@ -14,7 +14,7 @@
 #' @param sample_fraction what proportion of the transects was covered (e.g., 0.5 for one-sided line transects)
 #' @param ci_width for use with confidence interval calculation (defined as 1-alpha, so the default 95 will give a 95\% confidence interval).
 #' @param innes logical flag for computing encounter rate variance using either the method of Innes et al (2002) where estimated abundance per transect divided by effort is used as the encounter rate, vs. (when \code{innes=FALSE}) using the number of observations divided by the effort (as in Buckland et al., 2001)
-#' @param total_area for options \code{stratification="within"} and \code{stratification="outwith"} the area to use as the total for combined, weighted final estimates.
+#' @param total_area for options \code{stratification="effort_sum"} and \code{stratification="replicate"} the area to use as the total for combined, weighted final estimates.
 #' @return a \code{data.frame} with estimates and attributes containing additional information
 #'
 #' @export
@@ -40,8 +40,8 @@
 #' There are four stratificaton options:
 #' \describe{
 #'  \item{geographical}{if each strata represents a different geographical areas and you want the total over all the areas}
-#'  \item{within}{if your strata are in fact from replicate surveys (perhaps using different designs) but you don't have many replicates and/or want an estimate of "average variance".}
-#'  \item{outwith}{if you have replicate surveys but have many of them, this calculates the average abundance and the variance between those many surveys (think of a population of surveys)}
+#'  \item{effort_sum}{if your strata are in fact from replicate surveys (perhaps using different designs) but you don't have many replicates and/or want an estimate of "average variance".}
+#'  \item{replicate}{if you have replicate surveys but have many of them, this calculates the average abundance and the variance between those many surveys (think of a population of surveys)}
 #'  \item{object}{if the stratification is really about the type of object observed, for example sex, species or life stage and what you want is the total number of individuals accross all the classes of objects. For example, if you have stratified by sex and have males and females, but also want a total number of animals, you should use this option.}
 #' }
 #' @section Variance:
@@ -536,7 +536,7 @@ if(mult){
                  Effort       = sum(Effort),
                  k            = sum(k)) %>%
           mutate(ER_df = ER_var_Nhat^2/sum((res$ER_var_Nhat^2/ER_df)))
-      }else if(stratification %in% c("within", "outwith")){
+      }else if(stratification %in% c("effort_sum", "replicate")){
         # check that all areas are the same value
         if(length(unique(dat_row$Area))>1 &
            is.null(total_area)){
@@ -602,11 +602,11 @@ if(mult){
       dat_row <- dat_row %>%
         mutate(df_CV  = sqrt(df_tvar[1,1])/dat_row$Abundance[1])
 
-      if(stratification=="outwith"){
+      if(stratification=="replicate"){
         # get "between" variance (empirical variance of strata)
         tvar <- sum((dat_row$Abundance[-nrow(dat_row)] -
                      dat_row$Abundance[nrow(dat_row)])^2)/(nrow(dat_row)-2)
-      }else if(stratification=="within"){
+      }else if(stratification=="effort_sum"){
         # add the pre-weighted CVs
         tvar <- dat_row$Abundance[1]^2 *
                  sum(c(dat_row$ER_CV[1]^2,
