@@ -302,7 +302,14 @@ dht2 <- function(ddf, observations=NULL, transects=NULL, geo_strat=NULL,
     # ensure that there isn't a size in the data if this is a
     # placeholder row for a sample unit
     bigdat$size <- NA
-    bigdat$size[!is.na(bigdat$object)] <- 1
+    bigdat$size[!is.na(bigdat$distance)] <- 1
+  }
+  # make object column if not present
+  if(is.null(bigdat$object)){
+    # ensure that there isn't a size in the data if this is a
+    # placeholder row for a sample unit
+    bigdat$object <- NA
+    bigdat$object[!is.na(bigdat$distance)] <- 1:sum(!is.na(bigdat$distance))
   }
 
   # now do some calculations
