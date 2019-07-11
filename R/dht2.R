@@ -212,16 +212,16 @@ dht2 <- function(ddf, observations=NULL, transects=NULL, geo_strat=NULL,
                         stringsAsFactors=FALSE)
       # which are not represented in the data?
       aj <- anti_join(ex, bigdat, by=c("Sample.Label", stratum_labels))
+      aj <- left_join(aj, bigdat[,c("Sample.Label","Effort","Area")], by="Sample.Label")
 
       # remove the transects with no stratum data
-      # TODO: this probably doesn't work for multiple strat
       bigdat2 <- filter_at(bigdat, stratum_labels, function(x) !is.na(x))
       # get the unique combinations in those
       bigdat3 <- select(bigdat2, Sample.Label, Area, Effort) %>%
         distinct()
       # join the unrepresented sample combinations to the extra cols
       # (i.e., add Area, Effort data to aj)
-      jj <- inner_join(aj, bigdat3, by="Sample.Label")
+      jj <- left_join(aj, bigdat3, by=c("Sample.Label", "Area", "Effort"))
 
       # rbind that onto the original data
       bigdat <- bind_rows(bigdat2, jj)
@@ -459,7 +459,7 @@ if(mult){
     # calculate stratum abundance estimate
     mutate(Abundance = (Area/Covered_area) * Nc) %>%
     mutate(df_CV = sqrt(df_var)/Abundance) %>%
-    mutate(group_CV = if_else(all(group_var==0), 0,
+    mutate(group_CV = if_else(group_var==0, 0,
                               sqrt(group_var)/group_mean))
 
 
@@ -491,7 +491,8 @@ if(mult){
     mutate(LCI = if_else(Abundance_CV==0, Abundance, Abundance/bigC),
            UCI = if_else(Abundance_CV==0, Abundance, Abundance*bigC)) %>%
     # done!
-    ungroup()
+    ungroup() %>%
+    distinct()
 
 ## TODO: summary stuff, this is BAD code
   # make a summary
