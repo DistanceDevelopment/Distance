@@ -599,6 +599,10 @@ ds <- function(data, truncation=ifelse(is.null(cutpoints),
   ## Now calculate abundance/density using dht()
   if(!is.null(region.table) & !is.null(sample.table)){
 
+    ervar <- "R2"
+    if(point){
+      ervar <- "P3"
+    }
     # if obs.table is not supplied, then data must have the Region.Label and
     # Sample.Label columns
     if(is.null(obs.table)){
@@ -608,10 +612,6 @@ ds <- function(data, truncation=ifelse(is.null(cutpoints),
           message("Some variance-covariance matrix elements were NA, possible numerical problems; only estimating detection function.\n")
           dht.res <- NULL
         }else{
-          ervar <- "R2"
-          if(point){
-            ervar <- "P3"
-          }
           dht.res <- dht(model, region.table, sample.table,
                          options=list(#varflag=0,
                                       group         = dht.group,
@@ -637,8 +637,9 @@ ds <- function(data, truncation=ifelse(is.null(cutpoints),
       }else{
         dht.res <- dht(model, region.table, sample.table, obs.table,
                        options=list(#varflag=0,group=TRUE,
-                                    group=dht.group,
-                                    convert.units=convert.units), se=TRUE)
+                                    group         = dht.group,
+                                    ervar         = ervar,
+                                    convert.units = convert.units), se=TRUE)
       }
     }
   }else{
