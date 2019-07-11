@@ -185,26 +185,11 @@ dht2 <- function(ddf, observations=NULL, transects=NULL, geo_strat=NULL,
     # TODO: check flatfile format here
     # TODO: check that unqiue(Area, stratum_labels) make sense
 
-    # truncate the data ensuring we keep NA distances
-    #find <- flatfile$distance <= ddf$meta.data$width &
-    #        flatfile$distance >= ddf$meta.data$left
-    #find[is.na(find)] <- TRUE
-    #flatfile <- flatfile[find, , drop=FALSE]
-    #find <- ddf$data$distance <= ddf$meta.data$width &
-    #        ddf$data$distance >= ddf$meta.data$left
-    #find[is.na(find)] <- TRUE
-    #ddf$data <- ddf$data[find, , drop=FALSE]
-
-#    ddf$data <- safetruncate(ddf$data, ddf$meta.data$width, ddf$meta.data$left)
     flatfile <- safetruncate(flatfile, ddf$meta.data$width, ddf$meta.data$left)
-
-#    bigdat <- suppressMessages(left_join(flatfile, ddf$data))
     bigdat <- flatfile
 
     # get probabilities of detection
     pp <- predict(ddf, bigdat, compute=TRUE)$fitted
-    #bigdat$p <- NA
-    #bigdat$p[!is.na(bigdat$distance)] <- pp
     bigdat$p <- pp
 
     if(strat_formula==~1){
