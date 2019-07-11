@@ -348,6 +348,8 @@ ds <- function(data, truncation=ifelse(is.null(cutpoints),
         # this is according to p. 47 of IDS.
         if(adjustment=="poly"){
           order <- 1:order
+        }else if(adjustment=="cos" & key=="unif"){
+          order <- order
         }else{
           order <- 2:order
         }
