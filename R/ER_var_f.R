@@ -43,24 +43,26 @@ ER_var_f <- function(erdat, innes, er_est, est_density){
     }else{
       # this is the "varflag=1"
       erdat <- erdat %>%
-        mutate(ER_var = varn(Effort, transect_n, type=er_est)) %>%
+        mutate(ER_var = varn(Effort, transect_n_observations, type=er_est)) %>%
         # put ER var on the Nhat scale
         mutate(ER_var_Nhat = ((Area/sum(Covered_area))*Nc*sum(Effort))^2 *
                                 ER_var/
-                                  sum(transect_n)^2 +
+                                  sum(transect_n_observations)^2 +
                                Nc^2 * group_var/group_mean^2) %>%
         mutate(ER_var_Nhat = ifelse(length(unique(Sample.Label))>1,
                                     ER_var_Nhat,
-                                    Nc^2* (1/transect_n +
+                                    Nc^2* (1/transect_n_observations +
                                            group_var/group_mean^2)))
 
     }
   }
 
   # let the Nhat estimate be 0 if the ER_var was 0
-  erdat <- erdat %>% mutate(ER_var_Nhat = ifelse(is.na(ER_var_Nhat) |
-                                             is.nan(ER_var_Nhat),
-                                             0, ER_var_Nhat))
+  erdat <- erdat %>%
+    mutate(ER_var_Nhat = ifelse(is.na(ER_var_Nhat) |
+                                is.nan(ER_var_Nhat),
+                                0, ER_var_Nhat))
+
   if(er_est %in% c("O2", "O3")){
     erdat <- erdat %>%
       arrange(.originalorder)

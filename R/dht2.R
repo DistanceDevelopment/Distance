@@ -346,20 +346,29 @@ dht2 <- function(ddf, observations=NULL, transects=NULL, geo_strat=NULL,
   # - distinct : select only the unique row combinations
   # - select   : retain only these columns
 
+  # first do transect level calculations
   res <- bigdat %>%
-    ## first do transect level calculations
-    group_by(Sample.Label) %>%
+    group_by(Sample.Label)
+
+  # if we are stratifying by object-level covariates, need to
+  # make sure summaries are made at the sample-stratum level here
+  if(stratification=="object"){
+    res <- res %>%
+      group_by_at(.vars=stratum_labels, .add=TRUE)
+  }
+
+  res <- res %>%
       # *observations* per transect
       mutate(transect_n = sum(size, na.rm=TRUE),
+             transect_n_observations = length(na.omit(unique(object))),
              # abundance estimate per transect in covered area
              transect_Nc = sum(Nhat, na.rm=TRUE)) %>%
-      # encounter rate per transect (ignoring group size)
-      # TODO: is this ever needed?
-      #mutate(transect_ER = ifelse(transect_n, 1, 0)/Effort) %>%
-      # covered area per transect
-      mutate(transect_Covered_area =
-               area_calc(df_width, Effort, transect_type, sample_fraction)) %>%
     ungroup()
+  # undo second grouping
+  if(stratification=="object"){
+    res <- res %>%
+      ungroup()
+  }
 
   # save the sample-level stats
   res_sample <- res
@@ -430,7 +439,8 @@ if(mult){
       # that we don't need
       select(!!stratum_labels, Sample.Label, Area, n, Nc, transect_n, Effort,
              Covered_area, df_var, transect_Nc, group_var, group_mean,
-             Nc_cuecorrected, rate_SE, rate, rate_df, rate_CV, p_var, p_average) %>%
+             Nc_cuecorrected, rate_SE, rate, rate_df, rate_CV, p_var, p_average,
+             transect_n_observations) %>%
       # keep only unique rows
       distinct()
 
@@ -457,10 +467,20 @@ if(mult){
            Covered_area, df_var, group_var, group_mean, ER_var_Nhat,
            rate_SE, rate, rate_df, rate_CV, p_var, p_average) %>%
     ## now just get the distinct cases
-    distinct() %>%
+    distinct()
     # calculate stratum encounter rate
-    mutate(ER = n/Effort,
-           ER_CV = sqrt(ER_var)/ER,
+
+  # we calculated n differently above, so reconcile this in the
+  # encounter rate calculation
+  if(stratification=="object"){
+    res <- res %>%
+      mutate(ER = sum(n)/Effort)
+  }else{
+    res <- res %>%
+      mutate(ER = n/Effort)
+  }
+  res <- res %>%
+    mutate(ER_CV = sqrt(ER_var)/ER,
            ER_df = compute_df(k, type=er_est)) %>%
     # var/CV 0 if there was only one transect
     mutate(ER_var = ifelse(k==1, 0, ER_var),
