@@ -212,19 +212,16 @@ dht2 <- function(ddf, observations=NULL, transects=NULL, geo_strat=NULL,
                         stringsAsFactors=FALSE)
       # which are not represented in the data?
       aj <- anti_join(ex, bigdat, by=c("Sample.Label", stratum_labels))
-      aj <- left_join(aj, bigdat[,c("Sample.Label","Effort","Area")], by="Sample.Label")
+      # join the unrepresented sample combinations to the extra cols
+      # (i.e., add Area, Effort data to aj)
+      aj <- left_join(aj, unique(bigdat[,c("Sample.Label","Effort","Area")]),
+                      by="Sample.Label")
 
       # remove the transects with no stratum data
       bigdat2 <- filter_at(bigdat, stratum_labels, function(x) !is.na(x))
-      # get the unique combinations in those
-      bigdat3 <- select(bigdat2, Sample.Label, Area, Effort) %>%
-        distinct()
-      # join the unrepresented sample combinations to the extra cols
-      # (i.e., add Area, Effort data to aj)
-      jj <- left_join(aj, bigdat3, by=c("Sample.Label", "Area", "Effort"))
 
       # rbind that onto the original data
-      bigdat <- bind_rows(bigdat2, jj)
+      bigdat <- bind_rows(bigdat2, aj)
     }
 
     # TODO: this needs to be fixed for the multi-strata case
@@ -345,6 +342,11 @@ dht2 <- function(ddf, observations=NULL, transects=NULL, geo_strat=NULL,
   # - mutate   : adds a new column
   # - distinct : select only the unique row combinations
   # - select   : retain only these columns
+  Tres <- bigdat %>%
+    mutate(group_var  = var(size, na.rm=TRUE)/sum(!is.na(size)),
+           group_mean = mean(size, na.rm=TRUE)) %>%
+  select(group_var, group_mean) %>%
+  distinct()
 
   # first do transect level calculations
   res <- bigdat %>%
@@ -587,9 +589,8 @@ if(mult){
                                     na.rm=TRUE)) %>%
           mutate(ER_var_Nhat  = sum(weight^2*ER_var_Nhat,
                                     na.rm=TRUE)) %>%
-          mutate(ER_df        = ER_var_Nhat^2/sum((weight^4 *
-                                  res$ER_var_Nhat^2/ER_df)))%>%
-          #mutate(ER_df        = compute_df(sum(k), er_est)) %>%
+          mutate(ER_df        = ER_var_Nhat^2/sum(
+                                  ((weight^2 * res$ER_var_Nhat)^2/res$ER_df)))%>%
           mutate(Area         = total_area,
                  Covered_area = sum(Covered_area),
                  Effort       = sum(Effort),
@@ -615,10 +616,13 @@ if(mult){
         mutate(ER         = n/Effort) %>%
         mutate(ER_CV      = if_else(ER==0, 0, sqrt(ER_var)/ER)) %>%
         mutate(Abundance  = sum(weight*Abundance)) %>%
-        mutate(group_mean = mean(group_mean),
-               group_var  = sum(group_var)) %>%
+        mutate(group_mean = Tres$group_mean,
+               group_var  = Tres$group_var) %>%
+        #mutate(group_mean = mean(group_mean),
+        #       group_var  = sum(group_var)) %>%
         mutate(group_CV   = if_else(all(group_var==0), 0,
                                     sqrt(group_var[1])/group_mean[1]))
+
 
       # calculate total variance for detection function
       vcov <- df_Nhat_unc$variance
@@ -678,7 +682,7 @@ if(mult){
         mutate(wtcv = sum(c((sqrt(ER_var_Nhat)/Abundance)^4/ER_df,
                             (df_tvar/Abundance^2)^2/(length(ddf$fitted) - length(ddf$par)),
                             (rate_SE/Abundance)^4/rate_df,
-                            (group_var/Abundance^2)^2/ER_df),
+                            (group_var/Abundance^2)^2/(n-1)),
                           na.rm=TRUE)) %>%
         # calculate Satterthwaite df
         mutate(df = sum(c((sqrt(ER_var_Nhat)/Abundance)^2,
