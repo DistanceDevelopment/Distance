@@ -20,11 +20,6 @@
 #' }
 create.bins <- function(data, cutpoints){
 
-  # don't do anything if there are NAs in the distance column
-  if(any(is.na(data$distance))){
-    stop("Some distances are NA, can't create bins.")
-  }
-
   # lazy typist
   cp <- cutpoints
 
@@ -39,8 +34,9 @@ create.bins <- function(data, cutpoints){
   na.ind <- is.na(data$distance)
   d <- data$distance[!na.ind]
 
-  distbegin<-rep(NA,length(d))
-  distend<-rep(NA,length(d))
+  # setup columns
+  distbegin <- rep(NA,length(d))
+  distend <- rep(NA,length(d))
 
   for(i in 1:(length(cp)-1)){
     # which elements of d lie between cutpoints i and i+1
@@ -57,8 +53,8 @@ create.bins <- function(data, cutpoints){
 
 
   # handle NA distances, that we need to preserve
-  distbegin.na <- rep(NA,length(data$distance))
-  distend.na <- rep(NA,length(data$distance))
+  distbegin.na <- rep(NA, length(data$distance))
+  distend.na <- rep(NA, length(data$distance))
   distbegin.na[!na.ind] <- distbegin
   distend.na[!na.ind] <- distend
 
