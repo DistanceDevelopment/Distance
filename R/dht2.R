@@ -226,6 +226,15 @@ dht2 <- function(ddf, observations=NULL, transects=NULL, geo_strat=NULL,
       # rbind that onto the original data
       bigdat <- bind_rows(bigdat2, jj)
     }
+
+    # TODO: this needs to be fixed for the multi-strata case
+    # check that Area-stratum combinations are coherent
+    ucomb <- unique(bigdat[, c("Area", stratum_labels)])
+    if(length(na.omit(ucomb[,stratum_labels])) >
+       length(na.omit(unique(bigdat[,stratum_labels])))){
+      stop(">1 Area defined for a single stratum label, check data")
+    }
+
   }else{
     stop("Need to supply either observations, transects and geo_strat OR flatfile")
   }
