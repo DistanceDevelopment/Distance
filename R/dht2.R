@@ -342,6 +342,8 @@ dht2 <- function(ddf, observations=NULL, transects=NULL, geo_strat=NULL,
   # - mutate   : adds a new column
   # - distinct : select only the unique row combinations
   # - select   : retain only these columns
+
+  # grab avg group size and var before we start messing around
   Tres <- bigdat %>%
     mutate(group_var  = var(size, na.rm=TRUE)/sum(!is.na(size)),
            group_mean = mean(size, na.rm=TRUE)) %>%
@@ -513,8 +515,8 @@ if(mult){
                         rate_CV^4/rate_df),
                    na.rm=TRUE)) %>%
     # adjust if df is too small
-    mutate(df=if_else(df < 1 & df >0, 1, df)) %>%
-    mutate(df=if_else(Abundance_CV==0, 1, df)) %>%
+    mutate(df = if_else(df < 1 & df >0, 1, df)) %>%
+    mutate(df = if_else(Abundance_CV==0, 1, df)) %>%
     # big C for Satterthwaite
     mutate(bigC = exp((abs(qt(ci_width, df)) *
                    sqrt(log(1 + Abundance_CV^2))))) %>%
