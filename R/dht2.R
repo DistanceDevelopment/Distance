@@ -323,7 +323,7 @@ dht2 <- function(ddf, observations=NULL, transects=NULL, geo_strat=NULL,
 
   df_width <- (ddf$ds$aux$width - ddf$ds$aux$left)*convert_units
 
-#TODO: check that sample_fraction is positive and a single number
+  # TODO: check that sample_fraction is positive and a single number
   area_calc <- function(width, effort, transect_type, sample_fraction){
     if(transect_type=="point"){
       return(effort*pi*width^2*sample_fraction)
@@ -331,8 +331,6 @@ dht2 <- function(ddf, observations=NULL, transects=NULL, geo_strat=NULL,
       return(effort*2*width*sample_fraction)
     }
   }
-
-
 
   # TODO: clean-up the data, removing stratum labels with zero observations
   #       or NA labels (and warning)
@@ -342,13 +340,6 @@ dht2 <- function(ddf, observations=NULL, transects=NULL, geo_strat=NULL,
   # - mutate   : adds a new column
   # - distinct : select only the unique row combinations
   # - select   : retain only these columns
-
-  # grab avg group size and var before we start messing around
-  Tres <- bigdat %>%
-    mutate(group_var  = var(size, na.rm=TRUE)/sum(!is.na(size)),
-           group_mean = mean(size, na.rm=TRUE)) %>%
-  select(group_var, group_mean) %>%
-  distinct()
 
   # first do transect level calculations
   res <- bigdat %>%
@@ -495,6 +486,44 @@ if(mult){
     mutate(group_CV = if_else(group_var==0, 0,
                               sqrt(group_var)/group_mean))
 
+#if(!is.null(grouped)){
+#  res <- res %>%
+#    mutate(Abundance_CV = sqrt(sum(c(ER_CV^2,
+#                                     df_CV^2))))
+#  if(nrow(grouped)>1){
+#    gr <- grouped[-nrow(grouped),,drop=FALSE]
+#  }
+#  gr <- gr[, c(stratum_labels, "Abundance_CV", "Abundance", "Effort")]
+#  names(gr) <- c(stratum_labels, "group_Abundance_CV",
+#                 "group_Abundance", "group_Effort")
+#  res <- merge(res, gr, by=stratum_labels)
+#
+#  # get var info
+#  gr_var <- attr(grouped, "df_var")
+#  vcov <- solvecov(ddf$hessian)$inv
+#
+#  res <- res %>%
+#    mutate(scale     = Area/Covered_area) %>%
+#    mutate(group_cov = covn(group_Effort/(scale*sum(Effort)),
+#                            group_Abundance/scale,
+#                            Abundance/scale,
+#                            er_est)) %>%
+#    # cov.Nc.Ncs <- as.vector(by(obs$size*(1 - obs$pdot)/obs$pdot^2,
+#    #                            obs$Region.Label, sum))
+#    mutate(group_cov  = (group_cov +
+#                         diag(t(gr_var$partial)%*%
+#                          vcov%*%
+#                          df_Nhat_unc$partial))^2) %>%
+#    mutate(group_mean = group_Abundance_CV^2 +
+#                         Abundance_CV^2 -
+#                         2*group_cov/
+#                        (Abundance * group_Abundance)) %>%
+#    mutate(group_CV = if_else(group_var==0, 0,
+#                              sqrt(group_var)/group_mean))
+#  res$scale <- NULL
+#  res$group_Abundance_CV <- NULL
+#  res$group_Abundance <- NULL
+#}
 
   # se and CV
   res <- res %>%
@@ -511,11 +540,10 @@ if(mult){
     mutate(df = Abundance_CV^4/
                   sum(c(if_else(k==1, 0, ER_CV^4/ER_df),
                         df_CV^4/(length(ddf$fitted) - length(ddf$par)),
-                        group_CV^4/ER_df,
+                        group_CV^4/(n-1),
                         rate_CV^4/rate_df),
                    na.rm=TRUE)) %>%
     # adjust if df is too small
-    mutate(df = if_else(df < 1 & df >0, 1, df)) %>%
     mutate(df = if_else(Abundance_CV==0, 1, df)) %>%
     # big C for Satterthwaite
     mutate(bigC = exp((abs(qt(ci_width, df)) *
@@ -592,7 +620,7 @@ if(mult){
           mutate(ER_var_Nhat  = sum(weight^2*ER_var_Nhat,
                                     na.rm=TRUE)) %>%
           mutate(ER_df        = ER_var_Nhat^2/sum(
-                                  ((weight^2 * res$ER_var_Nhat)^2/res$ER_df)))%>%
+                                  ((weight^2 * res$ER_var_Nhat)^2/ER_df)))%>%
           mutate(Area         = total_area,
                  Covered_area = sum(Covered_area),
                  Effort       = sum(Effort),
@@ -618,12 +646,10 @@ if(mult){
         mutate(ER         = n/Effort) %>%
         mutate(ER_CV      = if_else(ER==0, 0, sqrt(ER_var)/ER)) %>%
         mutate(Abundance  = sum(weight*Abundance)) %>%
-        mutate(group_mean = Tres$group_mean,
-               group_var  = Tres$group_var) %>%
-        #mutate(group_mean = mean(group_mean),
-        #       group_var  = sum(group_var)) %>%
-        mutate(group_CV   = if_else(all(group_var==0), 0,
-                                    sqrt(group_var[1])/group_mean[1]))
+        mutate(group_mean = mean(group_mean),
+               group_var  = sum(group_var)) %>%
+        mutate(group_CV   = if_else(group_var==0, 0,
+                                    sqrt(group_var)/group_mean))
 
 
       # calculate total variance for detection function
@@ -745,6 +771,8 @@ if(mult){
   attr(res, "density_only") <- est_density
   # save the sample level estimates
   attr(res, "sample_res") <- res_sample
+  # detection function variance data
+  attr(res, "df_var") <- df_Nhat_unc
   # save the variance proportions
   attr(res, "prop_var") <- variance_contributions(res)
   # save grouped analysis (might be NULL)
