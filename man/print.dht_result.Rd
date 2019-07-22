@@ -5,7 +5,7 @@
 \title{Print abundance estimates}
 \usage{
 \method{print}{dht_result}(x, report = "abundance", groups = FALSE,
-  round = 0, ...)
+  ...)
 }
 \arguments{
 \item{x}{object of class \code{dht_result}}
@@ -13,8 +13,6 @@
 \item{report}{should \code{"abundance"}, \code{"density"} or \code{"both"} be reported?}
 
 \item{groups}{should abundance/density of groups be produced?}
-
-\item{round}{option passed to \code{round} to specify rounding on abundance/density estimates (defaults to 0, giving results to the nearest whole animal)}
 }
 \description{
 Print abundance estimates

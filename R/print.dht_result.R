@@ -2,9 +2,8 @@
 #' @export
 #' @param x object of class \code{dht_result}
 #' @param groups should abundance/density of groups be produced?
-#' @param round option passed to \code{round} to specify rounding on abundance/density estimates (defaults to 0, giving results to the nearest whole animal)
 #' @param report should \code{"abundance"}, \code{"density"} or \code{"both"} be reported?
-print.dht_result <- function(x, report="abundance", groups=FALSE, round=0, ...){
+print.dht_result <- function(x, report="abundance", groups=FALSE, ...){
 
   if(groups & !is.null(attr(x, "grouped"))){
     cat("Groups:\n\n")
@@ -55,8 +54,10 @@ print.dht_result <- function(x, report="abundance", groups=FALSE, round=0, ...){
   if(report=="abundance" | report=="both" | attr(object, "density_only")){
     # print abundance table
     if(attr(object, "density_only")){
+      round <- 4
       cat("Density estimates:\n")
     }else{
+      round <- 0
       cat("Abundance estimates:\n")
     }
     object$Estimate <- object$Abundance
@@ -71,6 +72,7 @@ print.dht_result <- function(x, report="abundance", groups=FALSE, round=0, ...){
   }
   # density estimates if requested
   if((report=="density" | report=="both") & !attr(object, "density_only")){
+      round <- 4
     cat("Density estimates:\n")
     dobject <- attr(object, "density")
 
