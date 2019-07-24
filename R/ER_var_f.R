@@ -28,32 +28,36 @@ ER_var_f <- function(erdat, innes, er_est, est_density){
       # this is the "varflag=2"
       erdat <- erdat %>%
         mutate(ER_var = varn(Effort, transect_Nc, type=er_est)) %>%
+        mutate(ER_var = ifelse(length(unique(Sample.Label))>1,
+                               ER_var, 0)) %>%
         # put ER var on the Nhat scale
         mutate(ER_var_Nhat = (Area/sum(Covered_area))^2 *
                              (Nc*sum(Effort))^2 *
                                ER_var/sum(transect_n)^2) %>%
         # if any strata only had one transect:
         mutate(ER_var_Nhat = ifelse(length(unique(Sample.Label))>1,
-                                     ER_var_Nhat,
-                                     transect_Nc^2/transect_Nc)) %>%
-        mutate(ER_var_Nhat = ifelse(length(unique(Sample.Label))>1,
-                                    ER_var_Nhat,
-                                    Nc^2* (1/Nc +
-                                           group_var/group_mean^2)))
+                                    ER_var_Nhat, 0))
+#                                    ER_var_Nhat,
+#                                    ((Area/sum(Covered_area))*Nc^2)*
+#                                     (1/((Area/sum(Covered_area))*Nc) +
+#                                      group_var/group_mean^2)))
     }else{
       # this is the "varflag=1"
       erdat <- erdat %>%
         mutate(ER_var = varn(Effort, transect_n_observations, type=er_est)) %>%
+        mutate(ER_var = ifelse(length(unique(Sample.Label))>1,
+                               ER_var, 0)) %>%
         # put ER var on the Nhat scale
         mutate(ER_var_Nhat = ((Area/sum(Covered_area))*Nc*sum(Effort))^2 *
                                 ER_var/
                                   sum(transect_n_observations)^2 +
-                               Nc^2 * group_var/group_mean^2) %>%
+                               ((Area/sum(Covered_area))*Nc)^2 * group_var/group_mean^2) %>%
         mutate(ER_var_Nhat = ifelse(length(unique(Sample.Label))>1,
-                                    ER_var_Nhat,
-                                    Nc^2* (1/transect_n_observations +
-                                           group_var/group_mean^2)))
-
+                                    ER_var_Nhat, 0))
+#                                    ((Area/sum(Covered_area))*Nc)^2 *
+#                                     (1/transect_n_observations +
+#                                      group_var/group_mean^2)))
+#
     }
   }
 
