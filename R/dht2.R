@@ -476,9 +476,6 @@ if(mult){
   res <- res %>%
     mutate(ER_CV = sqrt(ER_var)/ER,
            ER_df = compute_df(k, type=er_est)) %>%
-    # var/CV 0 if there was only one transect
-    mutate(ER_var = ifelse(k==1, 0, ER_var),
-           ER_CV  = ifelse(k==1, 0, ER_CV)) %>%
     # calculate stratum abundance estimate
     mutate(Abundance = (Area/Covered_area) * Nc) %>%
     mutate(df_CV = sqrt(df_var)/Abundance) %>%
