@@ -274,8 +274,9 @@ dht2 <- function(ddf, observations=NULL, transects=NULL, geo_strat=NULL,
         multipliers[[ii]]$SE <- 0
       }
 
-      bigmult$rate_CV <- bigmult$rate_CV + (multipliers[[ii]]$SE/
-                          multipliers[[ii]]$rate)^2
+      bigmult$rate_CV <- bigmult$rate_CV^2 +
+                          (multipliers[[ii]]$SE/
+                           multipliers[[ii]]$rate)^2
       # since we are dividing, use the sandwich estimator,
       # var(1/x) = 1/x^2 * var(x) * 1/x^2 => se(1/x) = se(x)/x^2
       if(ii=="decay" && multipliers[[ii]]$SE!=0){
