@@ -315,7 +315,7 @@ dht2 <- function(ddf, observations=NULL, transects=NULL, geo_strat=NULL,
     # placeholder row for a sample unit
     bigdat$object <- NA
     bigdat$object[!is.na(bigdat$distance)] <- 1:sum(!is.na(bigdat$distance))
-  }else if(sum(is.na(bigdat$distance)) != sum(is.na(bigdat$object))){
+  }else if(!all(is.na(bigdat$distance) == is.na(bigdat$object))){
     stop("NAs in distance column do not match those in the object column, check data")
   }
 
