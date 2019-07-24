@@ -1,6 +1,6 @@
 # internal function to check input data
 dht2_checkdata <- function(ddf, observations, transects, geo_strat, strat_formula,
-                      stratum_labels, geo_stratum_labels){
+                           stratum_labels, geo_stratum_labels){
 
   # required columns for observations and transects
   col_req <- list(observations = c("object", "Sample.Label"),
