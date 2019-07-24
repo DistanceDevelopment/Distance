@@ -2,7 +2,7 @@
 #'
 #' Once a detection function is fitted to data, this function can be used to compute abundance estimates over required areas. The function also allows for stratification and variance estimation via various schemes (see below).
 #'
-#' @param ddf mode fitted by \code{\link[Distance]{ds}} or \code{\link[mrds]{ddf}}
+#' @param ddf model fitted by \code{\link[Distance]{ds}} or \code{\link[mrds]{ddf}}
 #' @param strat_formula a formula giving the stratification structure (see "Stratification" below)
 #' @param observations \code{data.frame} to link detection function data (indexed by \code{object} column IDs) to the transects (indexed by \code{Sample.Label} column IDs). See "Data" below.
 #' @param transects \code{data.frame} with information about samples (points or line transects). See "Data" below.

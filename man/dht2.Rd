@@ -10,7 +10,7 @@ dht2(ddf, observations = NULL, transects = NULL, geo_strat = NULL,
   innes = FALSE, stratification = "geographical", total_area = NULL)
 }
 \arguments{
-\item{ddf}{mode fitted by \code{\link[Distance]{ds}} or \code{\link[mrds]{ddf}}}
+\item{ddf}{model fitted by \code{\link[Distance]{ds}} or \code{\link[mrds]{ddf}}}
 
 \item{observations}{\code{data.frame} to link detection function data (indexed by \code{object} column IDs) to the transects (indexed by \code{Sample.Label} column IDs). See "Data" below.}
 
