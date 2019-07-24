@@ -21,7 +21,6 @@
 #' @importFrom stats qt na.omit predict terms var
 #' @importFrom dplyr group_by group_by_at mutate ungroup select distinct mutate_if if_else summarize_all "%>%" filter_at inner_join anti_join bind_rows left_join arrange
 #' @importFrom mrds DeltaMethod
-#compute.df
 #' @section Data:
 #' The data format allows for complex stratification schemes to be set-up. Before going into this detail, three objects are always required:
 #' \describe{
@@ -378,7 +377,7 @@ dht2 <- function(ddf, observations=NULL, transects=NULL, geo_strat=NULL,
       mutate(
              # individuals and observations per stratum
              n_individuals = sum(size, na.rm=TRUE),
-             n_observations = length(na.omit(unique(object))),
+             n_observations = length(na.omit(unique(distance))),
              # abundance estimate per stratum in covered area
              Nc = sum(Nhat, na.rm=TRUE),
              # covered area per transect
