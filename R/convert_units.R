@@ -2,7 +2,7 @@
 #'
 #' It is often the case that effort, distances and prediction area are collected in different units in the field. Functions in \code{Distance} allow for an argument to convert between these and provide an answer that makes sense. This function calculates that conversion factor, given knowledge of the units of the quantities used.
 #'
-#' \code{convert_units} expects particular names for its inputs. You can view possible options with \code{\link{units_table}}. Both UK and US spellings are acceptable, case does not matter. For density estimation, area must still be provided ("objects per square ???"). Note that for cue counts (or other multiplier-based methods) one will still have to ensure that the rates are in the correct units for the survey.
+#' \code{convert_units} expects particular names for its inputs -- these should be singular names of the unit (e.g., "metre" rather than "metres"). You can view possible options with \code{\link{units_table}}. Both UK and US spellings are acceptable, case does not matter. For density estimation, area must still be provided ("objects per square ???"). Note that for cue counts (or other multiplier-based methods) one will still have to ensure that the rates are in the correct units for the survey.
 #'
 #'@param distance_units units distances were measured in.
 #'@param effort_units units that effort were measured in. Set as \code{NULL} for point transects.
