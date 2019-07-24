@@ -736,6 +736,11 @@ if(mult){
   res <- as.data.frame(res)
   res <- unique(res)
 
+  # warn if we only had one transect in one or more strata
+  if(any(res$k == 1)){
+    warning("One or more strata have only one transect, cannot calculate empirical encounter rate variance")
+  }
+
   # fix area == covered area for compatibility with mrds::dht
   if(est_density){
     res$Area <- res$Covered_area
