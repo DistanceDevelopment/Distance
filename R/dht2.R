@@ -315,6 +315,8 @@ dht2 <- function(ddf, observations=NULL, transects=NULL, geo_strat=NULL,
     # placeholder row for a sample unit
     bigdat$object <- NA
     bigdat$object[!is.na(bigdat$distance)] <- 1:sum(!is.na(bigdat$distance))
+  }else if(sum(is.na(bigdat$distance)) != sum(is.na(bigdat$object))){
+    stop("NAs in distance column do not match those in the object column, check data")
   }
 
   # now do some calculations
@@ -377,7 +379,7 @@ dht2 <- function(ddf, observations=NULL, transects=NULL, geo_strat=NULL,
       mutate(
              # individuals and observations per stratum
              n_individuals = sum(size, na.rm=TRUE),
-             n_observations = length(na.omit(unique(distance))),
+             n_observations = length(na.omit(unique(object))),
              # abundance estimate per stratum in covered area
              Nc = sum(Nhat, na.rm=TRUE),
              # covered area per transect
