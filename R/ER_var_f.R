@@ -9,8 +9,8 @@ ER_var_f <- function(erdat, innes, er_est, est_density){
     erdat <- erdat %>%
       mutate(pdot = n/Nc) %>%
       mutate(ER_var = sum(size^2*(1-pdot)/pdot^2) +
-                           Nc^2 * group_var/group_mean^2) %>%
-      drop(pdot)
+                           Nc^2 * group_var/group_mean^2)
+      erdat$pdot <- NULL
   }else{
 
     # sort the data if we use O2/O3 estimators
