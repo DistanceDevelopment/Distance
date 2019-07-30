@@ -11,6 +11,14 @@ ER_var_f <- function(erdat, innes, er_est, est_density){
       mutate(ER_var = sum(size^2*(1-pdot)/pdot^2) +
                            Nc^2 * group_var/group_mean^2)
       erdat$pdot <- NULL
+
+# TODO: this might not be right
+    erdat <- erdat %>%
+      mutate(ER_var_Nhat = (Nc*sum(Effort))^2 *
+                             ER_var/sum(transect_n)^2) %>%
+      # if any strata only had one transect:
+      mutate(ER_var_Nhat = ifelse(length(unique(Sample.Label))>1,
+                                  ER_var_Nhat, 0))
   }else{
 
     # sort the data if we use O2/O3 estimators
