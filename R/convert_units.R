@@ -12,7 +12,8 @@
 #' @author David L Miller
 #'
 #' @examples
-#' # distances measured in metres, effort in kilometres and abundance over an area measured in hectares:
+#' # distances measured in metres, effort in kilometres and
+#' # abundance over an area measured in hectares:
 #' convert_units("Metre", "Kilometre", "Hectare")
 #'
 #' # all SI units, so the result is 1

@@ -20,7 +20,8 @@ It is often the case that effort, distances and prediction area are collected in
 \code{convert_units} expects particular names for its inputs -- these should be singular names of the unit (e.g., "metre" rather than "metres"). You can view possible options with \code{\link{units_table}}. Both UK and US spellings are acceptable, case does not matter. For density estimation, area must still be provided ("objects per square ???"). Note that for cue counts (or other multiplier-based methods) one will still have to ensure that the rates are in the correct units for the survey.
 }
 \examples{
-# distances measured in metres, effort in kilometres and abundance over an area measured in hectares:
+# distances measured in metres, effort in kilometres and
+# abundance over an area measured in hectares:
 convert_units("Metre", "Kilometre", "Hectare")
 
 # all SI units, so the result is 1
