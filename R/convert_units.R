@@ -38,12 +38,17 @@ convert_units <- function(distance_units, effort_units, area_units){
   # but we have distance (truncation) squared
   if(is.null(effort_units)){
     eu <- ut$Conversion[ut$Unit==distance_units]
+    pt <- TRUE
   }else{
     # otherwise do as above
     effort_units <- tolower(effort_units)
     eu <- ut$Conversion[ut$Unit==effort_units]
+    pt <- FALSE
   }
 
-  # return the calculation
-  return((du*eu)/au)
+  cu <- (du*eu)/au
+  if(pt) cu <- sqrt(cu)
+
+  # return the conversion
+  return(cu)
 }
