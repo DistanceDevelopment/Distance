@@ -3,6 +3,7 @@
 #' @param x object of class \code{dht_result}
 #' @param groups should abundance/density of groups be produced?
 #' @param report should \code{"abundance"}, \code{"density"} or \code{"both"} be reported?
+#' @param \dots unused
 print.dht_result <- function(x, report="abundance", groups=FALSE, ...){
 
   if(groups & !is.null(attr(x, "grouped"))){

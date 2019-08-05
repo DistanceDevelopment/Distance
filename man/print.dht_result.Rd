@@ -13,6 +13,8 @@
 \item{report}{should \code{"abundance"}, \code{"density"} or \code{"both"} be reported?}
 
 \item{groups}{should abundance/density of groups be produced?}
+
+\item{\dots}{unused}
 }
 \description{
 Print abundance estimates
