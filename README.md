@@ -9,7 +9,7 @@
 
 # Using `Distance`
 
-For more information and examples of use [take a look at this preprint](http://biorxiv.org/content/early/2016/07/14/063891).
+For more information and examples of use [take a look at this paper](https://www.jstatsoft.org/article/view/v089i01) published in Journal of Statistical Software in May 2019.
 
 # Getting `Distance`
 
