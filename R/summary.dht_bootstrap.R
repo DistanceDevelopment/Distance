@@ -19,8 +19,8 @@ summary.dht_bootstrap <- function(object, alpha=0.05, ...){
     if(is.numeric(x)){
       xx <- data.frame(Estimate = median(x, na.rm=TRUE),
                        se       = sqrt(var(x, na.rm=TRUE)),
-                       ucl      = quantile(x, 1-(alpha/2)),
-                       lcl      = quantile(x, (alpha/2)))
+                       lcl      = quantile(x, (alpha/2)),
+                       ucl      = quantile(x, 1-(alpha/2)))
       xx$cv <- xx$se/xx$Estimate
     }else{
       xx <- NULL#data.frame(Estimate = NA,
