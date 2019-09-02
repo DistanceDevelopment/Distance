@@ -17,7 +17,8 @@ summary.dht_bootstrap <- function(object, alpha=0.05, ...){
   # build a summary object
   sumfun <- function(x){
     if(is.numeric(x)){
-      xx <- data.frame(Estimate = median(x, na.rm=TRUE),
+      xx <- data.frame(Median   = median(x, na.rm=TRUE),
+                       Mean     = mean(x, na.rm=TRUE),
                        se       = sqrt(var(x, na.rm=TRUE)),
                        lcl      = quantile(x, (alpha/2)),
                        ucl      = quantile(x, 1-(alpha/2)))
