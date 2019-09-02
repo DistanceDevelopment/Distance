@@ -388,7 +388,9 @@ dht2 <- function(ddf, observations=NULL, transects=NULL, geo_strat=NULL,
              Covered_area = area_calc(df_width, Effort, transect_type,
                                       sample_fraction),
              # get group size stats
-             group_var  = var(size, na.rm=TRUE)/sum(!is.na(size)),
+             group_var  = if_else(n_observations>1,
+                                  var(size, na.rm=TRUE)/sum(!is.na(size)),
+                                  0),
              group_mean = mean(size, na.rm=TRUE)) %>%
       # report n as n_observations
       mutate(n = n_observations)
