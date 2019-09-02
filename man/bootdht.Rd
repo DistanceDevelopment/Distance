@@ -21,7 +21,7 @@ bootdht(model, flatfile, resample_strata = FALSE, resample_obs = FALSE,
 
 \item{nboot}{number of bootstrap replicates}
 
-\item{summary_fun}{function that is used to obtain summary statistics from the bootstrap, see Details below.}
+\item{summary_fun}{function that is used to obtain summary statistics from the bootstrap, see Summary Functions below.}
 
 \item{convert.units}{conversion between units for abundance estimation, see "Units", below. (Defaults to 1, implying all of the units are "correct" already.)}
 
@@ -30,6 +30,11 @@ bootdht(model, flatfile, resample_strata = FALSE, resample_obs = FALSE,
 \description{
 Performs a bootstrap for simple distance sampling models using the same data structures as \code{\link[mrds]{dht}}.
 }
+\section{Summary Functions}{
+
+The function \code{summary_fun} allows the user to specify what summary statistics should be recorded from each bootstrap. The function should take two arguments, \code{ests} and \code{fit}. The former is the output from \code{dht2}, giving tables of estimates. The latter is the fitted detection function object. The function is called once fitting and estimation has been performed and should return a \code{data.frame}. Those \code{data.frame}s are then concatenated using \code{rbind}. One can make these functions return any information within those objects, for example abundance or density estimates or the AIC for each model. See Examples below.
+}
+
 \section{Model selection}{
 
 Model selection can be performed on a per-replicate basis within the bootstrap. This has three variations:
@@ -42,3 +47,20 @@ Model selection can be performed on a per-replicate basis within the bootstrap. 
 The last of these options can be very time consuming!
 }
 
+\examples{
+# Not run:
+# fit a model to the minke data
+data(minke)
+mod1 <- ds(minke)
+
+# summary function to save the abundance estimate
+Nhat_summarize <- function(ests, fit) {
+  return(data.frame(Nhat=ests$individuals$N$Estimate))
+}
+
+# perform 5 bootstraps
+bootout <- bootdht(mod1, flatfile=minke, summary_fun=Nhat_summarize, nboot=5)
+
+# obtain basic summary information
+summary(bootout)
+}
