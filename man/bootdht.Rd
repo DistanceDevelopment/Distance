@@ -64,3 +64,6 @@ bootout <- bootdht(mod1, flatfile=minke, summary_fun=Nhat_summarize, nboot=5)
 # obtain basic summary information
 summary(bootout)
 }
+\seealso{
+\code{\link{summary.dht_bootstrap}} for how to summarize the results
+}

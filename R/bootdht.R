@@ -25,6 +25,7 @@
 #' @importFrom utils txtProgressBar setTxtProgressBar getTxtProgressBar
 #' @importFrom stats as.formula
 #' @importFrom mrds ddf dht
+#' @seealso \code{\link{summary.dht_bootstrap}} for how to summarize the results
 #' @export
 #' @examples
 #' # Not run:
