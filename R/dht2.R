@@ -7,7 +7,7 @@
 #' @param observations \code{data.frame} to link detection function data (indexed by \code{object} column IDs) to the transects (indexed by \code{Sample.Label} column IDs). See "Data" below.
 #' @param transects \code{data.frame} with information about samples (points or line transects). See "Data" below.
 #' @param geo_strat \code{data.frame} with information about any geographical stratification. See "Data" below.
-#' @param flatfile data in the flatfile format, see \code{link[Distance]{flatfile}}
+#' @param flatfile data in the flatfile format, see \code{\link[Distance]{flatfile}}
 #' @param convert_units conversion factor between units for the distances, effort and area. See "Units" below.
 #' @param er_est encounter rate variance estimator to be used. See "Variance" below and \code{\link{varn}}.
 #' @param multipliers \code{list} of \code{data.frame}s. See "Multipliers" below.
