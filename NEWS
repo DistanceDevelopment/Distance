@@ -1,5 +1,6 @@
 Distance version 0.9.9
   * call now saved in the model object as $call
+  * Added lots of example data sets
 
 Distance version 0.9.8
   * Includes reference and citation for paper on 'Distance Sampling in R'.
