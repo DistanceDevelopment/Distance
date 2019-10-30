@@ -31,7 +31,7 @@ summary.dht_bootstrap <- function(object, alpha=0.05, ...){
                        se       = sqrt(var(x, na.rm=TRUE)),
                        lcl      = quantile(x, (alpha/2)),
                        ucl      = quantile(x, 1-(alpha/2)))
-      xx$cv <- xx$se/xx$Median
+      xx$cv <- xx$se/xx$median
     }else{
       xx <- NULL
     }
