@@ -4,6 +4,7 @@
 #' @export
 #'
 #' @author David L Miller
+#' @importFrom utils read.delim
 # Taken from readdst, wheere it is in turn taken from Distance for Windows
 units_table <- function(){
 
