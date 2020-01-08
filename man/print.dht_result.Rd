@@ -4,8 +4,7 @@
 \alias{print.dht_result}
 \title{Print abundance estimates}
 \usage{
-\method{print}{dht_result}(x, report = "abundance", groups = FALSE,
-  ...)
+\method{print}{dht_result}(x, report = "abundance", groups = FALSE, ...)
 }
 \arguments{
 \item{x}{object of class \code{dht_result}}

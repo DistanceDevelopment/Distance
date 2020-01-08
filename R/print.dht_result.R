@@ -34,7 +34,7 @@ print.dht_result <- function(x, report="abundance", groups=FALSE, ...){
     ss <- attr(object, "summary")
     ss$CoveredArea <- ss$Covered_area
     ss$se.ER <- sqrt(ss$ER_var)
-    ss$cv.ER <- ER_CV
+    ss$cv.ER <- ss$ER_CV
     summ <- rbind(summ, ss[, c(stratum_labels, "Area", "CoveredArea",
                                "Effort", "n","k", "ER", "se.ER", "cv.ER")])
   }

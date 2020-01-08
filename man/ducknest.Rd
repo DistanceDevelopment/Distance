@@ -4,6 +4,7 @@
 \name{ducknest}
 \alias{ducknest}
 \alias{ducknest_units}
+\alias{ducknests_units}
 \title{Ducknest line transect survey data}
 \format{A data frame with 534 rows and 7 variables
   \tabular{ll}{

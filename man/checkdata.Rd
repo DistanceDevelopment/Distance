@@ -4,8 +4,13 @@
 \alias{checkdata}
 \title{Check that the data supplied to \code{ds} is correct}
 \usage{
-checkdata(data, region.table = NULL, sample.table = NULL,
-  obs.table = NULL, formula = ~1)
+checkdata(
+  data,
+  region.table = NULL,
+  sample.table = NULL,
+  obs.table = NULL,
+  formula = ~1
+)
 }
 \arguments{
 \item{data}{as in \code{ds}}

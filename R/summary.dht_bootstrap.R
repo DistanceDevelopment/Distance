@@ -6,6 +6,7 @@
 #'
 #' @param object output from \code{bootdht}
 #' @param alpha value to use in confidence interval calculation (to obtain \code{alpha}/2 and 1-\code{alpha}/2 intervals
+#' @param ... for S3 compatability, unused.
 #' @return a \code{data.frame} of summary statistics
 #' @export
 #' @importFrom stats median quantile

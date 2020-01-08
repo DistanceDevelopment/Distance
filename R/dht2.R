@@ -19,8 +19,9 @@
 #' @return a \code{data.frame} with estimates and attributes containing additional information
 #'
 #' @export
+#' @importFrom rlang .data
 #' @importFrom stats qt na.omit predict terms var
-#' @importFrom dplyr group_by group_by_at mutate ungroup select distinct mutate_if if_else summarize_all "%>%" filter_at inner_join anti_join bind_rows left_join arrange
+#' @importFrom dplyr group_by group_by_at mutate ungroup select distinct mutate_if if_else summarize_all "%>%" filter_at inner_join anti_join bind_rows left_join arrange vars
 #' @importFrom mrds DeltaMethod
 #' @section Data:
 #' The data format allows for complex stratification schemes to be set-up. Before going into this detail, three objects are always required:
@@ -343,10 +344,14 @@ dht2 <- function(ddf, observations=NULL, transects=NULL, geo_strat=NULL,
   # - mutate   : adds a new column
   # - distinct : select only the unique row combinations
   # - select   : retain only these columns
+  # - .data$   : get the column from the current data, don't go to global env
+  # note that this all turns out to be non-standard dplyr code because
+  # you can't have unquoted variable names (NSE) in CRAN-submitted packages
+  # see https://dplyr.tidyverse.org/articles/programming.html for "why"s
 
   # first do transect level calculations
   res <- bigdat %>%
-    group_by(Sample.Label)
+    group_by_at(vars("Sample.Label"))
 
   # if we are stratifying by object-level covariates, need to
   # make sure summaries are made at the sample-stratum level here
@@ -357,10 +362,10 @@ dht2 <- function(ddf, observations=NULL, transects=NULL, geo_strat=NULL,
 
   res <- res %>%
       # *observations* per transect
-      mutate(transect_n = sum(size, na.rm=TRUE),
-             transect_n_observations = length(na.omit(unique(object))),
+      mutate(transect_n = sum(.data$size, na.rm=TRUE),
+             transect_n_observations = length(na.omit(unique(.data$object))),
              # abundance estimate per transect in covered area
-             transect_Nc = sum(Nhat, na.rm=TRUE)) %>%
+             transect_Nc = sum(.data$Nhat, na.rm=TRUE)) %>%
     ungroup()
   # undo second grouping
   if(stratification=="object"){
@@ -380,20 +385,21 @@ dht2 <- function(ddf, observations=NULL, transects=NULL, geo_strat=NULL,
       # calculate various summary stats
       mutate(
              # individuals and observations per stratum
-             n_individuals = sum(size, na.rm=TRUE),
-             n_observations = length(na.omit(unique(object))),
+             n_individuals = sum(.data$size, na.rm=TRUE),
+             n_observations = length(na.omit(unique(.data$object))),
              # abundance estimate per stratum in covered area
-             Nc = sum(Nhat, na.rm=TRUE),
+             Nc = sum(.data$Nhat, na.rm=TRUE),
              # covered area per transect
-             Covered_area = area_calc(df_width, Effort, transect_type,
-                                      sample_fraction),
+             Covered_area = area_calc(.data$df_width, .data$Effort,
+                                      transect_type, sample_fraction),
              # get group size stats
-             group_var  = if_else(n_observations>1,
-                                  var(size, na.rm=TRUE)/sum(!is.na(size)),
+             group_var  = if_else(.data$n_observations>1,
+                                  var(.data$size, na.rm=TRUE)/
+                                   sum(!is.na(.data$size)),
                                   0),
-             group_mean = mean(size, na.rm=TRUE)) %>%
+             group_mean = mean(.data$size, na.rm=TRUE)) %>%
       # report n as n_observations
-      mutate(n = n_observations)
+      mutate(n = .data$n_observations)
   # if we didn't have any areas, then set to 1 and estimate density
   est_density <- FALSE
   if(all(res$Area == 0) | all(is.na(res$Area))){
@@ -405,7 +411,7 @@ dht2 <- function(ddf, observations=NULL, transects=NULL, geo_strat=NULL,
 # TODO: include cue count summary info?
 if(mult){
   res <- res %>%
-    mutate(Nc_cuecorrected = Nc/rate)
+    mutate(Nc_cuecorrected = .data$Nc/.data$rate)
 }else{
   res <- res %>%
     mutate(Nc_cuecorrected = NA)
@@ -437,18 +443,18 @@ if(mult){
     group_by_at(.vars=stratum_labels) %>%
       # now we're done with observation level stuff, so remove the columns
       # that we don't need
-      select(!!stratum_labels, Sample.Label, Area, n, Nc, transect_n, Effort,
-             Covered_area, df_var, transect_Nc, group_var, group_mean,
-             Nc_cuecorrected, rate_SE, rate, rate_df, rate_CV, p_var, p_average,
-             transect_n_observations) %>%
+      select(!!stratum_labels, "Sample.Label", "Area", "n", "Nc", "transect_n", "Effort",
+             "Covered_area", "df_var", "transect_Nc", "group_var", "group_mean",
+             "Nc_cuecorrected", "rate_SE", "rate", "rate_df", "rate_CV", "p_var", "p_average",
+             "transect_n_observations") %>%
       # keep only unique rows
       distinct()
 
 # TODO: fix
 if(mult){
   res <- res %>%
-    mutate(Nc = Nc_cuecorrected) %>%
-    mutate(transect_Nc = transect_Nc/rate)
+    mutate(Nc = .data$Nc_cuecorrected) %>%
+    mutate(transect_Nc = .data$transect_Nc/.data$rate)
 }
   # save ungrouped version for summary calculation later
   resT <- ungroup(res)
@@ -459,13 +465,13 @@ if(mult){
   # calculate final summaries
   res <- res %>%
     # number of transects, total effort and covered area per stratum
-    mutate(k = length(Sample.Label),
-           Effort = sum(Effort),
-           Covered_area = sum(Covered_area)) %>%
+    mutate(k = length(.data$Sample.Label),
+           Effort = sum(.data$Effort),
+           Covered_area = sum(.data$Covered_area)) %>%
     ## keep only these columns
-    select(!!stratum_labels, Area, Nc, n, ER_var, Effort, k,
-           Covered_area, df_var, group_var, group_mean, ER_var_Nhat,
-           rate_SE, rate, rate_df, rate_CV, p_var, p_average) %>%
+    select(!!stratum_labels, "Area", "Nc", "n", "ER_var", "Effort", "k",
+           "Covered_area", "df_var", "group_var", "group_mean", "ER_var_Nhat",
+           "rate_SE", "rate", "rate_df", "rate_CV", "p_var", "p_average") %>%
     ## now just get the distinct cases
     distinct()
     # calculate stratum encounter rate
@@ -474,19 +480,19 @@ if(mult){
   # encounter rate calculation
   if(stratification=="object"){
     res <- res %>%
-      mutate(ER = sum(n)/Effort)
+      mutate(ER = sum(.data$n)/.data$Effort)
   }else{
     res <- res %>%
-      mutate(ER = n/Effort)
+      mutate(ER = .data$n/.data$Effort)
   }
   res <- res %>%
-    mutate(ER_CV = sqrt(ER_var)/ER,
-           ER_df = compute_df(k, type=er_est)) %>%
+    mutate(ER_CV = sqrt(.data$ER_var)/.data$ER,
+           ER_df = compute_df(.data$k, type=er_est)) %>%
     # calculate stratum abundance estimate
-    mutate(Abundance = (Area/Covered_area) * Nc) %>%
-    mutate(df_CV = sqrt(df_var)/Abundance) %>%
-    mutate(group_CV = if_else(group_var==0, 0,
-                              sqrt(group_var)/group_mean))
+    mutate(Abundance = (.data$Area/.data$Covered_area) * .data$Nc) %>%
+    mutate(df_CV = sqrt(.data$df_var)/.data$Abundance) %>%
+    mutate(group_CV = if_else(.data$group_var==0, 0,
+                              sqrt(.data$group_var)/.data$group_mean))
 
 #if(!is.null(grouped)){
 #  res <- res %>%
@@ -505,23 +511,23 @@ if(mult){
 #  vcov <- solvecov(ddf$hessian)$inv
 #
 #  res <- res %>%
-#    mutate(scale     = Area/Covered_area) %>%
-#    mutate(group_cov = covn(group_Effort/(scale*sum(Effort)),
-#                            group_Abundance/scale,
-#                            Abundance/scale,
+#    mutate(scale     = .data$Area/.data$Covered_area) %>%
+#    mutate(group_cov = covn(.data$group_Effort/(scale*sum(.data$Effort)),
+#                            .data$group_Abundance/scale,
+#                            .data$Abundance/scale,
 #                            er_est)) %>%
 #    # cov.Nc.Ncs <- as.vector(by(obs$size*(1 - obs$pdot)/obs$pdot^2,
 #    #                            obs$Region.Label, sum))
-#    mutate(group_cov  = (group_cov +
+#    mutate(group_cov  = (.data$group_cov +
 #                         diag(t(gr_var$partial)%*%
 #                          vcov%*%
 #                          df_Nhat_unc$partial))^2) %>%
-#    mutate(group_mean = group_Abundance_CV^2 +
-#                         Abundance_CV^2 -
-#                         2*group_cov/
-#                        (Abundance * group_Abundance)) %>%
-#    mutate(group_CV = if_else(group_var==0, 0,
-#                              sqrt(group_var)/group_mean))
+#    mutate(group_mean = .data$group_Abundance_CV^2 +
+#                         .data$Abundance_CV^2 -
+#                         2*.data$group_cov/
+#                        (.data$Abundance * .data$group_Abundance)) %>%
+#    mutate(group_CV = if_else(.data$group_var==0, 0,
+#                              sqrt(.data$group_var)/.data$group_mean))
 #  res$scale <- NULL
 #  res$group_Abundance_CV <- NULL
 #  res$group_Abundance <- NULL
@@ -529,30 +535,30 @@ if(mult){
 
   # se and CV
   res <- res %>%
-    mutate(Abundance_CV = sqrt(sum(c(ER_CV^2,
-                                     df_CV^2,
-                                     rate_CV^2,
-                                     group_CV^2),
+    mutate(Abundance_CV = sqrt(sum(c(.data$ER_CV^2,
+                                     .data$df_CV^2,
+                                     .data$rate_CV^2,
+                                     .data$group_CV^2),
                                    na.rm=TRUE)))%>%
-    mutate(Abundance_se = Abundance_CV*Abundance) %>%
+    mutate(Abundance_se = .data$Abundance_CV*.data$Abundance) %>%
     distinct()
 
   # total degrees of freedom and CI calculation
   res <- res %>%
-    mutate(df = Abundance_CV^4/
-                  sum(c(if_else(k==1, 0, ER_CV^4/ER_df),
-                        df_CV^4/(length(ddf$fitted) - length(ddf$par)),
-                        group_CV^4/(n-1),
-                        rate_CV^4/rate_df),
+    mutate(df = .data$Abundance_CV^4/
+                  sum(c(if_else(.data$k==1, 0, .data$ER_CV^4/.data$ER_df),
+                        .data$df_CV^4/(length(ddf$fitted) - length(ddf$par)),
+                        .data$group_CV^4/(.data$n-1),
+                        .data$rate_CV^4/.data$rate_df),
                    na.rm=TRUE)) %>%
     # adjust if df is too small
-    mutate(df = if_else(Abundance_CV==0, 1, df)) %>%
+    mutate(df = if_else(.data$Abundance_CV==0, 1, .data$df)) %>%
     # big C for Satterthwaite
-    mutate(bigC = exp((abs(qt(ci_width, df)) *
-                   sqrt(log(1 + Abundance_CV^2))))) %>%
+    mutate(bigC = exp((abs(qt(ci_width, .data$df)) *
+                   sqrt(log(1 + .data$Abundance_CV^2))))) %>%
     # actually calculate the cis
-    mutate(LCI = if_else(Abundance_CV==0, Abundance, Abundance/bigC),
-           UCI = if_else(Abundance_CV==0, Abundance, Abundance*bigC)) %>%
+    mutate(LCI = if_else(.data$Abundance_CV==0, .data$Abundance, .data$Abundance / .data$bigC),
+           UCI = if_else(.data$Abundance_CV==0, .data$Abundance, .data$Abundance * .data$bigC)) %>%
     # done!
     ungroup() %>%
     distinct()
@@ -584,21 +590,21 @@ if(mult){
     # rate portion of variance (df.total)
 
       dat_row <- dat_row %>%
-        mutate(n  = sum(n))
+        mutate(n  = sum(.data$n))
       #### stratification options
       ## in Distance for Windows these are in density
       if(stratification=="geographical"){
         # "weighting by area"
         #  which is adding up the abundances
         dat_row <- dat_row %>%
-          mutate(ER_var       = sum(ER_var, na.rm=TRUE)) %>%
-          mutate(ER_var_Nhat  = sum(ER_var_Nhat, na.rm=TRUE)) %>%
+          mutate(ER_var       = sum(.data$ER_var, na.rm=TRUE)) %>%
+          mutate(ER_var_Nhat  = sum(.data$ER_var_Nhat, na.rm=TRUE)) %>%
           mutate(weight       = 1,
-                 Area         = sum(Area),
-                 Covered_area = sum(Covered_area),
-                 Effort       = sum(Effort),
-                 k            = sum(k)) %>%
-          mutate(ER_df = ER_var_Nhat^2/sum((res$ER_var_Nhat^2/ER_df)))
+                 Area         = sum(.data$Area),
+                 Covered_area = sum(.data$Covered_area),
+                 Effort       = sum(.data$Effort),
+                 k            = sum(.data$k)) %>%
+          mutate(ER_df = .data$ER_var_Nhat^2/sum((res$ER_var_Nhat^2/.data$ER_df)))
       }else if(stratification %in% c("effort_sum", "replicate")){
         # check that all areas are the same value
         if(length(unique(dat_row$Area))>1 &
@@ -616,28 +622,28 @@ if(mult){
         }
         # replicates, 2 different ways
         dat_row <- dat_row %>%
-          mutate(weight       = xt * Effort/sum(Effort)) %>%
-          mutate(ER_var       = sum((Effort/sum(Effort))^2*ER_var,
+          mutate(weight       = xt * .data$Effort/sum(.data$Effort)) %>%
+          mutate(ER_var       = sum((.data$Effort/sum(.data$Effort))^2*.data$ER_var,
                                     na.rm=TRUE)) %>%
-          mutate(ER_var_Nhat  = sum(weight^2*ER_var_Nhat,
+          mutate(ER_var_Nhat  = sum(.data$weight^2*.data$ER_var_Nhat,
                                     na.rm=TRUE)) %>%
-          mutate(ER_df        = ER_var_Nhat^2/sum(
-                                  ((weight^2 * res$ER_var_Nhat)^2/ER_df)))%>%
+          mutate(ER_df        = .data$ER_var_Nhat^2/sum(
+                                  ((.data$weight^2 * res$ER_var_Nhat)^2/.data$ER_df)))%>%
           mutate(Area         = total_area,
-                 Covered_area = sum(Covered_area),
-                 Effort       = sum(Effort),
-                 k            = sum(k))
+                 Covered_area = sum(.data$Covered_area),
+                 Effort       = sum(.data$Effort),
+                 k            = sum(.data$k))
       }else if(stratification=="object"){
         # things you want to add up like object type
         dat_row <- dat_row %>%
-          mutate(ER_var       = sum(ER_var, na.rm=TRUE)) %>%
-          mutate(ER_var_Nhat  = sum(ER_var_Nhat, na.rm=TRUE)) %>%
+          mutate(ER_var       = sum(.data$ER_var, na.rm=TRUE)) %>%
+          mutate(ER_var_Nhat  = sum(.data$ER_var_Nhat, na.rm=TRUE)) %>%
           mutate(weight       = 1,
-                 Covered_area = Covered_area[1],
-                 Area         = Area[1],
-                 Effort       = Effort[1],
-                 k            = k[1]) %>%
-          mutate(ER_df        = ER_var_Nhat^2/sum((res$ER_var_Nhat^2/ER_df)))
+                 Covered_area = .data$Covered_area[1],
+                 Area         = .data$Area[1],
+                 Effort       = .data$Effort[1],
+                 k            = .data$k[1]) %>%
+          mutate(ER_df        = .data$ER_var_Nhat^2/sum((res$ER_var_Nhat^2/.data$ER_df)))
       }else{
         # TODO: move to top
         stop("Invalid weighting option")
@@ -645,13 +651,13 @@ if(mult){
 
       # calculate the weighted abundance
       dat_row <- dat_row %>%
-        mutate(ER         = n/Effort) %>%
-        mutate(ER_CV      = if_else(ER==0, 0, sqrt(ER_var)/ER)) %>%
-        mutate(Abundance  = sum(weight*Abundance)) %>%
-        mutate(group_mean = mean(group_mean),
-               group_var  = sum(group_var)) %>%
-        mutate(group_CV   = if_else(group_var==0, 0,
-                                    sqrt(group_var)/group_mean))
+        mutate(ER         = .data$n/.data$Effort) %>%
+        mutate(ER_CV      = if_else(.data$ER==0, 0, sqrt(.data$ER_var)/.data$ER)) %>%
+        mutate(Abundance  = sum(.data$weight*.data$Abundance)) %>%
+        mutate(group_mean = mean(.data$group_mean),
+               group_var  = sum(.data$group_var)) %>%
+        mutate(group_CV   = if_else(.data$group_var==0, 0,
+                                    sqrt(.data$group_var)/.data$group_mean))
 
 
       # calculate total variance for detection function
@@ -692,10 +698,10 @@ if(mult){
 
 
       dat_row <- dat_row %>%
-        mutate(Nc = sum(weight*Nc),
+        mutate(Nc = sum(.data$weight*.data$Nc),
                df_var = df_tvar[1,1]) %>%
         mutate(Abundance_se = sqrt(tvar)) %>%
-        mutate(Abundance_CV = Abundance_se/Abundance) %>%
+        mutate(Abundance_CV = .data$Abundance_se/.data$Abundance) %>%
         mutate(df=NA,
                bigC = NA,
                LCI = NA,
@@ -709,27 +715,27 @@ if(mult){
       dat_row <- dat_row %>%
         # compute degrees of freedom
         # CV weights for Satterthwaite df
-        mutate(wtcv = sum(c((sqrt(ER_var_Nhat)/Abundance)^4/ER_df,
-                            (df_tvar/Abundance^2)^2/(length(ddf$fitted) - length(ddf$par)),
-                            (rate_SE/Abundance)^4/rate_df,
-                            (group_var/Abundance^2)^2/(n-1)),
+        mutate(wtcv = sum(c((sqrt(.data$ER_var_Nhat)/.data$Abundance)^4/.data$ER_df,
+                            (df_tvar/.data$Abundance^2)^2/(length(ddf$fitted) - length(ddf$par)),
+                            (.data$rate_SE/.data$Abundance)^4/.data$rate_df,
+                            (.data$group_var/.data$Abundance^2)^2/(.data$n-1)),
                           na.rm=TRUE)) %>%
         # calculate Satterthwaite df
-        mutate(df = sum(c((sqrt(ER_var_Nhat)/Abundance)^2,
-                          (sqrt(df_tvar)/Abundance)^2,
-                          (rate_SE/Abundance)^2,
-                          (sqrt(group_var)/Abundance)^2),
+        mutate(df = sum(c((sqrt(.data$ER_var_Nhat)/.data$Abundance)^2,
+                          (sqrt(.data$df_tvar)/.data$Abundance)^2,
+                          (.data$rate_SE/.data$Abundance)^2,
+                          (sqrt(.data$group_var)/.data$Abundance)^2),
                         na.rm=TRUE)^2) %>%
-        mutate(df = df/wtcv)
+        mutate(df = .data$df/.data$wtcv)
       # drop weight column
       dat_row$wtcv <- NULL
 
       # actually calculate the CIs
       dat_row <- dat_row %>%
-        mutate(bigC = exp((abs(qt(ci_width, df)) *
-                       sqrt(log(1 + Abundance_CV^2))))) %>%
-        mutate(LCI = Abundance/bigC,
-               UCI = Abundance*bigC)
+        mutate(bigC = exp((abs(qt(ci_width, .data$df)) *
+                       sqrt(log(1 + .data$Abundance_CV^2))))) %>%
+        mutate(LCI = .data$Abundance / .data$bigC,
+               UCI = .data$Abundance * .data$bigC)
 
       this_stra_row <- as.data.frame(c(this_stra_row, dat_row))
 
@@ -753,19 +759,19 @@ if(mult){
   }else{
     # generate density results too!
     dens_res <- res %>%
-      mutate(Density = Abundance/Area,
-             df_var = df_var/Area^2) %>%
-      mutate(Density_se = sqrt(Abundance_se^2/Area^2)) %>%
-      mutate(Density_CV = Density_se/Density) %>%
-      mutate(bigC = exp((abs(qt(ci_width, df)) *
-                     sqrt(log(1 + Density_CV^2))))) %>%
-      mutate(LCI   = Density/bigC,
-             UCI   = Density*bigC,
-             Area  = Covered_area) %>%
-      select(!!stratum_labels, Area, n, ER_var, Effort, k,
-             Density, Density_CV, Density_se, UCI, LCI, df,
-             Covered_area, df_var, group_var, group_mean,
-             rate_SE, rate, rate_df, rate_CV, p_var, p_average)
+      mutate(Density = .data$Abundance/.data$Area,
+             df_var = .data$df_var/.data$Area^2) %>%
+      mutate(Density_se = sqrt(.data$Abundance_se^2/.data$Area^2)) %>%
+      mutate(Density_CV = .data$Density_se/.data$Density) %>%
+      mutate(bigC = exp((abs(qt(ci_width, .data$df)) *
+                     sqrt(log(1 + .data$Density_CV^2))))) %>%
+      mutate(LCI   = .data$Density / .data$bigC,
+             UCI   = .data$Density * .data$bigC,
+             Area  = .data$Covered_area) %>%
+      select(!!stratum_labels, "Area", "n", "ER_var", "Effort", "k",
+             "Density", "Density_CV", "Density_se", "UCI", "LCI", "df",
+             "Covered_area", "df_var", "group_var", "group_mean",
+             "rate_SE", "rate", "rate_df", "rate_CV", "p_var", "p_average")
 
     # store this
     attr(res, "density") <- dens_res

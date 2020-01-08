@@ -10,6 +10,8 @@
 \item{object}{output from \code{bootdht}}
 
 \item{alpha}{value to use in confidence interval calculation (to obtain \code{alpha}/2 and 1-\code{alpha}/2 intervals}
+
+\item{...}{for S3 compatability, unused.}
 }
 \value{
 a \code{data.frame} of summary statistics

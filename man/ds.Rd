@@ -4,16 +4,29 @@
 \alias{ds}
 \title{Fit detection functions and calculate abundance from line or point transect data}
 \usage{
-ds(data, truncation = ifelse(is.null(cutpoints),
-  ifelse(is.null(data$distend), max(data$distance), max(data$distend)),
-  max(cutpoints)), transect = c("line", "point"), formula = ~1,
-  key = c("hn", "hr", "unif"), adjustment = c("cos", "herm", "poly"),
-  order = NULL, scale = c("width", "scale"), cutpoints = NULL,
-  dht.group = FALSE, monotonicity = ifelse(formula == ~1, "strict",
-  "none"), region.table = NULL, sample.table = NULL,
-  obs.table = NULL, convert.units = 1, method = "nlminb",
-  quiet = FALSE, debug.level = 0, initial.values = NULL,
-  max.adjustments = 5)
+ds(
+  data,
+  truncation = ifelse(is.null(cutpoints), ifelse(is.null(data$distend),
+    max(data$distance), max(data$distend)), max(cutpoints)),
+  transect = c("line", "point"),
+  formula = ~1,
+  key = c("hn", "hr", "unif"),
+  adjustment = c("cos", "herm", "poly"),
+  order = NULL,
+  scale = c("width", "scale"),
+  cutpoints = NULL,
+  dht.group = FALSE,
+  monotonicity = ifelse(formula == ~1, "strict", "none"),
+  region.table = NULL,
+  sample.table = NULL,
+  obs.table = NULL,
+  convert.units = 1,
+  method = "nlminb",
+  quiet = FALSE,
+  debug.level = 0,
+  initial.values = NULL,
+  max.adjustments = 5
+)
 }
 \arguments{
 \item{data}{a \code{data.frame} containing at least a column called

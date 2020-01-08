@@ -4,8 +4,7 @@
 \alias{gof_ds}
 \title{Goodness of fit testing and quantile-quantile plots}
 \usage{
-gof_ds(model, plot = TRUE, chisq = FALSE, nboot = 100, ks = FALSE,
-  ...)
+gof_ds(model, plot = TRUE, chisq = FALSE, nboot = 100, ks = FALSE, ...)
 }
 \arguments{
 \item{model}{a fitted detection function.}

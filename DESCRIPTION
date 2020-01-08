@@ -16,8 +16,9 @@ Depends:
     R (>= 3.0),
     mrds (>= 2.2.1)
 Imports:
-    dplyr
+    dplyr,
+    rlang
 Suggests:
     testthat
 Encoding: UTF-8
-RoxygenNote: 6.1.1
+RoxygenNote: 7.0.2

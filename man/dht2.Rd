@@ -4,10 +4,22 @@
 \alias{dht2}
 \title{Abundance estimation for distance sampling models}
 \usage{
-dht2(ddf, observations = NULL, transects = NULL, geo_strat = NULL,
-  flatfile = NULL, strat_formula, convert_units = 1, er_est = c("R2",
-  "P2"), multipliers = NULL, sample_fraction = 1, ci_width = 0.95,
-  innes = FALSE, stratification = "geographical", total_area = NULL)
+dht2(
+  ddf,
+  observations = NULL,
+  transects = NULL,
+  geo_strat = NULL,
+  flatfile = NULL,
+  strat_formula,
+  convert_units = 1,
+  er_est = c("R2", "P2"),
+  multipliers = NULL,
+  sample_fraction = 1,
+  ci_width = 0.95,
+  innes = FALSE,
+  stratification = "geographical",
+  total_area = NULL
+)
 }
 \arguments{
 \item{ddf}{model fitted by \code{\link[Distance]{ds}} or \code{\link[mrds]{ddf}}}
