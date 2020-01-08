@@ -28,7 +28,7 @@ ER_var_f <- function(erdat, innes, er_est, est_density){
         warning("Additionally, Sample.Label is not numeric, this may cause additional issues")
       }
       erdat <- erdat %>%
-        mutate(.originalorder = 1:nrow(.data$erdat)) %>%
+        mutate(.originalorder = 1:nrow(erdat)) %>%
         arrange(.data$Sample.Label)
     }
 
