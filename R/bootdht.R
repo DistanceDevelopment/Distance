@@ -89,7 +89,7 @@ bootdht <- function(model,
   # count failures
   nbootfail <- 0
   # function to do a single bootstrap iteration
-  bootit <- function(bootdat, our_resamples, df_call, groups,
+  bootit <- function(bootdat, our_resamples, groups,
                      convert.units, pb){
 
     # sample at the right levels
@@ -160,7 +160,7 @@ bootdht <- function(model,
   pb <- txtProgressBar(0, nboot, style=3)
   # run the code
   boot_ests <- replicate(nboot,
-                         bootit(dat, our_resamples, df_call,
+                         bootit(dat, our_resamples,
                                 summary_fun, convert.units=convert.units,
                                 pb=pb), simplify=FALSE)
 
