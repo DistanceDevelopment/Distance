@@ -16,7 +16,7 @@ ER_var_f <- function(erdat, innes, er_est, est_density){
     erdat <- erdat %>%
       mutate(ER_var_Nhat = (.data$Nc*sum(.data$Effort))^2 *
                              .data$ER_var/sum(.data$transect_n)^2) %>%
-      # if any strata only had one transect:
+      # if any stratum only had one transect:
       mutate(ER_var_Nhat = ifelse(length(unique(.data$Sample.Label))>1,
                                   .data$ER_var_Nhat, 0))
   }else{
