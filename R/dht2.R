@@ -390,7 +390,7 @@ dht2 <- function(ddf, observations=NULL, transects=NULL, geo_strat=NULL,
              # abundance estimate per stratum in covered area
              Nc = sum(.data$Nhat, na.rm=TRUE),
              # covered area per transect
-             Covered_area = area_calc(.data$df_width, .data$Effort,
+             Covered_area = area_calc(df_width, .data$Effort,
                                       transect_type, sample_fraction),
              # get group size stats
              group_var  = if_else(.data$n_observations>1,
