@@ -722,7 +722,7 @@ if(mult){
                           na.rm=TRUE)) %>%
         # calculate Satterthwaite df
         mutate(df = sum(c((sqrt(.data$ER_var_Nhat)/.data$Abundance)^2,
-                          (sqrt(.data$df_tvar)/.data$Abundance)^2,
+                          (sqrt(df_tvar)/.data$Abundance)^2,
                           (.data$rate_SE/.data$Abundance)^2,
                           (sqrt(.data$group_var)/.data$Abundance)^2),
                         na.rm=TRUE)^2) %>%
