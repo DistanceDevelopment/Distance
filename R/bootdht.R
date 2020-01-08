@@ -23,7 +23,7 @@
 #' }
 #' The last of these options can be very time consuming!
 #' @importFrom utils txtProgressBar setTxtProgressBar getTxtProgressBar
-#' @importFrom stats as.formula
+#' @importFrom stats as.formula AIC
 #' @importFrom mrds ddf dht
 #' @seealso \code{\link{summary.dht_bootstrap}} for how to summarize the results
 #' @export
