@@ -28,7 +28,7 @@
 #' @seealso \code{\link{summary.dht_bootstrap}} for how to summarize the results
 #' @export
 #' @examples
-#' # Not run:
+#' \dontrun{
 #' # fit a model to the minke data
 #' data(minke)
 #' mod1 <- ds(minke)
@@ -43,6 +43,7 @@
 #'
 #' # obtain basic summary information
 #' summary(bootout)
+#' }
 bootdht <- function(model,
                     flatfile,
                     resample_strata=FALSE,

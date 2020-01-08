@@ -4,9 +4,17 @@
 \alias{bootdht}
 \title{Bootstrap uncertainty estimation for distance sampling models}
 \usage{
-bootdht(model, flatfile, resample_strata = FALSE, resample_obs = FALSE,
-  resample_transects = TRUE, nboot = 100, summary_fun,
-  convert.units = 1, select_adjustments = FALSE)
+bootdht(
+  model,
+  flatfile,
+  resample_strata = FALSE,
+  resample_obs = FALSE,
+  resample_transects = TRUE,
+  nboot = 100,
+  summary_fun,
+  convert.units = 1,
+  select_adjustments = FALSE
+)
 }
 \arguments{
 \item{model}{a model fitted by \code{\link{ds}} or a list of models}
@@ -48,7 +56,7 @@ The last of these options can be very time consuming!
 }
 
 \examples{
-# Not run:
+\dontrun{
 # fit a model to the minke data
 data(minke)
 mod1 <- ds(minke)
@@ -63,6 +71,7 @@ bootout <- bootdht(mod1, flatfile=minke, summary_fun=Nhat_summarize, nboot=5)
 
 # obtain basic summary information
 summary(bootout)
+}
 }
 \seealso{
 \code{\link{summary.dht_bootstrap}} for how to summarize the results
