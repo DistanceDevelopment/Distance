@@ -100,6 +100,8 @@ This function fits detection functions to line or point transect data and then (
 \section{Details}{
 
 If abundance estimates are required then the \code{data.frame}s \code{region.table} and \code{sample.table} must be supplied. If \code{data} does not contain the columns \code{Region.Label} and \code{Sample.Label} then the \code{data.frame} \code{obs.table} must also be supplied. Note that stratification only applies to abundance estimates and not at the detection function level.
+
+Examples of distance sampling analyses are available at \url{http://examples.distancesampling.org/}.
 }
 
 \section{Clusters/groups}{

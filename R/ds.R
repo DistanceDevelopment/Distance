@@ -49,6 +49,8 @@
 #' @section Details:
 #' If abundance estimates are required then the \code{data.frame}s \code{region.table} and \code{sample.table} must be supplied. If \code{data} does not contain the columns \code{Region.Label} and \code{Sample.Label} then the \code{data.frame} \code{obs.table} must also be supplied. Note that stratification only applies to abundance estimates and not at the detection function level.
 #'
+#' Examples of distance sampling analyses are available at \url{http://examples.distancesampling.org/}.
+#'
 #' @section Clusters/groups:
 #'  Note that if the data contains a column named \code{size}, cluster size will be estimated and density/abundance will be based on a clustered analysis of the data. Setting this column to be \code{NULL} will perform a non-clustered analysis (for example if "\code{size}" means something else in your dataset).
 #'

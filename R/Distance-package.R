@@ -4,7 +4,7 @@
 #'
 #' Underlying \code{Distance} is the package \code{mrds}, for more advanced analyses (such as those involving double observer surveys) one may find it necessary to use \code{mrds}.
 #'
-#' Further information on distance sampling methods and example code is available at \url{http://distancesampling.org/R/}.
+#' Examples of distance sampling analyses are available at \url{http://examples.distancesampling.org/}.
 #'
 #' For help with distance sampling and this package, there is a Google Group \url{https://groups.google.com/forum/#!forum/distance-sampling}.
 #'
