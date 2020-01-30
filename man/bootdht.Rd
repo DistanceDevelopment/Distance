@@ -11,7 +11,7 @@ bootdht(
   resample_obs = FALSE,
   resample_transects = TRUE,
   nboot = 100,
-  summary_fun,
+  summary_fun = bootdht_Nhat_summarize,
   convert.units = 1,
   select_adjustments = FALSE
 )
@@ -29,7 +29,7 @@ bootdht(
 
 \item{nboot}{number of bootstrap replicates}
 
-\item{summary_fun}{function that is used to obtain summary statistics from the bootstrap, see Summary Functions below.}
+\item{summary_fun}{function that is used to obtain summary statistics from the bootstrap, see Summary Functions below. By default \code{\link{bootdht_Nhat_summarize}} is used, which just extracts abundance estimates.}
 
 \item{convert.units}{conversion between units for abundance estimation, see "Units", below. (Defaults to 1, implying all of the units are "correct" already.)}
 

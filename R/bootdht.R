@@ -9,7 +9,7 @@
 #' @param resample_obs should resampling happen at the observation (\code{object}) level? (Default \code{FALSE})
 #' @param resample_transects should resampling happen at the transect (\code{Sample.Label}) level? (Default \code{TRUE})
 #' @param nboot number of bootstrap replicates
-#' @param summary_fun function that is used to obtain summary statistics from the bootstrap, see Summary Functions below.
+#' @param summary_fun function that is used to obtain summary statistics from the bootstrap, see Summary Functions below. By default \code{\link{bootdht_Nhat_summarize}} is used, which just extracts abundance estimates.
 #' @param select_adjustments select the number of adjustments in each bootstrap, when \code{FALSE} the exact detection function specified in \code{model} is fitted to each replicate. Note that for this to work \code{model} must have been fitted with \code{adjustment!=NULL}.
 #' @section Summary Functions:
 #' The function \code{summary_fun} allows the user to specify what summary statistics should be recorded from each bootstrap. The function should take two arguments, \code{ests} and \code{fit}. The former is the output from \code{dht2}, giving tables of estimates. The latter is the fitted detection function object. The function is called once fitting and estimation has been performed and should return a \code{data.frame}. Those \code{data.frame}s are then concatenated using \code{rbind}. One can make these functions return any information within those objects, for example abundance or density estimates or the AIC for each model. See Examples below.
@@ -50,7 +50,7 @@ bootdht <- function(model,
                     resample_obs=FALSE,
                     resample_transects=TRUE,
                     nboot=100,
-                    summary_fun,
+                    summary_fun=bootdht_Nhat_summarize,
                     convert.units=1,
                     select_adjustments=FALSE){
 
