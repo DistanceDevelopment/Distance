@@ -1,5 +1,5 @@
 Package: Distance
-Maintainer: David L Miller <dave@ninepointeightone.net>
+Maintainer: Laura Marshall <lhm@st-andrews.ac.uk>
 License: GPL (>= 2)
 Title: Distance Sampling Detection Function and Abundance Estimation
 LazyLoad: yes
