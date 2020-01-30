@@ -25,7 +25,7 @@
 #' @importFrom utils txtProgressBar setTxtProgressBar getTxtProgressBar
 #' @importFrom stats as.formula AIC
 #' @importFrom mrds ddf dht
-#' @seealso \code{\link{summary.dht_bootstrap}} for how to summarize the results
+#' @seealso \code{\link{summary.dht_bootstrap}} for how to summarize the results, \code{\link{bootdht_Nhat_summarize}} for an example summary function.
 #' @export
 #' @examples
 #' \dontrun{
