@@ -1,4 +1,4 @@
-Distance version 0.9.9
+Distance version 1.0.0
   * call now saved in the model object as $call
   * Added lots of example data sets
   * new abundance estimation via dht2! Handles more complex situations.
