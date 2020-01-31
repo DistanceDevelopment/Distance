@@ -5,7 +5,7 @@
 #'
 #' @param ests output from \code{\link{dht2}}.
 #' @param fit fitted detection function object (unused).
-#' @return \code{data.frame} with one column ("\code{Nhat}"), containing estimate(s) of abundundance of individuals.
+#' @return \code{data.frame} with one column ("\code{Nhat}"), containing estimate(s) of abundance of individuals from each bootstrap replicate.  This data frame can be examined for example, with \code{quantile} to compute confidence intervals.
 #' @export
 #' @seealso \code{\link{bootdht}}, which this function is to be used with.
 bootdht_Nhat_summarize <- function(ests, fit) {
