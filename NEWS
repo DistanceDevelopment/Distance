@@ -11,7 +11,7 @@ Distance version 0.9.8
   * Added examples to create.bins, ds.gof, gof_ds, summarize_ds_models, logLik.dsmodel and AIC.dsmodel. Thanks to a reviewer of our Journal of Statistical Software paper.
   * Parameters from previous fit are used as starting values for the next fit when AIC is used to select adjustments
   * when distbegin and distend were specified in the data but distance wasn't, checkdata() threw an error. checkdata() now generates the distance column at the midpoint. Thanks to Tom for spotting this.
- * new argument to ds(), max.adjustments gives the maximum number of adjustment terms to add to the model when doing AIC term selection. Thanks to Oscar Dewhurst for the suggestion.
+  * new argument to ds(), max.adjustments gives the maximum number of adjustment terms to add to the model when doing AIC term selection. Thanks to Oscar Dewhurst for the suggestion.
 
 Distance version 0.9.7
   * summarize_ds_models now will only compare models that are allowed by AIC (all binning and truncation must be the same). Thanks to Carolin Tröger and Eric Rextad for highlighting this issue.
