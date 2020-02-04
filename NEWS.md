@@ -1,11 +1,11 @@
-Distance version 1.0.0
+# Distance version 1.0.0
   * call now saved in the model object as $call
   * Added lots of example data sets
   * new abundance estimation via dht2! Handles more complex situations.
   * bootstrap variance estimation via bootdht
   * for more examples see http://examples.distancesampling.org
 
-Distance version 0.9.8
+# Distance version 0.9.8
   * Includes reference and citation for paper on 'Distance Sampling in R'.
   * AIC now works for multiple models at once (as it does for other model classes) thanks to Tiago Marques and Len Thomas for this suggestion.
   * Added examples to create.bins, ds.gof, gof_ds, summarize_ds_models, logLik.dsmodel and AIC.dsmodel. Thanks to a reviewer of our Journal of Statistical Software paper.
@@ -13,11 +13,11 @@ Distance version 0.9.8
   * when distbegin and distend were specified in the data but distance wasn't, checkdata() threw an error. checkdata() now generates the distance column at the midpoint. Thanks to Tom for spotting this.
   * new argument to ds(), max.adjustments gives the maximum number of adjustment terms to add to the model when doing AIC term selection. Thanks to Oscar Dewhurst for the suggestion.
 
-Distance version 0.9.7
+# Distance version 0.9.7
   * summarize_ds_models now will only compare models that are allowed by AIC (all binning and truncation must be the same). Thanks to Carolin Tröger and Eric Rextad for highlighting this issue.
   * If there are numerical issues that cause NAs in the Hessian, ds() will not try to run dht() to estimate abundance (as it will fail), instead throws a message and returns only the detection function. Thanks to Steve Ahlswede for bringing this to our attention.
 
-Distance version 0.9.6
+# Distance version 0.9.6
  * Coefficients are called coefficients (not a mixture of coefficients and parameters) in summary() results
  * Added gof_ds() for easy access to goodness of fit testing and q-q plotting
  * Checking of truncation distance was checking via is.double rather than is.numeric. Thanks to Tiago Marques for spotting this!
@@ -25,64 +25,61 @@ Distance version 0.9.6
  * Added amakihi (point transect) data
  * add extra documentation for objects in obs.table, thanks to Olivier Devineau for spotting this
 
-Distance version 0.9.5
+# Distance version 0.9.5
  * Truncation by percentage now works when there are missing distances (i.e. when we are using flatfile). Thanks to Len Thomas for pointing out this bug.
 
-Distance version 0.9.4
+# Distance version 0.9.4
  * Object ID uniqueness stopped abundance estimation from working (since NA IDs were "not unique").
  * Check that areas are consistently entered. This was problematic when areas were not entered identically for each region, but unique was used to extract the region table. Thanks to Katy Echave for finding this bug!
  * Monotonicity constraints were not applied during automated model selection. Thanks to Tiago Marques for spotting this.
  * AIC selection of adjustment terms goes up to 5 terms by default, as in DISTANCE. Thanks to Eric Rexstad for suggesting this.
 
-Distance version 0.9.3
+# Distance version 0.9.3
  * Updated tests to work with new unique object ID code.
  * Liberally sprinkled tests with suppressMessages()
 
-Distance version 0.9.2
+# Distance version 0.9.2
  * Now warning when columns are correctly named but not in the correct case. Thanks to Richard Borthwick for reporting this bug.
  * Now checks that object IDs are unique. Thanks to Ricardo Lima & Francisco Azevedo for highlighting this issue.
 
-Distance version 0.9.1
+# Distance version 0.9.1
  * Models with both covariates and adjustment terms can actually be specified -- this was not fully implemented in previous version.
  * ds() now tells the user the models which is returned (rather than previously fitted model)
  * links to mrds documentation on optimisation issues
 
-Distance version 0.9
+# Distance version 0.9
  * Flat file support example, see ?flatfile
  * New data set: simulated minke whale data, see ?minke and ?flatfile for an example analysis
  * Models with both covariates and adjustment terms can be specified.
  * Default left truncation is now 0, default right truncation is now the largest observed distance or furthest bin end.
 
-Distance version 0.8.1
+# Distance version 0.8.1
  * another fix to binning (redundant code/inconsistent definition between docs and code). (Thanks to Jason Roberts for finding this.)
  * binning would fail if there were NA distances, which might occur when using the simplified data tables
  * check implemented to ensure that samples have consistent (i.e. the same) effort (Eric Rexstad found this bug)
  * clarification that stratification only occurs at the abundance/density estimation stage (dht), rather than at the detection function modelling stage (thanks to Filipe Dias for this suggestion)
  * Setting order=0 is equivalent to adjustment=NULL to specify a detection function without adjustments. (Eric Rexstad brought this to my attention.)
 
-
-Distance version 0.8.0
+# Distance version 0.8.0
  * new simplified table data format (see ?ds)
  * bug in binning from cutpoints (thanks to Colin Beale for finding this)
  * removed percentage truncation for binned data, as it doesn't really make sense
 
-Distance version 0.7.4
+# Distance version 0.7.4
  * new initial values argument
 
-Distance version 0.7.3
+# Distance version 0.7.3
  * remove annoying crash when mrds failed to fit a model
  * NB the optimiser underlying mrds (optimx) has changed, update both of these
     packages to avoid issues.
 
-Distance version 0.7.2
+# Distance version 0.7.2
  * message tells the user the model that was selected
 
-Distance version 0.7.1
+# Distance version 0.7.1
  * debugging options
  * bug fixes (see github for further details)
    - automatic generation of adjustments did not generate any for poly/herm.
 
-
-Distance version 0.7
+# Distance version 0.7
  * "width" is now default for scaling
-
