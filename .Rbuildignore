@@ -7,3 +7,4 @@ LICENSE
 ^.*\.Rproj$
 ^\.Rproj\.user$
 cran-comments.md
+^CRAN-RELEASE$
