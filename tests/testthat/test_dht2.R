@@ -10,6 +10,7 @@ egdata <- book.tee.data$book.tee.dataframe
 # take only observer 1 data
 egdata <- egdata[egdata$observer==1,]
 
+obsold <- obs
 obs <- merge(obs, egdata, by="object")
 obs$Region.Label <- NULL
 obs$distance <- NULL
@@ -19,6 +20,60 @@ obs$sex <- NULL
 obs$exposure <- NULL
 
 ds.dht.model <- suppressMessages(ds(egdata,4))
+
+
+#test_that("error thrown if geo strat but object",{
+#
+#
+#obs2 <- obs
+#obs2$size <- NULL
+#ff <- merge(region, samples, by="Region.Label", all.x=TRUE)
+#ff <- merge(ff, obs2, by="Sample.Label", all.x=TRUE)
+#ff <- merge(ff, egdata, by="object", all.x=TRUE)
+#
+#ff <- ff[, c("Region.Label", "Area","Sample.Label", "Effort", "size", "distance")]
+#
+#dd <- dht2(ds.dht.model, flatfile=ff, strat_formula=~Region.Label)
+#
+#dd <- dht2(ds.dht.model, flatfile=ff,
+#           strat_formula=~Region.Label, stratification="object")
+#
+#dd <- dht2(ds.dht.model, flatfile=ff,
+#           strat_formula=~as.factor(Region.Label))
+#
+#ff$fa <- as.factor(ff$Region.Label)
+#dd <- dht2(ds.dht.model, flatfile=ff,
+#           strat_formula=~fa)
+#
+##  expect_error(dht2(ds.dht.model, obs, samples, region,
+##                    strat_formula=~Region.Label, stratification="object"),
+##    "Levels of Region.Label are different in `geo_strat` and `transects`")
+#
+#  dd <- dht2(ds.dht.model, obs, samples, region,
+#             strat_formula=~as.factor(Region.Label))
+#})
+
+test_that("as.factor works in formula",{
+
+  obs2 <- obs
+  obs2$size <- NULL
+  ff <- merge(region, samples, by="Region.Label", all.x=TRUE)
+  ff <- merge(ff, obs2, by="Sample.Label", all.x=TRUE)
+  ff <- merge(ff, egdata, by="object", all.x=TRUE)
+  ff_formfac <- dht2(ds.dht.model, flatfile=ff,
+                  strat_formula=~as.factor(Region.Label))
+  formfac <- dht2(ds.dht.model, obs, samples, region,
+                  strat_formula=~as.factor(Region.Label))
+
+
+  ff$Region.Label <- as.factor(ff$Region.Label)
+  ff_prefac <- dht2(ds.dht.model, flatfile=ff, strat_formula=~Region.Label)
+  prefac <- dht2(ds.dht.model, obs, samples, region, strat_formula=~Region.Label)
+
+  expect_equivalent(prefac, formfac)
+  expect_equivalent(ff_prefac, ff_formfac)
+})
+
 
 test_that("error thrown if geo stratum levels are mismatched",{
 
@@ -67,4 +122,8 @@ test_that("undropped individual stratum covar levels don't cause errors",{
 
   expect_equivalent(d1, d2)
 })
+
+
+
+
 

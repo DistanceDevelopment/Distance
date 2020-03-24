@@ -121,6 +121,8 @@ dht2 <- function(ddf, observations=NULL, transects=NULL, geo_strat=NULL,
 
   if(!is.null(observations) & !is.null(transects)){
     if(!is.null(geo_strat)){
+      # what if there were as.factor()s in the formula?
+      geo_strat <- safe_factorize(strat_formula, geo_strat)
       # which occur at the geo level?
       geo_stratum_labels <- stratum_labels[stratum_labels %in%
                                            colnames(geo_strat)]
@@ -131,6 +133,9 @@ dht2 <- function(ddf, observations=NULL, transects=NULL, geo_strat=NULL,
 # list of protected column names that can't be in the data
 # protected <- c("p", ".Label", )
 
+    # what if there were as.factor()s in the formula?
+    transects <- safe_factorize(strat_formula, transects)
+    observations <- safe_factorize(strat_formula, observations)
 
     # TODO: do some data checking at this point
     # - check duplicate column names (e.g., obs$sex and df$data$sex)
@@ -190,10 +195,12 @@ dht2 <- function(ddf, observations=NULL, transects=NULL, geo_strat=NULL,
   }else if(!is.null(flatfile)){
     # if we have a flatfile
     # TODO: check flatfile format here
-    # TODO: check that unqiue(Area, stratum_labels) make sense
 
     flatfile <- safetruncate(flatfile, ddf$meta.data$width, ddf$meta.data$left)
     bigdat <- flatfile
+
+    # what if there were as.factor()s in the formula?
+    bigdat <- safe_factorize(strat_formula, bigdat)
 
     # get probabilities of detection
     pp <- predict(ddf, bigdat, compute=TRUE)$fitted
@@ -242,6 +249,7 @@ dht2 <- function(ddf, observations=NULL, transects=NULL, geo_strat=NULL,
   }else{
     stop("Need to supply either observations, transects and geo_strat OR flatfile")
   }
+
 
   # merge-in multipliers
   if(!is.null(multipliers)){
@@ -743,7 +751,7 @@ if(mult){
         mutate(LCI = .data$Abundance / .data$bigC,
                UCI = .data$Abundance * .data$bigC)
 
-      this_stra_row <- as.data.frame(c(this_stra_row, dat_row))
+      this_stra_row <- cbind.data.frame(this_stra_row, dat_row)
 
       res <- rbind(res, this_stra_row)
     }
