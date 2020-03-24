@@ -139,6 +139,12 @@ dht2 <- function(ddf, observations=NULL, transects=NULL, geo_strat=NULL,
     dht2_checkdata(ddf, observations, transects, geo_strat, strat_formula,
                    stratum_labels, geo_stratum_labels)
 
+    # drop unused levels of factors
+    ddf$data <- droplevels(ddf$data)
+    observations <- droplevels(observations)
+    transects <- droplevels(transects)
+    geo_strat <- droplevels(geo_strat)
+
     # prepare data
     obj_keep <- ddf$data$object[ddf$data$distance <= ddf$ds$aux$width &
                                 ddf$data$distance >= ddf$ds$aux$left]
