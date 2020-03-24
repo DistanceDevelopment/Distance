@@ -106,7 +106,7 @@ dht2 <- function(ddf, observations=NULL, transects=NULL, geo_strat=NULL,
       ff$size <- 1
       mc$flatfile <- ff
     }
-    grouped <- eval(mc, parent.frame())
+    grouped <- eval.parent(mc)
     rm(dddf, mc)
   }else{
     grouped <- NULL
