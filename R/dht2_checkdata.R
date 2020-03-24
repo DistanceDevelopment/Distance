@@ -45,18 +45,20 @@ dht2_checkdata <- function(ddf, observations, transects, geo_strat, strat_formul
 
   # check that if geo_stratum_labels are factors in one data.frame,
   # they are in both!
-  if(!all(is.factor(geo_strat[[geo_stratum_labels]]) &
-          is.factor(transects[[geo_stratum_labels]]))){
-    stop(paste("Columns:",
-               paste(geo_stratum_labels[is.factor(geo_strat[[geo_stratum_labels]])], collapse=", "),
-               "are factors in `geo_strat` are not factors in `transects`"))
-  }else{
-    # check that even if they are factors, the levels are the same!
-    for(geo_lev in geo_stratum_labels){
-      if(!all(sort(levels(geo_strat[[geo_lev]]))==
-         sort(levels(transects[[geo_lev]])))){
-        stop(paste("Levels of", geo_lev,
-                   "are different in `geo_strat` and `transects`"))
+  if(length(geo_stratum_labels) > 0){
+    if(!all(is.factor(geo_strat[[geo_stratum_labels]]) &
+            is.factor(transects[[geo_stratum_labels]]))){
+      stop(paste("Columns:",
+                 paste(geo_stratum_labels[is.factor(geo_strat[[geo_stratum_labels]])], collapse=", "),
+                 "are factors in `geo_strat` are not factors in `transects`"))
+    }else{
+      # check that even if they are factors, the levels are the same!
+      for(geo_lev in geo_stratum_labels){
+        if(!all(sort(levels(geo_strat[[geo_lev]]))==
+           sort(levels(transects[[geo_lev]])))){
+          stop(paste("Levels of", geo_lev,
+                     "are different in `geo_strat` and `transects`"))
+        }
       }
     }
   }
