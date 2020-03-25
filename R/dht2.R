@@ -196,11 +196,29 @@ dht2 <- function(ddf, observations=NULL, transects=NULL, geo_strat=NULL,
     # if we have a flatfile
     # TODO: check flatfile format here
 
+    # check regular columns exist
+    flatfile_labels <- c("distance", "object", "Sample.Label", "Effort", "Area")
+    if(!all(flatfile_labels %in% names(flatfile))){
+      stop(paste("Column(s):",
+                 paste(flatfile_labels[!(flatfile_labels %in% names(flatfile))],
+                       collapse=", "),
+                 "not in `flatfile`"))
+    }
+    # safely truncate the data, respecting the data structure
     flatfile <- safetruncate(flatfile, ddf$meta.data$width, ddf$meta.data$left)
     bigdat <- flatfile
 
     # what if there were as.factor()s in the formula?
     bigdat <- safe_factorize(strat_formula, bigdat)
+
+    # check strat columns are in the data
+    if(!all(stratum_labels %in% names(bigdat))){
+      stop(paste("Column(s):",
+                 paste(stratum_labels[!(stratum_labels %in% names(bigdat))],
+                       collapse=", "),
+                 "not in `flatfile`"))
+    }
+
 
     # get probabilities of detection
     pp <- predict(ddf, bigdat, compute=TRUE)$fitted

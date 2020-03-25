@@ -19,6 +19,13 @@ obs$detected <- NULL
 obs$sex <- NULL
 obs$exposure <- NULL
 
+# make a flatfile version
+obs2 <- obs
+obs2$size <- NULL
+ff <- merge(region, samples, by="Region.Label", all.x=TRUE)
+ff <- merge(ff, obs2, by="Sample.Label", all.x=TRUE)
+ff <- merge(ff, egdata, by="object", all.x=TRUE)
+
 ds.dht.model <- suppressMessages(ds(egdata,4))
 
 
@@ -55,11 +62,6 @@ ds.dht.model <- suppressMessages(ds(egdata,4))
 
 test_that("as.factor works in formula",{
 
-  obs2 <- obs
-  obs2$size <- NULL
-  ff <- merge(region, samples, by="Region.Label", all.x=TRUE)
-  ff <- merge(ff, obs2, by="Sample.Label", all.x=TRUE)
-  ff <- merge(ff, egdata, by="object", all.x=TRUE)
   ff_formfac <- dht2(ds.dht.model, flatfile=ff,
                   strat_formula=~as.factor(Region.Label))
   formfac <- dht2(ds.dht.model, obs, samples, region,
@@ -72,6 +74,14 @@ test_that("as.factor works in formula",{
 
   expect_equivalent(prefac, formfac)
   expect_equivalent(ff_prefac, ff_formfac)
+})
+
+test_that("error thrown if stratum name doesn't exist in flatfile",{
+
+  expect_error(dht2(ds.dht.model, flatfile=ff,
+                    strat_formula=~year+boop),
+               "Column\\(s\\): year, boop not in \\`flatfile\\`")
+
 })
 
 
