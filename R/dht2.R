@@ -197,7 +197,7 @@ dht2 <- function(ddf, observations=NULL, transects=NULL, geo_strat=NULL,
     # TODO: check flatfile format here
 
     # check regular columns exist
-    flatfile_labels <- c("distance", "object", "Sample.Label", "Effort", "Area")
+    flatfile_labels <- c("distance", "Sample.Label", "Effort", "Area")
     if(!all(flatfile_labels %in% names(flatfile))){
       stop(paste("Column(s):",
                  paste(flatfile_labels[!(flatfile_labels %in% names(flatfile))],
