@@ -19,7 +19,6 @@
 #' @author David L Miller
 #' @export
 #' @importFrom stats predict
-#' @importFrom mrds predict.ds
 predict.dsmodel <- function(object, newdata=NULL, compute=FALSE,
                             esw=FALSE, se.fit=FALSE, ...){
   predict(object$ddf, newdata, compute, esw, se.fit, int.range=NULL, ...)
