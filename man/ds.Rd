@@ -21,6 +21,7 @@ ds(
   sample.table = NULL,
   obs.table = NULL,
   convert.units = 1,
+  er.var = "R2",
   method = "nlminb",
   quiet = FALSE,
   debug.level = 0,
@@ -77,6 +78,8 @@ By default for exact distances the maximum observed distance is used as the righ
              \code{Sample.Label} \tab label for the sample\cr}}
 
 \item{convert.units}{conversion between units for abundance estimation, see "Units", below. (Defaults to 1, implying all of the units are "correct" already.)}
+
+\item{er.var}{encounter rate variance estimator to use when abundance estimates are required. Defaults to "R2" for line transects and "P3" for point transects. See \code{\link{dht2}} for more information and if more complex options are required.}
 
 \item{method}{optimization method to use (any method usable by \code{\link{optim}} or \pkg{optimx}). Defaults to \code{"nlminb"}.}
 

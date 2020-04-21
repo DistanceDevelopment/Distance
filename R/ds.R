@@ -36,6 +36,7 @@
 #'                          sample belongs to.\cr
 #'                     \code{Sample.Label} \tab label for the sample\cr}
 #' @param convert.units conversion between units for abundance estimation, see "Units", below. (Defaults to 1, implying all of the units are "correct" already.)
+#' @param er.var encounter rate variance estimator to use when abundance estimates are required. Defaults to "R2" for line transects and "P3" for point transects. See \code{\link{dht2}} for more information and if more complex options are required.
 #' @param method optimization method to use (any method usable by \code{\link{optim}} or \pkg{optimx}). Defaults to \code{"nlminb"}.
 #' @param debug.level print debugging output. \code{0}=none, \code{1-3} increasing levels of debugging output.
 #' @param quiet suppress non-essential messages (useful for bootstraps etc). Default value \code{FALSE}.
@@ -176,7 +177,8 @@ ds <- function(data, truncation=ifelse(is.null(cutpoints),
                                  "strict",
                                  "none"),
              region.table=NULL, sample.table=NULL, obs.table=NULL,
-             convert.units=1, method="nlminb", quiet=FALSE, debug.level=0,
+             convert.units=1, er.var="R2",
+             method="nlminb", quiet=FALSE, debug.level=0,
              initial.values=NULL, max.adjustments=5){
 
   # capture the call
@@ -601,10 +603,7 @@ ds <- function(data, truncation=ifelse(is.null(cutpoints),
   ## Now calculate abundance/density using dht()
   if(!is.null(region.table) & !is.null(sample.table)){
 
-    ervar <- "R2"
-    if(point){
-      ervar <- "P3"
-    }
+
     # if obs.table is not supplied, then data must have the Region.Label and
     # Sample.Label columns
     if(is.null(obs.table)){
@@ -617,7 +616,7 @@ ds <- function(data, truncation=ifelse(is.null(cutpoints),
           dht.res <- dht(model, region.table, sample.table,
                          options=list(#varflag=0,
                                       group         = dht.group,
-                                      ervar         = ervar,
+                                      ervar         = er.var,
                                       convert.units = convert.units), se=TRUE)
         }
       }else{
@@ -640,7 +639,7 @@ ds <- function(data, truncation=ifelse(is.null(cutpoints),
         dht.res <- dht(model, region.table, sample.table, obs.table,
                        options=list(#varflag=0,group=TRUE,
                                     group         = dht.group,
-                                    ervar         = ervar,
+                                    ervar         = er.var,
                                     convert.units = convert.units), se=TRUE)
       }
     }
