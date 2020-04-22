@@ -256,6 +256,7 @@ ds <- function(data, truncation=ifelse(is.null(cutpoints),
       message("Columns \"distbegin\" and \"distend\" in data: performing a binned analysis...")
       binned <- TRUE
       breaks <- sort(unique(c(data$distend, data$distbegin)))
+      data$distance <- (data$distend + data$distbegin)/2
     }else{
       binned <- FALSE
       breaks <- NULL
