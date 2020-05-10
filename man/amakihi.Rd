@@ -5,7 +5,8 @@
 \alias{amakihi}
 \alias{amakihi_units}
 \title{Hawaiian amakihi point transect data}
-\format{A data frame with 1487 rows and 12 variables
+\format{
+A data frame with 1487 rows and 12 variables
   \tabular{ll}{
     \code{Region.Label} \tab strata names (seven strata) \cr
     \code{Area} \tab size of study area (set to 0) \cr
@@ -19,7 +20,8 @@
     \code{MAS} \tab Time after sunrise (min) \cr
     \code{HAS} \tab Time after sunrise (hours) \cr
     \code{Study.Area} \tab name of study area \cr
-  }}
+  }
+}
 \description{
 Also known as the Common 'Amakihi, a type of Hawaiian honeycreeper
 }

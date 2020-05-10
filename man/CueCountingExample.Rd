@@ -5,7 +5,8 @@
 \alias{CueCountingExample}
 \alias{CueCountingExample_units}
 \title{Cue counts of whale blows}
-\format{A data frame with 109 rows and 15 variables.
+\format{
+A data frame with 109 rows and 15 variables.
   \tabular{ll}{ 
     \code{Region.Label} \tab stratum labels \cr
     \code{Area} \tab size (km^2) of each stratum \cr
@@ -22,7 +23,8 @@
     \code{sp} \tab Species detected (all observations W in these data) \cr
     \code{size} \tab Number of animals in group (all 1 in these data) \cr
     \code{Study.Area} \tab study area name \cr
-  }}
+  }
+}
 \description{
 Cues are treated as an indirect count, requiring the use of multipliers.
 }

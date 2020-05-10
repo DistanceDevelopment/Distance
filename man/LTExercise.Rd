@@ -5,7 +5,8 @@
 \alias{LTExercise}
 \alias{LTExercise_units}
 \title{Simulated line transect survey data}
-\format{A data frame with 106 rows and 7 variables
+\format{
+A data frame with 106 rows and 7 variables
   \tabular{ll}{
     \code{Region.Label} \tab strata names (single stratum) \cr
     \code{Area} \tab size of study area (1 in this case, making abundance and density equal) \cr
@@ -14,7 +15,8 @@
     \code{object} \tab object ID  \cr
     \code{distance} \tab perpendicular distance (m) \cr
     \code{Study.Area} \tab name of study area \cr
-  }}
+  }
+}
 \source{
 Simulated data, from the distance sampling introductory course, Centre for
  Research into Ecological & Environmental Modelling, University of St Andrews.

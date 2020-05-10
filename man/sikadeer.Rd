@@ -5,7 +5,8 @@
 \alias{sikadeer}
 \alias{sikadeer_units}
 \title{Sika deer pellet data from southern Scotland}
-\format{A data frame with 1923 rows and 11 variables.
+\format{
+A data frame with 1923 rows and 11 variables.
   \tabular{ll}{  
     \code{Region.Label} \tab stratum labels \cr
     \code{Area} \tab size (ha) of each stratum \cr
@@ -18,7 +19,8 @@
     \code{object} \tab object ID \cr
     \code{distance} \tab perpendicular distance (cm) \cr
     \code{Study.Area} \tab study area name \cr
-  }}
+  }
+}
 \description{
 Because sika deer spend most of their time in woodland areas, abundance
 estimates are based on pellet group counts.  Line transect methods were applied

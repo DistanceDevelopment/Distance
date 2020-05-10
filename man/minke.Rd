@@ -4,12 +4,14 @@
 \name{minke}
 \alias{minke}
 \title{Simulated minke whale data}
-\format{\code{data.frame} with 99 observations of 5 variables:
+\format{
+\code{data.frame} with 99 observations of 5 variables:
 \tabular{ll}{\code{Region.Label} \tab stratum label (\code{"North"} or \code{"South"}) \cr
 \code{Area} \tab stratum area\cr
 \code{Sample.Label} \tab transect identifier\cr
 \code{Effort} \tab transect length\cr
-\code{distance} \tab observed distance}}
+\code{distance} \tab observed distance}
+}
 \source{
 Shipped with the Distance for Windows.
 }

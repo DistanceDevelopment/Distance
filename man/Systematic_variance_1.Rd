@@ -7,7 +7,8 @@
 \alias{Systematic_variance_1_units}
 \alias{Systematic_variance_2_units}
 \title{Simulation of encounter rate variance}
-\format{\code{data.frame} with 253 observations of 7 variables:
+\format{
+\code{data.frame} with 253 observations of 7 variables:
 \tabular{ll}{
 \code{Region.Label} \tab stratum label (default) \cr
 \code{Area} \tab stratum area (0.5 km^2) \cr
@@ -16,7 +17,8 @@
 \code{object} \tab object ID \cr
 \code{distance} \tab perpendicular distance (m) \cr
 \code{Study.Area} \tab name of study area
-}}
+}
+}
 \description{
 Simulated line transect data with large differences in transect length.
 In \code{systematic_var_2} that transect length gradient is coupled with a

@@ -5,7 +5,8 @@
 \alias{unimak}
 \alias{unimak_units}
 \title{Simulated line transect survey data with covariates}
-\format{A data frame with 60 rows and 9 variables
+\format{
+A data frame with 60 rows and 9 variables
   \tabular{ll}{
     \code{Region.Label} \tab strata names (single stratum) \cr
     \code{Area} \tab size of study area (mi^2) \cr
@@ -16,7 +17,8 @@
     \code{MSTDO} \tab time since medication taken by observer (min) \cr
     \code{Hour} \tab time of day of sighting (hour) \cr
     \code{Study.Area} \tab name of study area \cr
-  }}
+  }
+}
 \source{
 Simulated data, from the distance sampling introductory course, Centre for
  Research into Ecological & Environmental Modelling, University of St Andrews.

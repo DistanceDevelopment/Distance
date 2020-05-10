@@ -7,7 +7,8 @@
 \alias{Savannah_sparrow_1980_units}
 \alias{Savannah_sparrow_1981_units}
 \title{Savanna sparrow point transects}
-\format{\code{data.frame} with 468 observations of 7 variables:
+\format{
+\code{data.frame} with 468 observations of 7 variables:
 \tabular{ll}{
 \code{Region.Label} \tab stratum label (pasture ID) \cr
 \code{Area} \tab stratum area (set to 1 so density is reported) \cr
@@ -16,7 +17,8 @@
 \code{object} \tab object ID \cr
 \code{distance} \tab radial distance (m) \cr
 \code{Study.Area} \tab name of study area
-}}
+}
+}
 \description{
 Point transect data collected in Colorado 1980/81 to examine effect of
 agricultural practices upon avian community.

@@ -5,7 +5,8 @@
 \alias{capercaillie}
 \alias{capercaillie_units}
 \title{Capercaillie in Monaughty Forest}
-\format{A data frame with 112 observations on the following 9 variables.
+\format{
+A data frame with 112 observations on the following 9 variables.
 \tabular{ll}{
   \code{Sample.Label} \tab name of single transect \cr
   \code{Effort} \tab transect length (km) \cr
@@ -16,7 +17,8 @@
   \code{observer} \tab single observer data \cr
   \code{Region.Label} \tab stratum name \cr
   \code{Area} \tab size of Monaughty Forest (ha) \cr
-}}
+}
+}
 \description{
 Data from a line transect survey of capercaillie in Monaughty Forest, Moray, 
 Scotland.

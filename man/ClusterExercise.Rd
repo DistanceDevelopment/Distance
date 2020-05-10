@@ -5,7 +5,8 @@
 \alias{ClusterExercise}
 \alias{ClusterExercise_units}
 \title{Simulated minke whale data with cluster size}
-\format{\code{data.frame} with 99 observations of 9 variables:
+\format{
+\code{data.frame} with 99 observations of 9 variables:
 \tabular{ll}{
 \code{Region.Label} \tab stratum label (\code{"North"} or \code{"South"}) \cr
 \code{Area} \tab stratum area  (square nautical mile)\cr
@@ -14,7 +15,8 @@
 \code{distance} \tab observed distance  (nautical mile)\cr
 \code{Cluster.strat} \tab strata based on cluster size: 1, 2 and 3+\cr 
 \code{size} \tab {cluster size}\cr
-\code{Study.Area} \tab {name of study area}}}
+\code{Study.Area} \tab {name of study area}}
+}
 \description{
 Data simulated from models fitted to 1992/1993 Southern Hemisphere minke whale data collected by the International Whaling Commission. See Branch and Butterworth (2001) for survey details (survey design is shown in figure 1(e)). Data simulated by David Borchers.
 }

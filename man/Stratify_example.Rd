@@ -5,7 +5,8 @@
 \alias{Stratify_example}
 \alias{Stratify_example_units}
 \title{Simulated minke whale data}
-\format{\code{data.frame} with 99 observations of 7 variables:
+\format{
+\code{data.frame} with 99 observations of 7 variables:
 \tabular{ll}{
 \code{Region.Label} \tab stratum label (\code{"North"} or \code{"South"}) \cr
 \code{Area} \tab stratum area  (square nautical mile)\cr
@@ -13,7 +14,8 @@
 \code{Effort} \tab transect length  (nautical mile)\cr
 \code{object} \tab object ID \cr
 \code{distance} \tab observed distance (nautical mile)\cr
-\code{Study.Area} \tab {name of study area}}}
+\code{Study.Area} \tab {name of study area}}
+}
 \description{
 Data simulated from models fitted to 1992/1993 Southern Hemisphere minke whale data collected by the International Whaling Commission. See Branch and Butterworth (2001) for survey details (survey design is shown in figure 1(e)). Data simulated by David Borchers.
 }

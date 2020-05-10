@@ -6,7 +6,8 @@
 \alias{ducknest_units}
 \alias{ducknests_units}
 \title{Ducknest line transect survey data}
-\format{A data frame with 534 rows and 7 variables
+\format{
+A data frame with 534 rows and 7 variables
   \tabular{ll}{
     \code{Region.Label} \tab strata names (single stratum in this instance) \cr
     \code{Area} \tab size of refuge (0 in this case, actual size 60km^2) \cr
@@ -15,7 +16,8 @@
     \code{object} \tab nest ID  \cr
     \code{distance} \tab perpendicular distance (m) \cr
     \code{Study.Area} \tab name of wildlife refuge \cr
-  }}
+  }
+}
 \source{
 Simulated data, from the distance sampling introductory course, Centre for Research into Ecological & Environmental Modelling, University of St Andrews.
 }

@@ -5,7 +5,8 @@
 \alias{golftees}
 \alias{golftees_units}
 \title{Golf tee data}
-\format{The format is:
+\format{
+The format is:
 \describe{ List of 4 
 $ book.tee.dataframe:'data.frame': 
   \item{$ object}{object ID}
@@ -26,7 +27,8 @@ $ book.tee.dataframe:'data.frame':
   \item{$ object}{object ID}
   \item{$ Region.Label}{stratum in which it was detected}
   \item{$ Sample.Label}{transect on which it was detected}
-  }}
+  }
+}
 \description{
 The data are from independent surveys by eight observers of a population of 250
 groups (760 individuals) of golf tees.  The tees, of two colours, were placed 

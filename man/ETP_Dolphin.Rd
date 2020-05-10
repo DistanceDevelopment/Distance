@@ -5,7 +5,8 @@
 \alias{ETP_Dolphin}
 \alias{ETP_Dolphin_units}
 \title{Eastern Tropical Pacific spotted dolphin survey}
-\format{A data frame with 1090 rows and 13 variables.
+\format{
+A data frame with 1090 rows and 13 variables.
   \tabular{ll}{  
     \code{Region.Label} \tab stratum labels (only one)\cr
     \code{Area} \tab size (nmi) of each stratum \cr
@@ -20,7 +21,8 @@
     \code{Search.method} \tab observer method making the detection \cr
     \code{size} \tab cluster size \cr
     \code{Study.Area} \tab study area name \cr
-  }}
+  }
+}
 \source{
 Inter-American Tropical Tuna Commission
 }
