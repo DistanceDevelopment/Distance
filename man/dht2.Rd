@@ -32,7 +32,7 @@ dht2(
 
 \item{flatfile}{data in the flatfile format, see \code{\link[Distance]{flatfile}}}
 
-\item{strat_formula}{a formula giving the stratification structure (see "Stratification" below)}
+\item{strat_formula}{a formula giving the stratification structure (see "Stratification" below). Currently only one level of stratification is supported.}
 
 \item{convert_units}{conversion factor between units for the distances, effort and area. See "Units" below.}
 

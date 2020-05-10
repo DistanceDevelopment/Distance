@@ -3,7 +3,7 @@
 #' Once a detection function is fitted to data, this function can be used to compute abundance estimates over required areas. The function also allows for stratification and variance estimation via various schemes (see below).
 #'
 #' @param ddf model fitted by \code{\link[Distance]{ds}} or \code{\link[mrds]{ddf}}
-#' @param strat_formula a formula giving the stratification structure (see "Stratification" below)
+#' @param strat_formula a formula giving the stratification structure (see "Stratification" below). Currently only one level of stratification is supported.
 #' @param observations \code{data.frame} to link detection function data (indexed by \code{object} column IDs) to the transects (indexed by \code{Sample.Label} column IDs). See "Data" below.
 #' @param transects \code{data.frame} with information about samples (points or line transects). See "Data" below.
 #' @param geo_strat \code{data.frame} with information about any geographical stratification. See "Data" below.
@@ -118,6 +118,11 @@ dht2 <- function(ddf, observations=NULL, transects=NULL, geo_strat=NULL,
 
   # what are the stratum labels specicied in strat_formula?
   stratum_labels <- attr(terms(strat_formula), "term.labels")
+
+  # TODO: currently break if >1 stratum is defined
+  if(length(stratum_labels) > 1){
+    stop("Only one level of stratification is currently supported")
+  }
 
   if(!is.null(observations) & !is.null(transects)){
     if(!is.null(geo_strat)){

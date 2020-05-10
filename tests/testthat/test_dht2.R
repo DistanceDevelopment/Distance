@@ -79,8 +79,8 @@ test_that("as.factor works in formula",{
 test_that("error thrown if stratum name doesn't exist in flatfile",{
 
   expect_error(dht2(ds.dht.model, flatfile=ff,
-                    strat_formula=~year+boop),
-               "Column\\(s\\): year, boop not in \\`flatfile\\`")
+                    strat_formula=~boop),
+               "Column\\(s\\): boop not in \\`flatfile\\`")
 
 })
 
