@@ -225,8 +225,19 @@ dht2 <- function(ddf, observations=NULL, transects=NULL, geo_strat=NULL,
     }
 
 
+    # make object column if not present
+    if(is.null(bigdat$object)){
+      # ensure that there isn't a size in the data if this is a
+      # placeholder row for a sample unit
+      bigdat$object <- NA
+      bigdat$object[!is.na(bigdat$distance)] <- 1:sum(!is.na(bigdat$distance))
+    }else if(!all(is.na(bigdat$distance) == is.na(bigdat$object))){
+      stop("NAs in distance column do not match those in the object column, check data")
+    }
+    # sort by object ID
+    bigdat <- bigdat[order(bigdat$object), ]
     # get probabilities of detection
-    pp <- predict(ddf, bigdat, compute=TRUE)$fitted
+    pp <- predict(ddf, newdata=bigdat, compute=TRUE)$fitted
     bigdat$p <- pp
 
     if(strat_formula==~1){

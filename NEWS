@@ -1,3 +1,8 @@
+Distance version 1.0.1
+----------------------
+
+* fix bug in dht2 when object IDs were not specified in flatfile formatted data
+
 Distance version 1.0.0
 ----------------------
 
