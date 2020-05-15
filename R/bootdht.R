@@ -132,9 +132,11 @@ bootdht <- function(model,
       df_call$data <- bootdat
 
       # fit that and update what's in models
-      models[[i]] <- try(suppressMessages(eval(df_call, parent.frame(n=3))))
+      models[[i]] <- try(suppressMessages(eval(df_call, parent.frame(n=3))),
+                         silent=TRUE)
 
       if(any(class(models[[i]]) == "try-error")){
+        # if the model failed, return NA
         aics[i] <- NA
       }else{
         # if that wasn't bad, grab the AIC
@@ -142,17 +144,21 @@ bootdht <- function(model,
       }
     }
 
-    fit <- models[[which.min(aics)]]
-
     # update progress bar
     setTxtProgressBar(pb, getTxtProgressBar(pb)+1)
 
-    # handle errors
-    if(any(class(fit) == "try-error")){
-      nbootfail <<- nbootfail + 1
+    if(all(is.na(aics))){
+      # if no models fitted, return NA
       return(NA)
     }else{
-      return(summary_fun(fit$dht, fit$ddf))
+      fit <- models[[which.min(aics)]]
+      # handle errors
+      if(any(class(fit) == "try-error")){
+        nbootfail <<- nbootfail + 1
+        return(NA)
+      }else{
+        return(summary_fun(fit$dht, fit$ddf))
+      }
     }
   }
 
