@@ -45,6 +45,13 @@ test_that("Input errors are thrown correctly",{
   expect_error(ds(egdata,4,key="hn",formula=~banana),
                "Variable\\(s\\): banana are in the model formula but not in the data.")
 
+  # observer is a reserved column
+  egdata$observer <- c("Fred", "Larry")
+  expect_error(ds(egdata,4,key="hn"),
+               "'observer' is a reserved column name, please rename this column.")
+  egdata$observer <- 1:3
+  expect_error(ds(egdata,4,key="hn"),
+               "'observer' is a reserved column name, please rename this column.")
 
 })
 

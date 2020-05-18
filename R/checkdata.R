@@ -38,20 +38,22 @@ checkdata<-function(data, region.table=NULL, sample.table=NULL, obs.table=NULL,
   data <- as.data.frame(data)
 
   # first see if the data has detected/observer/object columns, if not add them
-  if(!any(names(data)=="observer")){
-    data<-cbind(data,observer=rep(1,nrow(data)))
+  if(!any(names(data) == "observer")){
+    data <- cbind(data, observer=rep(1, nrow(data)))
+  }else if(!all(data$observer %in% c(1, 2))){
+    stop("'observer' is a reserved column name, please rename this column.")
   }
-  if(!any(names(data)=="detected")){
-    data<-cbind(data,detected=rep(1,nrow(data)))
+  if(!any(names(data) == "detected")){
+    data <- cbind(data, detected=rep(1, nrow(data)))
   }
-  if(!any(names(data)=="object")){
-    data<-cbind(data,object=1:nrow(data))
+  if(!any(names(data) == "object")){
+    data <- cbind(data, object=1:nrow(data))
   }else{
     # check that the object IDs are unique
     # first need to remove the rows with NA distances used for padding
     # below
-    data_no_NA <- data[!is.na(data$distance),]
-    if(length(data_no_NA$object)!=length(unique(data_no_NA$object))){
+    data_no_NA <- data[!is.na(data$distance), ]
+    if(length(data_no_NA$object) != length(unique(data_no_NA$object))){
       stop("Not all object IDs are unique, check data.")
     }
   }
@@ -83,10 +85,10 @@ checkdata<-function(data, region.table=NULL, sample.table=NULL, obs.table=NULL,
       }
       rownames(region.table) <- 1:nrow(region.table)
       # drop Area column
-      data <- data[,!c(colnames(data) %in% "Area")]
+      data <- data[, !c(colnames(data) %in% "Area")]
 
       ## construct sample table
-      sample.table <- unique(data[,c("Sample.Label", "Region.Label", "Effort")])
+      sample.table <- unique(data[, c("Sample.Label", "Region.Label", "Effort")])
 
       # possible that Effort is not the same for a given
       # Sample.Label+Region.Label -- this is BAD.
@@ -97,11 +99,11 @@ checkdata<-function(data, region.table=NULL, sample.table=NULL, obs.table=NULL,
 
       rownames(sample.table) <- 1:nrow(sample.table)
       # drop Effort column
-      data <- data[,!c(colnames(data) %in% "Effort")]
+      data <- data[, !c(colnames(data) %in% "Effort")]
 
 
       ## construct obs
-      obs.table <- unique(data[,c("object", "Region.Label","Sample.Label")])
+      obs.table <- unique(data[, c("object", "Region.Label","Sample.Label")])
       rownames(obs.table) <- 1:nrow(obs.table)
 
       # drop Region and Sample label columns
@@ -119,14 +121,15 @@ checkdata<-function(data, region.table=NULL, sample.table=NULL, obs.table=NULL,
   }else{
     # check that dht info has the right column titles
     if(!is.null(region.table) & !is.null(sample.table) & !is.null(obs.table)){
-      if(!all(c("Region.Label","Area") %in% names(region.table))){
+      if(!all(c("Region.Label", "Area") %in% names(region.table))){
         stop("region.table must have columns named 'Region.Label' and 'Area'")
       }
-      if(!all(c("Region.Label","Sample.Label","Effort") %in%
+      if(!all(c("Region.Label", "Sample.Label", "Effort") %in%
               names(sample.table))){
         stop("sample.table must have columns named 'Region.Label', 'Sample.Label' and 'Effort'")
       }
-      if(!all(c("Region.Label","Sample.Label","object") %in% names(obs.table))){
+      if(!all(c("Region.Label", "Sample.Label", "object") %in%
+              names(obs.table))){
         stop("obs.table must have columns names 'Region.Label', 'Sample.Label' and 'object'")
       }
     }
