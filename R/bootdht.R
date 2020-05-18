@@ -149,6 +149,7 @@ bootdht <- function(model,
 
     if(all(is.na(aics))){
       # if no models fitted, return NA
+      nbootfail <<- nbootfail + 1
       return(NA)
     }else{
       fit <- models[[which.min(aics)]]
