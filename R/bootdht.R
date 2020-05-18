@@ -154,7 +154,8 @@ bootdht <- function(model,
     }else{
       fit <- models[[which.min(aics)]]
       # handle errors
-      if(any(class(fit) == "try-error")){
+      if(any(class(fit) == "try-error") ||
+         any(is.na(fit$ddf$hessian))){
         nbootfail <<- nbootfail + 1
         return(NA)
       }else{
