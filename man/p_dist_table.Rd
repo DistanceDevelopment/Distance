@@ -5,15 +5,13 @@
 \alias{p_dist_table}
 \title{Distribution of probabilities of detection}
 \value{
-invisibly, the values of detectability over the truncation range
+a \code{data.frame} with probability bins, counts and (optionally) proportions. The object has an attribute \code{p_range} which contains the range of estimated detection probabilities
 }
 \description{
-Add a line or lines to a plot of the detection function which correspond to a a given covariate combination. These can be particularly useful when there is a small number of factor levels or if quantiles of a continuous covariate are specified.
+Generate a table of frequencies of probability of detection from a detection function model. This is particularly useful when employing covariates, as it can indicate if there are detections with very small detection probabilities that can be unduly influential when calculating abundance estimates.
 }
 \details{
-All covariates must be specified in \code{data}. Plots can become quite busy when this approach is used. It may be useful to fix some covariates at their median level and plot set values of a covariate of interest. For example setting weather (e.g., Beaufort) to its median and plotting levels of observer, then creating a second plot for a fixed observer with levels of weather.
-
-Arguments to \code{\link{lines}} are supplied in \dots and aesthetics like line type (\code{lty}), line width (\code{lwd}) and colour (\code{col}) are recycled. By default \code{lty} is used to distinguish between the lines. It may be useful to add a \code{\link{legend}} to the plot (lines are plotted in the order of \code{data}).
+Because \code{\link[mrds]{dht}} uses a Horvitz-Thompson-like estimator, abundance estimates can be sensitive to errors in the estimated probabilities. The estimator is based on \eqn{\sum 1/ \hat{P}_a(z_i)}, which means that the sensitivity is greater for smaller detection probabilities. As a rough guide, we recommend that the method be not used if more than say 5\% of the \eqn{\hat{P}_a(z_i)} are less than 0.2, or if any are less than 0.1. If these conditions are violated, the truncation distance w can be reduced. This causes some loss of precision relative to standard distance sampling without covariates.
 }
 \note{
 This function is located in the \code{mrds} package but the documentation is provided here for easy access.
@@ -29,4 +27,13 @@ p_dist_table(result)
 # with proportions
 p_dist_table(result, proportion=TRUE)
 }
+}
+\references{
+Marques, F.F.C. and S.T. Buckland. 2004. Covariate models for the detection function.
+  In: Advanced Distance Sampling, eds. S.T.
+  Buckland, D.R.Anderson, K.P. Burnham, J.L. Laake, D.L. Borchers, and L.
+  Thomas. Oxford University Press.
+}
+\author{
+David L Miller
 }

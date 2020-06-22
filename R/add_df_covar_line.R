@@ -1,6 +1,6 @@
 #' Add covariate levels detection function plots
 #'
-#' @inherit mrds::add_df_covar_line param return references description details sections seealso
+#' @inherit mrds::add_df_covar_line parameters return references description details sections seealso
 #' @name add_df_covar_line
 #' @docType methods
 #' @note This function is located in the \code{mrds} package but the documentation is provided here for easy access.

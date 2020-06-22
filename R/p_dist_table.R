@@ -1,7 +1,8 @@
 #' Distribution of probabilities of detection
 #'
-#' @inherit mrds::add_df_covar_line param return references description details sections seealso
 #' @name p_dist_table
+#' @inherit mrds::p_dist_table
+#' @inheritParams mrds::p_dist_table
 #' @docType methods
 #' @note This function is located in the \code{mrds} package but the documentation is provided here for easy access.
 #' @examples
