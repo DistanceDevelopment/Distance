@@ -226,7 +226,7 @@ Buckland, S.T., Anderson, D.R., Burnham, K.P., Laake, J.L., Borchers, D.L., and 
 Buckland, S.T., Anderson, D.R., Burnham, K.P., Laake, J.L., Borchers, D.L., and Thomas, L. (2004). Advanced Distance Sampling. Oxford University Press. Oxford, UK.
 }
 \seealso{
-\code{\link{flatfile}}
+\code{\link{flatfile}} \code{\link{AIC.ds}} \code{\link{ds.gof}} \code{\link{p_dist_table}} \code{\link{plot.ds}} \code{\link{add_df_covar_line}}
 }
 \author{
 David L. Miller
