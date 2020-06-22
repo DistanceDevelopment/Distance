@@ -1,8 +1,12 @@
 #' Add covariate levels detection function plots
 #'
-#' @inherit mrds::add_df_covar_line parameters return references description details sections seealso
+#' @inherit mrds::add_df_covar_line
 #' @name add_df_covar_line
 #' @docType methods
+#' @param ddf a fitted detection function object
+#' @param data a \code{data.frame} with the covariate combination you want to plot
+#' @param \dots extra arguments to give to \code{\link{line}} (\code{lty}, \code{lwd}, \code{col})
+#' @param ndist number of points to evaluate the detection function at
 #' @note This function is located in the \code{mrds} package but the documentation is provided here for easy access.
 #' @examples
 #' \dontrun{

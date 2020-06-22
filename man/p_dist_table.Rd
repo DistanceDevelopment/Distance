@@ -4,6 +4,13 @@
 \name{p_dist_table}
 \alias{p_dist_table}
 \title{Distribution of probabilities of detection}
+\arguments{
+\item{object}{fitted detection function}
+
+\item{bins}{how the results should be binned}
+
+\item{proportion}{should proportions be returned as well as counts?}
+}
 \value{
 a \code{data.frame} with probability bins, counts and (optionally) proportions. The object has an attribute \code{p_range} which contains the range of estimated detection probabilities
 }

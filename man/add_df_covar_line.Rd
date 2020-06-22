@@ -4,6 +4,15 @@
 \name{add_df_covar_line}
 \alias{add_df_covar_line}
 \title{Add covariate levels detection function plots}
+\arguments{
+\item{ddf}{a fitted detection function object}
+
+\item{data}{a \code{data.frame} with the covariate combination you want to plot}
+
+\item{\dots}{extra arguments to give to \code{\link{line}} (\code{lty}, \code{lwd}, \code{col})}
+
+\item{ndist}{number of points to evaluate the detection function at}
+}
 \value{
 invisibly, the values of detectability over the truncation range
 }
@@ -36,4 +45,7 @@ add_df_covar_line(result, data.frame(Region.Label="North"), lty=3)
 legend(1.5, 1, c("Average", "South", "North"), lty=1:3)
 
 }
+}
+\author{
+David L Miller
 }
