@@ -11,6 +11,7 @@
 #' @export
 #' @author David L. Miller
 #' @importFrom graphics plot
+#' @seealso add_df_covar_line
 plot.dsmodel <- function(x, pl.den=0, ...){
 
   plot(x$ddf, pl.den=pl.den, ...)
