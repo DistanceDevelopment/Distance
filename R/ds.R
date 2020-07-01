@@ -601,6 +601,12 @@ ds <- function(data, truncation=ifelse(is.null(cutpoints),
     stop("No models could be fitted.")
   }
 
+  # check that hazard models have a reasonable scale parameter
+  if(key=="hr" && model$par < sqrt(.Machine$double.eps)){
+    warning("Estimated hazard-rate scale parameter close to 0 (on log scale). Possible problem in data (e.g., spike near zero distance).")
+  }
+
+
   ## Now calculate abundance/density using dht()
   if(!is.null(region.table) & !is.null(sample.table)){
 
