@@ -602,7 +602,7 @@ ds <- function(data, truncation=ifelse(is.null(cutpoints),
   }
 
   # check that hazard models have a reasonable scale parameter
-  if(key=="hr" && model$par < sqrt(.Machine$double.eps)){
+  if(key=="hr" && model$par[1] < sqrt(.Machine$double.eps)){
     warning("Estimated hazard-rate scale parameter close to 0 (on log scale). Possible problem in data (e.g., spike near zero distance).")
   }
 
