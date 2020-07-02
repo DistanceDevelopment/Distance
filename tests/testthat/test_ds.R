@@ -241,6 +241,18 @@ test_that("max.adjustments works",{
 
 })
 
+# warnings when bad models get fitted
 
+test_that("warnings of bad models get thrown",{
+
+  # data with spike for which hazard-rate estimates
+  # 0 shape par
+  # based on data posted on distance list but rescaled and edited for anonymity
+  dat <- c(0, 0, 0, 0, 0.008, 0.008, 0.013, 0.022, 0.027, 0.05, 0.058, 0.137,
+           0.172, 0.2, 0.2, 0.2, 0.2, 0.25, 0.26, 0.29, 0.34, 0.36)
+  expect_warning(ds(dat, key="hr", adjustment=NULL),
+               "Estimated hazard-rate scale parameter close to 0 \\(on log scale\\). Possible problem in data \\(e.g., spike near zero distance\\).")
+
+})
 
 
