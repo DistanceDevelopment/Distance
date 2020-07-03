@@ -253,6 +253,10 @@ test_that("warnings of bad models get thrown",{
   expect_warning(ds(dat, key="hr", adjustment=NULL),
                "Estimated hazard-rate scale parameter close to 0 \\(on log scale\\). Possible problem in data \\(e.g., spike near zero distance\\).")
 
+
+  # check 
+
+
 })
 
 
