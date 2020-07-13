@@ -377,11 +377,14 @@ dht2 <- function(ddf, observations=NULL, transects=NULL, geo_strat=NULL,
   df_left <- ddf$ds$aux$left*convert_units
 
   # TODO: check that sample_fraction is positive and a single number
-  area_calc <- function(width, left, effort, transect_type, sample_fraction){
+  area_calc <- function(width, effort, transect_type, sample_fraction){
+    #Note - this function does not need to account for left truncation, as
+    # it is taken care of when calculating average detection prob (by setting
+    # detection prob to 0 between 0 and left truncation distance)
     if(transect_type=="point"){
-      return(effort*pi*(width^2 - left^2)*sample_fraction)
+      return(effort*pi*width^2*sample_fraction)
     }else{
-      return(effort*2*(width-left)*sample_fraction)
+      return(effort*2*width*sample_fraction)
     }
   }
 
@@ -439,7 +442,7 @@ dht2 <- function(ddf, observations=NULL, transects=NULL, geo_strat=NULL,
              # abundance estimate per stratum in covered area
              Nc = sum(.data$Nhat, na.rm=TRUE),
              # covered area per transect
-             Covered_area = area_calc(df_width, df_left, .data$Effort,
+             Covered_area = area_calc(df_width, .data$Effort,
                                       transect_type, sample_fraction),
              # get group size stats
              group_var  = if_else(.data$n_observations>1,
