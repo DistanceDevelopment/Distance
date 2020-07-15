@@ -13,10 +13,10 @@
 #'  \code{data.frame}.
 #'
 #' @author David L. Miller
-checkdata<-function(data, region.table=NULL, sample.table=NULL, obs.table=NULL,
-                    formula=~1){
+checkdata <- function(data, region.table=NULL, sample.table=NULL,
+                      obs.table=NULL, formula=~1){
 
-  #Check if the user has passed in a numeric vector
+  # Check if the user has passed in a numeric vector
   if(class(data) != "data.frame" & class(data) != "list"){
     if(is.numeric(data)){
       data <- data.frame(distance = data)
@@ -25,7 +25,7 @@ checkdata<-function(data, region.table=NULL, sample.table=NULL, obs.table=NULL,
     }
   }
 
-  ## make sure that the data are in the right format first
+  # make sure that the data are in the right format first
   if(is.null(data$distance)){
     if(is.null(data$distend) & is.null(data$distbegin)){
       stop("Your data must (at least) have a column called 'distance' or 'distbegin' and 'distend'!")
