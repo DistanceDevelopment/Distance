@@ -30,7 +30,7 @@ dht2(
 
 \item{geo_strat}{\code{data.frame} with information about any geographical stratification. See "Data" below.}
 
-\item{flatfile}{data in the flatfile format, see \code{\link[Distance]{flatfile}}}
+\item{flatfile}{data in the flatfile format, see \code{\link[Distance]{flatfile}}.}
 
 \item{strat_formula}{a formula giving the stratification structure (see "Stratification" below). Currently only one level of stratification is supported.}
 
@@ -40,7 +40,7 @@ dht2(
 
 \item{multipliers}{\code{list} of \code{data.frame}s. See "Multipliers" below.}
 
-\item{sample_fraction}{what proportion of the transects was covered (e.g., 0.5 for one-sided line transects)}
+\item{sample_fraction}{what proportion of the transects was covered (e.g., 0.5 for one-sided line transects).}
 
 \item{ci_width}{for use with confidence interval calculation (defined as 1-alpha, so the default 95 will give a 95\% confidence interval).}
 

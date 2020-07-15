@@ -13,7 +13,8 @@ bootdht(
   nboot = 100,
   summary_fun = bootdht_Nhat_summarize,
   convert.units = 1,
-  select_adjustments = FALSE
+  select_adjustments = FALSE,
+  sample_fraction = 1
 )
 }
 \arguments{
@@ -34,6 +35,8 @@ bootdht(
 \item{convert.units}{conversion between units for abundance estimation, see "Units", below. (Defaults to 1, implying all of the units are "correct" already.)}
 
 \item{select_adjustments}{select the number of adjustments in each bootstrap, when \code{FALSE} the exact detection function specified in \code{model} is fitted to each replicate. Note that for this to work \code{model} must have been fitted with \code{adjustment!=NULL}.}
+
+\item{sample_fraction}{what proportion of the transects was covered (e.g., 0.5 for one-sided line transects).}
 }
 \description{
 Performs a bootstrap for simple distance sampling models using the same data structures as \code{\link[mrds]{dht}}.

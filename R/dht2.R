@@ -7,11 +7,11 @@
 #' @param observations \code{data.frame} to link detection function data (indexed by \code{object} column IDs) to the transects (indexed by \code{Sample.Label} column IDs). See "Data" below.
 #' @param transects \code{data.frame} with information about samples (points or line transects). See "Data" below.
 #' @param geo_strat \code{data.frame} with information about any geographical stratification. See "Data" below.
-#' @param flatfile data in the flatfile format, see \code{\link[Distance]{flatfile}}
+#' @param flatfile data in the flatfile format, see \code{\link[Distance]{flatfile}}.
 #' @param convert_units conversion factor between units for the distances, effort and area. See "Units" below.
 #' @param er_est encounter rate variance estimator to be used. See "Variance" below and \code{\link{varn}}.
 #' @param multipliers \code{list} of \code{data.frame}s. See "Multipliers" below.
-#' @param sample_fraction what proportion of the transects was covered (e.g., 0.5 for one-sided line transects)
+#' @param sample_fraction what proportion of the transects was covered (e.g., 0.5 for one-sided line transects).
 #' @param stratification what do strata represent, see "Stratification" below.
 #' @param ci_width for use with confidence interval calculation (defined as 1-alpha, so the default 95 will give a 95\% confidence interval).
 #' @param innes logical flag for computing encounter rate variance using either the method of Innes et al (2002) where estimated abundance per transect divided by effort is used as the encounter rate, vs. (when \code{innes=FALSE}) using the number of observations divided by the effort (as in Buckland et al., 2001)
@@ -120,6 +120,7 @@ dht2 <- function(ddf, observations=NULL, transects=NULL, geo_strat=NULL,
   stratum_labels <- attr(terms(strat_formula), "term.labels")
 
   # TODO: currently break if >1 stratum is defined
+  # https://github.com/DistanceDevelopment/Distance/issues/46
   if(length(stratum_labels) > 1){
     stop("Only one level of stratification is currently supported")
   }
@@ -135,8 +136,6 @@ dht2 <- function(ddf, observations=NULL, transects=NULL, geo_strat=NULL,
       geo_stratum_labels <- NULL
     }
 
-# list of protected column names that can't be in the data
-# protected <- c("p", ".Label", )
 
     # what if there were as.factor()s in the formula?
     transects <- safe_factorize(strat_formula, transects)
@@ -145,6 +144,9 @@ dht2 <- function(ddf, observations=NULL, transects=NULL, geo_strat=NULL,
     # TODO: do some data checking at this point
     # - check duplicate column names (e.g., obs$sex and df$data$sex)
     # - check column names don't conflict with columns created below
+    #    - list of protected column names that can't be in the data
+    #         protected <- c("p", ".Label", )
+
     # check the data
     dht2_checkdata(ddf, observations, transects, geo_strat, strat_formula,
                    stratum_labels, geo_stratum_labels)
@@ -200,6 +202,7 @@ dht2 <- function(ddf, observations=NULL, transects=NULL, geo_strat=NULL,
   }else if(!is.null(flatfile)){
     # if we have a flatfile
     # TODO: check flatfile format here
+    # should this just run Distance:::checkdata(flatfile)?
 
     # check regular columns exist
     flatfile_labels <- c("distance", "Sample.Label", "Effort", "Area")
@@ -223,7 +226,6 @@ dht2 <- function(ddf, observations=NULL, transects=NULL, geo_strat=NULL,
                        collapse=", "),
                  "not in `flatfile`"))
     }
-
 
     # make object column if not present
     if(is.null(bigdat$object)){
@@ -251,7 +253,8 @@ dht2 <- function(ddf, observations=NULL, transects=NULL, geo_strat=NULL,
       geo_stratum_labels <- c()
     }
 
-    # TODO: unchecked for multiple stratification
+    # TODO: checked when implementing multiple stratification
+    # https://github.com/DistanceDevelopment/Distance/issues/46
     if(stratification=="object"){
       # what are all the possible combinations of obs level stratum
       # levels and sample labels?
@@ -272,7 +275,8 @@ dht2 <- function(ddf, observations=NULL, transects=NULL, geo_strat=NULL,
       bigdat <- bind_rows(bigdat2, aj)
     }
 
-    # TODO: this needs to be fixed for the multi-strata case
+    # TODO: this needs to be checked for the multi-strata case
+    # https://github.com/DistanceDevelopment/Distance/issues/46
     # check that Area-stratum combinations are coherent
     ucomb <- unique(bigdat[, c("Area", stratum_labels)])
     if(length(na.omit(ucomb[,stratum_labels])) >
@@ -283,7 +287,6 @@ dht2 <- function(ddf, observations=NULL, transects=NULL, geo_strat=NULL,
   }else{
     stop("Need to supply either observations, transects and geo_strat OR flatfile")
   }
-
 
   # merge-in multipliers
   if(!is.null(multipliers)){
@@ -376,9 +379,12 @@ dht2 <- function(ddf, observations=NULL, transects=NULL, geo_strat=NULL,
   df_width <- ddf$ds$aux$width*convert_units
   df_left <- ddf$ds$aux$left*convert_units
 
-  # TODO: check that sample_fraction is positive and a single number
+  # check that sample_fraction is positive and a single number
+  check_sample_fraction(sample_fraction)
+
+  # function to calculate covered area
   area_calc <- function(width, effort, transect_type, sample_fraction){
-    #Note - this function does not need to account for left truncation, as
+    # Note - this function does not need to account for left truncation, as
     # it is taken care of when calculating average detection prob (by setting
     # detection prob to 0 between 0 and left truncation distance)
     if(transect_type=="point"){
@@ -618,7 +624,8 @@ if(mult){
 ## TODO: summary stuff, this is BAD code
   # make a summary
   res <- as.data.frame(res)
-# TODO: this is untested for multiple labels
+  # TODO: this is untested for multiple strata
+  # https://github.com/DistanceDevelopment/Distance/issues/46
   for(this_stratum in stratum_labels){
     dat_row <- res
 

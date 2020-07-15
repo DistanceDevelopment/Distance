@@ -11,8 +11,11 @@
 #' @param nboot number of bootstrap replicates
 #' @param summary_fun function that is used to obtain summary statistics from the bootstrap, see Summary Functions below. By default \code{\link{bootdht_Nhat_summarize}} is used, which just extracts abundance estimates.
 #' @param select_adjustments select the number of adjustments in each bootstrap, when \code{FALSE} the exact detection function specified in \code{model} is fitted to each replicate. Note that for this to work \code{model} must have been fitted with \code{adjustment!=NULL}.
+#' @param sample_fraction what proportion of the transects was covered (e.g., 0.5 for one-sided line transects).
+#'
 #' @section Summary Functions:
 #' The function \code{summary_fun} allows the user to specify what summary statistics should be recorded from each bootstrap. The function should take two arguments, \code{ests} and \code{fit}. The former is the output from \code{dht2}, giving tables of estimates. The latter is the fitted detection function object. The function is called once fitting and estimation has been performed and should return a \code{data.frame}. Those \code{data.frame}s are then concatenated using \code{rbind}. One can make these functions return any information within those objects, for example abundance or density estimates or the AIC for each model. See Examples below.
+#'
 #' @section Model selection:
 #' Model selection can be performed on a per-replicate basis within the bootstrap. This has three variations:
 #' \enumerate{
@@ -52,7 +55,8 @@ bootdht <- function(model,
                     nboot=100,
                     summary_fun=bootdht_Nhat_summarize,
                     convert.units=1,
-                    select_adjustments=FALSE){
+                    select_adjustments=FALSE,
+                    sample_fraction=1){
 
   if(!any(c(resample_strata, resample_obs, resample_transects))){
     stop("At least one of resample_strata, resample_obs, resample_transects must be TRUE")
@@ -74,17 +78,19 @@ bootdht <- function(model,
   }
   dat <- flatfile
 
+  # apply the sample fraction
+  check_sample_fraction(sample_fraction)
+  dat$Effort <- dat$Effort*sample_fraction
+
   # this can be generalized later on
   stratum_label <- "Region.Label"
   obs_label <- "object"
   sample_label <- "Sample.Label"
 
-
   # which resamples are we going to make?
   possible_resamples <- c(stratum_label, sample_label, obs_label)
   our_resamples <- possible_resamples[c(resample_strata, resample_transects,
                                         resample_obs)]
-
 
   # count failures
   nbootfail <- 0
