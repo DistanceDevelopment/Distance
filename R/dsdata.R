@@ -479,3 +479,27 @@ NULL
 #'     \code{Study.Area} \tab Montrave Estate \cr
 #'   }
 NULL
+
+
+#' Duiker camera trap survey
+#'
+#' Filmed Maxwell's duikers were assigned to distance intervals; recorded distances are the midpoints of the intervals. This data includes only observations recorded at times of peak activity.
+#'
+#' @name DuikerCameraTrap
+#' @aliases DuikerCameraTrap_units
+#' @docType data
+#' @format A data frame with 6277 rows and 6 variables
+#'   \tabular{ll}{
+#'     \code{Region.Label} \tab strata names (single stratum) \cr
+#'     \code{Area} \tab size of study area (0 in this case) \cr
+#'     \code{multiplier} \tab spatial effort, as the proportion of a circle covered by the angle of view of the camera \cr
+#'     \code{Sample.Label} \tab transect ID \cr
+#'     \code{Effort} \tab temporal effort, i.e. the number of 2-second time-steps over which the camera operated\cr
+#'     \code{distance} \tab radial distance (m) \cr
+#'   }
+#' @source Howe, E.J., Buckland, S.T., Després‐Einspenner, M.‐L. and Kühl, H.S. (2017), Distance sampling with camera traps. Methods Ecol Evol, 8: 1558-1565. doi:10.1111/2041-210X.12790
+#'
+#' Howe, Eric J. et al. (2018), Data from: Distance sampling with camera traps, Dryad, Dataset, https://doi.org/10.5061/dryad.b4c70
+#' @keywords datasets
+NULL
+

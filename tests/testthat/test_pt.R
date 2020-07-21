@@ -42,3 +42,37 @@ test_that("ptexample.single from mrds gives same results -- binned",{
   expect_that(summary(xx$ddf)$average.p,equals(0.1779359,tol=p.tol))
 
 })
+
+## amongst other things: test that left truncation does the right thing
+## based on bug at https://github.com/DistanceDevelopment/Distance/issues/64
+## this test is very slow so disabled for now
+#test_that("camera trap data works",{
+#
+#  data(DuikerCameraTraps)
+#
+#  trunc.list <- list(left=2, right=15)
+#  conversion <- convert_units("meter", NULL, "square kilometer")
+#  DuikerCameraTraps.hr <- ds(DuikerCameraTraps, transect = "point",
+#                             key="hr", adjustment = NULL,
+#                             cutpoints = c(seq(2,8,1), 10, 12, 15),
+#                             truncation = trunc.list, convert.units = conversion,
+#                             er.var="P3")
+#
+#  mult.list <-list(creation=data.frame(rate=unique(DuikerCameraTraps$multiplier),
+#                                       SE=0))
+#  DuikerCameraTraps.hr.dens.mult <- dht2(DuikerCameraTraps.hr,
+#                                         flatfile=DuikerCameraTraps,
+#                                         strat_formula = ~1,
+#                                         multipliers = mult.list,
+#                                         convert_units = conversion)
+#
+#
+#  #Check n, effort and number of samples
+#  expect_equal(DuikerCameraTraps.hr.dens.mult$n, 5865)
+#  expect_equal(DuikerCameraTraps.hr.dens.mult$Effort, 12317058)
+#  expect_equal(DuikerCameraTraps.hr.dens.mult$k, 21)
+#  # check density estimate
+#  expect_equal(attr(DuikerCameraTraps.hr.dens.mult, "density")$Density,
+#               14.51055, tol=lnl.tol)
+#
+#})

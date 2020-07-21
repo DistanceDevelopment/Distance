@@ -5,6 +5,7 @@ Distance 1.0.1
 * fix bugs in bootdht where the function crashed if all models failed to fit and when the hessian couldn't be computed
 * better checking of data$observer, thanks to Martin Biuw for pointing this out
 * fix bug in dht2 where the covered area was calculated incorrectly when left truncation was used for point transects
+* add example data for camera trap distance sampling, see ?DuikerCameraTrap for more information
 
 Distance 1.0.0
 ----------------------
