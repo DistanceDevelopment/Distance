@@ -62,7 +62,7 @@ By default for exact distances the maximum observed distance is used as the righ
 \item{region.table}{\code{data.frame} with two columns:
 \tabular{ll}{ \code{Region.Label} \tab label for the region\cr
              \code{Area} \tab area of the region\cr}
-\code{region.table} has one row for each stratum. If there is no stratification then \code{region.table} has one entry with \code{Area} corresponding to the total survey area.}
+\code{region.table} has one row for each stratum. If there is no stratification then \code{region.table} has one entry with \code{Area} corresponding to the total survey area. If \code{Area} is omitted density estimates only are produced.}
 
 \item{sample.table}{\code{data.frame} mapping the regions to the samples (i.e. transects). There are three columns:
 \tabular{ll}{\code{Sample.Label} \tab label for the sample\cr
@@ -103,6 +103,8 @@ This function fits detection functions to line or point transect data and then (
 \section{Details}{
 
 If abundance estimates are required then the \code{data.frame}s \code{region.table} and \code{sample.table} must be supplied. If \code{data} does not contain the columns \code{Region.Label} and \code{Sample.Label} then the \code{data.frame} \code{obs.table} must also be supplied. Note that stratification only applies to abundance estimates and not at the detection function level.
+
+For more advanced abundance/density estimation please see the \code{\link{dht}} and \code{\link{dht2}} functions.
 
 Examples of distance sampling analyses are available at \url{http://examples.distancesampling.org/}.
 }
@@ -167,6 +169,11 @@ Even with no monotonicity constraints, checks are still made that the detection 
 \section{Data format}{
 
 One can supply \code{data} only to simply fit a detection function. However, if abundance/density estimates are necessary further information is required. Either the \code{region.table}, \code{sample.table} and \code{obs.table} \code{data.frame}s can be supplied or all data can be supplied as a "flat file" in the \code{data} argument. In this format each row in data has additional information that would ordinarily be in the other tables. This usually means that there are additional columns named: \code{Sample.Label}, \code{Region.Label}, \code{Effort} and \code{Area} for each observation. See \code{\link{flatfile}} for an example.
+}
+
+\section{Density estimation}{
+
+If column \code{Area} is omitted, a density estimate is generated but note that the degrees of freedom/standard errors/confidence intervals will not match density estimates made with the \code{Area} column present.
 }
 
 \examples{

@@ -73,9 +73,14 @@ checkdata <- function(data, region.table=NULL, sample.table=NULL,
     ## or we have a simplified table, in which case we need to interpret into
     ## three tables.
 
-    if(all(c("Region.Label", "Area", "Sample.Label", "Effort", "object") %in%
+    if(all(c("Region.Label", "Sample.Label", "Effort", "object") %in%
            colnames(data))){
       ## construct region table
+      # if area isn't specified, we can still compute density
+      if(!("Area" %in% names(data))){
+        message("No Area column found, generating density estimates only")
+        data$Area <- 0
+      }
       region.table <- unique(data[,c("Region.Label", "Area")])
       # make sure that the region areas are consistent -- the above can
       # lead to duplicate labels if the areas are not the same for a given
@@ -113,7 +118,7 @@ checkdata <- function(data, region.table=NULL, sample.table=NULL,
 
       # remove the NA rows
       data <- data[!is.na(data$distance),]
-    }else if(all(tolower(c("Region.Label", "Area", "Sample.Label",
+    }else if(all(tolower(c("Region.Label", "Sample.Label",
                            "Effort", "object")) %in%
                  tolower(colnames(data)))){
       stop("flatfile column names detected but with incorrect cAsE, correct the names and re-run. See ?flatfile for details.")
@@ -121,6 +126,10 @@ checkdata <- function(data, region.table=NULL, sample.table=NULL,
   }else{
     # check that dht info has the right column titles
     if(!is.null(region.table) & !is.null(sample.table) & !is.null(obs.table)){
+      if(!("Area" %in% names(region.table))){
+        message("No Area column found, generating density estimates only")
+        region.table$Area <- 0
+      }
       if(!all(c("Region.Label", "Area") %in% names(region.table))){
         stop("region.table must have columns named 'Region.Label' and 'Area'")
       }

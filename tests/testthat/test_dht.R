@@ -28,3 +28,35 @@ test_that("dht without obs.table",{
 
 })
 
+# check density estimation when no area column present
+# https://github.com/DistanceDevelopment/Distance/issues/56
+test_that("no Area column works", {
+
+  # with separate data.frames
+  ds_with_Area <- ds(egdata, 4, region.table=region, adjustment=NULL,
+                     sample.table=samples, obs.table=obs)
+
+  region$Area <- NULL
+  ds_no_Area <- ds(egdata, 4, region.table=region, adjustment=NULL,
+                   sample.table=samples, obs.table=obs)
+
+  # degrees of freedom/uncertainty will not match!
+  # estimates should though!
+  expect_equal(ds_with_Area$dht$individuals$D,#$Estimate,
+               ds_no_Area$dht$individuals$D)#$Estimate)
+
+
+  # with flatfile
+  data(minke)
+
+  minke_with_Area <- ds(minke, adjustment=NULL)
+
+  minke$Area <- NULL
+  minke_no_Area <- ds(minke, adjustment=NULL)
+
+  # totals line doesn't match here as the proportion of effort between
+  # strata is different
+  expect_equal(minke_with_Area$dht$individuals$D[1:2,],
+               minke_no_Area$dht$individuals$D[1:2,])
+
+})

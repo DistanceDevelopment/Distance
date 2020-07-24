@@ -23,7 +23,7 @@
 #' @param region.table \code{data.frame} with two columns:
 #'        \tabular{ll}{ \code{Region.Label} \tab label for the region\cr
 #'                     \code{Area} \tab area of the region\cr}
-#'        \code{region.table} has one row for each stratum. If there is no stratification then \code{region.table} has one entry with \code{Area} corresponding to the total survey area.
+#'        \code{region.table} has one row for each stratum. If there is no stratification then \code{region.table} has one entry with \code{Area} corresponding to the total survey area. If \code{Area} is omitted density estimates only are produced.
 #' @param sample.table \code{data.frame} mapping the regions to the samples (i.e. transects). There are three columns:
 #'        \tabular{ll}{\code{Sample.Label} \tab label for the sample\cr
 #'                     \code{Region.Label} \tab label for the region that the
@@ -49,6 +49,8 @@
 #'
 #' @section Details:
 #' If abundance estimates are required then the \code{data.frame}s \code{region.table} and \code{sample.table} must be supplied. If \code{data} does not contain the columns \code{Region.Label} and \code{Sample.Label} then the \code{data.frame} \code{obs.table} must also be supplied. Note that stratification only applies to abundance estimates and not at the detection function level.
+#'
+#' For more advanced abundance/density estimation please see the \code{\link{dht}} and \code{\link{dht2}} functions.
 #'
 #' Examples of distance sampling analyses are available at \url{http://examples.distancesampling.org/}.
 #'
@@ -102,6 +104,8 @@
 #'
 #' @section Data format:
 #' One can supply \code{data} only to simply fit a detection function. However, if abundance/density estimates are necessary further information is required. Either the \code{region.table}, \code{sample.table} and \code{obs.table} \code{data.frame}s can be supplied or all data can be supplied as a "flat file" in the \code{data} argument. In this format each row in data has additional information that would ordinarily be in the other tables. This usually means that there are additional columns named: \code{Sample.Label}, \code{Region.Label}, \code{Effort} and \code{Area} for each observation. See \code{\link{flatfile}} for an example.
+#' @section Density estimation:
+#' If column \code{Area} is omitted, a density estimate is generated but note that the degrees of freedom/standard errors/confidence intervals will not match density estimates made with the \code{Area} column present.
 #'
 #' @author David L. Miller
 #' @seealso \code{\link{flatfile}} \code{\link{AIC.ds}} \code{\link{ds.gof}} \code{\link{p_dist_table}} \code{\link{plot.ds}} \code{\link{add_df_covar_line}}
@@ -606,13 +610,17 @@ ds <- function(data, truncation=ifelse(is.null(cutpoints),
     warning("Estimated hazard-rate scale parameter close to 0 (on log scale). Possible problem in data (e.g., spike near zero distance).")
   }
 
-
   ## Now calculate abundance/density using dht()
   if(!is.null(region.table) & !is.null(sample.table)){
-
-
     # if obs.table is not supplied, then data must have the Region.Label and
     # Sample.Label columns
+
+    # setup dht options
+    dht_options <- list(group         = dht.group,
+                        ervar         = er.var,
+                        convert.units = convert.units)
+
+    # if no obs.table
     if(is.null(obs.table)){
       if(all(c("Region.Label", "Sample.Label") %in% names(data))){
 
@@ -621,17 +629,13 @@ ds <- function(data, truncation=ifelse(is.null(cutpoints),
           dht.res <- NULL
         }else{
           dht.res <- dht(model, region.table, sample.table,
-                         options=list(#varflag=0,
-                                      group         = dht.group,
-                                      ervar         = er.var,
-                                      convert.units = convert.units), se=TRUE)
+                         options=dht_options, se=TRUE)
         }
       }else{
         message("No obs.table supplied nor does data have Region.Label and Sample.Label columns, only estimating detection function.\n")
         dht.res <- NULL
       }
     }else{
-
       # from ?dht:
       # For animals observed in tight clusters, that estimator gives the
       # abundance of groups (group=TRUE in options) and the abundance of
@@ -644,10 +648,7 @@ ds <- function(data, truncation=ifelse(is.null(cutpoints),
         dht.res <- NULL
       }else{
         dht.res <- dht(model, region.table, sample.table, obs.table,
-                       options=list(#varflag=0,group=TRUE,
-                                    group         = dht.group,
-                                    ervar         = er.var,
-                                    convert.units = convert.units), se=TRUE)
+                       options=dht_options, se=TRUE)
       }
     }
   }else{
