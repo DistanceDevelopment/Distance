@@ -82,7 +82,7 @@ bootdht <- function(model,
   # we're not going to have a good time
   if(missing(summary_fun) &
      (is.null(flatfile$Area) || all(flatfile$Area==0))){
-    stop("No Area in flatfile, densities will be returned and the default summary function records only abundances. You need to write your own summay_fun.")
+    stop("No Area in flatfile, densities will be returned and the default summary function records only abundances. You need to write your own summary_fun.")
   }
 
   # apply the sample fraction

@@ -8,11 +8,11 @@ test_that("area=0 with default summary",{
   surv <- ds(amakihi, transect="point", key="hr",
              formula=~Region.Label, convert.units=conv, truncation = 82.5)
   expect_error(bootdht(surv, flatfile=amakihi, nboot=5),
-               "No Area in flatfile, densities will be returned and the default summary function records only abundances. You need to write your own summay_fun.")
+               "No Area in flatfile, densities will be returned and the default summary function records only abundances. You need to write your own summary_fun.")
 
   amakihi$Area <- NULL
   expect_error(bootdht(surv, flatfile=amakihi, nboot=5),
-               "No Area in flatfile, densities will be returned and the default summary function records only abundances. You need to write your own summay_fun.")
+               "No Area in flatfile, densities will be returned and the default summary function records only abundances. You need to write your own summary_fun.")
 
 })
 
