@@ -205,7 +205,17 @@ dht2 <- function(ddf, observations=NULL, transects=NULL, geo_strat=NULL,
     # should this just run Distance:::checkdata(flatfile)?
 
     # check regular columns exist
-    flatfile_labels <- c("distance", "Sample.Label", "Effort", "Area")
+    if(ddf$meta.data$binned){
+      flatfile_labels <- c("distbegin", "distend", "Sample.Label", "Effort",
+                           "Area")
+      # make a dummy distance column for use later on
+      # this overwrites the column that's there BUT that's okay
+      # since we need to make sure it's consistent with the bins
+      flatfile$distance <- (flatfile$distend+flatfile$distbegin)/2
+    }else{
+      flatfile_labels <- c("distance", "Sample.Label", "Effort", "Area")
+    }
+
     if(!all(flatfile_labels %in% names(flatfile))){
       stop(paste("Column(s):",
                  paste(flatfile_labels[!(flatfile_labels %in% names(flatfile))],
