@@ -9,7 +9,7 @@
 A data frame with 6277 rows and 6 variables
   \tabular{ll}{
     \code{Region.Label} \tab strata names (single stratum) \cr
-    \code{Area} \tab size of study area (0 in this case) \cr
+    \code{Area} \tab size of study area (40.37 km^2) \cr
     \code{multiplier} \tab spatial effort, as the proportion of a circle covered by the angle of view of the camera (42 degrees for these cameras) \cr
     \code{Sample.Label} \tab camera station identifier (21 functioning cameras in this data set) \cr
     \code{Effort} \tab temporal effort, i.e. the number of 2-second time-steps over which the camera operated\cr
