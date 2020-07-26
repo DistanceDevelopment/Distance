@@ -52,7 +52,6 @@ Model selection can be performed on a per-replicate basis within the bootstrap. 
 \enumerate{
    \item when \code{select_adjustments} is \code{TRUE} then adjustment terms are selected by AIC within each bootstrap replicate (provided that \code{model} had the \code{order} and \code{adjustment} options set to non-\code{NULL}.
    \item if \code{model} is a list of fitted detection functions, each of these is fitted to each replicate and results generated from the one with the lowest AIC.
-   \item if both 
    \item when \code{select_adjustments} is \code{TRUE} and \code{model} is a list of fitted detection functions, each model fitted to each replicate and number of adjustments is selected via AIC.
 }
 The last of these options can be very time consuming!
