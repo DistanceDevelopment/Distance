@@ -179,18 +179,24 @@ dht2 <- function(ddf, observations=NULL, transects=NULL, geo_strat=NULL,
     # get probabilities of detection
     bigdat$p <- predict(ddf)$fitted
 
-    bigdat <- merge(bigdat, observations, all.x=TRUE, by="object")
+    bigdat <- merge(bigdat, observations, all.x=TRUE, by="object",
+                    suffixes=c("DUPLICATE", ""))
 
     # remove Sample.Label dupes
-    if(!is.null(bigdat[["Sample.Label.x"]])){
-      bigdat[["Sample.Label"]] <- bigdat[["Sample.Label.x"]]
-      bigdat[["Sample.Label.x"]] <- NULL
-      bigdat[["Sample.Label.y"]] <- NULL
+    if(any(grepl("DUPLICATE", names(bigdat)))){
+      bigdat[, grepl("DUPLICATE", names(bigdat))] <- NULL
     }
 
     # merge onto transects
+    join_labs <- intersect(names(bigdat), names(transects))
+    join_labs <- join_labs[c("Sample.Label", geo_stratum_labels) %in% join_labs]
     bigdat <- merge(bigdat, transects, all.x=TRUE, all.y=TRUE,
-                    by="Sample.Label")
+                    by=join_labs,
+                    suffixes=c("DUPLICATE", ""))
+    # remove Sample.Label dupes
+    if(any(grepl("DUPLICATE", names(bigdat)))){
+      bigdat[, grepl("DUPLICATE", names(bigdat))] <- NULL
+    }
 
     # merge on the geographical strata
     if(!is.null(geo_strat)){
