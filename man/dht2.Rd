@@ -18,7 +18,8 @@ dht2(
   ci_width = 0.95,
   innes = FALSE,
   stratification = "geographical",
-  total_area = NULL
+  total_area = NULL,
+  binomial_var = FALSE
 )
 }
 \arguments{
@@ -49,6 +50,8 @@ dht2(
 \item{stratification}{what do strata represent, see "Stratification" below.}
 
 \item{total_area}{for options \code{stratification="effort_sum"} and \code{stratification="replicate"} the area to use as the total for combined, weighted final estimates.}
+
+\item{binomial_var}{if we wish to estimate abundance for the covered area only (i.e., study area = surveyed area) then this must be set to be \code{TRUE} and use the binomial variance estimator of Borchers et al. (1998). This is only valid when objects are not clustered. (This situation is rare.)}
 }
 \value{
 a \code{data.frame} with estimates and attributes containing additional information
@@ -104,6 +107,10 @@ It is often the case that distances are recorded in one convenient set of units,
 }
 
 \references{
+Borchers, D.L., S.T. Buckland, P.W. Goedhart, E.D. Clarke, and S.L. Hedley.
+  1998. Horvitz-Thompson estimators for double-platform line transect
+  surveys. Biometrics 54: 1221-1237.
+
 Borchers, D.L., S.T. Buckland, and W. Zucchini. 2002 \emph{Estimating Animal Abundance: Closed Populations}. Statistics for Biology and Health. Springer London.
 
 Buckland, S.T., E.A. Rexstad, T.A. Marques, and C.S. Oedekoven. 2015 \emph{Distance Sampling: Methods and Applications}. Methods in Statistical Ecology. Springer International Publishing.

@@ -16,6 +16,7 @@
 #' @param ci_width for use with confidence interval calculation (defined as 1-alpha, so the default 95 will give a 95\% confidence interval).
 #' @param innes logical flag for computing encounter rate variance using either the method of Innes et al (2002) where estimated abundance per transect divided by effort is used as the encounter rate, vs. (when \code{innes=FALSE}) using the number of observations divided by the effort (as in Buckland et al., 2001)
 #' @param total_area for options \code{stratification="effort_sum"} and \code{stratification="replicate"} the area to use as the total for combined, weighted final estimates.
+#' @param binomial_var if we wish to estimate abundance for the covered area only (i.e., study area = surveyed area) then this must be set to be \code{TRUE} and use the binomial variance estimator of Borchers et al. (1998). This is only valid when objects are not clustered. (This situation is rare.)
 #' @return a \code{data.frame} with estimates and attributes containing additional information
 #'
 #' @export
@@ -57,6 +58,11 @@
 #' It is often the case that distances are recorded in one convenient set of units, whereas the study area and effort are recorded in some other units. To ensure that the results from this function are in the expected units, we use the \code{convert_units} argument to supply a single number to convert the units of the covered area to those of the study/stratification area (results are always returned in the units of the study area). For line transects, the covered area is calculated as \code{2 * width * length} where \code{width} is the effective (half)width of the transect (often referred to as w in the literature) and \code{length} is the line length (referred to as L). If \code{width} and \code{length} are measured in kilometres and the study area in square kilometres, then all is fine and \code{convert_units} is 1 (and can be ignored). If, for example, line length and distances were measured in metres, we instead need to convert this to be kilometres, by dividing by 1000 for each of distance and length, hence \code{convert_units=1e-6}. For point transects, this is slightly easier as we only have the radius and study area to consider, so the conversion is just such that the units of the truncation radius are the square root of the study area units.
 #'
 #' @references
+#'
+#' Borchers, D.L., S.T. Buckland, P.W. Goedhart, E.D. Clarke, and S.L. Hedley.
+#'   1998. Horvitz-Thompson estimators for double-platform line transect
+#'   surveys. Biometrics 54: 1221-1237.
+#'
 #' Borchers, D.L., S.T. Buckland, and W. Zucchini. 2002 \emph{Estimating Animal Abundance: Closed Populations}. Statistics for Biology and Health. Springer London.
 #'
 #' Buckland, S.T., E.A. Rexstad, T.A. Marques, and C.S. Oedekoven. 2015 \emph{Distance Sampling: Methods and Applications}. Methods in Statistical Ecology. Springer International Publishing.
@@ -71,7 +77,7 @@ dht2 <- function(ddf, observations=NULL, transects=NULL, geo_strat=NULL,
                  multipliers=NULL, sample_fraction=1,
                  ci_width=0.95, innes=FALSE,
                  stratification="geographical",
-                 total_area=NULL){
+                 total_area=NULL, binomial_var=FALSE){
 
   # just get the ds model if we have Distance::ds output
   if(inherits(ddf, "dsmodel")){
@@ -85,6 +91,12 @@ dht2 <- function(ddf, observations=NULL, transects=NULL, geo_strat=NULL,
     }else{
       er_est <- "R2"
     }
+  }
+
+  # check we have a valid stratification option
+  if(!(stratification %in% c("geographical", "object",
+                             "effort_sum", "replicate"))){
+    stop("'stratification' must be one of: \"geographical\", \"object\", \"effort_sum\" or \"replicate\"")
   }
 
   # check ci width
@@ -264,7 +276,7 @@ dht2 <- function(ddf, observations=NULL, transects=NULL, geo_strat=NULL,
       geo_stratum_labels <- c()
     }
 
-    # TODO: checked when implementing multiple stratification
+    # TODO: check when implementing multiple stratification
     # https://github.com/DistanceDevelopment/Distance/issues/46
     if(stratification=="object"){
       # what are all the possible combinations of obs level stratum
@@ -422,9 +434,10 @@ dht2 <- function(ddf, observations=NULL, transects=NULL, geo_strat=NULL,
   res <- bigdat %>%
     group_by_at(vars("Sample.Label"))
 
-  # if we are stratifying by object-level covariates, need to
+  # if we are stratifying by object or geographical covariates, need to
   # make sure summaries are made at the sample-stratum level here
-  if(stratification=="object"){
+  # (since sample labels may be duplicated between strata)
+  if(stratification %in% c("object", "geographical")){
     res <- res %>%
       group_by_at(.vars=stratum_labels, .add=TRUE)
   }
@@ -512,10 +525,10 @@ if(mult){
     group_by_at(.vars=stratum_labels) %>%
       # now we're done with observation level stuff, so remove the columns
       # that we don't need
-      select(!!stratum_labels, "Sample.Label", "Area", "n", "Nc", "transect_n", "Effort",
-             "Covered_area", "df_var", "transect_Nc", "group_var", "group_mean",
-             "Nc_cuecorrected", "rate_SE", "rate", "rate_df", "rate_CV", "p_var", "p_average",
-             "transect_n_observations") %>%
+      select(!!stratum_labels, "Sample.Label", "Area", "n", "Nc", "transect_n",
+             "Effort", "Covered_area", "df_var", "transect_Nc", "group_var",
+             "group_mean", "Nc_cuecorrected", "rate_SE", "rate", "rate_df",
+             "rate_CV", "p_var", "p_average", "transect_n_observations") %>%
       # keep only unique rows
       distinct()
 
@@ -529,7 +542,7 @@ if(mult){
   resT <- ungroup(res)
 
   # calculate ER variance
-  res <- ER_var_f(res, innes=innes, er_est=er_est, est_density)
+  res <- ER_var_f(res, innes=innes, er_est=er_est, binomial_var=binomial_var)
 
   # calculate final summaries
   res <- res %>%
@@ -626,8 +639,10 @@ if(mult){
     mutate(bigC = exp((abs(qt(ci_width, .data$df)) *
                    sqrt(log(1 + .data$Abundance_CV^2))))) %>%
     # actually calculate the cis
-    mutate(LCI = if_else(.data$Abundance_CV==0, .data$Abundance, .data$Abundance / .data$bigC),
-           UCI = if_else(.data$Abundance_CV==0, .data$Abundance, .data$Abundance * .data$bigC)) %>%
+    mutate(LCI = if_else(.data$Abundance_CV==0,
+                         .data$Abundance, .data$Abundance / .data$bigC),
+           UCI = if_else(.data$Abundance_CV==0,
+                         .data$Abundance, .data$Abundance * .data$bigC)) %>%
     # done!
     ungroup() %>%
     distinct()
@@ -654,10 +669,10 @@ if(mult){
       this_stra_row[] <- NA
       this_stra_row[[this_stratum]] <- "Total"
 
-# from mrds:
-    # df for total estimate assuming sum of indep region estimates; uses
-    # variances instead of cv's because it is a sum of means for encounter
-    # rate portion of variance (df.total)
+    # from mrds:
+    #   df for total estimate assuming sum of indep region estimates; uses
+    #   variances instead of cv's because it is a sum of means for encounter
+    #   rate portion of variance (df.total)
 
       dat_row <- dat_row %>%
         mutate(n  = sum(.data$n))
@@ -667,14 +682,19 @@ if(mult){
         # "weighting by area"
         #  which is adding up the abundances
         dat_row <- dat_row %>%
-          mutate(ER_var       = sum(.data$ER_var, na.rm=TRUE)) %>%
-          mutate(ER_var_Nhat  = sum(.data$ER_var_Nhat, na.rm=TRUE)) %>%
-          mutate(weight       = 1,
+          # for the density case weight by covered area
+          mutate(weight       = if_else(rep(est_density, nrow(dat_row)),
+                                        .data$Covered_area/
+                                         sum(.data$Covered_area), 1),
                  Area         = sum(.data$Area),
                  Covered_area = sum(.data$Covered_area),
                  Effort       = sum(.data$Effort),
                  k            = sum(.data$k)) %>%
-          mutate(ER_df = .data$ER_var_Nhat^2/sum((res$ER_var_Nhat^2/.data$ER_df)))
+          # now summarize ER variance and degrees of freedom
+          mutate(ER_var       = sum(.data$ER_var, na.rm=TRUE)) %>%
+          mutate(ER_var_Nhat  = sum(.data$ER_var_Nhat, na.rm=TRUE)) %>%
+          mutate(ER_df = .data$ER_var_Nhat^2/
+                         sum((res$ER_var_Nhat^2/.data$ER_df)))
       }else if(stratification %in% c("effort_sum", "replicate")){
         # check that all areas are the same value
         if(length(unique(dat_row$Area))>1 &
@@ -714,15 +734,14 @@ if(mult){
                  Effort       = .data$Effort[1],
                  k            = .data$k[1]) %>%
           mutate(ER_df        = .data$ER_var_Nhat^2/sum((res$ER_var_Nhat^2/.data$ER_df)))
-      }else{
-        # TODO: move to top
-        stop("Invalid weighting option")
       }
 
       # calculate the weighted abundance
       dat_row <- dat_row %>%
         mutate(ER         = .data$n/.data$Effort) %>%
-        mutate(ER_CV      = if_else(.data$ER==0, 0, sqrt(.data$ER_var)/.data$ER)) %>%
+        mutate(ER_CV      = if_else(.data$ER==0,
+                                    0,
+                                    sqrt(.data$ER_var)/.data$ER)) %>%
         mutate(Abundance  = sum(.data$weight*.data$Abundance)) %>%
         mutate(group_mean = mean(.data$group_mean),
                group_var  = sum(.data$group_var)) %>%
@@ -765,7 +784,6 @@ if(mult){
                     df_tvar +
                     dat_row$Abundance[1]^2*dat_row$rate_CV[1]^2
       }
-
 
       dat_row <- dat_row %>%
         mutate(Nc = sum(.data$weight*.data$Nc),
