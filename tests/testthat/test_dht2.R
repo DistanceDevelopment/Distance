@@ -194,6 +194,7 @@ test_that("density estimation, no innes, longform", {
   expect_equal(dht_old$individuals$summary$n, dht2_zero$n)
   expect_equal(dht_old$individuals$summary$CoveredArea, dht2_zero$Covered_area)
   expect_equal(dht_old$individuals$summary$se.ER, sqrt(dht2_zero$ER_var))
+#  expect_equal(dht_old$individuals$summary$cv.ER, sqrt(dht2_zero$ER_CV))
   expect_equal(dht_old$individuals$D$se, dht2_zero$Abundance_se, tol=1e-4)
 
 })
@@ -204,11 +205,6 @@ test_that("density estimation, innes", {
   # dht
   dht_old <- dht(easy.am$ddf, uf$region.table, uf$sample.table, uf$obs.table,
                  options=list(convert.units=conv.am, ervar="P2", varflag=2))
-  # now with dht2 equiv
-  #dht2_zero <- dht2(easy.am, observations=uf$obs.table,
-  #                  transects=uf$sample.table, uf$region.table,
-  #                  convert_units = conv.am,
-  #                  strat_formula = ~Region.Label, innes=FALSE, er_est="P2")
   dht2_zero <- dht2(easy.am, flatfile=amakihi, convert_units = conv.am,
                     strat_formula = ~Region.Label, innes=TRUE, er_est="P2")
 

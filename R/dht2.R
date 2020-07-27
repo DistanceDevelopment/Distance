@@ -553,8 +553,8 @@ if(mult){
   # calculate final summaries
   res <- res %>%
     # number of transects, total effort and covered area per stratum
-    mutate(k = length(.data$Sample.Label),
-           Effort = sum(.data$Effort),
+    mutate(k            = length(.data$Sample.Label),
+           Effort       = sum(.data$Effort),
            Covered_area = sum(.data$Covered_area)) %>%
     ## keep only these columns
     select(!!stratum_labels, "Area", "Nc", "n", "ER_var", "Effort", "k",
@@ -562,7 +562,6 @@ if(mult){
            "rate_SE", "rate", "rate_df", "rate_CV", "p_var", "p_average") %>%
     ## now just get the distinct cases
     distinct()
-    # calculate stratum encounter rate
 
   # we calculated n differently above, so reconcile this in the
   # encounter rate calculation
@@ -697,8 +696,10 @@ if(mult){
                  Effort       = sum(.data$Effort),
                  k            = sum(.data$k)) %>%
           # now summarize ER variance and degrees of freedom
-          mutate(ER_var       = sum(.data$ER_var, na.rm=TRUE)) %>%
-          mutate(ER_var_Nhat  = sum(.data$ER_var_Nhat, na.rm=TRUE)) %>%
+          mutate(ER_var       = sum(.data$weight^2*.data$ER_var,
+                                    na.rm=TRUE)) %>%
+          mutate(ER_var_Nhat  = sum(.data$weight^2*.data$ER_var_Nhat,
+                                    na.rm=TRUE)) %>%
           mutate(ER_df = .data$ER_var_Nhat^2/
                          sum((res$ER_var_Nhat^2/.data$ER_df)))
       }else if(stratification %in% c("effort_sum", "replicate")){
@@ -785,10 +786,10 @@ if(mult){
         tvar <- sum(dat_row$weight^2*(
                       (dat_row$Abundance_se^2-
                        res$Abundance^2*res$rate_CV^2 -
-                        dat_row$df_var)),
+                       dat_row$df_var)),
                     na.rm=TRUE) +
-                    df_tvar +
-                    dat_row$Abundance[1]^2*dat_row$rate_CV[1]^2
+                df_tvar +
+                dat_row$Abundance[1]^2*dat_row$rate_CV[1]^2
       }
 
       dat_row <- dat_row %>%
