@@ -182,7 +182,7 @@ dht2 <- function(ddf, observations=NULL, transects=NULL, geo_strat=NULL,
     bigdat <- merge(bigdat, observations, all.x=TRUE, by="object",
                     suffixes=c("DUPLICATE", ""))
 
-    # remove Sample.Label dupes
+    # remove column duplicates
     if(any(grepl("DUPLICATE", names(bigdat)))){
       bigdat[, grepl("DUPLICATE", names(bigdat))] <- NULL
     }
