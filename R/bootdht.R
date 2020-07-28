@@ -4,7 +4,7 @@
 #'
 #' @param model a model fitted by \code{\link{ds}} or a list of models
 #' @param flatfile Data provided in the flatfile format. See \code{\link{flatfile}} for details.
-#' @param convert.units conversion between units for abundance estimation, see "Units", below. (Defaults to 1, implying all of the units are "correct" already.)
+#' @param convert.units conversion between units for abundance estimation, see "Units", below. (Defaults to 1, implying all of the units are "correct" already.) This takes precedence over any unit conversion stored in \code{model}.
 #' @param resample_strata should resampling happen at the stratum (\code{Region.Label}) level? (Default \code{FALSE})
 #' @param resample_obs should resampling happen at the observation (\code{object}) level? (Default \code{FALSE})
 #' @param resample_transects should resampling happen at the transect (\code{Sample.Label}) level? (Default \code{TRUE})
@@ -67,6 +67,10 @@ bootdht <- function(model,
     # yes, I am a monster
   }else{
     models <- model
+  }
+
+  if(missing(convert.units)){
+    convert.units <-  NULL
   }
 
   for(i in seq_along(models)){
@@ -142,6 +146,9 @@ bootdht <- function(model,
       }
       # insert the new data into the model
       df_call$data <- bootdat
+      if(!is.null(convert.units)){
+        df_call$convert.units <- convert.units
+      }
 
       # fit that and update what's in models
       models[[i]] <- try(suppressMessages(eval(df_call, parent.frame(n=3))),

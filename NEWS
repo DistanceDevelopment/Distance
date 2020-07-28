@@ -9,6 +9,7 @@ Distance 1.0.1
 * Stratum area column (Area) is no longer required by ds(). If it is omitted density estimates are returned.
 * Fix bug when dht2 is used with pre-binned data. Thanks to Delphine Ducros for reporting this bug.
 * Fix to dht2 bugs when Innes et al estimator is used for encounter rate variance estimation
+* fix bootdht issue where convert.units argument was not handled properly
 
 Distance 1.0.0
 ----------------------
