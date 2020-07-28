@@ -6,13 +6,13 @@ ER_var_f <- function(erdat, innes, er_est, binomial_var=FALSE){
   if(binomial_var){
     # "varflag=0"
     # do the binomial var if A=a
+    # TODO: fix
     erdat <- erdat %>%
       mutate(pdot = .data$n/.data$Nc) %>%
       mutate(ER_var = sum((1-.data$pdot)/.data$pdot^2) +
                            .data$Nc^2 * .data$group_var/.data$group_mean^2)
       erdat$pdot <- NULL
 
-# TODO: this might not be right
     erdat <- erdat %>%
       mutate(ER_var_Nhat = (.data$Nc*sum(.data$Effort))^2 *
                              .data$ER_var/sum(.data$transect_n)^2) %>%
@@ -41,9 +41,7 @@ ER_var_f <- function(erdat, innes, er_est, binomial_var=FALSE){
                                .data$ER_var,
                                0)) %>%
         # put ER var on the Nhat scale
-        mutate(ER_var_Nhat = (.data$Area/sum(.data$Covered_area))^2 *
-                             (.data$Nc*sum(.data$Effort))^2 *
-                               .data$ER_var/sum(.data$transect_n)^2) %>%
+        mutate(ER_var_Nhat = varn(.data$Effort/(sum(.data$Effort)*unique(.data$Area)/sum(.data$Covered_area)), .data$transect_Nc, type=er_est)) %>%
         # if any strata only had one transect:
         mutate(ER_var_Nhat = ifelse(length(unique(.data$Sample.Label))>1,
                                     .data$ER_var_Nhat,

@@ -251,6 +251,42 @@ test_that("flat minke works", {
 
 })
 
+test_that("minke dht vs dht2", {
+
+  uf <- unflatten(minke)
+
+  # compare dht and dht2
+  mfit <- ds(minke, key="hr", formula=~Region.Label, tru=1.5)
+  dht_old <- dht(mfit$ddf, uf$region.table, uf$sample.table,
+                 options=list(ervar="R2", varflag=1))
+
+  fromdht2 <- dht2(mfit, flatfile=minke,
+                   strat_formula=~Region.Label)
+
+  expect_equal(dht_old$individuals$N$Estimate,
+               fromdht2$Abundance)
+  #expect_equal(dht_old$individuals$summary$se.ER,
+  #             sqrt(fromdht2$ER_var), tol=1e-4)
+
+  expect_equal(dht_old$individuals$N$se,
+               fromdht2$Abundance_se, tol=1e-4)
+
+
+  # now with innes
+  dht_old <- dht(mfit$ddf, uf$region.table, uf$sample.table,
+                 options=list(ervar="R2", varflag=2))
+  fromdht2 <- dht2(mfit, flatfile=minke, strat_formula=~Region.Label, innes=TRUE)
+
+  expect_equal(dht_old$individuals$N$Estimate,
+               fromdht2$Abundance)
+  # note this will always be wrong because dht reports ER without Innes
+  # but dht2 reports with Innes
+  #expect_equal(dht_old$individuals$summary$se.ER,
+  #             sqrt(fromdht2$ER_var), tol=1e-4)
+  expect_equal(dht_old$individuals$N$se,
+               fromdht2$Abundance_se, tol=1e-4)
+})
+
 test_that("area=0, flat minke works", {
 
   minke_noobj$Area <- 0
@@ -264,9 +300,10 @@ test_that("area=0, flat minke works", {
                fromdht2$Abundance)
 
   expect_equal(strat.spec$dht$individuals$D$se,
-               fromdht2$Abundance_se)#, tol=1e-4)
+               fromdht2$Abundance_se, tol=1e-4)
 
-  expect_equal(strat.spec$dht$individuals$summary$se.ER, sqrt(fromdht2$ER_var))
+  expect_equal(strat.spec$dht$individuals$summary$se.ER, sqrt(fromdht2$ER_var),
+               tol=1e-3)
 
 
 })

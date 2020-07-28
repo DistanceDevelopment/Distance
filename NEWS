@@ -8,6 +8,7 @@ Distance 1.0.1
 * add example data for camera trap distance sampling, see ?DuikerCameraTrap for more information
 * Stratum area column (Area) is no longer required by ds(). If it is omitted density estimates are returned.
 * Fix bug when dht2 is used with pre-binned data. Thanks to Delphine Ducros for reporting this bug.
+* Fix to dht2 bugs when Innes et al estimator is used for encounter rate variance estimation
 
 Distance 1.0.0
 ----------------------

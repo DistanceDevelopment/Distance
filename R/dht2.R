@@ -93,6 +93,10 @@ dht2 <- function(ddf, observations=NULL, transects=NULL, geo_strat=NULL,
     }
   }
 
+  if(binomial_var){
+    stop("binomial variance estimator not implemented yet")
+  }
+
   # check we have a valid stratification option
   if(!(stratification %in% c("geographical", "object",
                              "effort_sum", "replicate"))){
@@ -622,10 +626,13 @@ if(mult){
 
   # se and CV
   res <- res %>%
-    mutate(Abundance_CV = sqrt(sum(c(.data$ER_CV^2,
-                                     .data$df_CV^2,
-                                     .data$rate_CV^2,
-                                     .data$group_CV^2),
+    # first add the ER and detfct variance components
+    mutate(Abundance_CV = sqrt(sum(c(.data$ER_var_Nhat,
+                                     .data$df_var), na.rm=TRUE))/
+                           .data$Abundance) %>%
+    # now add in the multiplier rate CV
+    mutate(Abundance_CV = sqrt(sum(c(Abundance_CV^2,
+                                     .data$rate_CV^2),
                                    na.rm=TRUE)))%>%
     mutate(Abundance_se = .data$Abundance_CV*.data$Abundance) %>%
     distinct()
@@ -674,15 +681,15 @@ if(mult){
       this_stra_row[] <- NA
       this_stra_row[[this_stratum]] <- "Total"
 
-    # from mrds:
-    #   df for total estimate assuming sum of indep region estimates; uses
-    #   variances instead of cv's because it is a sum of means for encounter
-    #   rate portion of variance (df.total)
-
+      # from mrds:
+      #   df for total estimate assuming sum of indep region estimates; uses
+      #   variances instead of cv's because it is a sum of means for encounter
+      #   rate portion of variance (df.total)
       dat_row <- dat_row %>%
         mutate(n  = sum(.data$n))
+
       #### stratification options
-      ## in Distance for Windows these are in density
+      ## in Distance for Windows these are in terms of density
       if(stratification=="geographical"){
         # "weighting by area"
         #  which is adding up the abundances

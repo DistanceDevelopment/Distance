@@ -28,7 +28,8 @@ test_that("cluster exercise works",{
                              nofit=TRUE))
   df <- result
 
-  strat_N <- dht2(df, flatfile=ClusterExercise, strat_formula=~Cluster.strat, stratification="object")
+  strat_N <- dht2(df, flatfile=ClusterExercise, strat_formula=~Cluster.strat,
+                  stratification="object")
 
 #  Estimate      %CV     df     95% Confidence Interval
 #                         ------------------------------------------------------
