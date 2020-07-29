@@ -496,7 +496,7 @@ NULL
 #'     \code{Effort} \tab temporal effort, i.e. the number of 2-second time-steps over which the camera operated\cr
 #'     \code{distance} \tab radial distance (m) to interval midpoint\cr
 #'   }
-#' @source Howe, E.J., Buckland, S.T., Després‐Einspenner, M.‐L. and Kühl, H.S. (2017), Distance sampling with camera traps. Methods Ecol Evol, 8: 1558-1565. doi:10.1111/2041-210X.12790
+#' @source Howe, E.J., Buckland, S.T., Després-Einspenner, M.-L. and Kühl, H.S. (2017), Distance sampling with camera traps. Methods Ecol Evol, 8: 1558-1565. doi:10.1111/2041-210X.12790
 #'
 #' Howe, Eric J. et al. (2018), Data from: Distance sampling with camera traps, Dryad, Dataset, https://doi.org/10.5061/dryad.b4c70
 #' @keywords datasets
