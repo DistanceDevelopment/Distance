@@ -93,10 +93,6 @@ dht2 <- function(ddf, observations=NULL, transects=NULL, geo_strat=NULL,
     }
   }
 
-  if(binomial_var){
-    stop("binomial variance estimator not implemented yet")
-  }
-
   # check we have a valid stratification option
   if(!(stratification %in% c("geographical", "object",
                              "effort_sum", "replicate"))){
@@ -108,6 +104,11 @@ dht2 <- function(ddf, observations=NULL, transects=NULL, geo_strat=NULL,
     stop("ci_width must be between 0 and 1!")
   }else{
     ci_width <- (1-ci_width)/2
+  }
+
+  # can't do both innes and binomial var
+  if(innes & binomial_var){
+    stop("Only 'innes' or 'binomial_var' may be TRUE")
   }
 
   # grouped estimation
@@ -439,6 +440,7 @@ dht2 <- function(ddf, observations=NULL, transects=NULL, geo_strat=NULL,
   # note that this all turns out to be non-standard dplyr code because
   # you can't have unquoted variable names (NSE) in CRAN-submitted packages
   # see https://dplyr.tidyverse.org/articles/programming.html for "why"s
+  # so we use rlang::.data to get around this
 
   # first do transect level calculations
   res <- bigdat %>%
@@ -567,6 +569,8 @@ if(mult){
     ## now just get the distinct cases
     distinct()
 
+
+
   # we calculated n differently above, so reconcile this in the
   # encounter rate calculation
   if(stratification=="object"){
@@ -585,72 +589,45 @@ if(mult){
     mutate(group_CV = if_else(.data$group_var==0, 0,
                               sqrt(.data$group_var)/.data$group_mean))
 
-#if(!is.null(grouped)){
-#  res <- res %>%
-#    mutate(Abundance_CV = sqrt(sum(c(ER_CV^2,
-#                                     df_CV^2))))
-#  if(nrow(grouped)>1){
-#    gr <- grouped[-nrow(grouped),,drop=FALSE]
-#  }
-#  gr <- gr[, c(stratum_labels, "Abundance_CV", "Abundance", "Effort")]
-#  names(gr) <- c(stratum_labels, "group_Abundance_CV",
-#                 "group_Abundance", "group_Effort")
-#  res <- merge(res, gr, by=stratum_labels)
-#
-#  # get var info
-#  gr_var <- attr(grouped, "df_var")
-#  vcov <- solvecov(ddf$hessian)$inv
-#
-#  res <- res %>%
-#    mutate(scale     = .data$Area/.data$Covered_area) %>%
-#    mutate(group_cov = covn(.data$group_Effort/(scale*sum(.data$Effort)),
-#                            .data$group_Abundance/scale,
-#                            .data$Abundance/scale,
-#                            er_est)) %>%
-#    # cov.Nc.Ncs <- as.vector(by(obs$size*(1 - obs$pdot)/obs$pdot^2,
-#    #                            obs$Region.Label, sum))
-#    mutate(group_cov  = (.data$group_cov +
-#                         diag(t(gr_var$partial)%*%
-#                          vcov%*%
-#                          df_Nhat_unc$partial))^2) %>%
-#    mutate(group_mean = .data$group_Abundance_CV^2 +
-#                         .data$Abundance_CV^2 -
-#                         2*.data$group_cov/
-#                        (.data$Abundance * .data$group_Abundance)) %>%
-#    mutate(group_CV = if_else(.data$group_var==0, 0,
-#                              sqrt(.data$group_var)/.data$group_mean))
-#  res$scale <- NULL
-#  res$group_Abundance_CV <- NULL
-#  res$group_Abundance <- NULL
-#}
 
   # se and CV
   res <- res %>%
-    # first add the ER and detfct variance components
+    # first add the ER+group size and detfct variance components
     mutate(Abundance_CV = sqrt(sum(c(.data$ER_var_Nhat,
                                      .data$df_var), na.rm=TRUE))/
                            .data$Abundance) %>%
     # now add in the multiplier rate CV
     mutate(Abundance_CV = sqrt(sum(c(Abundance_CV^2,
                                      .data$rate_CV^2),
-                                   na.rm=TRUE)))%>%
+                                   na.rm=TRUE))) %>%
     mutate(Abundance_se = .data$Abundance_CV*.data$Abundance) %>%
     distinct()
 
+
   # total degrees of freedom and CI calculation
+  if(binomial_var){
+    # normal approximation for binomial_var
+    res <- res %>%
+      mutate(bigC = exp((abs(qnorm(ci_width)) *
+                     sqrt(log(1 + .data$Abundance_CV^2))))) %>%
+      mutate(df = 0)
+  }else{
+    res <- res %>%
+      mutate(df = .data$Abundance_CV^4/
+                    sum(c(if_else(.data$k==1, 0, .data$ER_CV^4/.data$ER_df),
+                          .data$df_CV^4/(length(ddf$fitted) - length(ddf$par)),
+                          .data$group_CV^4/(.data$n-1),
+                          .data$rate_CV^4/.data$rate_df),
+                     na.rm=TRUE)) %>%
+      # adjust if df is too small
+      mutate(df = if_else(.data$Abundance_CV==0, 1, .data$df)) %>%
+      # big C for Satterthwaite
+      mutate(bigC = exp((abs(qt(ci_width, .data$df)) *
+                     sqrt(log(1 + .data$Abundance_CV^2)))))
+  }
+
+  # actually calculate the cis
   res <- res %>%
-    mutate(df = .data$Abundance_CV^4/
-                  sum(c(if_else(.data$k==1, 0, .data$ER_CV^4/.data$ER_df),
-                        .data$df_CV^4/(length(ddf$fitted) - length(ddf$par)),
-                        .data$group_CV^4/(.data$n-1),
-                        .data$rate_CV^4/.data$rate_df),
-                   na.rm=TRUE)) %>%
-    # adjust if df is too small
-    mutate(df = if_else(.data$Abundance_CV==0, 1, .data$df)) %>%
-    # big C for Satterthwaite
-    mutate(bigC = exp((abs(qt(ci_width, .data$df)) *
-                   sqrt(log(1 + .data$Abundance_CV^2))))) %>%
-    # actually calculate the cis
     mutate(LCI = if_else(.data$Abundance_CV==0,
                          .data$Abundance, .data$Abundance / .data$bigC),
            UCI = if_else(.data$Abundance_CV==0,
@@ -765,15 +742,13 @@ if(mult){
 
       # calculate total variance for detection function
       vcov <- df_Nhat_unc$variance
-      # vvv could do this if we wanted to ignore covariance
-      #vcov[] <- 0
-      #diag(vcov) <- diag(df_Nhat_unc$variance)
       df_tvar <- matrix(dat_row$weight, nrow=1) %*%
                   vcov %*%
                   matrix(dat_row$weight, ncol=1)
       dat_row <- dat_row %>%
-        mutate(df_CV  = sqrt(df_tvar[1,1])/dat_row$Abundance[1])
+        mutate(df_CV  = sqrt(df_tvar[1, 1])/dat_row$Abundance[1])
 
+      # calculate total variance
       if(stratification=="replicate"){
         # get "between" variance (empirical variance of strata)
         tvar <- sum((dat_row$Abundance[-nrow(dat_row)] -
@@ -787,14 +762,8 @@ if(mult){
                        dat_row$group_CV[1]^2),
                      na.rm=TRUE)
       }else{
-        # add all sources of variance (weighted as above)
-        # here we subtract the detection function variance and add-in the total
-        # variance, which includes a covar term
-        tvar <- sum(dat_row$weight^2*(
-                      (dat_row$Abundance_se^2-
-                       res$Abundance^2*res$rate_CV^2 -
-                       dat_row$df_var)),
-                    na.rm=TRUE) +
+        # add all sources of variance (pre-weighted)
+        tvar <- dat_row$ER_var_Nhat[1] +
                 df_tvar +
                 dat_row$Abundance[1]^2*dat_row$rate_CV[1]^2
       }
@@ -814,28 +783,38 @@ if(mult){
       dat_row <- dat_row %>%
         distinct()
 
-      dat_row <- dat_row %>%
-        # compute degrees of freedom
-        # CV weights for Satterthwaite df
-        mutate(wtcv = sum(c((sqrt(.data$ER_var_Nhat)/.data$Abundance)^4/.data$ER_df,
-                            (df_tvar/.data$Abundance^2)^2/(length(ddf$fitted) - length(ddf$par)),
-                            (.data$rate_SE/.data$Abundance)^4/.data$rate_df,
-                            (.data$group_var/.data$Abundance^2)^2/(.data$n-1)),
-                          na.rm=TRUE)) %>%
-        # calculate Satterthwaite df
-        mutate(df = sum(c((sqrt(.data$ER_var_Nhat)/.data$Abundance)^2,
-                          (sqrt(df_tvar)/.data$Abundance)^2,
-                          (.data$rate_SE/.data$Abundance)^2,
-                          (sqrt(.data$group_var)/.data$Abundance)^2),
-                        na.rm=TRUE)^2) %>%
-        mutate(df = .data$df/.data$wtcv)
-      # drop weight column
-      dat_row$wtcv <- NULL
+      # compute degrees of freedom
+      if(binomial_var){
+        # normal approximation for binomial_var
+        dat_row <- dat_row %>%
+          mutate(bigC = exp((abs(qnorm(ci_width)) *
+                         sqrt(log(1 + .data$Abundance_CV^2))))) %>%
+          mutate(df = 0)
+      }else{
+        dat_row <- dat_row %>%
+          # CV weights for Satterthwaite df
+          mutate(wtcv = sum(c((sqrt(.data$ER_var_Nhat)/.data$Abundance)^4/
+                                    .data$ER_df,
+                              (df_tvar/.data$Abundance^2)^2/
+                                (length(ddf$fitted) - length(ddf$par)),
+                              (.data$rate_SE/.data$Abundance)^4/.data$rate_df,
+                              (.data$group_var/.data$Abundance^2)^2/(.data$n-1)),
+                            na.rm=TRUE)) %>%
+          # calculate Satterthwaite df
+          mutate(df = sum(c((sqrt(.data$ER_var_Nhat)/.data$Abundance)^2,
+                            (sqrt(df_tvar)/.data$Abundance)^2,
+                            (.data$rate_SE/.data$Abundance)^2,
+                            (sqrt(.data$group_var)/.data$Abundance)^2),
+                          na.rm=TRUE)^2) %>%
+          mutate(df = .data$df/.data$wtcv) %>%
+          mutate(bigC = exp((abs(qt(ci_width, .data$df)) *
+                         sqrt(log(1 + .data$Abundance_CV^2)))))
+        # drop weight column
+        dat_row$wtcv <- NULL
+      }
 
       # actually calculate the CIs
       dat_row <- dat_row %>%
-        mutate(bigC = exp((abs(qt(ci_width, .data$df)) *
-                       sqrt(log(1 + .data$Abundance_CV^2))))) %>%
         mutate(LCI = .data$Abundance / .data$bigC,
                UCI = .data$Abundance * .data$bigC)
 
@@ -857,7 +836,9 @@ if(mult){
 
   # fix area == covered area for compatibility with mrds::dht
   if(est_density){
-    res$Area <- res$Covered_area
+    #res$Area <- res$Covered_area
+    res <- res %>%
+      mutate(Area = .data$Covered_area)
   }else{
     # generate density results too!
     dens_res <- res %>%

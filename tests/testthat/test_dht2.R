@@ -216,16 +216,21 @@ test_that("density estimation, innes", {
 
 })
 
-#test_that("varflag=0 works", {
-#  # dht with varflag=0
-#  dht_old <- dht(easy.am$ddf, uf$region.table, uf$sample.table, uf$obs.table,
-#                 options=list(varflag=0, convert.units=conv.am, ervar="P3"))
-#  # now with dht2 equiv
-#  dht2_zero <- dht2(easy.am, flatfile=amakihi, convert_units = conv.am,
-#                    strat_formula = ~Region.Label, binomial_var=TRUE)
-#
-#  expect_equal(dht_old$individuals$D$Estimate, dht2_zero$Abundance)
-#  expect_equal(dht_old$individuals$D$se, dht2_zero$Abundance_se)
-#
-#})
+test_that("varflag=0 works", {
+  # dht with varflag=0
+  dht_old <- dht(easy.am$ddf, uf$region.table, uf$sample.table, uf$obs.table,
+                 options=list(varflag=0, convert.units=conv.am, ervar="P3"))
+  # now with dht2 equiv
+devtools::load_all()
+  dht2_zero <- dht2(easy.am, flatfile=amakihi, convert_units = conv.am,
+                    strat_formula = ~Region.Label, binomial_var=TRUE)
+
+  expect_equal(dht_old$individuals$D$Estimate, dht2_zero$Abundance)
+  expect_equal(dht_old$individuals$D$se, dht2_zero$Abundance_se, tol=1e-5)
+  expect_equal(dht_old$individuals$D$cv, dht2_zero$Abundance_CV, tol=1e-5)
+  expect_equal(dht_old$individuals$D$df, dht2_zero$df)
+  expect_equal(dht_old$individuals$D$lcl, dht2_zero$LCI, tol=1e-5)
+  expect_equal(dht_old$individuals$D$ucl, dht2_zero$UCI, tol=1e-5)
+
+})
 
