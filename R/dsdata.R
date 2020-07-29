@@ -484,8 +484,8 @@ NULL
 #'
 #' Study took place in Tai National Park Cote d'Ivoire in 2014.  Filmed Maxwell's duikers (Philantomba maxwellii) were assigned to distance intervals; recorded distances are the midpoints of the intervals. This data includes only observations recorded at times of peak activity.
 #'
-#' @name DuikerCameraTrap
-#' @aliases DuikerCameraTrap_units
+#' @name DuikerCameraTraps
+#' @aliases DuikerCameraTraps_units
 #' @docType data
 #' @format A data frame with 6277 rows and 6 variables
 #'   \tabular{ll}{

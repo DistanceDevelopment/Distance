@@ -6,6 +6,7 @@
 #' @param data a data.frame
 #' @return data, with (maybe) some extra columns
 #' @author David L Miller
+#' @importFrom stats model.frame
 safe_factorize <- function(formula, data){
 
   if(!grepl("as\\.factor", as.character(formula)[2])){

@@ -21,7 +21,7 @@
 #'
 #' @export
 #' @importFrom rlang .data
-#' @importFrom stats qt na.omit predict terms var
+#' @importFrom stats qt na.omit predict terms var qnorm
 #' @importFrom dplyr group_by group_by_at mutate ungroup select distinct mutate_if if_else summarize_all "%>%" filter_at inner_join anti_join bind_rows left_join arrange vars
 #' @importFrom mrds DeltaMethod
 #' @section Data:
@@ -597,7 +597,7 @@ if(mult){
                                      .data$df_var), na.rm=TRUE))/
                            .data$Abundance) %>%
     # now add in the multiplier rate CV
-    mutate(Abundance_CV = sqrt(sum(c(Abundance_CV^2,
+    mutate(Abundance_CV = sqrt(sum(c(.data$Abundance_CV^2,
                                      .data$rate_CV^2),
                                    na.rm=TRUE))) %>%
     mutate(Abundance_se = .data$Abundance_CV*.data$Abundance) %>%

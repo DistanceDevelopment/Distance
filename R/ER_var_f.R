@@ -14,7 +14,7 @@ ER_var_f <- function(erdat, innes, er_est, binomial_var=FALSE){
       mutate(pdot = .data$transect_n/.data$transect_Nc) %>%
       mutate(ER_var = sum(((1-.data$pdot)/.data$pdot^2)*.data$transect_n,
                           na.rm=TRUE)) %>%
-      mutate(ER_var = if_else(is.infinite(ER_var), 0, ER_var)) %>%
+      mutate(ER_var = if_else(is.infinite(.data$ER_var), 0, .data$ER_var)) %>%
       mutate(ER_var_Nhat = .data$ER_var/sum(.data$Covered_area)^2) %>%
       # if any stratum only had one transect:
       mutate(ER_var_Nhat = ifelse(length(unique(.data$Sample.Label))>1,
