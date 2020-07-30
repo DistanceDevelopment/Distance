@@ -23,7 +23,7 @@ flatdat <- merge(flatdat,egdata,by="object",all.x=TRUE)
 test_that("Recover structure for tee data",{
 
   ## check we can recover the 4 data frames
-  sepdat <- Distance:::checkdata(flatdat)
+  sepdat <- unflatten(flatdat)
 
   # this should be a factor really, as is elsewhere
   obs$Region.Label <- as.factor(obs$Region.Label)
@@ -45,12 +45,12 @@ test_that("Errors work",{
   flatdat[nrow(flatdat)+1,] <- flatdat[1,]
   flatdat[nrow(flatdat),]$Effort <- 1322
 
-  expect_error(Distance:::checkdata(flatdat))
+  expect_error(unflatten(flatdat))
 
   # check we get an error if the columns are right but their case is wrong
   flatdat$effort <- flatdat$Effort
   flatdat$Effort <- NULL
-  expect_error(Distance:::checkdata(flatdat))
+  expect_error(unflatten(flatdat))
 
 })
 #test_that("Extra regions",{

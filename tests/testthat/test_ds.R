@@ -157,7 +157,7 @@ test_that("Truncation is handled",{
                   cutpoints=c(0,1,2,3,3.8)))$ddf$meta.data$width,3.8)
 
   # largest bin
-  bin.data <- Distance:::create.bins(egdata,c(0,1,2,3,3.8))
+  bin.data <- create.bins(egdata,c(0,1,2,3,3.8))
   expect_equal(suppressMessages(ds(bin.data,key="hn",order=0))$ddf$meta.data$width,3.8)
 
 })
@@ -198,7 +198,7 @@ test_that("Percentage truncation works when distances are missing",{
 
 test_that("just distend and distbegin can be supplied", {
   # make some data
-  bin.data <- Distance:::create.bins(egdata, c(0, 1, 2, 3, 4))
+  bin.data <- create.bins(egdata, c(0, 1, 2, 3, 4))
   bin.data$distance <- NULL
   expect_message(ds.model <- ds(bin.data, 4),
                  "^Columns \"distbegin\" and \"distend\" in data: performing a binned analysis....*")
