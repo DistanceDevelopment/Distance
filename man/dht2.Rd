@@ -81,13 +81,15 @@ The \code{multipliers} argument is a \code{list}, with 2 possible elements (\cod
 
 \section{Stratification}{
 
-There are four stratification options:
+There are four stratification options which can be used by setting \code{strat_formula}:
 \describe{
- \item{geographical}{if each stratum represents a different geographical areas and you want the total over all the areas}
- \item{effort_sum}{if your strata are in fact from replicate surveys (perhaps using different designs) but you don't have many replicates and/or want an estimate of "average variance".}
- \item{replicate}{if you have replicate surveys but have many of them, this calculates the average abundance and the variance between those many surveys (think of a population of surveys)}
- \item{object}{if the stratification is really about the type of object observed, for example sex, species or life stage and what you want is the total number of individuals across all the classes of objects. For example, if you have stratified by sex and have males and females, but also want a total number of animals, you should use this option.}
+ \item{\code{"geographical"}}{if each stratum represents a different geographical areas and you want the total over all the areas}
+ \item{\code{"effort_sum"}}{if your strata are in fact from replicate surveys (perhaps using different designs) but you don't have many replicates and/or want an estimate of "average variance".}
+ \item{\code{"replicate"}}{if you have replicate surveys but have many of them, this calculates the average abundance and the variance between those many surveys (think of a population of surveys)}
+ \item{\code{"object"}}{if the stratification is really about the type of object observed, for example sex, species or life stage and what you want is the total number of individuals across all the classes of objects. For example, if you have stratified by sex and have males and females, but also want a total number of animals, you should use this option.}
 }
+
+Examples of their use are available at \url{http://examples.distancesampling.org/}.
 }
 
 \section{Variance}{
