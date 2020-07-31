@@ -120,7 +120,7 @@ The right truncation point is by default set to be largest observed distance or 
 
 When specified as a percentage, the largest \code{right} and smallest \code{left} percent distances are discarded. Percentages cannot be supplied when using binned data.
 
-For left truncation, there are two options: (1) fit a detection function to the truncated data as is (this is what happens when you set \code{left}). This does not assume that g(x)=1 at the truncation point. (2) manually remove data with distances less than the left truncation distance -- effectively move the centreline out to be the truncation distance (this needs to be done before calling \code{ds}). This then assumes that detection is certain at the left truncation distance. The former strategy has a weaker assumption, but will give higher variance as the detection function close to the line has no data to tell it where to fit -- it will be relying on the data from after the left truncation point and the assumed shape of the detection function. The latter is most appropriate in the case of aerial surveys, where some area under the plane is not visible to the observers, but their probability of detection is certain at the smallest distance.
+For left truncation, there are two options: (1) fit a detection function to the truncated data as is (this is what happens when you set \code{left}). This does not assume that g(x)=1 at the truncation point. (2) manually remove data with distances less than the left truncation distance -- effectively move the centre line out to be the truncation distance (this needs to be done before calling \code{ds}). This then assumes that detection is certain at the left truncation distance. The former strategy has a weaker assumption, but will give higher variance as the detection function close to the line has no data to tell it where to fit -- it will be relying on the data from after the left truncation point and the assumed shape of the detection function. The latter is most appropriate in the case of aerial surveys, where some area under the plane is not visible to the observers, but their probability of detection is certain at the smallest distance.
 }
 
 \section{Binning}{
@@ -148,10 +148,10 @@ Even with no monotonicity constraints, checks are still made that the detection 
  easiest if the units of \code{Area} are the square of the units of
  \code{Effort} and then it is only necessary to convert the units of
  \code{distance} to the units of \code{Effort}. For example, if \code{Effort}
-  was entered in kilometers and \code{Area} in square kilometers and
- \code{distance} in meters then using \code{convert.units=0.001} would
- convert meters to kilometers, density would be expressed in square
- kilometers which would then be consistent with units for \code{Area}.
+  was entered in kilometres and \code{Area} in square kilometres and
+ \code{distance} in metres then using \code{convert.units=0.001} would
+ convert metres to kilometres, density would be expressed in square
+ kilometres which would then be consistent with units for \code{Area}.
  However, they can all be in different units as long as the appropriate
  composite value for \code{convert.units} is chosen.  Abundance for a survey
  region can be expressed as: \code{A*N/a} where \code{A} is \code{Area} for
@@ -160,9 +160,9 @@ Even with no monotonicity constraints, checks are still made that the detection 
  \code{Effort * distance}.  The sampled region \code{a} is multiplied by
   \code{convert.units}, so it should be chosen such that the result is in
  the same units as \code{Area}.  For example, if \code{Effort} was entered
- in kilometers, \code{Area} in hectares (100m x 100m) and \code{distance}
- in meters, then using \code{convert.units=10} will convert \code{a} to
- units of hectares (100 to convert meters to 100 meters for distance and
+ in kilometres, \code{Area} in hectares (100m x 100m) and \code{distance}
+ in metres, then using \code{convert.units=10} will convert \code{a} to
+ units of hectares (100 to convert metres to 100 metres for distance and
  .1 to convert km to 100m units).
 }
 
