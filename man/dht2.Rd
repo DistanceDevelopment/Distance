@@ -89,7 +89,7 @@ The \code{strat_formula} argument is used to specify a column to use to stratify
  \item{\code{"object"}}{if the stratification is really about the type of object observed, for example sex, species or life stage and what you want is the total number of individuals across all the classes of objects. For example, if you have stratified by sex and have males and females, but also want a total number of animals, you should use this option.}
 }
 
-Examples of their use can be found at \url{http://examples.distancesampling.org/}.
+A simple example of using \code{stratification="geographical"} is given below. Further examples can be found at \url{http://examples.distancesampling.org/}.
 }
 
 \section{Variance}{
@@ -108,6 +108,23 @@ Variance in the estimated abundance comes from multiple sources. Depending on th
 It is often the case that distances are recorded in one convenient set of units, whereas the study area and effort are recorded in some other units. To ensure that the results from this function are in the expected units, we use the \code{convert_units} argument to supply a single number to convert the units of the covered area to those of the study/stratification area (results are always returned in the units of the study area). For line transects, the covered area is calculated as \code{2 * width * length} where \code{width} is the effective (half)width of the transect (often referred to as w in the literature) and \code{length} is the line length (referred to as L). If \code{width} and \code{length} are measured in kilometres and the study area in square kilometres, then all is fine and \code{convert_units} is 1 (and can be ignored). If, for example, line length and distances were measured in metres, we instead need to convert this to be kilometres, by dividing by 1000 for each of distance and length, hence \code{convert_units=1e-6}. For point transects, this is slightly easier as we only have the radius and study area to consider, so the conversion is just such that the units of the truncation radius are the square root of the study area units.
 }
 
+\examples{
+\dontrun{
+# example of simple geographical stratification
+# minke whale data, with 2 strata: North and South
+data(minke)
+# first fitting the detection function
+minke_df <- ds(minke, truncation=1.5, adjustment=NULL)
+# now estimate abundance using dht2
+# stratum labels are in the Region.Label column
+minke_dht2 <- dht2(minke_df, flatfile=minke, stratification="geographical",
+                   strat_formula=~Region.Label)
+# could compare this to minke_df$dht and see the same results
+minke_dht2
+# can alternatively report density
+print(minke_dht2, report="density")
+}
+}
 \references{
 Borchers, D.L., S.T. Buckland, P.W. Goedhart, E.D. Clarke, and S.L. Hedley.
   1998. Horvitz-Thompson estimators for double-platform line transect

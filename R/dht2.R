@@ -47,7 +47,7 @@
 #'  \item{\code{"object"}}{if the stratification is really about the type of object observed, for example sex, species or life stage and what you want is the total number of individuals across all the classes of objects. For example, if you have stratified by sex and have males and females, but also want a total number of animals, you should use this option.}
 #' }
 #'
-#' Examples of their use can be found at \url{http://examples.distancesampling.org/}.
+#' A simple example of using \code{stratification="geographical"} is given below. Further examples can be found at \url{http://examples.distancesampling.org/}.
 #'
 #' @section Variance:
 #' Variance in the estimated abundance comes from multiple sources. Depending on the data used to fit the model and estimate abundance, different components will be included in the estimated variances. In the simplest case, the detection function and encounter rate variance need to be combined. If group size varies, then this too must be included. Finally, if multipliers are used and have corresponding standard errors given, this are also included. Variances are combined by assuming independence between the measures and adding variances. A brief summary of how each component is calculated is given here, though see references for more details.
@@ -74,6 +74,22 @@
 #'
 #' Innes, S., M. P. Heide-Jorgensen, J.L. Laake, K.L. Laidre, H.J. Cleator, P. Richard, and R.E.A. Stewart. 2002 Surveys of belugas and narwhals in the Canadian high arctic in 1996. \emph{NAMMCO Scientific Publications} \bold{4}, 169–-190.
 #' @name dht2
+#' @examples
+#' \dontrun{
+#' # example of simple geographical stratification
+#' # minke whale data, with 2 strata: North and South
+#' data(minke)
+#' # first fitting the detection function
+#' minke_df <- ds(minke, truncation=1.5, adjustment=NULL)
+#' # now estimate abundance using dht2
+#' # stratum labels are in the Region.Label column
+#' minke_dht2 <- dht2(minke_df, flatfile=minke, stratification="geographical",
+#'                    strat_formula=~Region.Label)
+#' # could compare this to minke_df$dht and see the same results
+#' minke_dht2
+#' # can alternatively report density
+#' print(minke_dht2, report="density")
+#'}
 dht2 <- function(ddf, observations=NULL, transects=NULL, geo_strat=NULL,
                  flatfile=NULL,
                  strat_formula, convert_units=1, er_est=c("R2", "P2"),
