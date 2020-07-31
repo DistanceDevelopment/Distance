@@ -39,7 +39,9 @@
 #' It is often the case that we cannot measure distances to individuals or groups directly, but instead need to estimate distances to something they produce (e.g., for whales, their blows; for elephants their dung) -- this is referred to as indirect sampling. We may need to use estimates of production rate and decay rate for these estimates (in the case of dung or nests) or just production rates (in the case of songbird calls or whale blows). We refer to these conversions between "number of cues" and "number of animals" as "multipliers".
 #' The \code{multipliers} argument is a \code{list}, with 2 possible elements (\code{creation} and \code{decay} Each element of which is a \code{data.frame} and must have at least a column named \code{rate}, which abundance estimates will be divided by (the term "multiplier" is a misnomer, but kept for compatibility with Distance for Windows). Additional columns can be added to give the standard error and degrees of freedom for the rate if known as \code{SE} and \code{df}, respectively.
 #' @section Stratification:
-#' The \code{strat_formula} argument is used to specify a column to use to stratify the results. There are four types of stratification which can be used by setting \code{stratification}:
+#' The \code{strat_formula} argument is used to specify a column to use to stratify the results, using the form \code{~column.name} where \code{column.name} is the column name you wish to use. 
+#' 
+#' The \code{stratification} argument is used to specify which of four types of stratification are intended:
 #' \describe{
 #'  \item{\code{"geographical"}}{if each stratum represents a different geographical areas and you want the total over all the areas}
 #'  \item{\code{"effort_sum"}}{if your strata are in fact from replicate surveys (perhaps using different designs) but you don't have many replicates and/or want an estimate of "average variance".}
@@ -47,7 +49,8 @@
 #'  \item{\code{"object"}}{if the stratification is really about the type of object observed, for example sex, species or life stage and what you want is the total number of individuals across all the classes of objects. For example, if you have stratified by sex and have males and females, but also want a total number of animals, you should use this option.}
 #' }
 #'
-#' A simple example of using \code{stratification="geographical"} is given below. Further examples can be found at \url{http://examples.distancesampling.org/}.
+#'
+#' A simple example of using \code{stratification="geographical"} is given below. Further examples can be found at \url{http://examples.distancesampling.org/} (see, e.g., the deer pellet survey).
 #'
 #' @section Variance:
 #' Variance in the estimated abundance comes from multiple sources. Depending on the data used to fit the model and estimate abundance, different components will be included in the estimated variances. In the simplest case, the detection function and encounter rate variance need to be combined. If group size varies, then this too must be included. Finally, if multipliers are used and have corresponding standard errors given, this are also included. Variances are combined by assuming independence between the measures and adding variances. A brief summary of how each component is calculated is given here, though see references for more details.
@@ -64,7 +67,7 @@
 #'
 #' Borchers, D.L., S.T. Buckland, P.W. Goedhart, E.D. Clarke, and S.L. Hedley.
 #'   1998. Horvitz-Thompson estimators for double-platform line transect
-#'   surveys. Biometrics 54: 1221-1237.
+#'   surveys. \emph{Biometrics} 54: 1221-1237.
 #'
 #' Borchers, D.L., S.T. Buckland, and W. Zucchini. 2002 \emph{Estimating Animal Abundance: Closed Populations}. Statistics for Biology and Health. Springer London.
 #'
@@ -72,7 +75,7 @@
 #'
 #' Buckland, S.T., D.R. Anderson, K. Burnham, J.L. Laake, D.L. Borchers, and L. Thomas. 2001 \emph{Introduction to Distance Sampling: Estimating Abundance of Biological Populations}. Oxford University Press.
 #'
-#' Innes, S., M. P. Heide-Jorgensen, J.L. Laake, K.L. Laidre, H.J. Cleator, P. Richard, and R.E.A. Stewart. 2002 Surveys of belugas and narwhals in the Canadian high arctic in 1996. \emph{NAMMCO Scientific Publications} \bold{4}, 169–-190.
+#' Innes, S., M. P. Heide-Jorgensen, J.L. Laake, K.L. Laidre, H.J. Cleator, P. Richard, and R.E.A. Stewart. 2002 Surveys of belugas and narwhals in the Canadian high arctic in 1996. \emph{NAMMCO Scientific Publications} 4, 169-190.
 #' @name dht2
 #' @examples
 #' \dontrun{
