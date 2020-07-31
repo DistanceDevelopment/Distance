@@ -10,7 +10,7 @@
 #' @param resample_transects should resampling happen at the transect (\code{Sample.Label}) level? (Default \code{TRUE})
 #' @param nboot number of bootstrap replicates
 #' @param summary_fun function that is used to obtain summary statistics from the bootstrap, see Summary Functions below. By default \code{\link{bootdht_Nhat_summarize}} is used, which just extracts abundance estimates.
-#' @param select_adjustments select the number of adjustments in each bootstrap, when \code{FALSE} the exact detection function specified in \code{model} is fitted to each replicate. Note that for this to work \code{model} must have been fitted with \code{adjustment!=NULL}.
+#' @param select_adjustments select the number of adjustments in each bootstrap, when \code{FALSE} the exact detection function specified in \code{model} is fitted to each replicate. Setting this option to \code{TRUE} can significantly increase the runtime for the bootstrap. Note that for this to work \code{model} must have been fitted with \code{adjustment!=NULL}.
 #' @param sample_fraction what proportion of the transects was covered (e.g., 0.5 for one-sided line transects).
 #'
 #' @section Summary Functions:

@@ -34,7 +34,7 @@ bootdht(
 
 \item{convert.units}{conversion between units for abundance estimation, see "Units", below. (Defaults to 1, implying all of the units are "correct" already.) This takes precedence over any unit conversion stored in \code{model}.}
 
-\item{select_adjustments}{select the number of adjustments in each bootstrap, when \code{FALSE} the exact detection function specified in \code{model} is fitted to each replicate. Note that for this to work \code{model} must have been fitted with \code{adjustment!=NULL}.}
+\item{select_adjustments}{select the number of adjustments in each bootstrap, when \code{FALSE} the exact detection function specified in \code{model} is fitted to each replicate. Setting this option to \code{TRUE} can significantly increase the runtime for the bootstrap. Note that for this to work \code{model} must have been fitted with \code{adjustment!=NULL}.}
 
 \item{sample_fraction}{what proportion of the transects was covered (e.g., 0.5 for one-sided line transects).}
 }
