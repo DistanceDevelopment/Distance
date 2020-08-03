@@ -17,10 +17,7 @@ flatdat <- merge(flatdat,obs,by=c("Sample.Label","Region.Label"),all.x=TRUE)
 # finally merge the distances onto that
 flatdat <- merge(flatdat,egdata,by="object",all.x=TRUE)
 
-
-
-
-test_that("Recover structure for tee data",{
+test_that("Recover structure for tee data", {
 
   ## check we can recover the 4 data frames
   sepdat <- unflatten(flatdat)
@@ -36,11 +33,9 @@ test_that("Recover structure for tee data",{
   expect_equivalent(sepdat$obs.table,obs)
   expect_equivalent(sepdat$sample.table,samples)
   expect_equivalent(sepdat$data,egdata)
-
-
 })
 
-test_that("Errors work",{
+test_that("Errors work", {
 
   flatdat[nrow(flatdat)+1,] <- flatdat[1,]
   flatdat[nrow(flatdat),]$Effort <- 1322
@@ -53,6 +48,15 @@ test_that("Errors work",{
   expect_error(unflatten(flatdat))
 
 })
+
+test_that("Too many areas given", {
+
+  flatdat$Area[1] <- 123
+
+  expect_error(ds(flatdat), "Region areas are not consistent.")
+
+})
+
 #test_that("Extra regions",{
 #
 #  # add an extra region
