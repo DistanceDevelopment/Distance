@@ -1,3 +1,9 @@
+Distance 1.0.2
+----------------------
+
+* ds.gof is now deprecated for goodness-of-fit testing. gof_ds is now preferred.
+* add_df_covar_line (actually located in mrds) can now plot probability density functioins for point transects
+
 Distance 1.0.1
 ----------------------
 

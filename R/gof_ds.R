@@ -20,7 +20,7 @@
 #' @param nboot number of replicates to use to calculate p-values for the Kolmogorov-Smirnov goodness of fit test statistics
 #' @param ks perform the Kolmogorov-Smirnov test (this involves many bootstraps so can take a while)
 #' @param nc number of evenly-spaced distance classes for chi-squared test, if \code{chisq=TRUE}
-#' @param breaks cutpoints to use for binning, if \code{chisq=TRUE}
+#' @param breaks vector of cutpoints to use for binning, if \code{chisq=TRUE}
 #' @param ... other arguments to be passed to \code{\link{ddf.gof}}
 #' @export
 #' @examples
@@ -33,11 +33,11 @@
 #' # don't make plot
 #' gof_ds(ds.model, plot=FALSE)
 #'}
-gof_ds <- function(model, plot=TRUE, chisq=FALSE, nboot=100, ks=FALSE, nc=NULL,
-                   ...){
+gof_ds <- function(model, plot=TRUE, chisq=FALSE, nboot=100, ks=FALSE,
+                   nc=NULL, breaks=NULL, ...){
 
   gof <- suppressMessages(ddf.gof(model$ddf, qq=plot, nboot=nboot, ks=ks, nc=nc,
-                                  ...))
+                                  breaks=breaks, ...))
 
   if(model$ddf$meta.data$binned | chisq){
     return(gof)

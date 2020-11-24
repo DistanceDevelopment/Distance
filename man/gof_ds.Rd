@@ -11,6 +11,7 @@ gof_ds(
   nboot = 100,
   ks = FALSE,
   nc = NULL,
+  breaks = NULL,
   ...
 )
 }
@@ -27,9 +28,9 @@ gof_ds(
 
 \item{nc}{number of evenly-spaced distance classes for chi-squared test, if \code{chisq=TRUE}}
 
-\item{...}{other arguments to be passed to \code{\link{ddf.gof}}}
+\item{breaks}{vector of cutpoints to use for binning, if \code{chisq=TRUE}}
 
-\item{breaks}{cutpoints to use for binning, if \code{chisq=TRUE}}
+\item{...}{other arguments to be passed to \code{\link{ddf.gof}}}
 }
 \description{
 Goodness of fit testing for detection function models. For continuous distances Kolmogorov-Smirnov and Cramer-von Mises tests can be used, when binned or continuous distances are used a chi-squared test can be used.
