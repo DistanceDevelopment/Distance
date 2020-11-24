@@ -7,33 +7,23 @@
 ds.gof(model, breaks = NULL, nc = NULL, qq = TRUE, ks = FALSE, ...)
 }
 \arguments{
-\item{model}{fitted model object}
+\item{model}{deprecated.}
 
-\item{breaks}{Cutpoints to use for binning data}
+\item{breaks}{deprecated.}
 
-\item{nc}{Number of distance classes}
+\item{nc}{deprecated.}
 
-\item{qq}{Flag to indicate whether quantile-quantile plot is desired}
+\item{qq}{deprecated.}
 
-\item{ks}{perform the Kolmogorov-Smirnov test (this involves many bootstraps so can take a while)}
+\item{ks}{deprecated.}
 
-\item{\dots}{Graphics parameters to pass into qqplot function}
+\item{\dots}{deprecated.}
 }
 \value{
-List of test results and a plot.
+Nothing, deprecated.
 }
 \description{
-Chi-square, Kolmogorov-Smirnov (if \code{ks=TRUE}) and Cramer-von Mises goodness of fit tests for detection function models.
-}
-\examples{
-\dontrun{
-# fit and test a simple model for the golf tee data
-library(Distance)
-data(book.tee.data)
-tee.data<-book.tee.data$book.tee.dataframe[book.tee.data$book.tee.dataframe$observer==1,]
-ds.model <- ds(tee.data,4)
-ds.gof(ds.model)
-}
+This function is deprecated, please see \code{link{gof_ds}}.
 }
 \seealso{
 qqplot.ddf ddf.gof

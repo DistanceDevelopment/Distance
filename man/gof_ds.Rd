@@ -4,7 +4,15 @@
 \alias{gof_ds}
 \title{Goodness of fit testing and quantile-quantile plots}
 \usage{
-gof_ds(model, plot = TRUE, chisq = FALSE, nboot = 100, ks = FALSE, ...)
+gof_ds(
+  model,
+  plot = TRUE,
+  chisq = FALSE,
+  nboot = 100,
+  ks = FALSE,
+  nc = NULL,
+  ...
+)
 }
 \arguments{
 \item{model}{a fitted detection function.}
@@ -17,15 +25,23 @@ gof_ds(model, plot = TRUE, chisq = FALSE, nboot = 100, ks = FALSE, ...)
 
 \item{ks}{perform the Kolmogorov-Smirnov test (this involves many bootstraps so can take a while)}
 
+\item{nc}{number of evenly-spaced distance classes for chi-squared test, if \code{chisq=TRUE}}
+
 \item{...}{other arguments to be passed to \code{\link{ddf.gof}}}
+
+\item{breaks}{cutpoints to use for binning, if \code{chisq=TRUE}}
 }
 \description{
-Formal goodness of fit testing for detection function models using Kolmogorov-Smirnov and Cramer-von Mises tests. Both tests are based on looking at the quantile-quantile plot produced by \code{\link{qqplot.ddf}} and deviations from the line x=y.
+Goodness of fit testing for detection function models. For continuous distances Kolmogorov-Smirnov and Cramer-von Mises tests can be used, when binned or continuous distances are used a chi-squared test can be used.
 }
 \details{
+Kolmogorov-Smirnov and Cramer-von Mises tests are based on looking at the quantile-quantile plot produced by \code{\link{qqplot.ddf}} and deviations from the line x=y.
+
 The Kolmogorov-Smirnov test asks the question "what's the largest vertical distance between a point and the y=x line?" It uses this distance as a statistic to test the null hypothesis that the samples (EDF and CDF in our case) are from the same distribution (and hence our model fits well). If the deviation between the y=x line and the points is too large we reject the null hypothesis and say the model doesn't have a good fit.
 
 Rather than looking at the single biggest difference between the y=x line and the points in the Q-Q plot, we might prefer to think about all the differences between line and points, since there may be many smaller differences that we want to take into account rather than looking for one large deviation. Its null hypothesis is the same, but the statistic it uses is the sum of the deviations from each of the point to the line.
+
+A chi-squared test is also run if \code{chisq=TRUE}. In this case binning of distances is required if distance data are continuous. This can be specified as a number of equally-spaced bins (using the argument \code{nc=}) or the cutpoints of bins (using \code{breaks=}). The test compares the number of observations in a given bin to the number predicted under the fitted detection function.
 }
 \section{Details}{
 
