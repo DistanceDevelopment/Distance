@@ -212,8 +212,6 @@ bootdht <- function(model,
     stop("progress_bar must be one of \"none\", \"base\" or \"progress\"")
   }
 
-
-
   # run the code
   boot_ests <- replicate(nboot,
                          bootit(dat, our_resamples,
