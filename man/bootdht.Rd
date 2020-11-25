@@ -14,7 +14,8 @@ bootdht(
   summary_fun = bootdht_Nhat_summarize,
   convert.units = 1,
   select_adjustments = FALSE,
-  sample_fraction = 1
+  sample_fraction = 1,
+  progress_bar = "base"
 )
 }
 \arguments{
@@ -37,6 +38,8 @@ bootdht(
 \item{select_adjustments}{select the number of adjustments in each bootstrap, when \code{FALSE} the exact detection function specified in \code{model} is fitted to each replicate. Setting this option to \code{TRUE} can significantly increase the runtime for the bootstrap. Note that for this to work \code{model} must have been fitted with \code{adjustment!=NULL}.}
 
 \item{sample_fraction}{what proportion of the transects was covered (e.g., 0.5 for one-sided line transects).}
+
+\item{progress_bar}{which progress bar should be used? Default "base" uses \code{txtProgressBar}, "none" suppresses output, "progress" uses the \code{progress} package, if installed.}
 }
 \description{
 Performs a bootstrap for simple distance sampling models using the same data structures as \code{\link[mrds]{dht}}.

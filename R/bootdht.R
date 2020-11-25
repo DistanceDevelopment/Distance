@@ -12,6 +12,7 @@
 #' @param summary_fun function that is used to obtain summary statistics from the bootstrap, see Summary Functions below. By default \code{\link{bootdht_Nhat_summarize}} is used, which just extracts abundance estimates.
 #' @param select_adjustments select the number of adjustments in each bootstrap, when \code{FALSE} the exact detection function specified in \code{model} is fitted to each replicate. Setting this option to \code{TRUE} can significantly increase the runtime for the bootstrap. Note that for this to work \code{model} must have been fitted with \code{adjustment!=NULL}.
 #' @param sample_fraction what proportion of the transects was covered (e.g., 0.5 for one-sided line transects).
+#' @param progress_bar which progress bar should be used? Default "base" uses \code{txtProgressBar}, "none" suppresses output, "progress" uses the \code{progress} package, if installed.
 #'
 #' @section Summary Functions:
 #' The function \code{summary_fun} allows the user to specify what summary statistics should be recorded from each bootstrap. The function should take two arguments, \code{ests} and \code{fit}. The former is the output from \code{dht2}, giving tables of estimates. The latter is the fitted detection function object. The function is called once fitting and estimation has been performed and should return a \code{data.frame}. Those \code{data.frame}s are then concatenated using \code{rbind}. One can make these functions return any information within those objects, for example abundance or density estimates or the AIC for each model. See Examples below.
@@ -55,7 +56,8 @@ bootdht <- function(model,
                     summary_fun=bootdht_Nhat_summarize,
                     convert.units=1,
                     select_adjustments=FALSE,
-                    sample_fraction=1){
+                    sample_fraction=1,
+                    progress_bar="base"){
 
   if(!any(c(resample_strata, resample_obs, resample_transects))){
     stop("At least one of resample_strata, resample_obs, resample_transects must be TRUE")
@@ -164,7 +166,7 @@ bootdht <- function(model,
     }
 
     # update progress bar
-    setTxtProgressBar(pb, getTxtProgressBar(pb)+1)
+    pb$increment(pb$pb)
 
     if(all(is.na(aics))){
       # if no models fitted, return NA
@@ -184,7 +186,34 @@ bootdht <- function(model,
   }
 
   cat(paste0("Performing ", nboot, " bootstraps\n"))
-  pb <- txtProgressBar(0, nboot, style=3)
+
+  # decide how to report progress
+  if(progress_bar == "base"){
+    pb <- list(pb        = txtProgressBar(0, nboot, style=3),
+               increment = function(pb){
+                 setTxtProgressBar(pb, getTxtProgressBar(pb)+1)
+               })
+  }else if(progress_bar == "none"){
+    pb <- list(pb        = NA,
+               increment = function(pb){
+                 invisible()
+               })
+  }else if(progress_bar == "progress"){
+    if (!requireNamespace("progress", quietly = TRUE)){
+      stop("Package 'progress' not installed!")
+    }else{
+      pb <- list(pb = progress::progress_bar$new(
+                                       format="   [:bar] :percent eta: :eta",
+                                       total=nboot, clear=FALSE, width=80),
+                 increment = function(pb) pb$tick())
+      pb$pb$tick(0)
+    }
+  }else{
+    stop("progress_bar must be one of \"none\", \"base\" or \"progress\"")
+  }
+
+
+
   # run the code
   boot_ests <- replicate(nboot,
                          bootit(dat, our_resamples,

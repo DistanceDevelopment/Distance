@@ -20,7 +20,8 @@ Imports:
     dplyr,
     rlang
 Suggests:
-    testthat,
-    covr
+    covr,
+    progress,
+    testthat
 Encoding: UTF-8
 RoxygenNote: 7.1.1
