@@ -2,7 +2,7 @@
 ==========
 
 [![Build Status](https://travis-ci.org/DistanceDevelopment/Distance.svg?branch=master)](https://travis-ci.org/DistanceDevelopment/Distance)
-[![CRAN (RStudio Mirror) Downloads](http://cranlogs.r-pkg.org/badges/Distance)](http://www.r-pkg.org/pkg/Distance)
+[![CRAN (RStudio Mirror) Downloads](http://cranlogs.r-pkg.org/badges/Distance)](https://www.r-pkg.org/pkg/Distance)
 [![CRAN Version](http://www.r-pkg.org/badges/version/Distance)](https://www.r-pkg.org/pkg/Distance)
  [![Codecov test coverage](https://codecov.io/gh/DistanceDevelopment/Distance/branch/master/graph/badge.svg)](https://codecov.io/gh/DistanceDevelopment/Distance?branch=master)
 
