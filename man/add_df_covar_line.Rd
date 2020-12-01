@@ -18,7 +18,7 @@
 \item{breaks}{required to ensure that PDF lines are the right size, should match what is supplied to original \code{plot} command. Defaults to "Sturges" breaks, as in \code{\link{hist}}. Only used if \code{pdf=TRUE}}
 }
 \value{
-invisibly, the values of detectability over the truncation range
+invisibly, the values of detectability over the truncation range.
 }
 \description{
 Add a line or lines to a plot of the detection function which correspond to a a given covariate combination. These can be particularly useful when there is a small number of factor levels or if quantiles of a continuous covariate are specified.

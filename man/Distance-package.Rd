@@ -20,7 +20,7 @@ For help with distance sampling and this package, there is a Google Group \url{h
 
 Miller D.L., E. Rexstad, L. Thomas, L. Marshall and J.L. Laake. 2019.
   Distance Sampling in R. Journal of Statistical Software, 89(1), 1-28. 
-  \url{http://doi.org/10.18637/jss.v089.i01}.
+  \url{https://doi.org/10.18637/jss.v089.i01}.
 
 \strong{Background References:}
 
