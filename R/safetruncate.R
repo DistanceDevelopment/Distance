@@ -21,7 +21,11 @@ safetruncate <- function(flatfile, right, left){
     find[flatfile$Sample.Label %in% sl_diff] <- TRUE
     # set the observation-specific data to NA
     flatfile[flatfile$Sample.Label %in% sl_diff, ]$distance <- NA
-    flatfile[flatfile$Sample.Label %in% sl_diff, ]$object <- NA
+
+    # if size or object columns are present set their values to NA
+    if(!is.null(flatfile$object)){
+      flatfile[flatfile$Sample.Label %in% sl_diff, ]$object <- NA
+    }
     if(!is.null(flatfile$size)){
       flatfile[flatfile$Sample.Label %in% sl_diff, ]$size <- NA
     }
