@@ -16,7 +16,7 @@ safetruncate <- function(flatfile, right, left){
   # would we drop Sample.Labels?
   if(length(fsl) != length(sl)){
     # if so, get the ones we would drop
-    sl_diff <- setdiff(sl, unique(flatfile$Sample.Label[find]))
+    sl_diff <- setdiff(sl, fsl)
     # add them to the keep list
     find[flatfile$Sample.Label %in% sl_diff] <- TRUE
     # set the observation-specific data to NA
