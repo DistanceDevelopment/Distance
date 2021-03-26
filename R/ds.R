@@ -549,11 +549,11 @@ ds <- function(data, truncation=ifelse(is.null(cutpoints),
     # wrap everything around this so we don't print out a lot of useless
     # stuff...
     model <- suppressPackageStartupMessages(
-               suppressWarnings(try(
+               try(
                                   ddf(dsmodel = as.formula(model.formula),
                                       data = data, method = "ds",
                                       control=control,
-                                      meta.data = meta.data),silent=TRUE)))
+                                      meta.data = meta.data), silent=quiet))
 
 
     # if that worked
