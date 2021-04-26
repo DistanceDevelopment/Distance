@@ -374,7 +374,6 @@ ds <- function(data, truncation=ifelse(is.null(cutpoints),
         }
       }
 
-
     }else{
 
       # if there are covariates then don't do the AIC search
@@ -481,7 +480,7 @@ ds <- function(data, truncation=ifelse(is.null(cutpoints),
   }
 
   # dummy last model
-  last.model<-list(criterion=Inf)
+  last.model <- list(criterion=Inf)
 
   # loop over the orders of adjustments
   for(i in for.ind){
@@ -575,7 +574,7 @@ ds <- function(data, truncation=ifelse(is.null(cutpoints),
         if(aic.search){
           # if this models AIC is worse (bigger) than the last
           # return the last model and stop looking.
-          if(model$criterion>last.model$criterion){
+          if(model$criterion > last.model$criterion){
             model <- last.model
             # capitalise!
             model_name <- model$name.message
@@ -587,14 +586,31 @@ ds <- function(data, truncation=ifelse(is.null(cutpoints),
             # otherwise keep this, best model
             last.model <- model
           }
-        }
+        } # end AIC selection fiddling
       }else{
+        # if the model didn't converge warn the user
         message("  Model failed to converge.")
-      }
+        # return the last model
+        if(aic.search & !is.infinite(last.model$criterion)){
+          model <- last.model
+          # capitalise!
+          model_name <- model$name.message
+          model_name <- paste0(toupper(substring(model_name, 1, 1)),
+                              substring(model_name, 2))
+          message(paste0("\n", model_name, " selected."))
+          break
+        }else{
+          # if that was the only model just need to return NULL,
+          # no last.model to fall back on
+          model <- NULL
+          break
+        }
+      } # end model convergence check
     }else{
       if(last.model$criterion == Inf & length(last.model)==1){
         message("\n\nAll models failed to fit!\n")
         model <- NULL
+        break
       }else{
         message(paste0("\n\nError in model fitting, returning: ",
                        sub("^Fitting ","",last.model$name.message)))
@@ -603,8 +619,8 @@ ds <- function(data, truncation=ifelse(is.null(cutpoints),
         model <- last.model
       }
       break
-    }
-  }
+    } # end try error check
+  } # end for() over adjustments
 
   if(is.null(model)){
     stop("No models could be fitted.")
