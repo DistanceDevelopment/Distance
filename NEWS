@@ -3,6 +3,7 @@ Distance 1.0.3
 
 * fix bug in dht2 where warnings were thrown if object column was not in the flatfile (https://github.com/DistanceDevelopment/Distance/issues/83)
 * removed silent=TRUE in try() around model fitting to enable users to get error messages from mrds during fitting. Old behaviour can be recovered using quiet=TRUE argument to ds()
+* handle the case where a model failed in AIC adjustment term selection
 
 Distance 1.0.2
 ----------------------
