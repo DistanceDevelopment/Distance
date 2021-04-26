@@ -536,7 +536,12 @@ ds <- function(data, truncation=ifelse(is.null(cutpoints),
         }
 
         # add a space for a new parameter
-        control$initial$adjustment <- c(control$initial$adjustment, 0)
+        # rep() here to handle the case where the previous iteration
+        # failed and we are using initial values from more than 1 model ago
+        control$initial$adjustment <- c(control$initial$adjustment,
+                                        rep(0,
+                                            i -
+                                            length(control$initial$adjustment)))
       }
     }
 
