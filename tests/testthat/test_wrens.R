@@ -1,7 +1,4 @@
 # wren tests
-
-library(Distance)
-
 context("wrens")
 
 test_that("wren 5 minute counts works",{

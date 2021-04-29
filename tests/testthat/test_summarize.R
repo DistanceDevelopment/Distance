@@ -1,6 +1,4 @@
 # test ds()
-library(Distance)
-
 par.tol <- 1e-5
 N.tol <- 1e-3
 lnl.tol <- 1e-4
