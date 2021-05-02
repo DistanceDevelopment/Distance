@@ -11,17 +11,17 @@
 
 \item{pl.den}{shading density for histogram (default \code{0}, no shading)}
 
-\item{...}{extra arguments to be passed to \code{\link{plot.ds}}.}
+\item{...}{extra arguments to be passed to \code{\link[mrds:plot.ds]{plot.ds}}.}
 }
 \value{
 \code{NULL}, just produces a plot.
 }
 \description{
-This is just a simple wrapper around \code{\link{plot.ds}}. See the manual
-page for that function for more information.
+This is just a simple wrapper around \code{\link[mrds:plot.ds]{plot.ds}}. See the
+manual page for that function for more information.
 }
 \seealso{
-add_df_covar_line
+\code{\link{add_df_covar_line}}
 }
 \author{
 David L. Miller

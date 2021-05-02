@@ -6,23 +6,24 @@
 \alias{PTExercise_units}
 \title{Simulated point transect survey data}
 \format{
-A data frame with 144 rows and 7 variables
-  \tabular{ll}{
-    \code{Region.Label} \tab strata names (single stratum) \cr
-    \code{Area} \tab size of study area (0 in this case) \cr
-    \code{Sample.Label} \tab transect ID \cr
-    \code{Effort} \tab number of visits to point \cr
-    \code{object} \tab object ID  \cr
-    \code{distance} \tab radial distance (m) \cr
-    \code{Study.Area} \tab name of study area \cr
-  }
+A \code{data.frame} with 144 rows and 7 variables
+\itemize{
+\item \code{Region.Label} strata names (single stratum)
+\item \code{Area} size of study area (0 in this case)
+\item \code{Sample.Label} transect ID
+\item \code{Effort} number of visits to point
+\item \code{object} object ID
+\item \code{distance} radial distance (m)
+\item \code{Study.Area} name of study area
+}
 }
 \source{
-Simulated data, from the distance sampling introductory course, Centre for
- Research into Ecological & Environmental Modelling, University of St Andrews.
+Simulated data, from the distance sampling introductory course,
+Centre for Research into Ecological & Environmental Modelling, University of
+St Andrews.
 }
 \description{
-Simulated point transect survey. Thirty point transects, detection function is half-normal. 
-True object density is 79.6 animals per hectare.
+Simulated point transect survey. Thirty point transects, detection function
+is half-normal.  True object density is 79.6 animals per hectare.
 }
 \keyword{datasets}

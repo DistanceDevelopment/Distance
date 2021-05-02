@@ -82,7 +82,8 @@ test_that("geo_strat columns", {
 
 test_that("stratification variable is in the data", {
   expect_error(dht2(df, obs, transects, strata, strat_formula=~foo),
-               "Stratification variable(s) \"foo\" not found in the data", fixed=TRUE)
+               "Stratification variable(s) \"foo\" not found in the data",
+               fixed=TRUE)
 })
 
 

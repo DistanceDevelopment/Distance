@@ -6,21 +6,21 @@
 \alias{capercaillie_units}
 \title{Capercaillie in Monaughty Forest}
 \format{
-A data frame with 112 observations on the following 9 variables.
-\tabular{ll}{
-  \code{Sample.Label} \tab name of single transect \cr
-  \code{Effort} \tab transect length (km) \cr
-  \code{distance} \tab perpendicular distance (m) \cr
-  \code{object} \tab object ID \cr
-  \code{size} \tab only individual birds detected \cr
-  \code{detected} \tab whether detected \cr
-  \code{observer} \tab single observer data \cr
-  \code{Region.Label} \tab stratum name \cr
-  \code{Area} \tab size of Monaughty Forest (ha) \cr
+A \code{data.frame} with 112 observations on the following 9 variables.
+\itemize{
+\item \code{Sample.Label} name of single transect
+\item \code{Effort} transect length (km)
+\item \code{distance} perpendicular distance (m)
+\item \code{object} object ID
+\item \code{size} only individual birds detected
+\item \code{detected} whether detected
+\item \code{observer} single observer data
+\item \code{Region.Label} stratum name
+\item \code{Area} size of Monaughty Forest (ha)
 }
 }
 \description{
-Data from a line transect survey of capercaillie in Monaughty Forest, Moray, 
+Data from a line transect survey of capercaillie in Monaughty Forest, Moray,
 Scotland.
 }
 \keyword{datasets}

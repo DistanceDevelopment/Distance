@@ -29,10 +29,11 @@ test_that("wren snapshot works",{
   data(wren_snapshot)
   cu_wren_snapshot <- 1/sqrt(10000)
 
-  w2_df_hr <- ds(wren_snapshot, transect="point", truncation=110, key="hr", adjustment=NULL, convert.units=cu_wren_snapshot, er.var="P3")
+  w2_df_hr <- ds(wren_snapshot, transect="point", truncation=110, key="hr",
+                 adjustment=NULL, convert.units=cu_wren_snapshot, er.var="P3")
 
   w2_nhat <- dht2(w2_df_hr, flatfile=wren_snapshot, strat_formula=~Region.Label,
-                      convert_units=cu_wren_snapshot)
+                  convert_units=cu_wren_snapshot)
   expect_equal(attr(w2_nhat,"density")$Density, 1.0232, tol=1e-1)
   expect_equal(attr(w2_nhat,"density")$LCI, 0.79487, tol=1e-2)
   expect_equal(attr(w2_nhat,"density")$UCI, 1.3171, tol=1e-2)
@@ -56,10 +57,11 @@ test_that("wren cue count works",{
 
   cu <- sqrt(0.0001)
 
-  w3_df_hr <- ds(wren_cuecount, transect="point", truncation=92.5, adjustment=NULL, key="hr", er.var="P3")
+  w3_df_hr <- ds(wren_cuecount, transect="point", truncation=92.5,
+                 adjustment=NULL, key="hr", er.var="P3")
 
   w3_nhat <- dht2(w3_df_hr, flatfile=wren_cuecount, strat_formula=~Region.Label,
-                      multipliers=list(creation=mult), convert_units=cu)
+                  multipliers=list(creation=mult), convert_units=cu)
 
 
   expect_equal(w3_nhat$Abundance_se, 8.0002, tol=1e-2)
@@ -96,6 +98,3 @@ test_that("wren cue count works",{
 #  expect_equal(attr(w4_nhat,"density")$LCI, 1.7382, tol=1e-2)
 #  expect_equal(attr(w4_nhat,"density")$UCI, 2.6207, tol=1e-2)
 #})
-
-
-

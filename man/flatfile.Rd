@@ -5,17 +5,27 @@
 \alias{flatfile}
 \title{The flatfile data format}
 \description{
-\code{Distance} allows loading data as a "flat file" and analyse data (and obtain abundance estimates) straight away, provided that the format of the flat file is correct. One can provide the file as, for example, an Excel spreadsheet using \code{read.xls} in \pkg{gdata} or CSV using \code{\link{read.csv}}.
+\code{Distance} allows loading data as a "flat file" and analyse data (and
+obtain abundance estimates) straight away, provided that the format of the
+flat file is correct. One can provide the file as, for example, an Excel
+spreadsheet using \code{\link[gdata:read.xls]{gdata::read.xls}} in or CSV using
+\code{\link[utils:read.table]{read.csv}}.
 }
 \details{
-Each row of the data table corresponds to one observation and must have a the following columns:
-\tabular{ll}{\code{distance} \tab observed distance to object \cr
-\code{Sample.Label} \tab Identifier for the sample (transect id) \cr
-\code{Effort} \tab effort for this transect (e.g. line transect length or number of times point transect was visited) \cr
-\code{Region.Label} \tab label for a given stratum (see below) \cr
-\code{Area} \tab area of the strata}
+Each row of the data table corresponds to one observation and must have a
+the following columns:
+\itemize{
+\item \code{distance} observed distance to object
+\item \code{Sample.Label} Identifier for the sample (transect id)
+\item \code{Effort} effort for this transect (e.g. line transect length or number
+of times point transect was visited)
+\item \code{Region.Label} label for a given stratum (see below)
+\item \code{Area} area of the strata`
+}
 
-Note that in the simplest case (one area surveyed only once) there is only one \code{Region.Label} and a single corresponding \code{Area} duplicated for each observation.
+Note that in the simplest case (one area surveyed only once) there is only
+one \code{Region.Label} and a single corresponding \code{Area} duplicated for each
+observation.
 
 The example given below was provided by Eric Rexstad.
 }
@@ -31,8 +41,9 @@ library(gdata)
 minke.filepath <- system.file("minke.xlsx",package="Distance")
 
 # Load the Excel file, note that header=FALSE and we add column names after
-minke <- read.xls(minke.filepath, stringsAsFactor=FALSE,header=FALSE)
-names(minke) <- c("Region.Label", "Area", "Sample.Label", "Effort","distance")
+minke <- read.xls(minke.filepath, stringsAsFactor=FALSE, header=FALSE)
+names(minke) <- c("Region.Label", "Area", "Sample.Label", "Effort",
+                  "distance")
 # One may want to call edit(minke) or head(minke) at this point
 # to examine the data format
 
@@ -50,7 +61,8 @@ summary(pooled.exact)
 ## Try a binned analysis
 # first define the bins
 dist.bins <- c(0,.214, .428,.643,.857,1.071,1.286,1.5)
-pooled.binned <- ds(minke, truncation=1.5, cutpoints=dist.bins, key="hr", order=0)
+pooled.binned <- ds(minke, truncation=1.5, cutpoints=dist.bins, key="hr",
+                    order=0)
 
 # binned with stratum as a covariate
 minke$stratum <- ifelse(minke$Region.Label=="North", "N", "S")

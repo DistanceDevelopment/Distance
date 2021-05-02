@@ -12,7 +12,8 @@ cuedat <- CueCountingExample[,c("Cue.rate", "Cue.rate.SE", "Cue.rate.df")]
 cuedat <- unique(cuedat)
 names(cuedat) <- c("rate", "SE", "df")
 # get rid of those columns, as we don't need them any more
-CueCountingExample[, c("Cue.rate", "Cue.rate.SE", "Cue.rate.df", "Sample.Fraction", "Sample.Fraction.SE")] <- list(NULL)
+CueCountingExample[, c("Cue.rate", "Cue.rate.SE", "Cue.rate.df",
+                       "Sample.Fraction", "Sample.Fraction.SE")] <- list(NULL)
 CueCountingExample$Label <- NULL
 
 # set truncation
@@ -53,7 +54,8 @@ test_that("unbinned", {
 
 
   # selected hn detection
-  df_hn <- ds(CueCountingExample, truncation=trunc, key="hn", transect="point", adjustment=NULL, er.var="P3")
+  df_hn <- ds(CueCountingExample, truncation=trunc, key="hn", transect="point",
+              adjustment=NULL, er.var="P3")
 
   # unstratified
   fs <- dht2(df_hn, flatfile=CueCountingExample,
@@ -122,7 +124,8 @@ test_that("stratified estimation",{
   dat <- dat$data
   # fit the exact function fitted by Distance
   result <- ddf(dsmodel = ~mcds(key = "hn", formula = ~1),
-                data = dat, method = "ds", meta.data = list(width = 1.2, point=TRUE),
+                data = dat, method = "ds",
+                meta.data = list(width = 1.2, point=TRUE),
                 control=list(initial=list(scale=log(0.4179)),
                              nofit=TRUE))
   df <- result
@@ -134,22 +137,11 @@ test_that("stratified estimation",{
   expect_equal(fs_st1$Abundance,
                c(7140.0, 737.00, 1411.0, 1686.0, 2578.0, 13552), tol=tol)
   expect_equal(fs_st1$df, c(28.74, 12.52, 15.37, 7.10, 29.43, 50.57), tol=tol)
-  expect_equal(fs_st1$Abundance_CV, c(69.48, 45.84, 44.06, 60.38, 63.80, 45.23)/100, tol=tol)
-  expect_equal(fs_st1$LCI, c(1977.0, 286.00, 576.00, 453.00, 781.00, 5699.0), tol=tol)
-  expect_equal(fs_st1$UCI, c(25785, 1900.0, 3456.0, 6276.0, 8512.0, 32226), tol=tol)
-
-
-
-
-
+  expect_equal(fs_st1$Abundance_CV,
+               c(69.48, 45.84, 44.06, 60.38, 63.80, 45.23)/100, tol=tol)
+  expect_equal(fs_st1$LCI,
+               c(1977.0, 286.00, 576.00, 453.00, 781.00, 5699.0), tol=tol)
+  expect_equal(fs_st1$UCI,
+               c(25785, 1900.0, 3456.0, 6276.0, 8512.0, 32226), tol=tol)
 
 })
-
-
-## compare with hr
-#fs_st1_hr <- dht2(df_hr$ddf, flatfile=CueCountingExample,
-#                   strat_formula=~Region.Label, multipliers=list(creation=cuedat),
-#                   sample_fraction=0.5)
-#fs_st1_hr
-
-

@@ -1,9 +1,13 @@
 #' Unflatten flatfile data.frames
 #'
-#' Sometimes data is provided in the \code{\link{flatfile}} format, but we really want it in \code{mrds} format (that is, as distance data, observation table, sample table and region table format). This function undoes the flattening, assuming that the data have the correct columns.
+#' Sometimes data is provided in the [`flatfile`][flatfile] format, but we
+#' really want it in `mrds` format (that is, as distance data, observation
+#' table, sample table and region table format). This function undoes the
+#' flattening, assuming that the data have the correct columns.
 #'
-#' @param data data in flatfile format (a \code{data.frame})
-#' @return \code{list} of four \code{data.frame}s: distance data, observation table, sample table, region table.
+#' @param data data in flatfile format (a `data.frame`)
+#' @return `list` of four `data.frame`s: distance data, observation table,
+#' sample table, region table.
 #'
 #' @author David L Miller
 #' @export
@@ -46,7 +50,7 @@ unflatten <- function(data){
   rownames(data) <- 1:nrow(data)
 
   # remove the NA rows
-  data <- data[!is.na(data$distance),]
+  data <- data[!is.na(data$distance), ]
 
   return(list(data=data, sample.table=sample.table, region.table=region.table,
               obs.table=obs.table))

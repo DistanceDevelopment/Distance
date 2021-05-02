@@ -1,8 +1,8 @@
 #' Print abundance estimates
 #' @export
-#' @param x object of class \code{dht_result}
+#' @param x object of class `dht_result`
 #' @param groups should abundance/density of groups be produced?
-#' @param report should \code{"abundance"}, \code{"density"} or \code{"both"} be reported?
+#' @param report should `"abundance"`, `"density"` or `"both"` be reported?
 #' @param \dots unused
 print.dht_result <- function(x, report="abundance", groups=FALSE, ...){
 
@@ -66,7 +66,8 @@ print.dht_result <- function(x, report="abundance", groups=FALSE, ...){
     object$se <- object$Abundance_se
     ab <- object[, cols]
 
-    ab[,c("Estimate", "LCI", "UCI")] <- round(ab[,c("Estimate", "LCI", "UCI")], round)
+    ab[,c("Estimate", "LCI", "UCI")] <- round(ab[,c("Estimate", "LCI", "UCI")],
+                                              round)
     ab[,c("se", "cv", "df")] <- round(ab[,c("se", "cv", "df")], 3)
     print(ab, row.names=FALSE)
     cat("\n")
@@ -83,7 +84,8 @@ print.dht_result <- function(x, report="abundance", groups=FALSE, ...){
     dobject$group_se <- sqrt(dobject$group_var)
     ab <- dobject[, cols]
 
-    ab[,c("Estimate", "LCI", "UCI")] <- round(ab[,c("Estimate", "LCI", "UCI")], round)
+    ab[,c("Estimate", "LCI", "UCI")] <- round(ab[,c("Estimate", "LCI", "UCI")],
+                                              round)
     ab[,c("se", "cv", "df")] <- round(ab[,c("se", "cv", "df")], 3)
     print(ab, row.names=FALSE)
     cat("\n")

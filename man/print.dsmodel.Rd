@@ -13,7 +13,7 @@
 }
 \description{
 Simply prints out a brief description of the model which was fitted. For more
-detailed information use \code{\link{summary}}.
+detailed information use \code{\link[=summary]{summary}}.
 }
 \author{
 David L. Miller

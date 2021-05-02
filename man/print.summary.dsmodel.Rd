@@ -15,9 +15,9 @@
 Nothing, just prints the summary.
 }
 \description{
-Provides a brief summary of a distance sampling analysis. Including: detection 
-function parameters, model selection criterion, and optionally abundance in the
-covered (sampled) region and its standard error.
+Provides a brief summary of a distance sampling analysis. Including:
+detection function parameters, model selection criterion, and optionally
+abundance in the covered (sampled) region and its standard error.
 }
 \seealso{
 \code{\link{summary.ds}}

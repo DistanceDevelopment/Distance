@@ -74,7 +74,8 @@ test_that("South works",{
                      strat_formula=~Region))
 
   # test
-  whale.full.strat1$dht$individuals$summary$k <- whale.full.strat1$dht$individuals$summary$k[1]
+  whale.full.strat1$dht$individuals$summary$k <-
+    whale.full.strat1$dht$individuals$summary$k[1]
   expect_equal(whale.full.strat1$dht$individuals$summary,
                make_old_summ_cluster(fs_st1), tolerance=tol)
 
@@ -86,7 +87,6 @@ test_that("South works",{
   old$df <- as.numeric(old$df)
   old$Label <- as.factor("South")
   expect_equal(old, make_old_abund_individual(fs_st1), tolerance=tol)
-
 
 })
 
@@ -112,7 +112,8 @@ test_that("North works",{
                      strat_formula=~Region))
 
   # test
-  whale.full.strat1$dht$individuals$summary$k <- whale.full.strat1$dht$individuals$summary$k[1]
+  whale.full.strat1$dht$individuals$summary$k <-
+    whale.full.strat1$dht$individuals$summary$k[1]
   expect_equal(whale.full.strat1$dht$individuals$summary,
                make_old_summ_cluster(fs_st1), tolerance=tol)
 
@@ -152,7 +153,8 @@ test_that("Combined works",{
                                region, strat_formula=~Region))
 
   # test
-  whale.full.strat1$dht$individuals$summary$k <- whale.full.strat1$dht$individuals$summary$k[1]
+  whale.full.strat1$dht$individuals$summary$k <-
+    whale.full.strat1$dht$individuals$summary$k[1]
   expect_equal(whale.full.strat1$dht$individuals$summary,
                make_old_summ_cluster(fs_st1), tolerance=tol)
 
@@ -183,13 +185,15 @@ test_that("stratification", {
   result <- ddf(dsmodel = ~mcds(key = "hr", formula = ~1),
                 data = whale.full.strat1$ddf$data, method = "ds",
                 meta.data = list(width = 1.5, binned=TRUE, breaks=cp),
-                control=list(initial=list(shape=log(2.483188), scale=log(0.7067555)),
+                control=list(initial=list(shape=log(2.483188),
+                                          scale=log(0.7067555)),
                              nofit=TRUE))
 
   whale.full.strat1 <- result
 
   # now do a fancy thing
-  fs_st1 <- dht2(whale.full.strat1, flatfile=whales, strat_formula=~Region.Label)
+  fs_st1 <- dht2(whale.full.strat1, flatfile=whales,
+                 strat_formula=~Region.Label)
 #                         Estimate      %CV     df     95% Confidence Interval
 #                        ------------------------------------------------------
 # Stratum: 1. South                                          

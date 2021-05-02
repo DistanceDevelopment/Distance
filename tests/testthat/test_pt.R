@@ -24,13 +24,14 @@ test_that("ptexample.distance from mrds gives same results",{
 
 test_that("ptexample.single from mrds gives same results -- binned",{
 
+  set.seed(345)
   data(ptdata.single)
 
-  set.seed(345)
-
   # mrds code for the same example
-  #ptdata.single$distbegin <- (as.numeric(cut(ptdata.single$distance,10*(0:10)))-1)*10
-  #ptdata.single$distend <- (as.numeric(cut(ptdata.single$distance,10*(0:10))))*10
+  #ptdata.single$distbegin <- (as.numeric(cut(ptdata.single$distance,
+  #                            10*(0:10)))-1)*10
+  #ptdata.single$distend <- (as.numeric(cut(ptdata.single$distance,
+  #                          10*(0:10))))*10
   #model <- ddf(data=ptdata.single, dsmodel=~cds(key="hn"),
   #                meta.data=list(point=TRUE,binned=TRUE,breaks=10*(0:10)))
 

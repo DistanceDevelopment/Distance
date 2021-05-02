@@ -6,36 +6,41 @@
 \alias{Distance}
 \title{Distance sampling}
 \description{
-\code{Distance} is a simple way to fit detection functions and estimate abundance using distance sampling methodology.
+\code{Distance} is a simple way to fit detection functions and estimate
+abundance using distance sampling methodology.
 }
 \details{
-Underlying \code{Distance} is the package \code{mrds}, for more advanced analyses (such as those involving double observer surveys) one may find it necessary to use \code{mrds}.
+Underlying \code{Distance} is the package \code{mrds}, for more advanced
+analyses (such as those involving double observer surveys) one may find it
+necessary to use \code{mrds}.
 
-Examples of distance sampling analyses are available at \url{http://examples.distancesampling.org/}.
+Examples of distance sampling analyses are available at
+\url{http://examples.distancesampling.org/}.
 
-For help with distance sampling and this package, there is a Google Group \url{https://groups.google.com/forum/#!forum/distance-sampling}.
+For help with distance sampling and this package, there is a Google Group
+\url{https://groups.google.com/forum/#!forum/distance-sampling}.
 }
 \references{
-\strong{Key References:}
+Key References:
 
 Miller D.L., E. Rexstad, L. Thomas, L. Marshall and J.L. Laake. 2019.
-  Distance Sampling in R. Journal of Statistical Software, 89(1), 1-28. 
-  \url{https://doi.org/10.18637/jss.v089.i01}.
+Distance Sampling in R. Journal of Statistical Software, 89(1), 1-28.
+\url{https://doi.org/10.18637/jss.v089.i01}
 
-\strong{Background References:}
+Background References:
 
 Laake, J.L. and D.L. Borchers. 2004. Methods for incomplete
-  detection at distance zero. In: Advanced Distance Sampling, eds. S.T.
-  Buckland, D.R.Anderson, K.P. Burnham, J.L. Laake, D.L. Borchers, and L.
-  Thomas. Oxford University Press.
+detection at distance zero. In: Advanced Distance Sampling, eds. S.T.
+Buckland, D.R.Anderson, K.P. Burnham, J.L. Laake, D.L. Borchers, and L.
+Thomas. Oxford University Press.
 
 Marques, F.F.C. and S.T. Buckland. 2004. Covariate models for the detection
-  function. In: Advanced Distance Sampling, eds. S.T. Buckland,
-  D.R.Anderson, K.P. Burnham, J.L. Laake, D.L. Borchers, and L. Thomas.
-  Oxford University Press.
+function. In: Advanced Distance Sampling, eds. S.T. Buckland,
+D.R.Anderson, K.P. Burnham, J.L. Laake, D.L. Borchers, and L. Thomas.
+Oxford University Press.
 }
 \author{
-David L. Miller <dave@ninepointeightone.net>
+David L. Miller \href{mailto:dave@ninepointeightone.net}{dave@ninepointeightone.net}
 }
 \keyword{Models}
 \keyword{Statistical}

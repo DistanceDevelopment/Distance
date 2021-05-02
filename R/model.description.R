@@ -1,4 +1,4 @@
-model.description<-function(model){
+model.description <- function(model){
 # builds the description of the model to be printed
 # only used internally.
 

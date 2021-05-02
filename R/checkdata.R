@@ -1,16 +1,16 @@
-#' Check that the data supplied to \code{ds} is correct
+#' Check that the data supplied to `ds` is correct
 #'
-#' This is an internal function that checks the \code{data.frame}s supplied
-#' to \code{ds} are "correct".
+#' This is an internal function that checks the `data.frame`s supplied
+#' to `ds` are "correct".
 #'
-#' @param data as in \code{ds}
-#' @param sample.table as in \code{ds}
-#' @param region.table as in \code{ds}
-#' @param obs.table as in \code{ds}
+#' @param data as in `ds`
+#' @param sample.table as in `ds`
+#' @param region.table as in `ds`
+#' @param obs.table as in `ds`
 #' @param formula formula for the covariates
 #'
 #' @return Throws an error if something goes wrong, otherwise returns a
-#'  \code{data.frame}.
+#' `data.frame`.
 #'
 #' @author David L. Miller
 checkdata <- function(data, region.table=NULL, sample.table=NULL,
@@ -63,7 +63,8 @@ checkdata <- function(data, region.table=NULL, sample.table=NULL,
   if(formula!=~1){
     vars_in_data <- all.vars(formula) %in% names(data)
     if(!all(vars_in_data)){
-      stop(paste("Variable(s):", paste(all.vars(formula)[!vars_in_data],collapse=", "),
+      stop(paste("Variable(s):",
+                 paste(all.vars(formula)[!vars_in_data],collapse=", "),
                  "are in the model formula but not in the data."))
     }
   }
@@ -93,7 +94,8 @@ checkdata <- function(data, region.table=NULL, sample.table=NULL,
       data <- data[, !c(colnames(data) %in% "Area")]
 
       ## construct sample table
-      sample.table <- unique(data[, c("Sample.Label", "Region.Label", "Effort")])
+      sample.table <- unique(data[, c("Sample.Label", "Region.Label",
+                                      "Effort")])
 
       # possible that Effort is not the same for a given
       # Sample.Label+Region.Label -- this is BAD.

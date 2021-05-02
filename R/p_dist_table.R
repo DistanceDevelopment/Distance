@@ -6,7 +6,8 @@
 #' @param bins how the results should be binned
 #' @param proportion should proportions be returned as well as counts?
 #' @docType methods
-#' @note This function is located in the \code{mrds} package but the documentation is provided here for easy access.
+#' @note This function is located in the `mrds` package but the documentation
+#' is provided here for easy access.
 #' @examples
 #' \dontrun{
 #' # example using a model for the minke data

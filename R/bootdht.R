@@ -1,34 +1,67 @@
 #' Bootstrap uncertainty estimation for distance sampling models
 #'
-#' Performs a bootstrap for simple distance sampling models using the same data structures as \code{\link[mrds]{dht}}.
+#' Performs a bootstrap for simple distance sampling models using the same data
+#' structures as [`dht`][mrds::dht].
 #'
-#' @param model a model fitted by \code{\link{ds}} or a list of models
-#' @param flatfile Data provided in the flatfile format. See \code{\link{flatfile}} for details.
-#' @param convert.units conversion between units for abundance estimation, see "Units", below. (Defaults to 1, implying all of the units are "correct" already.) This takes precedence over any unit conversion stored in \code{model}.
-#' @param resample_strata should resampling happen at the stratum (\code{Region.Label}) level? (Default \code{FALSE})
-#' @param resample_obs should resampling happen at the observation (\code{object}) level? (Default \code{FALSE})
-#' @param resample_transects should resampling happen at the transect (\code{Sample.Label}) level? (Default \code{TRUE})
+#' @param model a model fitted by [`ds`][ds] or a list of models
+#' @param flatfile Data provided in the flatfile format. See
+#' [`flatfile`][flatfile] for details.
+#' @param convert.units conversion between units for abundance estimation, see
+#' "Units", below. (Defaults to 1, implying all of the units are "correct"
+#' already.) This takes precedence over any unit conversion stored in `model`.
+#' @param resample_strata should resampling happen at the stratum
+#' (`Region.Label`) level? (Default `FALSE`)
+#' @param resample_obs should resampling happen at the observation (`object`)
+#' level? (Default `FALSE`)
+#' @param resample_transects should resampling happen at the transect
+#' (`Sample.Label`) level? (Default `TRUE`)
 #' @param nboot number of bootstrap replicates
-#' @param summary_fun function that is used to obtain summary statistics from the bootstrap, see Summary Functions below. By default \code{\link{bootdht_Nhat_summarize}} is used, which just extracts abundance estimates.
-#' @param select_adjustments select the number of adjustments in each bootstrap, when \code{FALSE} the exact detection function specified in \code{model} is fitted to each replicate. Setting this option to \code{TRUE} can significantly increase the runtime for the bootstrap. Note that for this to work \code{model} must have been fitted with \code{adjustment!=NULL}.
-#' @param sample_fraction what proportion of the transects was covered (e.g., 0.5 for one-sided line transects).
-#' @param progress_bar which progress bar should be used? Default "base" uses \code{txtProgressBar}, "none" suppresses output, "progress" uses the \code{progress} package, if installed.
+#' @param summary_fun function that is used to obtain summary statistics from
+#' the bootstrap, see Summary Functions below. By default
+#' [`bootdht_Nhat_summarize`][bootdht_Nhat_summarize] is used, which just
+#' extracts abundance estimates.
+#' @param select_adjustments select the number of adjustments in each
+#' bootstrap, when `FALSE` the exact detection function specified in `model` is
+#' fitted to each replicate. Setting this option to `TRUE` can significantly
+#' increase the runtime for the bootstrap. Note that for this to work `model`
+#' must have been fitted with `adjustment!=NULL`.
+#' @param sample_fraction what proportion of the transects was covered (e.g.,
+#' 0.5 for one-sided line transects).
+#' @param progress_bar which progress bar should be used? Default "base" uses
+#' `txtProgressBar`, "none" suppresses output, "progress" uses the
+#' `progress` package, if installed.
 #'
 #' @section Summary Functions:
-#' The function \code{summary_fun} allows the user to specify what summary statistics should be recorded from each bootstrap. The function should take two arguments, \code{ests} and \code{fit}. The former is the output from \code{dht2}, giving tables of estimates. The latter is the fitted detection function object. The function is called once fitting and estimation has been performed and should return a \code{data.frame}. Those \code{data.frame}s are then concatenated using \code{rbind}. One can make these functions return any information within those objects, for example abundance or density estimates or the AIC for each model. See Examples below.
+#' The function `summary_fun` allows the user to specify what summary
+#' statistics should be recorded from each bootstrap. The function should take
+#' two arguments, `ests` and `fit`. The former is the output from
+#' `dht2`, giving tables of estimates. The latter is the fitted detection
+#' function object. The function is called once fitting and estimation has been
+#' performed and should return a `data.frame`. Those `data.frame`s
+#' are then concatenated using `rbind`. One can make these functions
+#' return any information within those objects, for example abundance or
+#' density estimates or the AIC for each model. See Examples below.
 #'
 #' @section Model selection:
-#' Model selection can be performed on a per-replicate basis within the bootstrap. This has three variations:
-#' \enumerate{
-#'    \item when \code{select_adjustments} is \code{TRUE} then adjustment terms are selected by AIC within each bootstrap replicate (provided that \code{model} had the \code{order} and \code{adjustment} options set to non-\code{NULL}.
-#'    \item if \code{model} is a list of fitted detection functions, each of these is fitted to each replicate and results generated from the one with the lowest AIC.
-#'    \item when \code{select_adjustments} is \code{TRUE} and \code{model} is a list of fitted detection functions, each model fitted to each replicate and number of adjustments is selected via AIC.
-#' }
+#' Model selection can be performed on a per-replicate basis within the
+#' bootstrap. This has three variations:
+#'   1. when `select_adjustments` is `TRUE` then adjustment terms are selected
+#'   by AIC within each bootstrap replicate (provided that `model` had the
+#'   `order` and `adjustment` options set to non-`NULL`.
+#'   2. if `model` is a list of fitted detection functions, each of these is
+#'   fitted to each replicate and results generated from the one with the
+#'   lowest AIC.
+#'   3. when `select_adjustments` is `TRUE` and `model` is a list of fitted
+#'   detection functions, each model fitted to each replicate and number of
+#'   adjustments is selected via AIC.
+#'
 #' The last of these options can be very time consuming!
 #' @importFrom utils txtProgressBar setTxtProgressBar getTxtProgressBar
 #' @importFrom stats as.formula AIC
 #' @importFrom mrds ddf dht
-#' @seealso \code{\link{summary.dht_bootstrap}} for how to summarize the results, \code{\link{bootdht_Nhat_summarize}} for an example summary function.
+#' @seealso [`summary.dht_bootstrap`][summary.dht_bootstrap] for how to
+#' summarize the results, [`bootdht_Nhat_summarize`][bootdht_Nhat_summarize]
+#' for an example summary function.
 #' @export
 #' @examples
 #' \dontrun{
@@ -119,9 +152,11 @@ bootdht <- function(model,
 
       # make a new data frame with the correct number of replicates of the
       # per-stratum data in it
-      bootdat <- lapply(levs, function(x) bootdat[bootdat[[sample_thingo]] == x, ])
+      bootdat <- lapply(levs, function(x){
+        bootdat[bootdat[[sample_thingo]] == x, ]
+      })
       # make a special index to make unique IDs later
-      iind <- rep(1:length(bootdat), lapply(bootdat, nrow))
+      iind <- rep(seq_len(length(bootdat)), lapply(bootdat, nrow))
       # make list of data.frames into one frame
       bootdat <- do.call("rbind", bootdat)
       # put that ID in there
@@ -129,7 +164,7 @@ bootdht <- function(model,
     }
 
     # need unique object IDs
-    bootdat$object <- 1:nrow(bootdat)
+    bootdat$object <- seq_len(nrow(bootdat))
     # get the sample labels right
     bootdat$Sample.Label <- paste0(bootdat[[sample_label]], "-",
                                    bootdat[[paste0(sample_thingo, "_ID")]])

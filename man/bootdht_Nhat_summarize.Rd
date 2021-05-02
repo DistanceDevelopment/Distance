@@ -12,12 +12,21 @@ bootdht_Nhat_summarize(ests, fit)
 \item{fit}{fitted detection function object (unused).}
 }
 \value{
-\code{data.frame} with one column ("\code{Nhat}"), containing estimate(s) of abundance of individuals from each bootstrap replicate.  This data frame can be examined for example, with \code{quantile} to compute confidence intervals.
+\code{data.frame} with one column ("\code{Nhat}"), containing estimate(s) of
+abundance of individuals from each bootstrap replicate. This \code{data.frame}
+can be examined for example, with \code{\link[stats:quantile]{quantile}} to compute
+confidence intervals.
 }
 \description{
-When using \code{\link{bootdht}} one needs to use a summary function to extract results from the resulting models per replicate. This function is the simplest possible example of such a function, that just extracts the estimated abundance.
-Further examples of such functions can be found at \url{http://examples.distancesampling.org}.
+When using \code{\link{bootdht}} one needs to use a summary function to
+extract results from the resulting models per replicate. This function is
+the simplest possible example of such a function, that just extracts the
+estimated abundance.
+}
+\details{
+Further examples of such functions can be found at
+\url{http://examples.distancesampling.org}.
 }
 \seealso{
-\code{\link{bootdht}}, which this function is to be used with.
+\code{\link{bootdht}} which this function is to be used with.
 }

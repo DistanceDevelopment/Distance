@@ -12,8 +12,8 @@ create.bins(data, cutpoints)
 \item{cutpoints}{vector of cutpoints for the bins}
 }
 \value{
-data \code{data} with two extra columns \code{distbegin} and
-       \code{distend}.
+argument \code{data} with two extra columns \code{distbegin} and
+\code{distend}.
 }
 \description{
 This is an internal routine and shouldn't be necessary in normal analyses.

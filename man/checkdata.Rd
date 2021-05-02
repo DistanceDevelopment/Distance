@@ -25,7 +25,7 @@ checkdata(
 }
 \value{
 Throws an error if something goes wrong, otherwise returns a
- \code{data.frame}.
+\code{data.frame}.
 }
 \description{
 This is an internal function that checks the \code{data.frame}s supplied

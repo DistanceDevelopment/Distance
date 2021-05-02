@@ -12,7 +12,9 @@
 \item{\dots}{included for S3 completeness, but ignored}
 }
 \value{
-a numeric value giving the log-likelihood with two attributes: \code{"df"} the "degrees of freedom" for the model (number of parameters) and \code{"nobs"} the number of observations used to fit the model
+a numeric value giving the log-likelihood with two attributes:
+\code{"df"} the "egrees of freedom for the model (number of parameters) and
+\code{"nobs"} the number of observations used to fit the model
 }
 \description{
 Extract the log-likelihood from a fitted detection function.

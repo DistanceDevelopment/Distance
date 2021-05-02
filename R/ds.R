@@ -1,128 +1,235 @@
-#' Fit detection functions and calculate abundance from line or point transect data
+#' Fit detection functions and calculate abundance from line or point transect
+#' data
 #'
-#' This function fits detection functions to line or point transect data and then (provided that survey information is supplied) calculates abundance and density estimates. The examples below illustrate some basic types of analysis using \code{ds()}.
+#' This function fits detection functions to line or point transect data and
+#' then (provided that survey information is supplied) calculates abundance and
+#' density estimates. The examples below illustrate some basic types of
+#' analysis using `ds()`.
 #'
-#' @param data a \code{data.frame} containing at least a column called
-#'        \code{distance} or a numeric vector containing the distances. 
-#'        NOTE! If there is a column called \code{size} in
-#'        the data then it will be interpreted as group/cluster size, see the
-#'        section "Clusters/groups", below. One can supply data as a "flat file"
-#'        and not supply \code{region.table}, \code{sample.table} and
-#'        \code{obs.table}, see "Data format", below and \code{\link{flatfile}}.
-#' @param truncation either truncation distance (numeric, e.g. 5) or percentage (as a string, e.g. "15\%"). Can be supplied as a \code{list} with elements \code{left} and \code{right} if left truncation is required (e.g. \code{list(left=1,right=20)} or \code{list(left="1\%",right="15\%")} or even \code{list(left="1",right="15\%")}).
-#' By default for exact distances the maximum observed distance is used as the right truncation. When the data is binned, the right truncation is the largest bin end point. Default left truncation is set to zero.
+#' @param data a `data.frame` containing at least a column called `distance` or
+#' a numeric vector containing the distances.  NOTE!  If there is a column
+#' called `size` in the data then it will be interpreted as group/cluster size,
+#' see the section "Clusters/groups", below. One can supply data as a "flat
+#' file" and not supply `region.table`, `sample.table` and `obs.table`, see
+#' "Data format", below and [`flatfile`][flatfile].
+#' @param truncation either truncation distance (numeric, e.g. 5) or percentage
+#' (as a string, e.g. "15%"). Can be supplied as a `list` with elements `left`
+#' and `right` if left truncation is required (e.g.  `list(left=1,right=20)` or
+#' `list(left="1%",right="15%")` or even `list(left="1",right="15%")`).  By
+#' default for exact distances the maximum observed distance is used as the
+#' right truncation. When the data is binned, the right truncation is the
+#' largest bin end point. Default left truncation is set to zero.
 #' @param transect indicates transect type "line" (default) or "point".
-#' @param formula formula for the scale parameter. For a CDS analysis leave this as its default \code{~1}.
-#' @param key key function to use; "hn" gives half-normal (default), "hr" gives hazard-rate and "unif" gives uniform. Note that if uniform key is used, covariates cannot be included in the model.
-#' @param adjustment adjustment terms to use; \code{"cos"} gives cosine (default), \code{"herm"} gives Hermite polynomial and \code{"poly"} gives simple polynomial. \code{"cos"} is recommended. A value of \code{NULL} indicates that no adjustments are to be fitted.
-#' @param order orders of the adjustment terms to fit (as a vector/scalar), the default value (\code{NULL}) will select via AIC up to \code{max.adjustments} adjustments. If a single number is given, that number is expanded to be \code{seq(term.min, order, by=1)} where \code{term.min} is the appropriate minimum order for this type of adjustment. For cosine adjustments, valid orders are integers greater than 2 (except when a uniform key is used, when the minimum order is 1). For Hermite polynomials, even integers equal or greater than 2 are allowed and for simple polynomials even integers equal or greater than 2 are allowed (though note these will be multiplied by 2, see Buckland et al, 2001 for details on their specification).
-#' @param scale the scale by which the distances in the adjustment terms are divided. Defaults to \code{"width"}, scaling by the truncation distance. If the key is uniform only \code{"width"} will be used. The other option is \code{"scale"}: the scale parameter of the detection
-#' @param cutpoints if the data are binned, this vector gives the cutpoints of the bins. Ensure that the first element is 0 (or the left truncation distance) and the last is the distance to the end of the furthest bin. (Default \code{NULL}, no binning.) Note that if \code{data} has columns \code{distbegin} and \code{distend} then these will be used as bins if \code{cutpoints} is not specified. If both are specified, \code{cutpoints} has precedence.
-#' @param monotonicity should the detection function be constrained for monotonicity weakly (\code{"weak"}), strictly (\code{"strict"}) or not at all (\code{"none"} or \code{FALSE}). See Monotonicity, below. (Default \code{"strict"}). By default it is on for models without covariates in the detection function, off when covariates are present.
-#' @param dht.group should density abundance estimates consider all groups to be size 1 (abundance of groups) \code{dht.group=TRUE} or should the abundance of individuals (group size is taken into account), \code{dht.group=FALSE}. Default is \code{FALSE} (abundance of individuals is calculated).
-#' @param region.table \code{data.frame} with two columns:
-#'        \tabular{ll}{ \code{Region.Label} \tab label for the region\cr
-#'                     \code{Area} \tab area of the region\cr}
-#'        \code{region.table} has one row for each stratum. If there is no stratification then \code{region.table} has one entry with \code{Area} corresponding to the total survey area. If \code{Area} is omitted density estimates only are produced.
-#' @param sample.table \code{data.frame} mapping the regions to the samples (i.e. transects). There are three columns:
-#'        \tabular{ll}{\code{Sample.Label} \tab label for the sample\cr
-#'                     \code{Region.Label} \tab label for the region that the
-#'                          sample belongs to.\cr
-#'                     \code{Effort} \tab the effort expended in that sample
-#'                          (e.g. transect length).\cr}
-#' @param obs.table \code{data.frame} mapping the individual observations (objects) to regions and samples. There should be three columns:
-#'        \tabular{ll}{\code{object} \tab unique numeric identifier for the observation\cr
-#'                     \code{Region.Label} \tab label for the region that the
-#'                          sample belongs to.\cr
-#'                     \code{Sample.Label} \tab label for the sample\cr}
-#' @param convert.units conversion between units for abundance estimation, see "Units", below. (Defaults to 1, implying all of the units are "correct" already.)
-#' @param er.var encounter rate variance estimator to use when abundance estimates are required. Defaults to "R2" for line transects and "P3" for point transects. See \code{\link{dht2}} for more information and if more complex options are required.
-#' @param method optimization method to use (any method usable by \code{\link{optim}} or \pkg{optimx}). Defaults to \code{"nlminb"}.
-#' @param debug.level print debugging output. \code{0}=none, \code{1-3} increasing levels of debugging output.
-#' @param quiet suppress non-essential messages (useful for bootstraps etc). Default value \code{FALSE}.
-#' @param initial.values a \code{list} of named starting values, see \code{\link{mrds-opt}}. Only allowed when AIC term selection is not used.
-#' @param max.adjustments maximum number of adjustments to try (default 5) only used when \code{order=NULL}.
+#' @param formula formula for the scale parameter. For a CDS analysis leave
+#' this as its default `~1`.
+#' @param key key function to use; `"hn"` gives half-normal (default), `"hr"`
+#' gives hazard-rate and `"unif"` gives uniform. Note that if uniform key is
+#' used, covariates cannot be included in the model.
+#' @param adjustment adjustment terms to use; `"cos"` gives cosine (default),
+#' `"herm"` gives Hermite polynomial and `"poly"` gives simple polynomial.
+#' `"cos"` is recommended. A value of `NULL` indicates that no adjustments are
+#' to be fitted.
+#' @param order orders of the adjustment terms to fit (as a vector/scalar), the
+#' default value (`NULL`) will select via AIC up to `max.adjustments`
+#' adjustments. If a single number is given, that number is expanded to be
+#' `seq(term.min, order, by=1)` where `term.min` is the appropriate minimum
+#' order for this type of adjustment. For cosine adjustments, valid orders are
+#' integers greater than 2 (except when a uniform key is used, when the minimum
+#' order is 1). For Hermite polynomials, even integers equal or greater than 2
+#' are allowed and for simple polynomials even integers equal or greater than 2
+#' are allowed (though note these will be multiplied by 2, see Buckland et al,
+#' 2001 for details on their specification).
+#' @param scale the scale by which the distances in the adjustment terms are
+#' divided. Defaults to `"width"`, scaling by the truncation distance. If the
+#' key is uniform only `"width"` will be used. The other option is `"scale"`:
+#' the scale parameter of the detection
+#' @param cutpoints if the data are binned, this vector gives the cutpoints of
+#' the bins. Ensure that the first element is 0 (or the left truncation
+#' distance) and the last is the distance to the end of the furthest bin.
+#' (Default `NULL`, no binning.) Note that if `data` has columns `distbegin`
+#' and `distend` then these will be used as bins if `cutpoints` is not
+#' specified. If both are specified, `cutpoints` has precedence.
+#' @param monotonicity should the detection function be constrained for
+#' monotonicity weakly (`"weak"`), strictly (`"strict"`) or not at all
+#' (`"none"` or `FALSE`). See Monotonicity, below. (Default `"strict"`). By
+#' default it is on for models without covariates in the detection function,
+#' off when covariates are present.
+#' @param dht.group should density abundance estimates consider all groups to
+#' be size 1 (abundance of groups) `dht.group=TRUE` or should the abundance of
+#' individuals (group size is taken into account), `dht.group=FALSE`. Default
+#' is `FALSE` (abundance of individuals is calculated).
+#' @param region.table `data.frame` with two columns:
+#'   * `Region.Label` label for the region
+#'   * `Area` area of the region
+#'   * `region.table` has one row for each stratum. If there is no
+#'   stratification then `region.table` has one entry with `Area` corresponding
+#'   to the total survey area. If `Area` is omitted density estimates only are
+#'   produced.
+#' @param sample.table `data.frame` mapping the regions to the samples
+#' (i.e. transects). There are three columns:
+#'   * `Sample.Label` label for the sample
+#'   * `Region.Label` label for the region that the sample belongs to.
+#'   * `Effort` the effort expended in that sample (e.g. transect length).
+#' @param obs.table `data.frame` mapping the individual observations
+#' (objects) to regions and samples. There should be three columns:
+#'   * `object` unique numeric identifier for the observation
+#'   * `Region.Label` label for the region that the sample belongs to
+#'   * `Sample.Label` label for the sample
+#' @param convert.units conversion between units for abundance estimation, see
+#' "Units", below. (Defaults to 1, implying all of the units are "correct"
+#' already.)
+#' @param er.var encounter rate variance estimator to use when abundance
+#' estimates are required. Defaults to "R2" for line transects and "P3" for
+#' point transects. See [`dht2`][dht2] for more information and if more
+#' complex options are required.
+#' @param method optimization method to use (any method usable by
+#' [`optim`][stats::optim] or [`optimx`][optimx::optimx]). Defaults to
+#' `"nlminb"`.
+#' @param debug.level print debugging output. `0`=none, `1-3` increasing levels
+#' of debugging output.
+#' @param quiet suppress non-essential messages (useful for bootstraps etc).
+#' Default value `FALSE`.
+#' @param initial.values a `list` of named starting values, see
+#' [`mrds-opt`][mrds::mrds-opt]. Only allowed when AIC term selection is not
+#' used.
+#' @param max.adjustments maximum number of adjustments to try (default 5) only
+#' used when `order=NULL`.
 #' @return a list with elements:
-#'        \tabular{ll}{\code{ddf} \tab a detection function model object.\cr
-#'                     \code{dht} \tab abundance/density information (if survey
-#'                      region data was supplied, else \code{NULL}).}
+#'   * `ddf` a detection function model object.
+#'   * `dht` abundance/density information (if survey region data was supplied,
+#'   else `NULL`)
 #'
 #' @section Details:
-#' If abundance estimates are required then the \code{data.frame}s \code{region.table} and \code{sample.table} must be supplied. If \code{data} does not contain the columns \code{Region.Label} and \code{Sample.Label} then the \code{data.frame} \code{obs.table} must also be supplied. Note that stratification only applies to abundance estimates and not at the detection function level.
+#' If abundance estimates are required then the `data.frame`s `region.table`
+#' and `sample.table` must be supplied. If `data` does not contain the columns
+#' `Region.Label` and `Sample.Label` then the `data.frame` `obs.table` must
+#' also be supplied. Note that stratification only applies to abundance
+#' estimates and not at the detection function level.
 #'
-#' For more advanced abundance/density estimation please see the \code{\link{dht}} and \code{\link{dht2}} functions.
+#' For more advanced abundance/density estimation please see the
+#' [`dht`][mrds::dht] and [`dht2`][dht2] functions.
 #'
-#' Examples of distance sampling analyses are available at \url{http://examples.distancesampling.org/}.
+#' Examples of distance sampling analyses are available at
+#' <http://examples.distancesampling.org/>.
 #'
 #' @section Clusters/groups:
-#'  Note that if the data contains a column named \code{size}, cluster size will be estimated and density/abundance will be based on a clustered analysis of the data. Setting this column to be \code{NULL} will perform a non-clustered analysis (for example if "\code{size}" means something else in your dataset).
+#'  Note that if the data contains a column named `size`, cluster size will be
+#'  estimated and density/abundance will be based on a clustered analysis of
+#'  the data. Setting this column to be `NULL` will perform a non-clustered
+#'  analysis (for example if "`size`" means something else in your dataset).
 #'
 #' @section Truncation:
-#' The right truncation point is by default set to be largest observed distance or bin end point. This is a default will not be appropriate for all data and can often be the cause of model convergence failures. It is recommended that one plots a histogram of the observed distances prior to model fitting so as to get a feel for an appropriate truncation distance. (Similar arguments go for left truncation, if appropriate). Buckland et al (2001) provide guidelines on truncation.
+#' The right truncation point is by default set to be largest observed distance
+#' or bin end point. This is a default will not be appropriate for all data and
+#' can often be the cause of model convergence failures. It is recommended that
+#' one plots a histogram of the observed distances prior to model fitting so as
+#' to get a feel for an appropriate truncation distance. (Similar arguments go
+#' for left truncation, if appropriate). Buckland et al (2001) provide
+#' guidelines on truncation.
 #'
-#' When specified as a percentage, the largest \code{right} and smallest \code{left} percent distances are discarded. Percentages cannot be supplied when using binned data.
+#' When specified as a percentage, the largest `right` and smallest `left`
+#' percent distances are discarded. Percentages cannot be supplied when using
+#' binned data.
 #'
-#' For left truncation, there are two options: (1) fit a detection function to the truncated data as is (this is what happens when you set \code{left}). This does not assume that g(x)=1 at the truncation point. (2) manually remove data with distances less than the left truncation distance -- effectively move the centre line out to be the truncation distance (this needs to be done before calling \code{ds}). This then assumes that detection is certain at the left truncation distance. The former strategy has a weaker assumption, but will give higher variance as the detection function close to the line has no data to tell it where to fit -- it will be relying on the data from after the left truncation point and the assumed shape of the detection function. The latter is most appropriate in the case of aerial surveys, where some area under the plane is not visible to the observers, but their probability of detection is certain at the smallest distance.
+#' For left truncation, there are two options: (1) fit a detection function to
+#' the truncated data as is (this is what happens when you set `left`).  This
+#' does not assume that g(x)=1 at the truncation point. (2) manually remove
+#' data with distances less than the left truncation distance -- effectively
+#' move the centre line out to be the truncation distance (this needs to be
+#' done before calling `ds`). This then assumes that detection is certain at
+#' the left truncation distance. The former strategy has a weaker assumption,
+#' but will give higher variance as the detection function close to the line
+#' has no data to tell it where to fit -- it will be relying on the data from
+#' after the left truncation point and the assumed shape of the detection
+#' function. The latter is most appropriate in the case of aerial surveys,
+#' where some area under the plane is not visible to the observers, but their
+#' probability of detection is certain at the smallest distance.
 #'
 #' @section Binning:
-#' Note that binning is performed such that bin 1 is all distances greater or equal to cutpoint 1 (>=0 or left truncation distance) and less than cutpoint 2. Bin 2 is then distances greater or equal to cutpoint 2 and less than cutpoint 3 and so on.
+#' Note that binning is performed such that bin 1 is all distances greater or
+#' equal to cutpoint 1 (>=0 or left truncation distance) and less than cutpoint
+#' 2. Bin 2 is then distances greater or equal to cutpoint 2 and less than
+#' cutpoint 3 and so on.
 #'
-#' @section Monotonicity: 
-#' When adjustment terms are used, it is possible for the detection function to not always decrease with increasing distance. This is unrealistic and can lead to bias. To avoid this, the detection function can be constrained for monotonicity (and is by default for detection functions without covariates).
+#' @section Monotonicity:
+#' When adjustment terms are used, it is possible for the detection function to
+#' not always decrease with increasing distance. This is unrealistic and can
+#' lead to bias. To avoid this, the detection function can be constrained for
+#' monotonicity (and is by default for detection functions without covariates).
 #'
-#'  Monotonicity constraints are supported in a similar way to that described in Buckland et al (2001). 20 equally spaced points over the range of the detection function (left to right truncation) are evaluated at each round of the optimisation and the function is constrained to be either always less than it's value at zero (\code{"weak"}) or such that each value is less than or equal to the previous point (monotonically decreasing; \code{"strict"}). See also \code{\link{check.mono}} in \code{mrds}.
+#' Monotonicity constraints are supported in a similar way to that described
+#' in Buckland et al (2001). 20 equally spaced points over the range of the
+#' detection function (left to right truncation) are evaluated at each round
+#' of the optimisation and the function is constrained to be either always
+#' less than it's value at zero (`"weak"`) or such that each value is
+#' less than or equal to the previous point (monotonically decreasing;
+#' `"strict"`). See also [`check.mono`][mrds::check.mono].
 #'
-#' Even with no monotonicity constraints, checks are still made that the detection function is monotonic, see \code{\link{check.mono}}.
+#' Even with no monotonicity constraints, checks are still made that the
+#' detection function is monotonic, see [`check.mono`][mrds::check.mono].
 #'
 # THIS IS STOLEN FROM mrds, sorry Jeff!
 #' @section Units:
-#'  In extrapolating to the entire survey region it is important that
-#'  the unit measurements be consistent or converted for consistency.
-#'  A conversion factor can be specified with the \code{convert.units}
-#'  variable.  The values of \code{Area} in \code{region.table}, must be made
-#'  consistent with the units for \code{Effort} in \code{sample.table} and the
-#'  units of \code{distance} in the \code{data.frame} that was analyzed.  It is
-#'  easiest if the units of \code{Area} are the square of the units of
-#'  \code{Effort} and then it is only necessary to convert the units of
-#'  \code{distance} to the units of \code{Effort}. For example, if \code{Effort}
-#'   was entered in kilometres and \code{Area} in square kilometres and
-#'  \code{distance} in metres then using \code{convert.units=0.001} would
-#'  convert metres to kilometres, density would be expressed in square
-#'  kilometres which would then be consistent with units for \code{Area}.
-#'  However, they can all be in different units as long as the appropriate
-#'  composite value for \code{convert.units} is chosen.  Abundance for a survey
-#'  region can be expressed as: \code{A*N/a} where \code{A} is \code{Area} for
-#'  the survey region, \code{N} is the abundance in the covered (sampled)
-#'  region, and \code{a} is the area of the sampled region and is in units of
-#'  \code{Effort * distance}.  The sampled region \code{a} is multiplied by
-#'   \code{convert.units}, so it should be chosen such that the result is in
-#'  the same units as \code{Area}.  For example, if \code{Effort} was entered
-#'  in kilometres, \code{Area} in hectares (100m x 100m) and \code{distance}
-#'  in metres, then using \code{convert.units=10} will convert \code{a} to
-#'  units of hectares (100 to convert metres to 100 metres for distance and
-#'  .1 to convert km to 100m units).
+#'  In extrapolating to the entire survey region it is important that the unit
+#'  measurements be consistent or converted for consistency.  A conversion
+#'  factor can be specified with the `convert.units` variable.  The values of
+#'  `Area` in `region.table`, must be made consistent with the units for
+#'  `Effort` in `sample.table` and the units of `distance` in the `data.frame`
+#'  that was analyzed.  It is easiest if the units of `Area` are the square of
+#'  the units of `Effort` and then it is only necessary to convert the units of
+#'  `distance` to the units of `Effort`. For example, if `Effort` was entered
+#'  in kilometres and `Area` in square kilometres and `distance` in metres then
+#'  using `convert.units=0.001` would convert metres to kilometres, density
+#'  would be expressed in square kilometres which would then be consistent with
+#'  units for `Area`.  However, they can all be in different units as long as
+#'  the appropriate composite value for `convert.units` is chosen.  Abundance
+#'  for a survey region can be expressed as: `A*N/a` where `A` is `Area` for
+#'  the survey region, `N` is the abundance in the covered (sampled) region,
+#'  and `a` is the area of the sampled region and is in units of `Effort *
+#'  distance`.  The sampled region `a` is multiplied by `convert.units`, so it
+#'  should be chosen such that the result is in the same units as `Area`.  For
+#'  example, if `Effort` was entered in kilometres, `Area` in hectares (100m x
+#'  100m) and `distance` in metres, then using `convert.units=10` will convert
+#'  `a` to units of hectares (100 to convert metres to 100 metres for distance
+#'  and .1 to convert km to 100m units).
 #'
 #' @section Data format:
-#' One can supply \code{data} only to simply fit a detection function. However, if abundance/density estimates are necessary further information is required. Either the \code{region.table}, \code{sample.table} and \code{obs.table} \code{data.frame}s can be supplied or all data can be supplied as a "flat file" in the \code{data} argument. In this format each row in data has additional information that would ordinarily be in the other tables. This usually means that there are additional columns named: \code{Sample.Label}, \code{Region.Label}, \code{Effort} and \code{Area} for each observation. See \code{\link{flatfile}} for an example.
+#' One can supply `data` only to simply fit a detection function. However, if
+#' abundance/density estimates are necessary further information is required.
+#' Either the `region.table`, `sample.table` and `obs.table` `data.frame`s can
+#' be supplied or all data can be supplied as a "flat file" in the `data`
+#' argument. In this format each row in data has additional information that
+#' would ordinarily be in the other tables. This usually means that there are
+#' additional columns named: `Sample.Label`, `Region.Label`, `Effort` and
+#' `Area` for each observation. See [`flatfile`][flatfile] for an example.
+#'
 #' @section Density estimation:
-#' If column \code{Area} is omitted, a density estimate is generated but note that the degrees of freedom/standard errors/confidence intervals will not match density estimates made with the \code{Area} column present.
+#' If column `Area` is omitted, a density estimate is generated but note that
+#' the degrees of freedom/standard errors/confidence intervals will not match
+#' density estimates made with the `Area` column present.
 #'
 #' @author David L. Miller
-#' @seealso \code{\link{flatfile}} \code{\link{AIC.ds}} \code{\link{ds.gof}} \code{\link{p_dist_table}} \code{\link{plot.ds}} \code{\link{add_df_covar_line}}
+#' @seealso [`flatfile`][flatfile], [`AIC.ds`][AIC.ds], [`ds.gof`][ds.gof],
+#' [`p_dist_table`][p_dist_table], [`plot.ds`][plot.ds],
+#' [`add_df_covar_line`][add_df_covar_line]
 #' @export
 #'
 #' @importFrom stats quantile as.formula
 #' @references
-#' Buckland, S.T., Anderson, D.R., Burnham, K.P., Laake, J.L., Borchers, D.L., and Thomas, L. (2001). Distance Sampling. Oxford University Press. Oxford, UK.
+#' Buckland, S.T., Anderson, D.R., Burnham, K.P., Laake, J.L., Borchers, D.L.,
+#' and Thomas, L. (2001). Distance Sampling. Oxford University Press. Oxford,
+#' UK.
 #'
-#' Buckland, S.T., Anderson, D.R., Burnham, K.P., Laake, J.L., Borchers, D.L., and Thomas, L. (2004). Advanced Distance Sampling. Oxford University Press. Oxford, UK.
+#' Buckland, S.T., Anderson, D.R., Burnham, K.P., Laake, J.L., Borchers, D.L.,
+#' and Thomas, L. (2004). Advanced Distance Sampling. Oxford University Press.
+#' Oxford, UK.
 #'
 #' @examples
 #'
 #' # An example from mrds, the golf tee data.
 #' library(Distance)
 #' data(book.tee.data)
-#' tee.data<-book.tee.data$book.tee.dataframe[book.tee.data$book.tee.dataframe$observer==1, ]
+#' tee.data <- subset(book.tee.data$book.tee.dataframe, observer==1)
 #' ds.model <- ds(tee.data, 4)
 #' summary(ds.model)
 #' plot(ds.model)
@@ -166,7 +273,6 @@
 #' AIC(ds.model.cos2)
 #' AIC(ds.model.cos23)
 #'}
-#'
 ds <- function(data, truncation=ifelse(is.null(cutpoints),
                                      ifelse(is.null(data$distend),
                                             max(data$distance),
@@ -412,11 +518,9 @@ ds <- function(data, truncation=ifelse(is.null(cutpoints),
                        herm = "Hermite",
                        poly = "simple polynomial"
                       )
-
   }else{
     aic.search <- FALSE
   }
-
 
   # monotonicity
   if(is.logical(monotonicity)){
@@ -495,7 +599,7 @@ ds <- function(data, truncation=ifelse(is.null(cutpoints),
     }
 
     # build a message to let the user know what is being fitted
-    this.message <- paste("Fitting ",key.name," key function",sep="")
+    this.message <- paste("Fitting ", key.name, " key function", sep="")
 
     # adjustments?
     # this handles the case when we have adjustments but are doing AIC search
@@ -504,13 +608,13 @@ ds <- function(data, truncation=ifelse(is.null(cutpoints),
       if(length(order[1:i])==1){
         order.str <- order[1:i]
       }else{
-        order.str <- paste("c(",paste(order[1:i],collapse=","),")",sep="")
+        order.str <- paste("c(", paste(order[1:i], collapse=","), ")", sep="")
       }
 
-      model.formula <- paste(model.formula,",",
-                           "adj.series=\"",adjustment,
-                           "\",adj.order=",order.str,",",
-                           "adj.scale=\"",scale,"\"",sep="")
+      model.formula <- paste(model.formula, ",",
+                           "adj.series=\"", adjustment,
+                           "\", adj.order=", order.str, ",",
+                           "adj.scale=\"", scale, "\"", sep="")
 
       this.message <- paste(this.message,
                             " with ", adj.name,"(",
@@ -691,5 +795,4 @@ ds <- function(data, truncation=ifelse(is.null(cutpoints),
   class(ret.obj) <- "dsmodel"
 
   return(ret.obj)
-
 }

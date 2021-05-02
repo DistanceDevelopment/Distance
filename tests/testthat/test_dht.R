@@ -13,11 +13,16 @@ egdata <- egdata[egdata$observer==1,]
 test_that("dht without obs.table",{
 
   # first with obs table
-  ds.dht.model<-suppressMessages(ds(egdata,4,region.table=region, monotonicity="strict", sample.table=samples,obs.table=obs))
+  ds.dht.model<-suppressMessages(ds(egdata,4,region.table=region,
+                                    monotonicity="strict",
+                                    sample.table=samples,obs.table=obs))
 
   # check if you just forget obs.table an error is thrown
-  # No longer throws error just displays to the user that it is only estimating detection function
-  #expect_error(suppressMessages(ds(egdata,4,region.table=region, monotonicity="strict", sample.table=samples)))
+  # No longer throws error just displays to the user that it is only estimating
+  # detection function
+  #expect_error(suppressMessages(ds(egdata,4,region.table=region,
+  #                                 monotonicity="strict",
+  #                                 sample.table=samples)))
 
   # test that the result is the same if we do the correct merge
   dat <- merge(egdata, obs, by="object")

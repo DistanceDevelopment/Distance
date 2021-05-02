@@ -49,14 +49,15 @@ test_that("hn", {
 
 # hazard
 test_that("hn", {
-  df_hr <- ds(PTExercise, transect="point", key="hr", truncation=20, convert.units=convert.units, er.var="P3")
+  df_hr <- ds(PTExercise, transect="point", key="hr", truncation=20,
+              convert.units=convert.units, er.var="P3")
   # this gives answers per square metre
   df_hr$dht
 })
 
 test_that("hn", {
-  df_unif <- ds(PTExercise, transect="point", key="unif", truncation=20, convert.units=convert.units, order=1, er.var="P3")
+  df_unif <- ds(PTExercise, transect="point", key="unif", truncation=20,
+                convert.units=convert.units, order=1, er.var="P3")
   # this gives answers per square metre
   df_unif$dht
 })
-

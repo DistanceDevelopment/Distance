@@ -14,7 +14,8 @@ test_that("cluster exercise works",{
   ClusterExercise$Region.Label <- "Total"
 
   # fit detection function
-  #df <- ds(ClusterExercise, truncation=1.5, key="hr", cutpoints=seq(0, 1.5, len=8), adjustment=NULL)
+  # df <- ds(ClusterExercise, truncation=1.5, key="hr",
+  #          cutpoints=seq(0, 1.5, len=8), adjustment=NULL)
 
   # exactly as in Distance for Windows
   dat <- unflatten(ClusterExercise)
@@ -23,8 +24,10 @@ test_that("cluster exercise works",{
   # fit the exact function fitted by Distance
   result <- ddf(dsmodel = ~mcds(key = "hr", formula = ~1),
                 data = dat, method = "ds",
-                meta.data = list(width = 1.5, binned=TRUE, breaks=seq(0, 1.5, len=8)),
-                control=list(initial=list(scale=log(0.7067555), shape=log(2.484188)),
+                meta.data = list(width = 1.5, binned=TRUE,
+                breaks=seq(0, 1.5, len=8)),
+                control=list(initial=list(scale=log(0.7067555),
+                                          shape=log(2.484188)),
                              nofit=TRUE))
   df <- result
 
@@ -79,7 +82,8 @@ test_that("cluster exercise works",{
   expect_equal(strat_N$LCI, c(4942.0, 7467.0, 8914.0, 26241), tol=1e-2)
   expect_equal(strat_N$UCI, c(14149, 26817, 44605, 68681), tol=1e-2)
   expect_equal(strat_N$df, c(36.13, 31.43, 34.46, 76.50), tol=1e-1)
-  expect_equal(strat_N$Abundance_CV, c(26.38, 32.15, 41.25, 24.51)/100, tol=1e-2)
+  expect_equal(strat_N$Abundance_CV, c(26.38, 32.15, 41.25, 24.51)/100,
+               tol=1e-2)
 })
 
 

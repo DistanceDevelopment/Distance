@@ -7,22 +7,31 @@
 \title{Simulated minke whale data with cluster size}
 \format{
 \code{data.frame} with 99 observations of 9 variables:
-\tabular{ll}{
-\code{Region.Label} \tab stratum label (\code{"North"} or \code{"South"}) \cr
-\code{Area} \tab stratum area  (square nautical mile)\cr
-\code{Sample.Label} \tab transect identifier\cr
-\code{Effort} \tab transect length  (nautical mile)\cr
-\code{distance} \tab observed distance  (nautical mile)\cr
-\code{Cluster.strat} \tab strata based on cluster size: 1, 2 and 3+\cr 
-\code{size} \tab {cluster size}\cr
-\code{Study.Area} \tab {name of study area}}
+\itemize{
+\item \code{Region.Label} stratum label (\code{"North"} or \code{"South"})
+\item \code{Area} stratum area  (square nautical mile)
+\item \code{Sample.Label} transect identifier
+\item \code{Effort} transect length  (nautical mile)
+\item \code{distance} observed distance  (nautical mile)
+\item \code{Cluster.strat} strata based on cluster size: 1, 2 and 3+
+\item \code{size} cluster size
+\item \code{Study.Area} name of study area
+}
 }
 \description{
-Data simulated from models fitted to 1992/1993 Southern Hemisphere minke whale data collected by the International Whaling Commission. See Branch and Butterworth (2001) for survey details (survey design is shown in figure 1(e)). Data simulated by David Borchers.
+Data simulated from models fitted to 1992/1993 Southern Hemisphere minke
+whale data collected by the International Whaling Commission. See Branch and
+Butterworth (2001) for survey details (survey design is shown in figure
+1(e)). Data simulated by David Borchers.
 }
 \references{
-Branch, T.A. and D.S. Butterworth. (2001) Southern Hemisphere minke whales: standardised abundance estimates from the 1978/79 to 1997/98 IDCR-SOWER surveys. Journal of Cetacean Research and Management 3(2): 143-174
+Branch, T.A. and D.S. Butterworth. (2001) Southern Hemisphere
+minke whales: standardised abundance estimates from the 1978/79 to 1997/98
+IDCR-SOWER surveys. Journal of Cetacean Research and Management 3(2):
+143-174
 
-Hedley, S.L., and S.T. Buckland. (2004) Spatial models for line transect sampling. Journal of Agricultural, Biological, and Environmental Statistics 9: 181-199. doi:10.1198/1085711043578.
+Hedley, S.L., and S.T. Buckland. (2004) Spatial models for line transect
+sampling. Journal of Agricultural, Biological, and Environmental Statistics
+9: 181-199. doi:10.1198/1085711043578.
 }
 \keyword{datasets}

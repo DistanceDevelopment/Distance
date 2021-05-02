@@ -16,66 +16,68 @@
 Steve Buckland
 }
 \description{
-Observations of winter wren (Troglodytes troglodytes L.) collected by Steve Buckland in woodland/parkland at Montrave Estate near Leven, Fife, Scotland.
+Observations of winter wren (\emph{Troglodytes troglodytes L.}) collected by Steve
+Buckland in woodland/parkland at Montrave Estate near Leven, Fife, Scotland.
 }
 \details{
 Four different surveys were carried out:
-\describe{
-  \item{\code{wren_5min}}{5-minute point count}
-  \item{\code{wren_snapshot}}{snapshot method}
-  \item{\code{wren_cuecount}}{cue count}
-  \item{\code{wren_lt}}{line transect survey}
+\itemize{
+\item \code{wren_5min} 5-minute point count
+\item \code{wren_snapshot} snapshot method
+\item \code{wren_cuecount} cue count
+\item \code{wren_lt} line transect survey
 }
 }
 \note{
-wren_5min is  data frame with 134 observations of 8 variables
-  \tabular{ll}{
-    \code{Region.Label} \tab stratum name (single stratum) \cr
-    \code{Area} \tab size (ha) of Montrave study area \cr
-    \code{Sample.Label} \tab point label \cr
-    \code{Effort} \tab Number of visits to point \cr
-    \code{object} \tab Object ID \cr
-    \code{distance} \tab radial distance (m) \cr
-    \code{direction} \tab direction of detection from point \cr
-    \code{Study.Area} \tab Montrave Estate \cr
-  }
+\code{wren_5min}: 134 observations of 8 variables
+\itemize{
+\item \code{Region.Label}  stratum name (single stratum)
+\item \code{Area}  size (ha) of Montrave study area
+\item \code{Sample.Label}  point label
+\item \code{Effort}  Number of visits to point
+\item \code{object}  Object ID
+\item \code{distance}  radial distance (m)
+\item \code{direction}  direction of detection from point
+\item \code{Study.Area}  Montrave Estate
+}
 
-wren_snapshot is  data frame with 119 observations of 7 variables
-  \tabular{ll}{
-    \code{Region.Label} \tab stratum name (single stratum) \cr
-    \code{Area} \tab size (ha) of Montrave study area \cr
-    \code{Sample.Label} \tab point label \cr
-    \code{Effort} \tab Number of visits to point \cr
-    \code{object} \tab Object ID \cr
-    \code{distance} \tab radial distance (m) \cr
-    \code{Study.Area} \tab Montrave Estate \cr
-  }
+\code{wren_snapshot}: 119 observations of 7 variables
+\itemize{
+\item \code{Region.Label}  stratum name (single stratum)
+\item \code{Area}  size (ha) of Montrave study area
+\item \code{Sample.Label}  point label
+\item \code{Effort}  Number of visits to point
+\item \code{object}  Object ID
+\item \code{distance}  radial distance (m)
+\item \code{Study.Area}  Montrave Estate
+}
 
-wren_cuecount is  data frame with 774 observations of 9 variables
-  \tabular{ll}{
-    \code{Region.Label} \tab stratum name (single stratum) \cr
-    \code{Area} \tab size (ha) of Montrave study area \cr
-    \code{Sample.Label} \tab point label \cr
-    \code{Cue.rate} \tab Production rate (per min) of cues \cr
-    \code{Cue.rate.SE} \tab  SE of cue production rate \cr
-    \code{object} \tab Object ID \cr
-    \code{distance} \tab radial distance (m) \cr
-    \code{Search.time} \tab Time (min) listening for cues \cr
-    \code{Study.Area} \tab Montrave Estate \cr
-  }
+\code{wren_cuecount}: 774 observations of 9 variables
+\itemize{
+\item \code{Region.Label}  stratum name (single stratum)
+\item \code{Area}  size (ha) of Montrave study area
+\item \code{Sample.Label}  point label
+\item \code{Cue.rate}  Production rate (per min) of cues
+\item \code{Cue.rate.SE}   SE of cue production rate
+\item \code{object}  Object ID
+\item \code{distance}  radial distance (m)
+\item \code{Search.time}  Time (min) listening for cues
+\item \code{Study.Area}  Montrave Estate
+}
 
-wren_lt is  data frame with 156 observations of 8 variables
-  \tabular{ll}{
-    \code{Region.Label} \tab stratum name (single stratum) \cr
-    \code{Area} \tab size (ha) of Montrave study area \cr
-    \code{Sample.Label} \tab transect label \cr
-    \code{Effort} \tab  transect length (km) \cr
-    \code{object} \tab Object ID \cr
-    \code{distance} \tab perpendicular distance (m) \cr
-    \code{Study.Area} \tab Montrave Estate \cr
-  }
+\code{wren_lt}: 156 observations of 8 variables
+\itemize{
+\item \code{Region.Label}  stratum name (single stratum)
+\item \code{Area}  size (ha) of Montrave study area
+\item \code{Sample.Label}  transect label
+\item \code{Effort}   transect length (km)
+\item \code{object}  Object ID
+\item \code{distance}  perpendicular distance (m)
+\item \code{Study.Area}  Montrave Estate
+}
 }
 \references{
-Buckland, S. T. (2006) Point-transect surveys for songbirds: robust methodologies. The Auk 123 (2): 345–357.
+Buckland, S. T. (2006) Point-transect surveys for songbirds:
+robust methodologies. The Auk 123 (2): 345–357.
 }
 \keyword{datasets}

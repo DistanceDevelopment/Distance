@@ -61,25 +61,27 @@ test_that("Input errors are thrown correctly",{
 
 
 test_that("Simple models work",{
-  
+
   #Test that ds can deal with a numeric vector as input
-  distances <- c(1.02,0.89,0.21,1.83,0.09,1.34,2.1,0.98,1.8,0.32,0.83,1.6,0.92,0.66,0.31,0.55,1.13,0.5,0.46,1)
+  distances <- c(1.02, 0.89, 0.21, 1.83, 0.09, 1.34, 2.1, 0.98, 1.8, 0.32,
+                 0.83, 1.6, 0.92, 0.66, 0.31, 0.55, 1.13, 0.5, 0.46, 1)
   numeric.test <- suppressMessages(ds(distances))
   data.frame.test <- suppressMessages(ds(data.frame(distance = distances)))
-  #Passing in distances as a vector should be identical to passing them in a data.frame
+  # Passing in distances as a vector should be identical to passing them in a
+  # data.frame
   expect_equal(numeric.test$ddf$par, data.frame.test$ddf$par)
 
   # same model, but calculating abundance
   # need to supply the region, sample and observation tables
-  region<-book.tee.data$book.tee.region
-  samples<-book.tee.data$book.tee.samples
-  obs<-book.tee.data$book.tee.obs
+  region <- book.tee.data$book.tee.region
+  samples <- book.tee.data$book.tee.samples
+  obs <- book.tee.data$book.tee.obs
 
   egdata <- egdata[egdata$observer==1,]
 
   # half-normal key should get selected
   ds.dht.model <- suppressMessages(ds(egdata,4,region.table=region,
-               sample.table=samples,obs.table=obs))
+                                      sample.table=samples,obs.table=obs))
   # pars and lnl
   expect_equal(ds.dht.model$ddf$par, 0.6632435,tol=par.tol)
   expect_equal(ds.dht.model$ddf$lnl, -154.5692, tol=lnl.tol)
@@ -137,9 +139,7 @@ test_that("Uniform does work after all",{
   dd <- suppressMessages(ds(egdata,4,key="unif",order=c(1,2)))
   expect_equal(dd$ddf$par, c(0.7050144, -0.1056291), tol=par.tol)
 
-
 })
-
 
 
 test_that("Truncation is handled",{
@@ -147,22 +147,24 @@ test_that("Truncation is handled",{
   egdata <- egdata[egdata$observer==1,]
 
   # setting the truncation is correct
-  expect_equal(suppressMessages(ds(egdata,4,key="hn",order=0))$ddf$meta.data$width,4)
+  expect_equal(suppressMessages(ds(egdata, 4, key="hn",
+                                   order=0))$ddf$meta.data$width, 4)
 
   # largest observed distance
-  expect_equal(suppressMessages(ds(egdata,key="hn",order=0))$ddf$meta.data$width,3.84)
-
+  expect_equal(suppressMessages(ds(egdata, key="hn",
+                                   order=0))$ddf$meta.data$width, 3.84)
 
   # remove observations after 3.8
-  egdata <- egdata[egdata$distance <= 3.8,]
+  egdata <- egdata[egdata$distance <= 3.8, ]
 
   # largest cutpoint
   expect_equal(suppressMessages(ds(egdata,key="hn",order=0,
-                  cutpoints=c(0,1,2,3,3.8)))$ddf$meta.data$width,3.8)
+                             cutpoints=c(0,1,2,3,3.8)))$ddf$meta.data$width,3.8)
 
   # largest bin
   bin.data <- create.bins(egdata,c(0,1,2,3,3.8))
-  expect_equal(suppressMessages(ds(bin.data,key="hn",order=0))$ddf$meta.data$width,3.8)
+  expect_equal(suppressMessages(ds(bin.data, key="hn",
+                                   order=0))$ddf$meta.data$width, 3.8)
 
 })
 
@@ -257,10 +259,4 @@ test_that("warnings of bad models get thrown",{
   expect_warning(ds(dat, key="hr", adjustment=NULL),
                "Estimated hazard-rate scale parameter close to 0 \\(on log scale\\). Possible problem in data \\(e.g., spike near zero distance\\).")
 
-
-  # check 
-
-
 })
-
-

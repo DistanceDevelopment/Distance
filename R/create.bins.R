@@ -2,11 +2,11 @@
 #'
 #' This is an internal routine and shouldn't be necessary in normal analyses.
 #'
-#' @param data \code{data.frame} with at least the column \code{distance}.
+#' @param data `data.frame` with at least the column `distance`.
 #' @param cutpoints vector of cutpoints for the bins
 #'
-#' @return data \code{data} with two extra columns \code{distbegin} and
-#'        \code{distend}.
+#' @return argument `data` with two extra columns `distbegin` and
+#'        `distend`.
 #'
 #' @author David L. Miller
 #' @export

@@ -16,9 +16,12 @@ list of extracted and summarized objects
 }
 \description{
 Provides a brief summary of a distance sampling analysis. This includes
+parameters, model selection criterion, and optionally abundance in the
+covered (sampled) region and its standard error.
 }
 \note{
-This function just calls \code{\link{summary.ds}} and \code{\link{dht}}, collates and prints the results in a nice way.
+This function just calls \code{\link{summary.ds}} and \code{\link{dht}},
+collates and prints the results in a nice way.
 }
 \author{
 David L. Miller

@@ -11,22 +11,28 @@ summarize_ds_models(..., sort = "AIC", output = "latex", delta_only = TRUE)
 
 \item{sort}{column to sort by (default \code{"AIC"})}
 
-\item{output}{should the output be given in \code{"latex"} compatible format or as \code{"plain"} text?}
+\item{output}{should the output be given in \code{"latex"} compatible format
+or as \code{"plain"} text?}
 
 \item{delta_only}{only output AIC differences (default \code{TRUE})}
 }
 \description{
-Provide a summary table of useful information about fitted detection functions. This can be useful when paired with \code{knitr}s \code{kable} function. By default models are sorted by AIC and will therefore not allow models with different truncations and distance binning.
+Provide a summary table of useful information about fitted detection
+functions. This can be useful when paired with \code{knitr}'s \code{kable} function. By
+default models are sorted by AIC and will therefore not allow models with
+different truncations and distance binning.
 }
 \details{
-Note that the column names are in LaTeX format, so if you plan to manipulate the resulting \code{data.frame} in R, you may wish to rename the columns for ease of access.
+Note that the column names are in LaTeX format, so if you plan to manipulate
+the resulting \code{data.frame} in R, you may wish to rename the columns for
+ease of access.
 }
 \examples{
 \dontrun{
 # fit some models to the golf tee data
 library(Distance)
 data(book.tee.data)
-tee.data<-book.tee.data$book.tee.dataframe[book.tee.data$book.tee.dataframe$observer==1,]
+tee.data <- subset(book.tee.data$book.tee.dataframe, observer==1)
 model_hn <- ds(tee.data,4)
 model_hr <- ds(tee.data,4, key="hr")
 summarize_ds_models(model_hr, model_hn, output="plain")

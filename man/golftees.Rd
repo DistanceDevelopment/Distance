@@ -6,46 +6,59 @@
 \alias{golftees_units}
 \title{Golf tee data}
 \format{
-The format is:
-\describe{ List of 4 
-$ book.tee.dataframe:'data.frame': 
-  \item{$ object}{object ID}
-  \item{$ observer}{observer ID}
-  \item{$ detected}{detected or not detected}
-  \item{$ distance}{perpendicular distance}
-  \item{$ size}{group size}
-  \item{$ sex}{number of tees in group}
-  \item{$ exposure}{tee height above ground}  
-  $ book.tee.region   :'data.frame': 2 obs. of 2 variables: ..
-  \item{$ Region.Label}{stratum name}
-  \item{$ Area}{stratum size}
-  $ book.tee.samples   :'data.frame': 11 obs. of 3 variables: ..
-  \item{$ Sample.Label}{transect label}
-  \item{$ Region.Label}{stratum name}
-  \item{$ Effort}{transect length}
-  $ book.tee.obs :'data.frame': 162 obs. of 3 variables:
-  \item{$ object}{object ID}
-  \item{$ Region.Label}{stratum in which it was detected}
-  \item{$ Sample.Label}{transect on which it was detected}
-  }
+Data is a \code{list} with 4 elements each of which is a \code{data.frame}:
+\itemize{
+\item \code{book.tee.dataframe}
+\itemize{
+\item \code{object} object ID
+\item \code{observer} observer ID
+\item \code{detected} detected or not detected
+\item \code{distance} perpendicular distance
+\item \code{size} group size
+\item \code{sex} number of tees in group
+\item \code{exposure} tee height above ground
+}
+\item \code{book.tee.region}
+\itemize{
+\item \code{Region.Label} stratum name
+\item \code{Area} stratum size
+}
+\item \code{book.tee.samples}
+\itemize{
+\item \code{Sample.Label} transect label
+\item \code{Region.Label} stratum name
+\item \code{Effort} transect length
+}
+\item \code{book.tee.obs}
+\itemize{
+\item \code{object} object ID
+\item \code{Region.Label} stratum in which it was detected
+\item \code{Sample.Label} transect on which it was detected
+}
+}
 }
 \description{
-The data are from independent surveys by eight observers of a population of 250
-groups (760 individuals) of golf tees.  The tees, of two colours, were placed 
-in groups of between 1 and 8 in a survey region of 1680 m^2^, either exposed 
-above the surrounding grass, or at least partially hidden by it.  They were 
-surveyed by the 1999 statistics honours class at the Univ of St Andrews.
+The data are from independent surveys by eight observers of a population of
+250 groups (760 individuals) of golf tees.  The tees, of two colours, were
+placed in groups of between 1 and 8 in a survey region of 1680 m^2, either
+exposed above the surrounding grass, or at least partially hidden by it.
+They were surveyed by the 1999 statistics honours class at the University of
+St Andrews.
 }
 \details{
-We treat each group of golf tees as a single animal with size equal to the 
-number of tees in the group; yellow tees are male, green are female; tees 
-exposed above the surrounding grass are classified as exposed, others as 
-unexposed.  We are grateful to Miguel Bernal for making these data available; 
-they were collected by him as part of a masters project.
+We treat each group of golf tees as a single animal with size equal to the
+number of tees in the group; yellow tees are male, green are female; tees
+exposed above the surrounding grass are classified as exposed, others as
+unexposed.  We are grateful to Miguel Bernal for making these data
+available; they were collected by him as part of a masters project.
 }
 \references{
-Borchers, D. L., S.T. Buckland, and W. Zucchini. 2002. Estimating Animal Abundance: Closed Populations. Statistics for Biology and Health. London: Springer-Verlag. https://www.springer.com/gp/book/9781852335601.
+Borchers, D. L., S.T. Buckland, and W. Zucchini. 2002. Estimating Animal
+Abundance: Closed Populations. Statistics for Biology and Health. London:
+Springer-Verlag. \url{https://www.springer.com/gp/book/9781852335601}
 
-Buckland, S.T., D.R. Anderson, K.P. Burnham, J.L. Laake, D.L. Borchers, and L. Thomas. Advanced Distance Sampling: Estimating Abundance of Biological Populations. OUP Oxford, 2004.
+Buckland, S.T., D.R. Anderson, K.P. Burnham, J.L. Laake, D.L. Borchers, and
+L. Thomas. Advanced Distance Sampling: Estimating Abundance of Biological
+Populations. OUP Oxford, 2004.
 }
 \keyword{datasets}

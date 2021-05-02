@@ -11,7 +11,8 @@
 
 \item{\dots}{optionally more fitted model objects.}
 
-\item{k}{penalty per parameter to be used; the default \code{k = 2} is the "classical" AIC}
+\item{k}{penalty per parameter to be used; the default \code{k = 2} is the
+"classical" AIC}
 }
 \description{
 Extract the AIC from a fitted detection function.

@@ -1,6 +1,7 @@
 #' Generate table of unit conversions
 #'
-#' Returns a table of conversions between the units used in Distance for Windows. This is extracted from the \code{DistIni.mdb} default database.
+#' Returns a table of conversions between the units used in Distance for
+#' Windows. This is extracted from the `DistIni.mdb` default database.
 #' @export
 #'
 #' @author David L Miller

@@ -6,22 +6,22 @@
 \alias{ETP_Dolphin_units}
 \title{Eastern Tropical Pacific spotted dolphin survey}
 \format{
-A data frame with 1090 rows and 13 variables.
-  \tabular{ll}{  
-    \code{Region.Label} \tab stratum labels (only one)\cr
-    \code{Area} \tab size (nmi) of each stratum \cr
-    \code{Sample.Label} \tab transect labels \cr
-    \code{Effort} \tab transect length (nmi) \cr
-    \code{object} \tab object ID \cr
-    \code{distance} \tab perpendicular distance (nmi) \cr
-    \code{LnCluster} \tab natural log of cluster size \cr
-    \code{Month} \tab month of detection \cr
-    \code{Beauf.class} \tab Beaufort sea state \cr
-    \code{Cue.type} \tab initial cue triggering detection \cr
-    \code{Search.method} \tab observer method making the detection \cr
-    \code{size} \tab cluster size \cr
-    \code{Study.Area} \tab study area name \cr
-  }
+A \code{data.frame} with 1090 rows and 13 variables:
+\itemize{
+\item \code{Region.Label} stratum labels (only one)
+\item \code{Area} size (nmi) of each stratum
+\item \code{Sample.Label} transect labels
+\item \code{Effort} transect length (nmi)
+\item \code{object} object ID
+\item \code{distance} perpendicular distance (nmi)
+\item \code{LnCluster} natural log of cluster size
+\item \code{Month} month of detection
+\item \code{Beauf.class} Beaufort sea state
+\item \code{Cue.type} initial cue triggering detection
+\item \code{Search.method} observer method making the detection
+\item \code{size} cluster size
+\item \code{Study.Area} study area name
+}
 }
 \source{
 Inter-American Tropical Tuna Commission
@@ -30,22 +30,21 @@ Inter-American Tropical Tuna Commission
 Observers aboard tuna vessels detecting dolphin schools along with a number
 of possibly useful covariates for modelling the detection function.
 }
-\note{
+\details{
 Several different search methods included in these data
-  \tabular{ll}{
-  \code{0} \tab binoculars from crows nest \cr
-  \code{2} \tab binoculars from elsewhere on ship \cr
-  \code{3} \tab helicopter searching ahead of ship \cr
-  \code{5} \tab radar detects of seabirds above dolphin schools \cr
-  }
+\itemize{
+\item \code{0} binoculars from crows nest
+\item \code{2} binoculars from elsewhere on ship
+\item \code{3} helicopter searching ahead of ship
+\item \code{5} radar detects of seabirds above dolphin schools
 }
-\seealso{
+
 Several cue types were also recorded by observers.
-  \tabular{ll}{
-  \code{1} \tab seabirds above the school \cr
-  \code{2} \tab water splashes \cr
-  \code{3} \tab unspecified \cr
-  \code{4} \tab floating objects such as logs \cr
-  }
+\itemize{
+\item \code{1} seabirds above the school
+\item \code{2} water splashes
+\item \code{3} unspecified
+\item \code{4} floating objects such as logs
+}
 }
 \keyword{datasets}

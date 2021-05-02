@@ -59,10 +59,10 @@ test_that("ER variance",{
                      strat_formula=~Region.Label, innes=FALSE)
 
   # tests
-oldres <- df$dht$clusters$summary
-oldres$k <- NULL
-oldres$mean.size <- df$dht$individuals$summary$mean.size
-oldres$se.mean <- df$dht$individuals$summary$se.mean
+  oldres <- df$dht$clusters$summary
+  oldres$k <- NULL
+  oldres$mean.size <- df$dht$individuals$summary$mean.size
+  oldres$se.mean <- df$dht$individuals$summary$se.mean
   expect_equal(oldres,
                make_old_summ_cluster(fs_st1), tolerance=tol)
 
@@ -74,6 +74,3 @@ oldres$se.mean <- df$dht$individuals$summary$se.mean
 #               tolerance=tol, check.attributes=FALSE)
 
 })
-
-
-

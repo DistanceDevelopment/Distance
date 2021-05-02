@@ -23,10 +23,10 @@ ds.gof(model, breaks = NULL, nc = NULL, qq = TRUE, ks = FALSE, ...)
 Nothing, deprecated.
 }
 \description{
-This function is deprecated, please see \code{link{gof_ds}}.
+This function is deprecated, please see \code{\link{gof_ds}}.
 }
 \seealso{
-qqplot.ddf ddf.gof
+\code{\link[mrds:qqplot.ddf]{qqplot.ddf}} \code{\link[mrds:ddf.gof]{ddf.gof}}
 }
 \author{
 David L Miller

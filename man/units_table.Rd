@@ -7,7 +7,8 @@
 units_table()
 }
 \description{
-Returns a table of conversions between the units used in Distance for Windows. This is extracted from the \code{DistIni.mdb} default database.
+Returns a table of conversions between the units used in Distance for
+Windows. This is extracted from the \code{DistIni.mdb} default database.
 }
 \author{
 David L Miller

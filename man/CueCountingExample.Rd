@@ -6,39 +6,40 @@
 \alias{CueCountingExample_units}
 \title{Cue counts of whale blows}
 \format{
-A data frame with 109 rows and 15 variables.
-  \tabular{ll}{ 
-    \code{Region.Label} \tab stratum labels \cr
-    \code{Area} \tab size (km^2) of each stratum \cr
-    \code{Sample.Label} \tab transect labels \cr
-    \code{Cue.rate} \tab rate of blows per animal per hour \cr
-    \code{Cue.rate.SE} \tab variability in cue rate \cr
-    \code{Cue.rate.df} \tab degrees of freedom (number of animals sampled for cues) \cr
-    \code{object} \tab object ID \cr
-    \code{distance} \tab perpendicular distance (km) \cr
-    \code{Sample.Fraction} \tab proportion of full circle scanned (radians) \cr
-    \code{Sample.Fraction.SE} \tab variability in sampling fraction (0) \cr
-    \code{Search.time} \tab Duration of scanning effort (hr) \cr
-    \code{bss} \tab Beaufort sea state \cr
-    \code{sp} \tab Species detected (all observations W in these data) \cr
-    \code{size} \tab Number of animals in group (all 1 in these data) \cr
-    \code{Study.Area} \tab study area name \cr
-  }
+A \code{data.frame} with 109 rows and 15 variables.
+\itemize{
+\item `Region.Label stratum labels
+\item \code{Area} size (km^2) of each stratum
+\item \code{Sample.Label} transect labels
+\item \code{Cue.rate} rate of blows per animal per hour
+\item \code{Cue.rate.SE} variability in cue rate
+\item \code{Cue.rate.df} degrees of freedom (number of animals sampled for cues)
+\item \code{object} object ID
+\item \code{distance} perpendicular distance (km)
+\item \code{Sample.Fraction} proportion of full circle scanned (radians)
+\item \code{Sample.Fraction.SE} variability in sampling fraction (0)
+\item \code{Search.time} Duration of scanning effort (hr)
+\item \code{bss} Beaufort sea state
+\item \code{sp} Species detected (all observations W in these data)
+\item \code{size} Number of animals in group (all 1 in these data)
+\item \code{Study.Area} study area name
+}
 }
 \description{
 Cues are treated as an indirect count, requiring the use of multipliers.
 }
 \details{
-Because whale blows disappear instantaneously, there is no need to measure a decay rate.
-However a cue production rate (blows per individual per unit time) is required,
-as is a measure of variability of that rate.
+Because whale blows disappear instantaneously, there is no need to measure a
+decay rate. However a cue production rate (blows per individual per unit
+time) is required, as is a measure of variability of that rate.
 }
 \note{
-There are two other nuances in this survey.  Even though the survey is taking place
-on a moving ship, effort is measured as amount of time scanning for blows.  In some instances,
-it is not possible for the observer to scan the sea all around them as view may be restricted
-by the ship's superstructure.  Here a \code{sampling fraction} multiplier is employed 
-to deal with restricted vision.  Units of measure of \code{cue.rate} and \code{Search.time}
+There are two other nuances in this survey.  Even though the survey
+is taking place on a moving ship, effort is measured as amount of time
+scanning for blows.  In some instances, it is not possible for the observer
+to scan the sea all around them as view may be restricted by the ship's
+superstructure.  Here a \verb{sampling fraction} multiplier is employed to deal
+with restricted vision.  Units of measure of \code{cue.rate} and \code{Search.time}
 must be equal.
 }
 \keyword{datasets}

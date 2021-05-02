@@ -12,16 +12,30 @@
 \item{proportion}{should proportions be returned as well as counts?}
 }
 \value{
-a \code{data.frame} with probability bins, counts and (optionally) proportions. The object has an attribute \code{p_range} which contains the range of estimated detection probabilities
+a \code{data.frame} with probability bins, counts and (optionally)
+proportions. The object has an attribute \code{p_range} which contains the
+range of estimated detection probabilities
 }
 \description{
-Generate a table of frequencies of probability of detection from a detection function model. This is particularly useful when employing covariates, as it can indicate if there are detections with very small detection probabilities that can be unduly influential when calculating abundance estimates.
+Generate a table of frequencies of probability of detection from a detection
+function model. This is particularly useful when employing covariates, as it
+can indicate if there are detections with very small detection probabilities
+that can be unduly influential when calculating abundance estimates.
 }
 \details{
-Because \code{\link[mrds]{dht}} uses a Horvitz-Thompson-like estimator, abundance estimates can be sensitive to errors in the estimated probabilities. The estimator is based on \eqn{\sum 1/ \hat{P}_a(z_i)}, which means that the sensitivity is greater for smaller detection probabilities. As a rough guide, we recommend that the method be not used if more than say 5\% of the \eqn{\hat{P}_a(z_i)} are less than 0.2, or if any are less than 0.1. If these conditions are violated, the truncation distance w can be reduced. This causes some loss of precision relative to standard distance sampling without covariates.
+Because \code{\link[mrds]{dht}} uses a Horvitz-Thompson-like estimator, abundance
+estimates can be sensitive to errors in the estimated probabilities. The
+estimator is based on \eqn{\sum 1/ \hat{P}_a(z_i)}, which means that the
+sensitivity is greater for smaller detection probabilities. As a rough
+guide, we recommend that the method be not used if more than say 5\% of the
+\eqn{\hat{P}_a(z_i)} are less than 0.2, or if any are less than 0.1. If
+these conditions are violated, the truncation distance w can be reduced.
+This causes some loss of precision relative to standard distance sampling
+without covariates.
 }
 \note{
-This function is located in the \code{mrds} package but the documentation is provided here for easy access.
+This function is located in the \code{mrds} package but the documentation
+is provided here for easy access.
 }
 \examples{
 \dontrun{
@@ -36,10 +50,11 @@ p_dist_table(result, proportion=TRUE)
 }
 }
 \references{
-Marques, F.F.C. and S.T. Buckland. 2004. Covariate models for the detection function.
-  In: Advanced Distance Sampling, eds. S.T.
-  Buckland, D.R.Anderson, K.P. Burnham, J.L. Laake, D.L. Borchers, and L.
-  Thomas. Oxford University Press.
+Marques, F.F.C. and S.T. Buckland. 2004. Covariate models for
+the detection function.
+  In: Advanced Distance Sampling, eds. S.T. Buckland, D.R. Anderson, K.P.
+  Burnham, J.L. Laake, D.L. Borchers, and L. Thomas. Oxford University
+  Press.
 }
 \author{
 David L Miller

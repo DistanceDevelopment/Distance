@@ -38,7 +38,8 @@ ds.dht.model <- suppressMessages(ds(egdata,4))
 #ff <- merge(ff, obs2, by="Sample.Label", all.x=TRUE)
 #ff <- merge(ff, egdata, by="object", all.x=TRUE)
 #
-#ff <- ff[, c("Region.Label", "Area","Sample.Label", "Effort", "size", "distance")]
+#ff <- ff[, c("Region.Label", "Area","Sample.Label", "Effort", "size",
+#             "distance")]
 #
 #dd <- dht2(ds.dht.model, flatfile=ff, strat_formula=~Region.Label)
 #
@@ -70,7 +71,8 @@ test_that("as.factor works in formula",{
 
   ff$Region.Label <- as.factor(ff$Region.Label)
   ff_prefac <- dht2(ds.dht.model, flatfile=ff, strat_formula=~Region.Label)
-  prefac <- dht2(ds.dht.model, obs, samples, region, strat_formula=~Region.Label)
+  prefac <- dht2(ds.dht.model, obs, samples, region,
+                 strat_formula=~Region.Label)
 
   expect_equivalent(prefac, formfac)
   expect_equivalent(ff_prefac, ff_formfac)
@@ -221,7 +223,6 @@ test_that("varflag=0 works", {
   dht_old <- dht(easy.am$ddf, uf$region.table, uf$sample.table, uf$obs.table,
                  options=list(varflag=0, convert.units=conv.am, ervar="P3"))
   # now with dht2 equiv
-devtools::load_all()
   dht2_zero <- dht2(easy.am, flatfile=amakihi, convert_units = conv.am,
                     strat_formula = ~Region.Label, binomial_var=TRUE)
 
@@ -231,6 +232,4 @@ devtools::load_all()
   expect_equal(dht_old$individuals$D$df, dht2_zero$df)
   expect_equal(dht_old$individuals$D$lcl, dht2_zero$LCI, tol=1e-5)
   expect_equal(dht_old$individuals$D$ucl, dht2_zero$UCI, tol=1e-5)
-
 })
-

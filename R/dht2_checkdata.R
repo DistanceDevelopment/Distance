@@ -1,6 +1,6 @@
 # internal function to check input data
-dht2_checkdata <- function(ddf, observations, transects, geo_strat, strat_formula,
-                           stratum_labels, geo_stratum_labels){
+dht2_checkdata <- function(ddf, observations, transects, geo_strat,
+                           strat_formula, stratum_labels, geo_stratum_labels){
 
   # required columns for observations and transects
   col_req <- list(observations = c("object", "Sample.Label"),
@@ -21,7 +21,8 @@ dht2_checkdata <- function(ddf, observations, transects, geo_strat, strat_formul
 
     # then check for the additional stratum names
     # get the names of all columns
-    these_colnames <- unlist(lapply(names(col_req), function(x) colnames(get(x))))
+    these_colnames <- unlist(lapply(names(col_req),
+                             function(x) colnames(get(x))))
 
     # check that the stratum labels are *somewhere*
     # if they are remove from this list
@@ -49,7 +50,9 @@ dht2_checkdata <- function(ddf, observations, transects, geo_strat, strat_formul
     if(!all(is.factor(geo_strat[[geo_stratum_labels]]) &
             is.factor(transects[[geo_stratum_labels]]))){
       stop(paste("Columns:",
-                 paste(geo_stratum_labels[is.factor(geo_strat[[geo_stratum_labels]])], collapse=", "),
+                 paste(geo_stratum_labels[
+                         is.factor(geo_strat[[geo_stratum_labels]])],
+                       collapse=", "),
                  "are factors in `geo_strat` are not factors in `transects`"))
     }else{
       # check that even if they are factors, the levels are the same!

@@ -4,12 +4,17 @@
 #' @name add_df_covar_line
 #' @docType methods
 #' @param ddf a fitted detection function object.
-#' @param data a \code{data.frame} with the covariate combination you want to plot.
-#' @param \dots extra arguments to give to \code{\link{line}} (\code{lty}, \code{lwd}, \code{col}).
+#' @param data a `data.frame` with the covariate combination you want to plot.
+#' @param \dots extra arguments to give to [`lines`][graphics::lines] (e.g.,
+#' `lty`, `lwd`, `col`).
 #' @param ndist number of distances at which to evaluate the detection function.
-#' @param pdf should the line be drawn on the probability density scale; ignored for line transects
-#' @param breaks required to ensure that PDF lines are the right size, should match what is supplied to original \code{plot} command. Defaults to "Sturges" breaks, as in \code{\link{hist}}. Only used if \code{pdf=TRUE}
-#' @note This function is located in the \code{mrds} package but the documentation is provided here for easy access.
+#' @param pdf should the line be drawn on the probability density scale;
+#' ignored for line transects
+#' @param breaks required to ensure that PDF lines are the right size, should
+#' match what is supplied to original `plot` command. Defaults to
+#' "Sturges" breaks, as in [`hist`][graphics::hist]. Only used if `pdf=TRUE`
+#' @note This function is located in the `mrds` package but the
+#' documentation is provided here for easy access.
 #' @examples
 #' \dontrun{
 #' # example using a model for the minke data

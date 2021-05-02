@@ -26,4 +26,5 @@ Suggests:
     progress,
     testthat
 Encoding: UTF-8
+Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.1.1

@@ -1,15 +1,12 @@
-#' @importFrom mrds DeltaMethod 
-#compute.df
-compute_df <- function(k,type){
-#df <- compute.df(k, type)
-    df <- sapply(k, compute.df, type)
-df[df<1] <- 1
+#' @importFrom mrds DeltaMethod
+compute_df <- function(k, type){
+  df <- sapply(k, compute.df, type)
+  df[df<1] <- 1
   return(df)
 }
 
-
-  # Define function: compute.df
-compute.df<- function(k, type){
+# Define function: compute.df
+compute.df <- function(k, type){
   if(type=="O1" | type=="O2"| type=="O3"){
     H.O <- k - 1
     k.h.O <- rep(2, H.O)

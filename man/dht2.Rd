@@ -23,92 +23,199 @@ dht2(
 )
 }
 \arguments{
-\item{ddf}{model fitted by \code{\link[Distance]{ds}} or \code{\link[mrds]{ddf}}}
+\item{ddf}{model fitted by \code{\link[=ds]{ds}} or \code{\link[mrds:ddf]{ddf}}}
 
-\item{observations}{\code{data.frame} to link detection function data (indexed by \code{object} column IDs) to the transects (indexed by \code{Sample.Label} column IDs). See "Data" below.}
+\item{observations}{\code{data.frame} to link detection function data (indexed by
+\code{object} column IDs) to the transects (indexed by \code{Sample.Label} column
+IDs). See "Data" below.}
 
-\item{transects}{\code{data.frame} with information about samples (points or line transects). See "Data" below.}
+\item{transects}{\code{data.frame} with information about samples (points or
+line transects). See "Data" below.}
 
-\item{geo_strat}{\code{data.frame} with information about any geographical stratification. See "Data" below.}
+\item{geo_strat}{\code{data.frame} with information about any geographical
+stratification. See "Data" below.}
 
-\item{flatfile}{data in the flatfile format, see \code{\link[Distance]{flatfile}}.}
+\item{flatfile}{data in the flatfile format, see \code{\link{flatfile}}.}
 
-\item{strat_formula}{a formula giving the stratification structure (see "Stratification" below). Currently only one level of stratification is supported.}
+\item{strat_formula}{a formula giving the stratification structure (see
+"Stratification" below). Currently only one level of stratification is
+supported.}
 
-\item{convert_units}{conversion factor between units for the distances, effort and area. See "Units" below.}
+\item{convert_units}{conversion factor between units for the distances,
+effort and area. See "Units" below.}
 
-\item{er_est}{encounter rate variance estimator to be used. See "Variance" below and \code{\link{varn}}.}
+\item{er_est}{encounter rate variance estimator to be used. See "Variance"
+below and \code{\link[mrds:varn]{varn}}.}
 
 \item{multipliers}{\code{list} of \code{data.frame}s. See "Multipliers" below.}
 
-\item{sample_fraction}{what proportion of the transects was covered (e.g., 0.5 for one-sided line transects).}
+\item{sample_fraction}{what proportion of the transects was covered (e.g.,
+0.5 for one-sided line transects).}
 
-\item{ci_width}{for use with confidence interval calculation (defined as 1-alpha, so the default 95 will give a 95\% confidence interval).}
+\item{ci_width}{for use with confidence interval calculation (defined as
+1-alpha, so the default 95 will give a 95\% confidence interval).}
 
-\item{innes}{logical flag for computing encounter rate variance using either the method of Innes et al (2002) where estimated abundance per transect divided by effort is used as the encounter rate, vs. (when \code{innes=FALSE}) using the number of observations divided by the effort (as in Buckland et al., 2001)}
+\item{innes}{logical flag for computing encounter rate variance using either
+the method of Innes et al (2002) where estimated abundance per transect
+divided by effort is used as the encounter rate, vs. (when \code{innes=FALSE})
+using the number of observations divided by the effort (as in Buckland et
+al., 2001)}
 
 \item{stratification}{what do strata represent, see "Stratification" below.}
 
-\item{total_area}{for options \code{stratification="effort_sum"} and \code{stratification="replicate"} the area to use as the total for combined, weighted final estimates.}
+\item{total_area}{for options \code{stratification="effort_sum"} and
+\code{stratification="replicate"} the area to use as the total for combined,
+weighted final estimates.}
 
-\item{binomial_var}{if we wish to estimate abundance for the covered area only (i.e., study area = surveyed area) then this must be set to be \code{TRUE} and use the binomial variance estimator of Borchers et al. (1998). This is only valid when objects are not clustered. (This situation is rare.)}
+\item{binomial_var}{if we wish to estimate abundance for the covered area
+only (i.e., study area = surveyed area) then this must be set to be
+\code{TRUE} and use the binomial variance estimator of Borchers et al.
+(1998). This is only valid when objects are not clustered. (This situation
+is rare.)}
 }
 \value{
-a \code{data.frame} with estimates and attributes containing additional information
+a \code{data.frame} with estimates and attributes containing
+additional information
 }
 \description{
-Once a detection function is fitted to data, this function can be used to compute abundance estimates over required areas. The function also allows for stratification and variance estimation via various schemes (see below).
+Once a detection function is fitted to data, this function can be used to
+compute abundance estimates over required areas. The function also allows
+for stratification and variance estimation via various schemes (see below).
 }
 \section{Data}{
 
-The data format allows for complex stratification schemes to be set-up. Before going into this detail, three objects are always required:
-\describe{
-\item{ddf}{the detection function (see \code{Distance::ds} or \code{mrds::ddf} for information on the format of their inputs).}
-\item{\code{observations}}{has one row per observation and links the observations to the transects. Required columns: \code{object} (unique ID for the observation, which must match with the data in the detection function) and \code{Sample.Label} (unique ID for the transect). Additional columns for strata which are not included in the detection function are required (stratification covariates that are included in the detection function do not need to be included here). The important case here is group size, which must have column name \code{size} (but does not need to be in the detection function).}
-\item{\code{transects}}{has one row per sample (point or line transect). At least one row is required. Required columns: \code{Sample.Label} (unique ID for the transect), \code{Effort} (line length for line transects, number of visits for point transects), if there is more than one geographical stratum.}
+The data format allows for complex stratification schemes to be set-up. Three
+objects are always required:
+\itemize{
+\item \code{ddf} the detection function (see \code{\link[=ds]{ds}} or
+\code{\link[mrds:ddf]{ddf}} for information on the format of their inputs).
+\item \code{observations} has one row per observation and links the observations to
+the transects. Required columns:
+\itemize{
+\item \code{object} (unique ID for the observation, which must match with the
+data in the detection function)
+\item \code{Sample.Label} (unique ID for the transect).
+\item Additional columns for strata which are not included in the detection
+function are required (stratification covariates that are included in
+the detection function do not need to be included here). The important
+case here is group size, which must have column name \code{size} (but does
+not need to be in the detection function).
 }
-With only these three arguments, abundance can only be calculated for the covered area. Including additional information on the area we wish to extrapolate to (i.e., the study area), we can obtain abundance estimates:
-\describe{
-\item{\code{geo_strat}}{has one row for each stratum that we wish to estimate abundance for. For abundance in the study area, at least one row is required. Required columns: \code{Area} (the area of that stratum). If there is >1 row, then additional columns, named in \code{strat_formula}.}
+\item \code{transects} has one row per sample (point or line transect). At least
+one row is required. Required columns: \code{Sample.Label} (unique ID for the
+transect), \code{Effort} (line length for line transects, number of visits for
+point transects), if there is more than one geographical stratum.
+}
+
+With only these three arguments, abundance can only be calculated for the
+covered area. Including additional information on the area we wish to
+extrapolate to (i.e., the study area), we can obtain abundance estimates:
+\itemize{
+\item \code{geo_strat} has one row for each stratum that we wish to estimate
+abundance for. For abundance in the study area, at least one row is
+required. Required columns: \code{Area} (the area of that stratum). If there
+is >1 row, then additional columns, named in \code{strat_formula}.`
 }
 }
 
 \section{Multipliers}{
 
-It is often the case that we cannot measure distances to individuals or groups directly, but instead need to estimate distances to something they produce (e.g., for whales, their blows; for elephants their dung) -- this is referred to as indirect sampling. We may need to use estimates of production rate and decay rate for these estimates (in the case of dung or nests) or just production rates (in the case of songbird calls or whale blows). We refer to these conversions between "number of cues" and "number of animals" as "multipliers".
-The \code{multipliers} argument is a \code{list}, with 2 possible elements (\code{creation} and \code{decay} Each element of which is a \code{data.frame} and must have at least a column named \code{rate}, which abundance estimates will be divided by (the term "multiplier" is a misnomer, but kept for compatibility with Distance for Windows). Additional columns can be added to give the standard error and degrees of freedom for the rate if known as \code{SE} and \code{df}, respectively.
+It is often the case that we cannot measure distances to individuals or
+groups directly, but instead need to estimate distances to something they
+produce (e.g., for whales, their blows; for elephants their dung) -- this is
+referred to as indirect sampling. We may need to use estimates of production
+rate and decay rate for these estimates (in the case of dung or nests) or
+just production rates (in the case of songbird calls or whale blows). We
+refer to these conversions between "number of cues" and "number of animals"
+as "multipliers".
+
+The \code{multipliers} argument is a \code{list}, with 2 possible elements (\code{creation}
+and \code{decay} Each element of which is a \code{data.frame} and must have at least a
+column named \code{rate}, which abundance estimates will be divided by (the term
+"multiplier" is a misnomer, but kept for compatibility with Distance for
+Windows). Additional columns can be added to give the standard error and
+degrees of freedom for the rate if known as \code{SE} and \code{df}, respectively.
 }
 
 \section{Stratification}{
 
-The \code{strat_formula} argument is used to specify a column to use to stratify the results, using the form \code{~column.name} where \code{column.name} is the column name you wish to use. 
+The \code{strat_formula} argument is used to specify a column to use to stratify
+the results, using the form \code{~column.name} where \code{column.name} is the column
+name you wish to use.
 
-The \code{stratification} argument is used to specify which of four types of stratification are intended:
-\describe{
- \item{\code{"geographical"}}{if each stratum represents a different geographical areas and you want the total over all the areas}
- \item{\code{"effort_sum"}}{if your strata are in fact from replicate surveys (perhaps using different designs) but you don't have many replicates and/or want an estimate of "average variance".}
- \item{\code{"replicate"}}{if you have replicate surveys but have many of them, this calculates the average abundance and the variance between those many surveys (think of a population of surveys)}
- \item{\code{"object"}}{if the stratification is really about the type of object observed, for example sex, species or life stage and what you want is the total number of individuals across all the classes of objects. For example, if you have stratified by sex and have males and females, but also want a total number of animals, you should use this option.}
+The \code{stratification} argument is used to specify which of four types of
+stratification are intended:
+\itemize{
+\item \code{"geographical"} if each stratum represents a different geographical
+areas and you want the total over all the areas
+\item \code{"effort_sum"} if your strata are in fact from replicate
+surveys (perhaps using different designs) but you don't have many
+replicates and/or want an estimate of "average variance"
+\item \code{"replicate"} if you have replicate surveys but have many of them, this
+calculates the average abundance and the variance between those many
+surveys (think of a population of surveys)
+\item \code{"object"} if the stratification is really about the type of object
+observed, for example sex, species or life stage and what you want is the
+total number of individuals across all the classes of objects. For example,
+if you have stratified by sex and have males and females, but also want a
+total number of animals, you should use this option.
 }
 
-
-A simple example of using \code{stratification="geographical"} is given below. Further examples can be found at \url{http://examples.distancesampling.org/} (see, e.g., the deer pellet survey).
+A simple example of using \code{stratification="geographical"} is given below.
+Further examples can be found at \url{http://examples.distancesampling.org/}
+(see, e.g., the deer pellet survey).
 }
 
 \section{Variance}{
 
-Variance in the estimated abundance comes from multiple sources. Depending on the data used to fit the model and estimate abundance, different components will be included in the estimated variances. In the simplest case, the detection function and encounter rate variance need to be combined. If group size varies, then this too must be included. Finally, if multipliers are used and have corresponding standard errors given, this are also included. Variances are combined by assuming independence between the measures and adding variances. A brief summary of how each component is calculated is given here, though see references for more details.
-\describe{
-\item{detection function}{variance from the detection function parameters is transformed to variance about the abundance via a sandwich estimator (see e.g., Appendix C of Borchers et al (2002)).}
-\item{encounter rate}{for strata with >1 transect in them, the encounter rate estimators given in Fewster et al (2009) can be specified via the \code{er_est} argument. If the argument \code{innes=TRUE} then calculations use the estimated number of individuals in the transect (rather than the observed), which was give by Innes et al (2002) as a superior estimator. When there is only one transect in a stratum, Poisson variance is assumed. Information on the Fewster encounter rate variance estimators are given in \code{\link{varn}}}
-\item{group size}{if objects occur in groups (sometimes "clusters"), then the empirical variance of the group sizes is added to the total variance.}
-\item{multipliers}{if multipliers with standard errors are given, their corresponding variances are added. If no standard errors are supplied, then their contribution to variance is assumed to be 0.}
+Variance in the estimated abundance comes from multiple sources. Depending
+on the data used to fit the model and estimate abundance, different
+components will be included in the estimated variances. In the simplest
+case, the detection function and encounter rate variance need to be
+combined. If group size varies, then this too must be included. Finally, if
+multipliers are used and have corresponding standard errors given, this are
+also included. Variances are combined by assuming independence between the
+measures and adding variances. A brief summary of how each component is
+calculated is given here, though see references for more details.
+\itemize{
+\item \emph{detection function}: variance from the detection function parameters is
+transformed to variance about the abundance via a sandwich estimator (see
+e.g., Appendix C of Borchers et al (2002)).
+\item \emph{encounter rate}: for strata with >1 transect in them, the encounter
+rate estimators given in Fewster et al (2009) can be specified via the
+\code{er_est} argument. If the argument \code{innes=TRUE} then calculations use the
+estimated number of individuals in the transect (rather than the
+observed), which was give by Innes et al (2002) as a superior estimator.
+When there is only one transect in a stratum, Poisson variance is assumed.
+Information on the Fewster encounter rate variance estimators are given in
+\code{\link[mrds:varn]{varn}}
+\item \emph{group size}: if objects occur in groups (sometimes "clusters"), then
+the empirical variance of the group sizes is added to the total variance.
+\item \emph{multipliers}: if multipliers with standard errors are given, their
+corresponding variances are added. If no standard errors are supplied,
+then their contribution to variance is assumed to be 0.
 }
 }
 
 \section{Units}{
 
-It is often the case that distances are recorded in one convenient set of units, whereas the study area and effort are recorded in some other units. To ensure that the results from this function are in the expected units, we use the \code{convert_units} argument to supply a single number to convert the units of the covered area to those of the study/stratification area (results are always returned in the units of the study area). For line transects, the covered area is calculated as \code{2 * width * length} where \code{width} is the effective (half)width of the transect (often referred to as w in the literature) and \code{length} is the line length (referred to as L). If \code{width} and \code{length} are measured in kilometres and the study area in square kilometres, then all is fine and \code{convert_units} is 1 (and can be ignored). If, for example, line length and distances were measured in metres, we instead need to convert this to be kilometres, by dividing by 1000 for each of distance and length, hence \code{convert_units=1e-6}. For point transects, this is slightly easier as we only have the radius and study area to consider, so the conversion is just such that the units of the truncation radius are the square root of the study area units.
+It is often the case that distances are recorded in one convenient set of
+units, whereas the study area and effort are recorded in some other units.
+To ensure that the results from this function are in the expected units, we
+use the \code{convert_units} argument to supply a single number to convert the
+units of the covered area to those of the study/stratification area (results
+are always returned in the units of the study area). For line transects, the
+covered area is calculated as \code{2 * width * length} where \code{width} is the
+effective (half)width of the transect (often referred to as w in the
+literature) and \code{length} is the line length (referred to as L). If \code{width}
+and \code{length} are measured in kilometres and the study area in square
+kilometres, then all is fine and \code{convert_units} is 1 (and can be ignored).
+If, for example, line length and distances were measured in metres, we
+instead need to convert this to be kilometres, by dividing by 1000 for each
+of distance and length, hence \code{convert_units=1e-6}. For point transects,
+this is slightly easier as we only have the radius and study area to
+consider, so the conversion is just such that the units of the truncation
+radius are the square root of the study area units.
 }
 
 \examples{
@@ -130,14 +237,22 @@ print(minke_dht2, report="density")
 }
 \references{
 Borchers, D.L., S.T. Buckland, P.W. Goedhart, E.D. Clarke, and S.L. Hedley.
-  1998. Horvitz-Thompson estimators for double-platform line transect
-  surveys. \emph{Biometrics} 54: 1221-1237.
+1998. Horvitz-Thompson estimators for double-platform line transect surveys.
+\emph{Biometrics} 54: 1221-1237.
 
-Borchers, D.L., S.T. Buckland, and W. Zucchini. 2002 \emph{Estimating Animal Abundance: Closed Populations}. Statistics for Biology and Health. Springer London.
+Borchers, D.L., S.T. Buckland, and W. Zucchini. 2002 \emph{Estimating Animal
+Abundance: Closed Populations}. Statistics for Biology and Health. Springer
+London.
 
-Buckland, S.T., E.A. Rexstad, T.A. Marques, and C.S. Oedekoven. 2015 \emph{Distance Sampling: Methods and Applications}. Methods in Statistical Ecology. Springer International Publishing.
+Buckland, S.T., E.A. Rexstad, T.A. Marques, and C.S. Oedekoven. 2015
+\emph{Distance Sampling: Methods and Applications}. Methods in Statistical
+Ecology. Springer International Publishing.
 
-Buckland, S.T., D.R. Anderson, K. Burnham, J.L. Laake, D.L. Borchers, and L. Thomas. 2001 \emph{Introduction to Distance Sampling: Estimating Abundance of Biological Populations}. Oxford University Press.
+Buckland, S.T., D.R. Anderson, K. Burnham, J.L. Laake, D.L. Borchers, and L.
+Thomas. 2001 \emph{Introduction to Distance Sampling: Estimating Abundance of
+Biological Populations}. Oxford University Press.
 
-Innes, S., M. P. Heide-Jorgensen, J.L. Laake, K.L. Laidre, H.J. Cleator, P. Richard, and R.E.A. Stewart. 2002 Surveys of belugas and narwhals in the Canadian high arctic in 1996. \emph{NAMMCO Scientific Publications} 4, 169-190.
+Innes, S., M. P. Heide-Jorgensen, J.L. Laake, K.L. Laidre, H.J. Cleator, P.
+Richard, and R.E.A. Stewart. 2002 Surveys of belugas and narwhals in the
+Canadian high arctic in 1996. \emph{NAMMCO Scientific Publications} 4, 169-190.
 }

@@ -21,42 +21,75 @@ bootdht(
 \arguments{
 \item{model}{a model fitted by \code{\link{ds}} or a list of models}
 
-\item{flatfile}{Data provided in the flatfile format. See \code{\link{flatfile}} for details.}
+\item{flatfile}{Data provided in the flatfile format. See
+\code{\link{flatfile}} for details.}
 
-\item{resample_strata}{should resampling happen at the stratum (\code{Region.Label}) level? (Default \code{FALSE})}
+\item{resample_strata}{should resampling happen at the stratum
+(\code{Region.Label}) level? (Default \code{FALSE})}
 
-\item{resample_obs}{should resampling happen at the observation (\code{object}) level? (Default \code{FALSE})}
+\item{resample_obs}{should resampling happen at the observation (\code{object})
+level? (Default \code{FALSE})}
 
-\item{resample_transects}{should resampling happen at the transect (\code{Sample.Label}) level? (Default \code{TRUE})}
+\item{resample_transects}{should resampling happen at the transect
+(\code{Sample.Label}) level? (Default \code{TRUE})}
 
 \item{nboot}{number of bootstrap replicates}
 
-\item{summary_fun}{function that is used to obtain summary statistics from the bootstrap, see Summary Functions below. By default \code{\link{bootdht_Nhat_summarize}} is used, which just extracts abundance estimates.}
+\item{summary_fun}{function that is used to obtain summary statistics from
+the bootstrap, see Summary Functions below. By default
+\code{\link{bootdht_Nhat_summarize}} is used, which just
+extracts abundance estimates.}
 
-\item{convert.units}{conversion between units for abundance estimation, see "Units", below. (Defaults to 1, implying all of the units are "correct" already.) This takes precedence over any unit conversion stored in \code{model}.}
+\item{convert.units}{conversion between units for abundance estimation, see
+"Units", below. (Defaults to 1, implying all of the units are "correct"
+already.) This takes precedence over any unit conversion stored in \code{model}.}
 
-\item{select_adjustments}{select the number of adjustments in each bootstrap, when \code{FALSE} the exact detection function specified in \code{model} is fitted to each replicate. Setting this option to \code{TRUE} can significantly increase the runtime for the bootstrap. Note that for this to work \code{model} must have been fitted with \code{adjustment!=NULL}.}
+\item{select_adjustments}{select the number of adjustments in each
+bootstrap, when \code{FALSE} the exact detection function specified in \code{model} is
+fitted to each replicate. Setting this option to \code{TRUE} can significantly
+increase the runtime for the bootstrap. Note that for this to work \code{model}
+must have been fitted with \code{adjustment!=NULL}.}
 
-\item{sample_fraction}{what proportion of the transects was covered (e.g., 0.5 for one-sided line transects).}
+\item{sample_fraction}{what proportion of the transects was covered (e.g.,
+0.5 for one-sided line transects).}
 
-\item{progress_bar}{which progress bar should be used? Default "base" uses \code{txtProgressBar}, "none" suppresses output, "progress" uses the \code{progress} package, if installed.}
+\item{progress_bar}{which progress bar should be used? Default "base" uses
+\code{txtProgressBar}, "none" suppresses output, "progress" uses the
+\code{progress} package, if installed.}
 }
 \description{
-Performs a bootstrap for simple distance sampling models using the same data structures as \code{\link[mrds]{dht}}.
+Performs a bootstrap for simple distance sampling models using the same data
+structures as \code{\link[mrds:dht]{dht}}.
 }
 \section{Summary Functions}{
 
-The function \code{summary_fun} allows the user to specify what summary statistics should be recorded from each bootstrap. The function should take two arguments, \code{ests} and \code{fit}. The former is the output from \code{dht2}, giving tables of estimates. The latter is the fitted detection function object. The function is called once fitting and estimation has been performed and should return a \code{data.frame}. Those \code{data.frame}s are then concatenated using \code{rbind}. One can make these functions return any information within those objects, for example abundance or density estimates or the AIC for each model. See Examples below.
+The function \code{summary_fun} allows the user to specify what summary
+statistics should be recorded from each bootstrap. The function should take
+two arguments, \code{ests} and \code{fit}. The former is the output from
+\code{dht2}, giving tables of estimates. The latter is the fitted detection
+function object. The function is called once fitting and estimation has been
+performed and should return a \code{data.frame}. Those \code{data.frame}s
+are then concatenated using \code{rbind}. One can make these functions
+return any information within those objects, for example abundance or
+density estimates or the AIC for each model. See Examples below.
 }
 
 \section{Model selection}{
 
-Model selection can be performed on a per-replicate basis within the bootstrap. This has three variations:
+Model selection can be performed on a per-replicate basis within the
+bootstrap. This has three variations:
 \enumerate{
-   \item when \code{select_adjustments} is \code{TRUE} then adjustment terms are selected by AIC within each bootstrap replicate (provided that \code{model} had the \code{order} and \code{adjustment} options set to non-\code{NULL}.
-   \item if \code{model} is a list of fitted detection functions, each of these is fitted to each replicate and results generated from the one with the lowest AIC.
-   \item when \code{select_adjustments} is \code{TRUE} and \code{model} is a list of fitted detection functions, each model fitted to each replicate and number of adjustments is selected via AIC.
+\item when \code{select_adjustments} is \code{TRUE} then adjustment terms are selected
+by AIC within each bootstrap replicate (provided that \code{model} had the
+\code{order} and \code{adjustment} options set to non-\code{NULL}.
+\item if \code{model} is a list of fitted detection functions, each of these is
+fitted to each replicate and results generated from the one with the
+lowest AIC.
+\item when \code{select_adjustments} is \code{TRUE} and \code{model} is a list of fitted
+detection functions, each model fitted to each replicate and number of
+adjustments is selected via AIC.
 }
+
 The last of these options can be very time consuming!
 }
 
@@ -79,5 +112,7 @@ summary(bootout)
 }
 }
 \seealso{
-\code{\link{summary.dht_bootstrap}} for how to summarize the results, \code{\link{bootdht_Nhat_summarize}} for an example summary function.
+\code{\link{summary.dht_bootstrap}} for how to
+summarize the results, \code{\link{bootdht_Nhat_summarize}}
+for an example summary function.
 }
