@@ -735,6 +735,11 @@ ds <- function(data, truncation=ifelse(is.null(cutpoints),
     warning("Estimated hazard-rate scale parameter close to 0 (on log scale). Possible problem in data (e.g., spike near zero distance).")
   }
 
+  # check to see if resulting function is monotonic
+  if(model$monotonicity.check){
+    mono.chk <- check.mono(model, n.pts=20)
+  }
+
   ## Now calculate abundance/density using dht()
   if(!is.null(region.table) & !is.null(sample.table)){
     # if obs.table is not supplied, then data must have the Region.Label and
