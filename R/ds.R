@@ -736,9 +736,7 @@ ds <- function(data, truncation=ifelse(is.null(cutpoints),
   }
 
   # check to see if resulting function is monotonic
-  if(model$monotonicity.check){
-    mono.chk <- check.mono(model, n.pts=20)
-  }
+  mono.chk <- mrds::check.mono(model, n.pts=20)
 
   ## Now calculate abundance/density using dht()
   if(!is.null(region.table) & !is.null(sample.table)){
