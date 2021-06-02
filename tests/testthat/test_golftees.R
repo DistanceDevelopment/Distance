@@ -4,7 +4,7 @@
 tol <- 1e-6
 
 # make some results to check against
-data(golftees, package="dsdata")
+data(golftees)
 
 # data fiddling
 gtees <- golftees[golftees$observer==1 & golftees$detected==1, ]
