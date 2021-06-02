@@ -61,5 +61,5 @@ jobs:
 
       - name: Show debug output
         if: always()
-        run: find check -name 'testthat.Rout*' -exec cat '{}' \; || true
+        run: find /tmp/* -name 'testthat.Rout*' -exec cat '{}' \; || true
         shell: bash
