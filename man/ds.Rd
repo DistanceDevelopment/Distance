@@ -173,6 +173,9 @@ For more advanced abundance/density estimation please see the
 
 Examples of distance sampling analyses are available at
 \url{http://examples.distancesampling.org/}.
+
+Hints and tips on fitting (particularly optimisation issues) are on the
+\href{mrds::mrds-opt}{\code{mrds-opt}} manual page.
 }
 
 \section{Clusters/groups}{

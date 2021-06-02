@@ -112,6 +112,9 @@
 #' Examples of distance sampling analyses are available at
 #' <http://examples.distancesampling.org/>.
 #'
+#' Hints and tips on fitting (particularly optimisation issues) are on the
+#' [`mrds-opt`](mrds::mrds-opt) manual page.
+#'
 #' @section Clusters/groups:
 #'  Note that if the data contains a column named `size`, cluster size will be
 #'  estimated and density/abundance will be based on a clustered analysis of
