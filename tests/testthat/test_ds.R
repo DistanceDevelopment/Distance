@@ -96,8 +96,7 @@ test_that("Simple models work",{
   #                            adj.order=2), data=egdata, method="ds",
   #              meta.data=list(width=4))
   tp <- c(0.66068510, -0.01592872)
-  names(tp) <- c("X.Intercept.","V2")
-  expect_equal(ds.model.cos2$ddf$par, tp, tol=par.tol)
+  expect_equal(unname(ds.model.cos2$ddf$par), tp, tol=par.tol)
   expect_equal(ds.model.cos2$ddf$lnl, -154.5619, tol=1e-6)
   expect_equal(ds.model.cos2$dht$individuals$N$Estimate[3], 642.9442, tol=N.tol)
 
@@ -106,8 +105,7 @@ test_that("Simple models work",{
                      region.table=region, sample.table=samples, obs.table=obs,
                      monotonicity=FALSE))
   tp <- c(0.661391356, -0.008769883, -0.041465153)
-  names(tp) <- c("X.Intercept.","V2","V3")
-  expect_equal(ds.model.cos24$ddf$par, tp, tol=par.tol)
+  expect_equal(unname(ds.model.cos24$ddf$par), tp, tol=par.tol)
   expect_equal(ds.model.cos24$ddf$lnl, -154.5084, tol=lnl.tol)
   expect_equal(ds.model.cos24$dht$individuals$N$Estimate[3],620.0747,tol=N.tol)
 
@@ -227,24 +225,26 @@ test_that("max.adjustments works",{
   dists <- c(dists, dists[dists<5])
   dists <- c(dists, dists[dists<5])
 
-  expect_equal(summary(ds(dists, 20, key="hn", max.adjustments=3,
-                          adjustment="cos"))$ddf$name.message,
+  # ignore warnings below from monotonicity checks, don't care about that here
+  expect_equal(summary(suppressWarnings(
+                ds(dists, 20, key="hn", max.adjustments=3,
+                   adjustment="cos")))$ddf$name.message,
                "half-normal key function with cosine(2,3,4) adjustments")
 
-  expect_equal(summary(ds(dists, 20, key="hn", max.adjustments=2,
-                          adjustment="cos"))$ddf$name.message,
+  expect_equal(summary(suppressWarnings(
+                ds(dists, 20, key="hn", max.adjustments=2,
+                   adjustment="cos")))$ddf$name.message,
                "half-normal key function with cosine(2,3) adjustments")
 
-  expect_equal(summary(ds(dists, 20, key="hn", max.adjustments=1,
-                          adjustment="cos"))$ddf$name.message,
+  expect_equal(summary(suppressWarnings(
+                ds(dists, 20, key="hn", max.adjustments=1,
+                   adjustment="cos")))$ddf$name.message,
                "half-normal key function with cosine(2) adjustments")
 
-
-  expect_equal(summary(ds(dists, 20, key="hn", max.adjustments=6,
-                          adjustment="cos"))$ddf$name.message,
+  expect_equal(summary(suppressWarnings(
+                ds(dists, 20, key="hn", max.adjustments=6,
+                   adjustment="cos")))$ddf$name.message,
                "half-normal key function with cosine(2,3,4) adjustments")
-
-
 })
 
 # warnings when bad models get fitted

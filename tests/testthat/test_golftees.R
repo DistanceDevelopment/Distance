@@ -55,8 +55,10 @@ test_that("ER variance",{
 
   # now do a fancy thing
   dat$obs.table <- dat$obs.table[dat$obs.table$object %in% gtees$object, ]
-  fs_st1 <- dht2(df$ddf, dat$obs.table, dat$sample.table, dat$region.table,
-                     strat_formula=~Region.Label, innes=FALSE)
+  fs_st1 <- expect_warning(dht2(df$ddf, dat$obs.table, dat$sample.table,
+                                dat$region.table, strat_formula=~Region.Label,
+                                innes=FALSE),
+                           "One or more strata have only one transect, cannot calculate empirical encounter rate variance")
 
   # tests
   oldres <- df$dht$clusters$summary

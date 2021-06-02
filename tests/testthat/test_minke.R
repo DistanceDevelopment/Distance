@@ -177,10 +177,14 @@ test_that("stratification", {
   # cutpoints
   cp <- seq(0, 1.5, length=8)
 
-  wmr <- ds(whales, truncation=whale.trunc,
-            key="hr",  adjustment=NULL, cutpoints=cp)
-  whale.full.strat1 <- ds(whales, truncation=whale.trunc,
-                          key="hr",  adjustment=NULL, cutpoints=cp)
+  expect_warning(wmr <- ds(whales, truncation=whale.trunc,
+                           key="hr",  adjustment=NULL, cutpoints=cp),
+                 "Some distances were outside bins and have been removed.")
+
+  expect_warning(whale.full.strat1 <- ds(whales, truncation=whale.trunc,
+                                         key="hr", adjustment=NULL,
+                                         cutpoints=cp),
+                 "Some distances were outside bins and have been removed.")
 
   result <- ddf(dsmodel = ~mcds(key = "hr", formula = ~1),
                 data = whale.full.strat1$ddf$data, method = "ds",

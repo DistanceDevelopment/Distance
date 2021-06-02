@@ -59,11 +59,11 @@ test_that("10% truncation", {
                                      SE   = 13))
 
   # weight by effort since we have repeats
-  deer_ests <- dht2(df, flatfile=sikadeer,
+  expect_warning(deer_ests <- dht2(df, flatfile=sikadeer,
                     strat_formula=~Region.Label,
                     convert_units=cu, multipliers=mult,
                     stratification="effort_sum",
-                    total_area=13.9)
+                    total_area=13.9), "One or more strata have only one transect, cannot calculate empirical encounter rate variance")
 
   deer_ests$ER_CV[is.na(deer_ests$ER_CV)] <- 0
   expect_equal(deer_ests$ER_CV[-nrow(deer_ests)],

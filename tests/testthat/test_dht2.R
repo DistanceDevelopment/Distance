@@ -197,7 +197,7 @@ test_that("density estimation, no innes, longform", {
   expect_equal(dht_old$individuals$summary$CoveredArea, dht2_zero$Covered_area)
   #expect_equal(dht_old$individuals$summary$se.ER, sqrt(dht2_zero$ER_var))
 #  expect_equal(dht_old$individuals$summary$cv.ER, sqrt(dht2_zero$ER_CV))
-  expect_equal(dht_old$individuals$D$se, dht2_zero$Abundance_se, tol=1e-4)
+  expect_equal(dht_old$individuals$D$se, dht2_zero$Abundance_se, tol=1e-3)
 
 })
 
