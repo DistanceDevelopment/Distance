@@ -15,9 +15,9 @@ test_that("Error on different truncation distance",{
   # some models
   t4 <- ds(egdata,4)
   t42 <- t4
-  t4hr <- ds(egdata,4, key="hr")
-  t3 <- ds(egdata,3)
-  t14 <- ds(egdata,list(left=1, right=4))
+  t4hr <- suppressWarnings(ds(egdata,4, key="hr"))
+  t3 <- suppressWarnings(ds(egdata,3))
+  t14 <- suppressWarnings(ds(egdata,list(left=1, right=4)))
 
   # when things are okay!
   out <- "           Model                                       Key function Formula\n1   \\\\texttt{t4}                                        Half-normal      ~1\n2  \\\\texttt{t42}                                        Half-normal      ~1\n3 \\\\texttt{t4hr} Hazard-rate with cosine adjustment term of order 2      ~1\n  C-vM p-value $\\\\hat{P_a}$ se($\\\\hat{P_a}$) $\\\\Delta$AIC\n1    0.7789695    0.5842744       0.04637627     0.000000\n2    0.7789695    0.5842744       0.04637627     0.000000\n3    0.8170780    0.5556728       0.07197512     2.501712"
