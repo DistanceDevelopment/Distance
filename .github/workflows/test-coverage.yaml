@@ -58,3 +58,8 @@ jobs:
           covr::codecov(cov, quiet=FALSE)
           sessionInfo()
         shell: Rscript {0}
+
+      - name: Show debug output
+        if: always()
+        run: find check -name 'testthat.Rout*' -exec cat '{}' \; || true
+        shell: bash
