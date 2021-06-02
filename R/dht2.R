@@ -405,9 +405,12 @@ dht2 <- function(ddf, observations=NULL, transects=NULL, geo_strat=NULL,
     }
     # sort by object ID
     bigdat <- bigdat[order(bigdat$object), ]
+    # remove the rows where there were no observations
+    bigdat_nona <- bigdat[!is.na(bigdat$object), ]
     # get probabilities of detection
-    pp <- predict(ddf, newdata=bigdat, compute=TRUE)$fitted
-    bigdat$p <- pp
+    pp <- predict(ddf, newdata=bigdat_nona, compute=TRUE)$fitted
+    bigdat$p <- NA
+    bigdat$p[!is.na(bigdat$object)] <- pp
 
     if(strat_formula==~1){
       bigdat$Area <- sum(unique(bigdat[, c("Area", "Region.Label")])$Area)

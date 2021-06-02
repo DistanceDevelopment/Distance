@@ -5,6 +5,7 @@ Distance 1.0.3
 * removed silent=TRUE in try() around model fitting to enable users to get error messages from mrds during fitting. Old behaviour can be recovered using quiet=TRUE argument to ds()
 * better handling of when models fail to converge during AIC adjustment term selection
 * documentation now in rmarkdown format
+* fix issue #85 when species was used in the detection function and for post-stratification. Thanks to jason-airst for reporting the bug.
 
 Distance 1.0.2
 ----------------------

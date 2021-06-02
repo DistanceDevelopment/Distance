@@ -50,6 +50,9 @@ varNhat <- function(data, model){
   # get variance-covariance matrix for the detection function
   vcov <- solvecov(model$hessian)$inv
 
+  # remove the rows where there were no observations
+  data <- data[!is.na(data$object), ]
+
   # calculate variance
   dm <- DeltaMethod(model$par, dhtd, vcov, sqrt(.Machine$double.eps),
                     model=model, data=data, area=area,
