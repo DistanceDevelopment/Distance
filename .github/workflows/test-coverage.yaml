@@ -43,15 +43,10 @@ jobs:
           remotes::install_cran("covr")
         shell: Rscript {0}
 
-      - name: what's going on
-        run: |
-          library(covr)
-          sessionInfo()
-        shell: Rscript {0}
-
       - name: Test coverage
         run: |
           library(covr)
           cov <- covr::package_coverage(quiet = FALSE, clean = FALSE)
-          covr::codecov(cov)
+          covr::codecov(cov, quiet=FALSE)
+          sessionInfo()
         shell: Rscript {0}
