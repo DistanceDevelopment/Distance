@@ -8,7 +8,7 @@
 \code{Distance} allows loading data as a "flat file" and analyse data (and
 obtain abundance estimates) straight away, provided that the format of the
 flat file is correct. One can provide the file as, for example, an Excel
-spreadsheet using \code{\link[gdata:read.xls]{gdata::read.xls}} in or CSV using
+spreadsheet using \code{\link[readxl:read_excel]{readxl::read_xls}} in or CSV using
 \code{\link[utils:read.table]{read.csv}}.
 }
 \details{
@@ -32,26 +32,18 @@ The example given below was provided by Eric Rexstad.
 \examples{
 \dontrun{
 library(Distance)
-# Need to have the gdata library installed from CRAN, requires a system
-# with perl installed (usually fine for Linux/Mac)
-library(gdata)
+# Need to have the readxl package installed from CRAN
+require(readxl)
 
 # Need to get the file path first
-# Going to the path given in the below, one can examine the format
-minke.filepath <- system.file("minke.xlsx",package="Distance")
+minke.filepath <- system.file("minke.xlsx", package="Distance")
 
-# Load the Excel file, note that header=FALSE and we add column names after
-minke <- read.xls(minke.filepath, stringsAsFactor=FALSE, header=FALSE)
+# Load the Excel file, note that col_names=FALSE and we add column names after
+minke <- read_xlsx(minke.filepath, col_names=FALSE)
 names(minke) <- c("Region.Label", "Area", "Sample.Label", "Effort",
                   "distance")
 # One may want to call edit(minke) or head(minke) at this point
 # to examine the data format
-
-# Due to the way the file was saved and the default behaviour in R
-# for numbers stored with many decimal places (they are read as strings
-# rather than numbers, see str(minke)). We must coerce the Effort column
-# to numeric
-minke$Effort <- as.numeric(minke$Effort)
 
 ## perform an analysis using the exact distances
 pooled.exact <- ds(minke, truncation=1.5, key="hr", order=0)

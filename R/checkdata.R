@@ -17,7 +17,7 @@ checkdata <- function(data, region.table=NULL, sample.table=NULL,
                       obs.table=NULL, formula=~1){
 
   # Check if the user has passed in a numeric vector
-  if(class(data) != "data.frame" & class(data) != "list"){
+  if(all(class(data) != "data.frame") & class(data) != "list"){
     if(is.numeric(data)){
       data <- data.frame(distance = data)
     }else{
