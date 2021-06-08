@@ -30,6 +30,7 @@
 #' @param progress_bar which progress bar should be used? Default "base" uses
 #' `txtProgressBar`, "none" suppresses output, "progress" uses the
 #' `progress` package, if installed.
+#' @param cores number of cores to use to compute the estimates. If >1 then the `foreach` package will be used to run the computation over multiple cores of the computer. It is advised that you do not set `cores` to be greater than one less than the number of cores on your machine.
 #'
 #' @section Summary Functions:
 #' The function `summary_fun` allows the user to specify what summary
@@ -59,6 +60,8 @@
 #' @importFrom utils txtProgressBar setTxtProgressBar getTxtProgressBar
 #' @importFrom stats as.formula AIC
 #' @importFrom mrds ddf dht
+# @importFrom foreach foreach "%dopar%"
+# @importFrom doMC registerDoMC
 #' @seealso [`summary.dht_bootstrap`][summary.dht_bootstrap] for how to
 #' summarize the results, [`bootdht_Nhat_summarize`][bootdht_Nhat_summarize]
 #' for an example summary function.
@@ -90,7 +93,8 @@ bootdht <- function(model,
                     convert.units=1,
                     select_adjustments=FALSE,
                     sample_fraction=1,
-                    progress_bar="base"){
+                    progress_bar="base",
+                    cores=1){
 
   if(!any(c(resample_strata, resample_obs, resample_transects))){
     stop("At least one of resample_strata, resample_obs, resample_transects must be TRUE")
@@ -140,9 +144,8 @@ bootdht <- function(model,
   # count failures
   nbootfail <- 0
   # function to do a single bootstrap iteration
-  bootit <- function(bootdat, our_resamples, groups,
-                     convert.units, pb){
-
+  bootit <- function(bootdat, our_resamples, summary_fun,
+                     convert.units, pb, ...){
     # sample at the right levels
     for(sample_thingo in our_resamples){
       # what are the possible samples at this level
@@ -168,7 +171,6 @@ bootdht <- function(model,
     # get the sample labels right
     bootdat$Sample.Label <- paste0(bootdat[[sample_label]], "-",
                                    bootdat[[paste0(sample_thingo, "_ID")]])
-
 
     aics <- rep(NA, length(models))
     for(i in seq_along(models)){
@@ -227,12 +229,14 @@ bootdht <- function(model,
     pb <- list(pb        = txtProgressBar(0, nboot, style=3),
                increment = function(pb){
                  setTxtProgressBar(pb, getTxtProgressBar(pb)+1)
+               },
+               done      = function(pb){
+                 setTxtProgressBar(pb, environment(pb$up)$max)
                })
   }else if(progress_bar == "none"){
     pb <- list(pb        = NA,
-               increment = function(pb){
-                 invisible()
-               })
+               increment = function(pb) invisible(),
+               done = function(pb) invisible())
   }else if(progress_bar == "progress"){
     if (!requireNamespace("progress", quietly = TRUE)){
       stop("Package 'progress' not installed!")
@@ -240,7 +244,8 @@ bootdht <- function(model,
       pb <- list(pb = progress::progress_bar$new(
                                        format="   [:bar] :percent eta: :eta",
                                        total=nboot, clear=FALSE, width=80),
-                 increment = function(pb) pb$tick())
+                 increment = function(pb) pb$tick(),
+                 done = function(pb) pb$update(1))
       pb$pb$tick(0)
     }
   }else{
@@ -248,14 +253,37 @@ bootdht <- function(model,
   }
 
   # run the code
-  boot_ests <- replicate(nboot,
-                         bootit(dat, our_resamples,
-                                summary_fun, convert.units=convert.units,
-                                pb=pb), simplify=FALSE)
+  if(cores > 1){
+    if (!requireNamespace("foreach", quietly = TRUE) &&
+       (!requireNamespace("doMC", quietly = TRUE))){
+      stop("Packages 'foreach' and `doMC` need to be installed to use multiple cores.")
+    }
 
-  # the above is then a list of thingos, do the "right" thing and assume
-  # they are data.frames and then rbind them all together
-  boot_ests <- do.call(rbind.data.frame, boot_ests)
+    # build the cluster
+    doMC::registerDoMC(cores=cores)
+    # needed to avoid a syntax error/check fail
+    `%dopar2%` <- foreach::`%dopar%`
+    # fit the model nboot times over cores cores
+    # note there is a bit of fiddling here with the progress bar to get it to
+    # work (updates happen in this loop rather than in bootit)
+    boot_ests <- foreach::foreach(i=1:nboot,
+                                  .combine=rbind.data.frame) %dopar2% {
+      r <- bootit(dat, our_resamples=our_resamples,
+                  summary_fun=summary_fun, convert.units=convert.units,
+                  pb=list(increment=function(pb){invisible()}))
+      pb$increment(pb$pb)
+      r
+    }
+    pb$done(pb$pb)
+  }else{
+    boot_ests <- replicate(nboot,
+                           bootit(dat, our_resamples,
+                                  summary_fun, convert.units=convert.units,
+                                  pb=pb), simplify=FALSE)
+    # the above is then a list of thingos, do the "right" thing and assume
+    # they are data.frames and then rbind them all together
+    boot_ests <- do.call(rbind.data.frame, boot_ests)
+  }
   cat("\n")
 
   attr(boot_ests, "nboot") <- nboot

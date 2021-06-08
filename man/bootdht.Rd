@@ -15,7 +15,8 @@ bootdht(
   convert.units = 1,
   select_adjustments = FALSE,
   sample_fraction = 1,
-  progress_bar = "base"
+  progress_bar = "base",
+  cores = 1
 )
 }
 \arguments{
@@ -56,6 +57,8 @@ must have been fitted with \code{adjustment!=NULL}.}
 \item{progress_bar}{which progress bar should be used? Default "base" uses
 \code{txtProgressBar}, "none" suppresses output, "progress" uses the
 \code{progress} package, if installed.}
+
+\item{cores}{number of cores to use to compute the estimates. If >1 then the \code{foreach} package will be used to run the computation over multiple cores of the computer. It is advised that you do not set \code{cores} to be greater than one less than the number of cores on your machine.}
 }
 \description{
 Performs a bootstrap for simple distance sampling models using the same data

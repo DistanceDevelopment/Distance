@@ -8,6 +8,7 @@ Distance 1.0.3
 * fix issue #85 when species was used in the detection function and for post-stratification. Thanks to jason-airst for reporting the bug.
 * fix dht2 bug where stratification="replicate" variance estimation was 0 due to order of operations
 * fix dht2 bug where stratification="effort_sum" encounter rate variance estimation, due to incorrect grouping of transects into strata. Thanks to Samantha Ball and Jamie McKaughan for reporting this issue.
+* bootdht can now run in parallel via the foreach/doMC packages, see the cores argument.
 
 Distance 1.0.2
 ----------------------
