@@ -6,6 +6,7 @@ Distance 1.0.3
 * better handling of when models fail to converge during AIC adjustment term selection
 * documentation now in rmarkdown format
 * fix issue #85 when species was used in the detection function and for post-stratification. Thanks to jason-airst for reporting the bug.
+* fix dht2 bug where stratification="replicate" variance estimation was 0 due to order of operations
 
 Distance 1.0.2
 ----------------------

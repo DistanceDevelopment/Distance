@@ -658,8 +658,9 @@ if(mult){
   vardat$df_var <- diag(df_Nhat_unc$variance)
 
   # detection function p uncertainty
-  vardat$p_var <- summary(ddf)$average.p.se[1,1]^2
-  vardat$p_average <- summary(ddf)$average.p
+  ddf_summary <- summary(ddf)
+  vardat$p_var <- ddf_summary$average.p.se[1,1]^2
+  vardat$p_average <- ddf_summary$average.p
 
   # we interrupt your regularly-scheduled grouping to bring you...
   # detection function uncertainty
@@ -686,7 +687,7 @@ if(mult){
     mutate(Nc = .data$Nc_cuecorrected) %>%
     mutate(transect_Nc = .data$transect_Nc/.data$rate)
 }
-  # save ungrouped version for summary calculation later
+  # save ungrouped version for later calculations
   resT <- ungroup(res)
 
   # calculate ER variance
@@ -730,7 +731,8 @@ if(mult){
   res <- res %>%
     # first add the ER+group size and detfct variance components
     mutate(Abundance_CV = sqrt(sum(c(.data$ER_var_Nhat,
-                                     .data$df_var), na.rm=TRUE))/
+                                     .data$df_var),
+                               na.rm=TRUE))/
                            .data$Abundance) %>%
     # now add in the multiplier rate CV
     mutate(Abundance_CV = sqrt(sum(c(.data$Abundance_CV^2,
@@ -738,7 +740,6 @@ if(mult){
                                    na.rm=TRUE))) %>%
     mutate(Abundance_se = .data$Abundance_CV*.data$Abundance) %>%
     distinct()
-
 
   # total degrees of freedom and CI calculation
   if(binomial_var){
@@ -762,7 +763,7 @@ if(mult){
                      sqrt(log(1 + .data$Abundance_CV^2)))))
   }
 
-  # actually calculate the cis
+  # actually calculate the CIs
   res <- res %>%
     mutate(LCI = if_else(.data$Abundance_CV==0,
                          .data$Abundance, .data$Abundance / .data$bigC),
@@ -772,11 +773,16 @@ if(mult){
     ungroup() %>%
     distinct()
 
-## TODO: summary stuff, this is BAD code
+
   # make a summary
   res <- as.data.frame(res)
   # TODO: this is untested for multiple strata
   # https://github.com/DistanceDevelopment/Distance/issues/46
+  # here we loop over the different stratification variables in the below
+  # terminology, "row" indicates a summary row (so for a given stratification
+  # variable, we have mutiple values ("strata": North, South etc) and then
+  # summarize to one row total at the end. This is for generalizability for to
+  # multiple stratification variables later)
   for(this_stratum in stratum_labels){
     dat_row <- res
 
@@ -789,6 +795,7 @@ if(mult){
     # remove labels
     dat_row[, stratum_labels] <- NULL
 
+    # don't do anything unless this stratum has rows attached to it
     if(length(stra_row[[this_stratum]]) > 1){
       this_stra_row <- stra_row[1, , drop=FALSE]
       this_stra_row[] <- NA
@@ -837,7 +844,8 @@ if(mult){
         }else{
           xt <- total_area/dat_row$Area
         }
-        # replicates, 2 different ways
+
+
         dat_row <- dat_row %>%
           mutate(weight       = xt * .data$Effort/sum(.data$Effort)) %>%
           mutate(ER_var       = sum((.data$Effort/sum(.data$Effort))^2*.data$ER_var,
@@ -851,6 +859,7 @@ if(mult){
                  Covered_area = sum(.data$Covered_area),
                  Effort       = sum(.data$Effort),
                  k            = sum(.data$k))
+
       }else if(stratification=="object"){
         # things you want to add up like object type
         dat_row <- dat_row %>%
@@ -865,18 +874,23 @@ if(mult){
                                                          .data$ER_df)))
       }
 
-      # calculate the weighted abundance
+      # calculate other summaries
       dat_row <- dat_row %>%
         mutate(ER         = .data$n/.data$Effort) %>%
         mutate(ER_CV      = if_else(.data$ER==0,
                                     0,
                                     sqrt(.data$ER_var)/.data$ER)) %>%
-        mutate(Abundance  = sum(.data$weight*.data$Abundance)) %>%
         mutate(group_mean = mean(.data$group_mean),
                group_var  = sum(.data$group_var)) %>%
         mutate(group_CV   = if_else(.data$group_var==0, 0,
                                     sqrt(.data$group_var)/.data$group_mean))
 
+      # calculate mean abundance, unless we are doing replicate, where we need
+      # the per-stratum abundances for variance later
+      if(stratification != "replicate"){
+        dat_row <- dat_row %>%
+          mutate(Abundance  = sum(.data$weight*.data$Abundance))
+      }
 
       # calculate total variance for detection function
       vcov <- df_Nhat_unc$variance
@@ -889,8 +903,12 @@ if(mult){
       # calculate total variance
       if(stratification=="replicate"){
         # get "between" variance (empirical variance of strata)
-        tvar <- sum((dat_row$Abundance[-nrow(dat_row)] -
-                     dat_row$Abundance[nrow(dat_row)])^2)/(nrow(dat_row)-2)
+        tvar <- sum((dat_row$Abundance -
+                     sum(dat_row$weight*dat_row$Abundance))^2)/
+                    (nrow(dat_row)-2)
+
+        dat_row <- dat_row %>%
+          mutate(Abundance  = sum(.data$weight*.data$Abundance))
       }else if(stratification=="effort_sum"){
         # add the pre-weighted CVs
         tvar <- dat_row$Abundance[1]^2 *

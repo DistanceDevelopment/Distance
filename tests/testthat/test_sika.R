@@ -63,7 +63,8 @@ test_that("10% truncation", {
                     strat_formula=~Region.Label,
                     convert_units=cu, multipliers=mult,
                     stratification="effort_sum",
-                    total_area=13.9), "One or more strata have only one transect, cannot calculate empirical encounter rate variance")
+                    total_area=13.9),
+                 "One or more strata have only one transect, cannot calculate empirical encounter rate variance")
 
   deer_ests$ER_CV[is.na(deer_ests$ER_CV)] <- 0
   expect_equal(deer_ests$ER_CV[-nrow(deer_ests)],
