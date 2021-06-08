@@ -22,10 +22,10 @@ which the camera operated
 \source{
 Howe, E.J., Buckland, S.T., Després-Einspenner, M.-L. and Kühl, H.S.
 (2017), Distance sampling with camera traps. Methods Ecol Evol, 8:
-1558-1565. doi:10.1111/2041-210X.12790
+1558-1565. \doi{10.1111/2041-210X.12790}
 
 Howe, Eric J. et al. (2018), Data from: Distance sampling with camera traps,
-Dryad, Dataset, \url{https://doi.org/10.5061/dryad.b4c70}
+Dryad, Dataset, \doi{10.5061/dryad.b4c70}
 }
 \description{
 Study took place in Tai National Park Cote d'Ivoire in 2014.  Filmed

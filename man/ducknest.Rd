@@ -34,6 +34,6 @@ at an altitude of roughly 2400m.
 \references{
 Anderson, D. R., and R. S. Pospahala. 1970. Correction of bias
 in belt transect studies of immotile objects. The Journal of Wildlife
-Management 34 (1): 141–146. \url{https://doi.org/10.2307/3799501}
+Management 34 (1): 141–146. \doi{10.2307/3799501}
 }
 \keyword{datasets}

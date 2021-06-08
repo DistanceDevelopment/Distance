@@ -32,6 +32,6 @@ such that true density is 2000 objects per km.
 Fewster, R.M., S.T. Buckland, K.P. Burnham, D.L. Borchers, P.E.
 Jupp, J.L. Laake and L. Thomas. (2009) Estimating the encounter rate
 variance in distance sampling. Biometrics 65 (1): 225–236.
-\url{https://doi.org/10.1111/j.1541-0420.2008.01018.x}
+\doi{10.1111/j.1541-0420.2008.01018.x}
 }
 \keyword{datasets}

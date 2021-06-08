@@ -32,6 +32,6 @@ sparrows (\emph{Passerculus sandwichensis}) are included here.
 \references{
 Knopf, F.L., J.A. Sedgwick, and R.W. Cannon. (1988) Guild structure of a
 riparian avifauna relative to seasonal cattle grazing.  The Journal of
-Wildlife Management 52 (2): 280–290.  \url{https://doi.org/10.2307/3801235}
+Wildlife Management 52 (2): 280–290.  \doi{10.2307/3801235}
 }
 \keyword{datasets}

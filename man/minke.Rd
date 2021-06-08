@@ -40,6 +40,6 @@ IDCR-SOWER surveys. Journal of Cetacean Research and Management 3(2):
 
 Hedley, S.L., and S.T. Buckland. Spatial Models for Line Transect Sampling.
 Journal of Agricultural, Biological, and Environmental Statistics 9, no. 2
-(2004): 181-199. doi:10.1198/1085711043578.
+(2004): 181-199. \doi{10.1198/1085711043578}.
 }
 \keyword{datasets}

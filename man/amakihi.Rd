@@ -34,6 +34,6 @@ problems can result from models with several factor covariates.
 Marques, T.A., L. Thomas, S.G. Fancy and S.T. Buckland. (2007)
 Improving estimates of bird density using multiple-covariate distance
 sampling.  The Auk 124 (4): 1229–1243.
-\url{https://doi.org/10.1642/0004-8038(2007)124[1229:IEOBDU]2.0.CO;2}
+\doi{10.1642/0004-8038(2007)124[1229:IEOBDU]2.0.CO;2}
 }
 \keyword{datasets}

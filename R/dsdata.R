@@ -12,7 +12,7 @@
 #'
 #' Hedley, S.L., and S.T. Buckland. (2004) Spatial models for line transect
 #' sampling. Journal of Agricultural, Biological, and Environmental Statistics
-#' 9: 181-199. doi:10.1198/1085711043578.
+#' 9: 181-199. \doi{10.1198/1085711043578}.
 #'
 #' @name ClusterExercise
 #' @aliases ClusterExercise_units
@@ -163,7 +163,7 @@ NULL
 #'
 #' Knopf, F.L., J.A. Sedgwick, and R.W. Cannon. (1988) Guild structure of a
 #' riparian avifauna relative to seasonal cattle grazing.  The Journal of
-#' Wildlife Management 52 (2): 280–290.  <https://doi.org/10.2307/3801235>
+#' Wildlife Management 52 (2): 280–290.  \doi{10.2307/3801235}
 #'
 #' @name Savannah_sparrow_1980
 #' @aliases Savannah_sparrow_1981 Savannah_sparrow_1980_units
@@ -195,7 +195,7 @@ NULL
 #'
 #' Hedley, S.L., and S.T. Buckland. (2004) Spatial models for line transect
 #' sampling. Journal of Agricultural, Biological, and Environmental Statistics
-#' 9: 181-199. doi:10.1198/1085711043578.
+#' 9: 181-199. \doi{10.1198/1085711043578}.
 #'
 #' @name Stratify_example
 #' @aliases Stratify_example_units
@@ -237,7 +237,7 @@ NULL
 #' @references Marques, T.A., L. Thomas, S.G. Fancy and S.T. Buckland. (2007)
 #' Improving estimates of bird density using multiple-covariate distance
 #' sampling.  The Auk 124 (4): 1229–1243.
-#' <https://doi.org/10.1642/0004-8038(2007)124[1229:IEOBDU]2.0.CO;2>
+#' \doi{10.1642/0004-8038(2007)124[1229:IEOBDU]2.0.CO;2}
 #' @keywords datasets
 NULL
 
@@ -284,7 +284,7 @@ NULL
 #'    * `Study.Area` name of wildlife refuge
 #' @references Anderson, D. R., and R. S. Pospahala. 1970. Correction of bias
 #' in belt transect studies of immotile objects. The Journal of Wildlife
-#' Management 34 (1): 141–146. <https://doi.org/10.2307/3799501>
+#' Management 34 (1): 141–146. \doi{10.2307/3799501}
 #' @source Simulated data, from the distance sampling introductory course,
 #' Centre for Research into Ecological & Environmental Modelling, University of
 #' St Andrews.
@@ -370,7 +370,7 @@ NULL
 #' Marques, F.F.C., S.T. Buckland, D. Goffin, C.E. Dixon, D.L.  Borchers, B.A.
 #' Mayle, and A.J. Peace. (2001). Estimating deer abundance from line transect
 #' surveys of dung: sika deer in southern Scotland. Journal of Applied Ecology
-#' 38 (2): 349–363.  <https://doi.org/10.1046/j.1365-2664.2001.00584.x>
+#' 38 (2): 349–363.  \doi{10.1046/j.1365-2664.2001.00584.x}
 #' @keywords datasets
 NULL
 
@@ -387,7 +387,7 @@ NULL
 #' @references Fewster, R.M., S.T. Buckland, K.P. Burnham, D.L. Borchers, P.E.
 #' Jupp, J.L. Laake and L. Thomas. (2009) Estimating the encounter rate
 #' variance in distance sampling. Biometrics 65 (1): 225–236.
-#' <https://doi.org/10.1111/j.1541-0420.2008.01018.x>
+#' \doi{10.1111/j.1541-0420.2008.01018.x}
 #'
 #' @name Systematic_variance_1
 #' @aliases Systematic_variance_2 Systematic_variance_1_units
@@ -510,9 +510,9 @@ NULL
 #'   * `distance`  radial distance (m) to interval midpoint
 #' @source Howe, E.J., Buckland, S.T., Després-Einspenner, M.-L. and Kühl, H.S.
 #' (2017), Distance sampling with camera traps. Methods Ecol Evol, 8:
-#' 1558-1565. doi:10.1111/2041-210X.12790
+#' 1558-1565. \doi{10.1111/2041-210X.12790}
 #'
 #' Howe, Eric J. et al. (2018), Data from: Distance sampling with camera traps,
-#' Dryad, Dataset, <https://doi.org/10.5061/dryad.b4c70>
+#' Dryad, Dataset, \doi{10.5061/dryad.b4c70}
 #' @keywords datasets
 NULL

@@ -34,6 +34,6 @@ by Marques et al. (2001).
 Marques, F.F.C., S.T. Buckland, D. Goffin, C.E. Dixon, D.L.  Borchers, B.A.
 Mayle, and A.J. Peace. (2001). Estimating deer abundance from line transect
 surveys of dung: sika deer in southern Scotland. Journal of Applied Ecology
-38 (2): 349–363.  \url{https://doi.org/10.1046/j.1365-2664.2001.00584.x}
+38 (2): 349–363.  \doi{10.1046/j.1365-2664.2001.00584.x}
 }
 \keyword{datasets}

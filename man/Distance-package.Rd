@@ -25,7 +25,7 @@ Key References:
 
 Miller D.L., E. Rexstad, L. Thomas, L. Marshall and J.L. Laake. 2019.
 Distance Sampling in R. Journal of Statistical Software, 89(1), 1-28.
-\url{https://doi.org/10.18637/jss.v089.i01}
+\doi{10.18637/jss.v089.i01}
 
 Background References:
 

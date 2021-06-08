@@ -24,7 +24,7 @@
 #'
 #' Miller D.L., E. Rexstad, L. Thomas, L. Marshall and J.L. Laake. 2019.
 #'   Distance Sampling in R. Journal of Statistical Software, 89(1), 1-28.
-#'   <https://doi.org/10.18637/jss.v089.i01>
+#'   \doi{10.18637/jss.v089.i01}
 #'
 #' Background References:
 #'
@@ -61,7 +61,7 @@ NULL
 #'
 #' Hedley, S.L., and S.T. Buckland. Spatial Models for Line Transect Sampling.
 #' Journal of Agricultural, Biological, and Environmental Statistics 9, no. 2
-#' (2004): 181-199. doi:10.1198/1085711043578.
+#' (2004): 181-199. \doi{10.1198/1085711043578}.
 #'
 #' @name minke
 #' @keywords datasets
