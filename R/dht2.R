@@ -582,13 +582,10 @@ dht2 <- function(ddf, observations=NULL, transects=NULL, geo_strat=NULL,
   res <- bigdat %>%
     group_by_at(vars("Sample.Label"))
 
-  # if we are stratifying by object or geographical covariates, need to
   # make sure summaries are made at the sample-stratum level here
   # (since sample labels may be duplicated between strata)
-  if(stratification %in% c("object", "geographical")){
-    res <- res %>%
-      group_by_at(.vars=stratum_labels, .add=TRUE)
-  }
+  res <- res %>%
+    group_by_at(.vars=stratum_labels, .add=TRUE)
 
   res <- res %>%
       # *observations* per transect
