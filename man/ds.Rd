@@ -22,7 +22,7 @@ ds(
   sample.table = NULL,
   obs.table = NULL,
   convert.units = 1,
-  er.var = "R2",
+  er.var = ifelse(transect == "line", "R2", "P3"),
   method = "nlminb",
   quiet = FALSE,
   debug.level = 0,
