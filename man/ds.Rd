@@ -9,7 +9,7 @@ ds(
   data,
   truncation = ifelse(is.null(cutpoints), ifelse(is.null(data$distend),
     max(data$distance), max(data$distend)), max(cutpoints)),
-  transect = c("line", "point"),
+  transect = "line",
   formula = ~1,
   key = c("hn", "hr", "unif"),
   adjustment = c("cos", "herm", "poly"),

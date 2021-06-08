@@ -6,6 +6,14 @@
 #' @param \dots unused
 print.dht_result <- function(x, report="abundance", groups=FALSE, ...){
 
+  # general information
+  cat("Estimates from distance sampling model\n")
+  cat("Stratification :", attr(x, "stratification"), "\n")
+  cat("Variance       :", paste0(attr(x, "ER_var")[1], ","),
+      ifelse(attr(x, "ER_var")[2], "N/L", "n/L"),
+      ifelse(attr(x, "ER_var")[3], ", binomial", ""), "\n")
+
+  cat("\n\n")
   if(groups & !is.null(attr(x, "grouped"))){
     cat("Groups:\n\n")
     print(attr(x, "grouped"), report=report)

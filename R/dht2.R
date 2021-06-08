@@ -1025,6 +1025,10 @@ if(mult){
   attr(res, "prop_var") <- variance_contributions(res)
   # save grouped analysis (might be NULL)
   attr(res, "grouped") <- grouped
+  # save enounter rate variance information
+  attr(res, "ER_var") <- c(er_est, innes, binomial_var)
+  # save stratification type
+  attr(res, "stratification") <- stratification
 
   class(res) <- c("dht_result", "data.frame")
   return(res)

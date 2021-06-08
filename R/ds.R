@@ -281,7 +281,7 @@ ds <- function(data, truncation=ifelse(is.null(cutpoints),
                                             max(data$distance),
                                             max(data$distend)),
                                      max(cutpoints)),
-             transect=c("line","point"),
+             transect="line",
              formula=~1, key=c("hn","hr","unif"),
              adjustment=c("cos","herm","poly"),
              order=NULL, scale=c("width","scale"),
@@ -346,7 +346,7 @@ ds <- function(data, truncation=ifelse(is.null(cutpoints),
   }
 
   # transect type
-  point <- switch(match.arg(transect),
+  point <- switch(transect,
                   "line"=FALSE,
                   "point"=TRUE,
                   stop("Only \"point\" or \"line\" transects may be supplied.")
