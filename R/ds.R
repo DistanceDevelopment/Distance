@@ -393,10 +393,6 @@ ds <- function(data, truncation=ifelse(is.null(cutpoints),
           stop("Adjustment orders must be integers.")
       }
 
-      #if(formula != ~1){
-      #  stop("Cannot use both adjustments and covariates, choose one!")
-      #}
-
       # check for each adjustment type
       order <- sort(order)
       if(adjustment=="poly"){
