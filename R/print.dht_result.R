@@ -7,7 +7,9 @@
 print.dht_result <- function(x, report="abundance", groups=FALSE, ...){
 
   # general information
-  cat("Estimates from distance sampling model\n")
+  resulttype <- ifelse(report=="both", "abundance and density", report)
+  substr(resulttype, 1, 1) <- toupper(substr(resulttype, 1, 1))
+  cat(resulttype, "estimates from distance sampling\n")
   cat("Stratification :", attr(x, "stratification"), "\n")
   cat("Variance       :", paste0(attr(x, "ER_var")[1], ","),
       ifelse(attr(x, "ER_var")[2], "N/L", "n/L"),
