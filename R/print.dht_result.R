@@ -12,8 +12,8 @@ print.dht_result <- function(x, report="abundance", groups=FALSE, ...){
   cat(resulttype, "estimates from distance sampling\n")
   cat("Stratification :", attr(x, "stratification"), "\n")
   cat("Variance       :", paste0(attr(x, "ER_var")[1], ","),
-      ifelse(attr(x, "ER_var")[2], "N/L", "n/L"),
-      ifelse(attr(x, "ER_var")[3], ", binomial", ""), "\n")
+      ifelse(attr(x, "ER_var")[3], "binomial",
+             ifelse(attr(x, "ER_var")[2], "N/L", "n/L")), "\n")
 
   cat("\n\n")
   if(groups & !is.null(attr(x, "grouped"))){
