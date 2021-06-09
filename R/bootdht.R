@@ -144,7 +144,7 @@ bootdht <- function(model,
   # count failures
   nbootfail <- 0
   # function to do a single bootstrap iteration
-  bootit <- function(bootdat, our_resamples, summary_fun,
+  bootit <- function(bootdat, models, our_resamples, summary_fun,
                      convert.units, pb, ...){
     # sample at the right levels
     for(sample_thingo in our_resamples){
@@ -261,26 +261,24 @@ bootdht <- function(model,
     }
 
     # build the cluster
-    cl <- parallel::makeCluster(cores)
-    doParallel::registerDoParallel()
+    doParallel::registerDoParallel(cores)
     # needed to avoid a syntax error/check fail
     `%dopar2%` <- foreach::`%dopar%`
     # fit the model nboot times over cores cores
     # note there is a bit of fiddling here with the progress bar to get it to
     # work (updates happen in this loop rather than in bootit)
-    boot_ests <- foreach::foreach(i=1:nboot,
-                                  .combine=rbind.data.frame) %dopar2% {
-      r <- bootit(dat, our_resamples=our_resamples,
+    boot_ests <- foreach::foreach(i=1:nboot, .combine=rbind.data.frame,
+                                  .multicombine=TRUE) %dopar2% {
+      r <- bootit(dat, models=models, our_resamples=our_resamples,
                   summary_fun=summary_fun, convert.units=convert.units,
                   pb=list(increment=function(pb){invisible()}))
       pb$increment(pb$pb)
       r
     }
     pb$done(pb$pb)
-    parallel::stopCluster(cl)
   }else{
     boot_ests <- replicate(nboot,
-                           bootit(dat, our_resamples,
+                           bootit(dat, models=models, our_resamples,
                                   summary_fun, convert.units=convert.units,
                                   pb=pb), simplify=FALSE)
     # the above is then a list of thingos, do the "right" thing and assume
