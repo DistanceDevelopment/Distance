@@ -254,13 +254,15 @@ bootdht <- function(model,
 
   # run the code
   if(cores > 1){
-    if (!requireNamespace("foreach", quietly = TRUE) &&
-       (!requireNamespace("doMC", quietly = TRUE))){
-      stop("Packages 'foreach' and `doMC` need to be installed to use multiple cores.")
+    if (!requireNamespace("foreach", quietly = TRUE) &
+        !requireNamespace("doParallel", quietly = TRUE) &
+        !requireNamespace("parallel", quietly = TRUE)){
+      stop("Packages 'parallel', 'foreach' and 'doParallel' need to be installed to use multiple cores.")
     }
 
     # build the cluster
-    doMC::registerDoMC(cores=cores)
+    cl <- parallel::makeCluster(cores)
+    doParallel::registerDoParallel()
     # needed to avoid a syntax error/check fail
     `%dopar2%` <- foreach::`%dopar%`
     # fit the model nboot times over cores cores
@@ -275,6 +277,7 @@ bootdht <- function(model,
       r
     }
     pb$done(pb$pb)
+    parallel::stopCluster(cl)
   }else{
     boot_ests <- replicate(nboot,
                            bootit(dat, our_resamples,
