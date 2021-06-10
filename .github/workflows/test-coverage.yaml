@@ -53,12 +53,15 @@ jobs:
       - name: Test coverage
         run: |
           library(covr)
+          sink("covlog", append=TRUE)
+          sink("covlog", append=TRUE, type="message")
           cov <- covr::package_coverage(quiet = FALSE, clean = FALSE)
           covr::codecov(cov, quiet=FALSE)
           sessionInfo()
+          sink()
         shell: Rscript {0}
 
       - name: Show debug output
         if: always()
-        run: find /tmp/* -name 'testthat.Rout*' -exec cat '{}' \; || true
+        run: more covlog
         shell: bash
