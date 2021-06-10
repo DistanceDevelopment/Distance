@@ -1,6 +1,9 @@
 context("Testing bootdht")
 
 test_that("area=0 with default summary",{
+
+  skip_on_cran()
+
   data(amakihi)
   # subset for testing speed
   amakihi <- amakihi[1:300,]
