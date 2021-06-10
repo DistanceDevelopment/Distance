@@ -101,9 +101,10 @@ test_that("Simple models work",{
   expect_equal(ds.model.cos2$dht$individuals$N$Estimate[3], 642.9442, tol=N.tol)
 
   # specify order 2 and 4 cosine adjustments
-  ds.model.cos24<-suppressMessages(ds(egdata,4,adjustment="cos",order=c(2,4),
+  ds.model.cos24<-suppressMessages(suppressWarnings(ds(egdata,4,
+                     adjustment="cos",order=c(2,4),
                      region.table=region, sample.table=samples, obs.table=obs,
-                     monotonicity=FALSE))
+                     monotonicity=FALSE)))
   tp <- c(0.661391356, -0.008769883, -0.041465153)
   expect_equal(unname(ds.model.cos24$ddf$par), tp, tol=par.tol)
   expect_equal(ds.model.cos24$ddf$lnl, -154.5084, tol=lnl.tol)
@@ -171,19 +172,23 @@ test_that("adjustments expand correctly",{
   egdata <- egdata[egdata$observer==1,]
 
   # hn + cos(2)
-  expect_equal(summary(ds(egdata,4,key="hn",order=2))$ddf$name.message,
+  expect_equal(suppressWarnings(summary(ds(egdata, 4, key="hn",
+                                           order=2))$ddf$name.message),
                "half-normal key function with cosine(2) adjustments")
 
   # hn + cos(2,3)
-  expect_equal(summary(ds(egdata,4,key="hn",order=2:3))$ddf$name.message,
+  expect_equal(suppressWarnings(summary(ds(egdata, 4, key="hn",
+                                           order=2:3))$ddf$name.message),
                "half-normal key function with cosine(2,3) adjustments")
 
   # hn + cos(2,3,4,5)
-  expect_equal(summary(ds(egdata,4,key="hn",order=5))$ddf$name.message,
+  expect_equal(suppressWarnings(summary(ds(egdata, 4, key="hn",
+                                           order=5))$ddf$name.message),
                "half-normal key function with cosine(2,3,4,5) adjustments")
 
   #unif + cos(1,2)
-  expect_equal(summary(ds(egdata,4,key="unif",order=2))$ddf$name.message,
+  expect_equal(suppressWarnings(summary(ds(egdata, 4, key="unif",
+                                           order=2))$ddf$name.message),
                "uniform key function with cosine(1,2) adjustments")
 
 })
@@ -204,7 +209,8 @@ test_that("just distend and distbegin can be supplied", {
   # make some data
   bin.data <- create.bins(egdata, c(0, 1, 2, 3, 4))
   bin.data$distance <- NULL
-  expect_message(ds.model <- ds(bin.data, 4),
+  expect_message(ds.model <- ds(bin.data, 4, monotonicity=FALSE, key="hn",
+                                adjustment=NULL),
                  "^Columns \"distbegin\" and \"distend\" in data: performing a binned analysis....*")
 })
 
