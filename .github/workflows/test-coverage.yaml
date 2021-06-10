@@ -53,16 +53,16 @@ jobs:
       - name: Test coverage
         run: |
           library(covr)
-          con <- file("covlog")
-          sink(con, append=TRUE)
-          sink(con, append=TRUE, type="message")
+          #con <- file("covlog")
+          #sink(con, append=TRUE)
+          #sink(con, append=TRUE, type="message")
           cov <- covr::package_coverage(quiet = FALSE, clean = FALSE)
           covr::codecov(cov, quiet=FALSE)
           sessionInfo()
-          sink()
+          #sink()
         shell: Rscript {0}
 
-      - name: Show debug output
-        if: always()
-        run: more covlog
-        shell: bash
+#      - name: Show debug output
+#        if: always()
+#        run: more covlog
+#        shell: bash
