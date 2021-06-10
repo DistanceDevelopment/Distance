@@ -127,11 +127,11 @@ test_that("Simple models work",{
 
 test_that("Uniform does work after all",{
 
-  egdata <- egdata[egdata$observer==1,]
+  egdata <- egdata[egdata$observer==1, ]
 
   par.tol <- 1e-4
   # should select unif+cos(1)
-  dd <- suppressMessages(ds(egdata,4,key="unif"))
+  dd <- suppressMessages(ds(egdata,4,key="unif",adjustment="cos",order=1))
   expect_equal(dd$ddf$par,  0.7384736, tol=par.tol)
 
   # try to fit with unif+cos(1,2)
