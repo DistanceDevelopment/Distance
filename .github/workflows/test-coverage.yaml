@@ -53,8 +53,9 @@ jobs:
       - name: Test coverage
         run: |
           library(covr)
-          sink("covlog", append=TRUE)
-          sink("covlog", append=TRUE, type="message")
+          con <- file("covlog")
+          sink(con, append=TRUE)
+          sink(con, append=TRUE, type="message")
           cov <- covr::package_coverage(quiet = FALSE, clean = FALSE)
           covr::codecov(cov, quiet=FALSE)
           sessionInfo()
