@@ -132,7 +132,7 @@ test_that("Uniform does work after all",{
   par.tol <- 1e-4
   # should select unif+cos(1)
   dd <- suppressMessages(ds(egdata,4,key="unif",adjustment="cos",order=1))
-  expect_equal(dd$ddf$par,  0.7384736, tol=par.tol)
+  expect_equal(dd$ddf$par, 0.7384736, tol=par.tol)
 
   # try to fit with unif+cos(1,2)
   dd <- suppressMessages(ds(egdata,4,key="unif",order=c(1,2)))
@@ -173,22 +173,22 @@ test_that("adjustments expand correctly",{
 
   # hn + cos(2)
   expect_equal(suppressWarnings(summary(ds(egdata, 4, key="hn",
-                                           order=2))$ddf$name.message),
+                                           order=2, monotonicity=FALSE))$ddf$name.message),
                "half-normal key function with cosine(2) adjustments")
 
   # hn + cos(2,3)
   expect_equal(suppressWarnings(summary(ds(egdata, 4, key="hn",
-                                           order=2:3))$ddf$name.message),
+                                           order=2:3, monotonicity=FALSE))$ddf$name.message),
                "half-normal key function with cosine(2,3) adjustments")
 
   # hn + cos(2,3,4,5)
   expect_equal(suppressWarnings(summary(ds(egdata, 4, key="hn",
-                                           order=5))$ddf$name.message),
+                                           order=5, monotonicity=FALSE))$ddf$name.message),
                "half-normal key function with cosine(2,3,4,5) adjustments")
 
   #unif + cos(1,2)
   expect_equal(suppressWarnings(summary(ds(egdata, 4, key="unif",
-                                           order=2))$ddf$name.message),
+                                           order=2, monotonicity=FALSE))$ddf$name.message),
                "uniform key function with cosine(1,2) adjustments")
 
 })
