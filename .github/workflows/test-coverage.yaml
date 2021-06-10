@@ -1,12 +1,10 @@
 on:
   push:
     branches:
-      - main
-      - master
+      - coverage-fiddle
   pull_request:
     branches:
-      - main
-      - master
+      - coverage-fiddle
 
 name: test-coverage
 
