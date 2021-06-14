@@ -9,6 +9,7 @@ Distance 1.0.3
 * fix dht2 bug where stratification="replicate" variance estimation was 0 due to order of operations
 * fix dht2 bug where stratification="effort_sum" encounter rate variance estimation, due to incorrect grouping of transects into strata. Thanks to Samantha Ball and Jamie McKaughan for reporting this issue.
 * bootdht can now run in parallel via the foreach/doParallel packages, see the cores argument.
+* multiple multipliers can now be specified, for example to have different creation/decay rates for each stratum
 
 Distance 1.0.2
 ----------------------

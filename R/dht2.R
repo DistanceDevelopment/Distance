@@ -92,7 +92,10 @@
 #' column named `rate`, which abundance estimates will be divided by (the term
 #' "multiplier" is a misnomer, but kept for compatibility with Distance for
 #' Windows). Additional columns can be added to give the standard error and
-#' degrees of freedom for the rate if known as `SE` and `df`, respectively.
+#' degrees of freedom for the rate if known as `SE` and `df`, respectively. You
+#' can use a multirow `data.frame` to have different rates for different
+#' geographical areas (for example). In this case the rows need to have a
+#' column (or columns) to `merge` with the data (for example `Region.Label`).
 #'
 #' @section Stratification:
 #' The `strat_formula` argument is used to specify a column to use to stratify
@@ -458,73 +461,10 @@ dht2 <- function(ddf, observations=NULL, transects=NULL, geo_strat=NULL,
     stop("Need to supply either observations, transects and geo_strat OR flatfile")
   }
 
-  # merge-in multipliers
-  if(!is.null(multipliers)){
-    if(!is.list(multipliers)){
-      stop("multipliers must be a list")
-    }
-    if(!all(names(multipliers) %in% c("creation", "decay")) |
-       is.null(names(multipliers))){
-      stop("Multipliers must be named \"creation\" and \"decay\"")
-    }
-    if(length(multipliers)>2){
-      stop("Only one creation and one decay rate may be provided")
-    }
-
-    # base multipliers
-    bigmult <- data.frame(rate = 1,
-                          # need to set df to zero here as we will
-                          # add later on...
-                          rate_df = 0,
-                          rate_SE = 0,
-                          rate_CV = 0)
-
-    for(ii in names(multipliers)){
-      if(!is.data.frame(multipliers[[ii]])){
-        stop(paste0("multipliers[[", ii, "]] must be a data.frame"))
-      }
-      # check multipliers has at least a rate column
-      if(!("rate" %in% names(multipliers[[ii]]))){
-        stop(paste("You need at least a column named \"rate\" in",
-                   names(multipliers)[ii], "multiplier"))
-      }
-
-      if(is.null(multipliers[[ii]]$df)){
-        # this deals with the no df case
-        multipliers[[ii]]$df <- Inf
-      }
-      if(is.null(multipliers[[ii]]$SE)){
-        multipliers[[ii]]$SE <- 0
-      }
-
-      bigmult$rate_CV <- bigmult$rate_CV^2 +
-                          (multipliers[[ii]]$SE/
-                           multipliers[[ii]]$rate)^2
-      # since we are dividing, use the sandwich estimator,
-      # var(1/x) = 1/x^2 * var(x) * 1/x^2 => se(1/x) = se(x)/x^2
-      if(ii=="decay" && multipliers[[ii]]$SE!=0){
-        multipliers[[ii]]$SE <- multipliers[[ii]]$SE/multipliers[[ii]]$rate^2
-      }
-
-      bigmult$rate <- bigmult$rate*multipliers[[ii]]$rate
-      bigmult$rate_SE <- sqrt(bigmult$rate_SE^2 + multipliers[[ii]]$SE^2)
-      bigmult$rate_df <- bigmult$rate_df + multipliers[[ii]]$df
-
-    }
-    bigmult$rate_CV <- sqrt(bigmult$rate_CV)
-    bigdat <- merge(bigdat, bigmult, all.x=TRUE)
-    mult <- TRUE
-  }else{
-    # setup "fake" data for when we don't have multipliers
-    # this makes the calculations cleaner below
-    mult <- FALSE
-    bigdat <- bigdat %>%
-      mutate(Nc_cuecorrected = NA,
-             rate = 1,
-             rate_df = 1,
-             rate_SE = 0,
-             rate_CV = 0)
-  }
+  # handle multipliers
+  bigdat <- dht2_multipliers(multipliers, bigdat)
+  mult <- TRUE
+  if(all(is.na(bigdat$Nc_cuecorrected))) mult <- FALSE
 
   # make group size 1 if not in the data
   if(is.null(bigdat$size)){
@@ -944,6 +884,7 @@ if(mult){
                          sqrt(log(1 + .data$Abundance_CV^2))))) %>%
           mutate(df = 0)
       }else{
+        df_tvar <- df_tvar[1, 1]
         dat_row <- dat_row %>%
           # CV weights for Satterthwaite df
           mutate(wtcv = sum(c((sqrt(.data$ER_var_Nhat)/.data$Abundance)^4/
@@ -961,7 +902,12 @@ if(mult){
                           na.rm=TRUE)^2) %>%
           mutate(df = .data$df/.data$wtcv) %>%
           mutate(bigC = exp((abs(qt(ci_width, .data$df)) *
-                         sqrt(log(1 + .data$Abundance_CV^2)))))
+                         sqrt(log(1 + .data$Abundance_CV^2))))) %>%
+          # average multiplier
+          mutate(rate    = mean(.data$rate),
+                 rate_df = sum(.data$rate_df),
+                 rate_SE = sqrt(sum(.data$rate_SE^2)),
+                 rate_CV = sqrt(sum(.data$rate_SE^2))/mean(.data$rate))
         # drop weight column
         dat_row$wtcv <- NULL
       }
@@ -971,7 +917,7 @@ if(mult){
         mutate(LCI = .data$Abundance / .data$bigC,
                UCI = .data$Abundance * .data$bigC)
 
-      this_stra_row <- cbind.data.frame(this_stra_row, dat_row)
+      this_stra_row <- cbind.data.frame(this_stra_row, dat_row, row.names=NULL)
 
       res <- rbind(res, this_stra_row)
     }
