@@ -1,5 +1,4 @@
 .DS_Store
-tests
 LICENSE
 ^\.travis\.yml$
 ^appveyor\.yml$
