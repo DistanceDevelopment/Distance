@@ -141,6 +141,17 @@ bootdht <- function(model,
   our_resamples <- possible_resamples[c(resample_strata, resample_transects,
                                         resample_obs)]
 
+  # process models
+  models <- lapply(models, function(model){
+    lpars <- as.list(model$call)
+    for(i in seq(2, length(lpars))){
+      if(is.symbol(model$call[[names(lpars)[i]]])){
+        model$call[[names(lpars)[i]]] <- eval(lpars[[i]])
+      }
+    }
+    model
+  })
+
   # count failures
   nbootfail <- 0
   # function to do a single bootstrap iteration
@@ -190,7 +201,7 @@ bootdht <- function(model,
       }
 
       # fit that and update what's in models
-      models[[i]] <- try(suppressMessages(eval(df_call, parent.frame(n=3))),
+      models[[i]] <- try(suppressMessages(eval(df_call)),
                          silent=TRUE)
 
       if(any(class(models[[i]]) == "try-error")){
@@ -287,7 +298,6 @@ bootdht <- function(model,
   # the above is then a list of thingos, do the "right" thing and assume
   # they are data.frames and then rbind them all together
   boot_ests <- do.call(rbind.data.frame, boot_ests)
-
 
   cat("\n")
 
