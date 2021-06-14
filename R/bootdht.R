@@ -267,7 +267,7 @@ bootdht <- function(model,
     # fit the model nboot times over cores cores
     # note there is a bit of fiddling here with the progress bar to get it to
     # work (updates happen in this loop rather than in bootit)
-    boot_ests <- foreach::foreach(i=1:nboot, .combine=rbind.data.frame,
+    boot_ests <- foreach::foreach(i=1:nboot,
                                   .multicombine=TRUE) %dopar2% {
       r <- bootit(dat, models=models, our_resamples=our_resamples,
                   summary_fun=summary_fun, convert.units=convert.units,
@@ -276,15 +276,20 @@ bootdht <- function(model,
       r
     }
     pb$done(pb$pb)
+    # post-process
+    nbootfail <- sum(unlist(lapply(boot_ests, is.na)))
+    boot_ests <- Filter(function(x) !is.na(x), boot_ests)
   }else{
     boot_ests <- replicate(nboot,
                            bootit(dat, models=models, our_resamples,
                                   summary_fun, convert.units=convert.units,
                                   pb=pb), simplify=FALSE)
-    # the above is then a list of thingos, do the "right" thing and assume
-    # they are data.frames and then rbind them all together
-    boot_ests <- do.call(rbind.data.frame, boot_ests)
   }
+  # the above is then a list of thingos, do the "right" thing and assume
+  # they are data.frames and then rbind them all together
+  boot_ests <- do.call(rbind.data.frame, boot_ests)
+
+
   cat("\n")
 
   attr(boot_ests, "nboot") <- nboot
