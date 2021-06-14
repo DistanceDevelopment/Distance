@@ -840,7 +840,7 @@ if(mult){
       # calculate total variance
       if(stratification=="replicate"){
         # get "between" variance (empirical variance of strata)
-        tvar <- sum((dat_row$Abundance -
+        tvar <- sum((dat_row$weight*dat_row$Abundance -
                      sum(dat_row$weight*dat_row$Abundance))^2)/
                     (nrow(dat_row)-2)
 
