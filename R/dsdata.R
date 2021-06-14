@@ -159,6 +159,13 @@ NULL
 #' and 4 in 1981). While many species were observed, only data for Savannah
 #' sparrows (*Passerculus sandwichensis*) are included here.
 #'
+#' Data given here are different from the Distance for Windows example project.
+#' Here each individual sighting is treated as an independent observation. This
+#' corresponds to the analysis in Buckland et al. (2001) Section 8.7.  In the
+#' Distance for Windows project objects are clusters of individuals. This
+#' should not affect the results too greatly as most clusters were of size 1,
+#' and so the results obtained should not be too far out.
+#'
 #' @references
 #'
 #' Knopf, F.L., J.A. Sedgwick, and R.W. Cannon. (1988) Guild structure of a
