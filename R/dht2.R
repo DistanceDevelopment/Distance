@@ -464,7 +464,7 @@ dht2 <- function(ddf, observations=NULL, transects=NULL, geo_strat=NULL,
   # handle multipliers
   bigdat <- dht2_multipliers(multipliers, bigdat)
   mult <- TRUE
-  if(all(is.na(bigdat$Nc_cuecorrected))) mult <- FALSE
+  if(attr(bigdat, "multipliers")) mult <- TRUE else mult <- FALSE
 
   # make group size 1 if not in the data
   if(is.null(bigdat$size)){

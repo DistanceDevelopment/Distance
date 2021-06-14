@@ -72,6 +72,7 @@ dht2_multipliers <- function(multipliers, bigdat){
     del_names <- del_names[(grepl("^creation_", del_names) |
                              grepl("^decay_", del_names))]
     bigdat[del_names] <- NULL
+    attr(bigdat, "multipliers") <- TRUE
   }else{
     # setup "fake" data for when we don't have multipliers
     # this makes the calculations cleaner below
@@ -81,6 +82,7 @@ dht2_multipliers <- function(multipliers, bigdat){
              rate_df = 1,
              rate_SE = 0,
              rate_CV = 0)
+    attr(bigdat, "multipliers") <- FALSE
   }
   return(bigdat)
 }
