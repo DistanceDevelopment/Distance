@@ -14,6 +14,12 @@ print.dht_result <- function(x, report="abundance", groups=FALSE, ...){
   cat("Variance       :", paste0(attr(x, "ER_var")[1], ","),
       ifelse(attr(x, "ER_var")[3], "binomial",
              ifelse(attr(x, "ER_var")[2], "N/L", "n/L")), "\n")
+  cat("Multipliers    :", ifelse(is.null(attr(x, "multipliers")),
+                                 "none",
+                                 paste(attr(x, "multipliers"), collapse=", ")),
+      "\n")
+  cat("Sample fraction :" , ifelse(attr(x, "sample_fraction")>1,
+                                  "multiple", attr(x, "sample_fraction")), "\n")
 
   cat("\n\n")
   if(groups & !is.null(attr(x, "grouped"))){

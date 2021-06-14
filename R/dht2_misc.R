@@ -8,3 +8,4 @@ check_sample_fraction <- function(sample_fraction){
   }
   invisible(TRUE)
 }
+

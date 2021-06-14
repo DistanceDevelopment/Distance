@@ -975,6 +975,10 @@ if(mult){
   attr(res, "ER_var") <- c(er_est, innes, binomial_var)
   # save stratification type
   attr(res, "stratification") <- stratification
+  # save multiplier info
+  attr(res, "multipliers") <- names(multipliers)
+  # save sample_fraction
+  attr(res, "sample_fraction") <- sample_fraction
 
   class(res) <- c("dht_result", "data.frame")
   return(res)
