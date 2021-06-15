@@ -303,7 +303,6 @@ bootdht <- function(model,
              summary_fun=summary_fun, convert.units=convert.units,
              pb=list(increment=function(pb){invisible()}))
     }
-    pb$done(pb$pb)
     # post-process
     nbootfail <- sum(unlist(lapply(boot_ests, is.na)))
     boot_ests <- Filter(function(x) !is.na(x), boot_ests)
