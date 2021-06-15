@@ -25,7 +25,7 @@ Suggests:
     covr,
     progress,
     parallel,
-    doParallel,
+    doSNOW,
     foreach,
     testthat
 Encoding: UTF-8

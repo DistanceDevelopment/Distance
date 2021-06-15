@@ -58,25 +58,21 @@
 #' This last option can be extremely time consuming.
 #'
 #' @section Parallelization:
-#' If `cores`>1 then the `foreach`/`doParallel` packages will be used to run the
+#' If `cores`>1 then the `foreach`/`doSNOW` packages will be used to run the
 #' computation over multiple cores of the computer. It is advised that you do
 #' not set `cores` to be greater than one less than the number of cores on your
 #' machine.
 #'
-#' Note that when running in parallel the progress bar may not update, or may
-#' jump backwards and forwards. It is also hard to debug any issues in
-#' `summary_fun` so it is best to run a small number of bootstraps first in
-#' parallel to check that things work. On Windows systems `summary_fun` does
-#' not have access to the global environment when running in parallel, so all
-#' computations must be made using only its `ests` and `fit` arguments (i.e.,
-#' you can not use R objects from elsewhere in that function, even if they are
-#' available to you from the console).
+#' It is also hard to debug any issues in `summary_fun` so it is best to run a
+#' small number of bootstraps first in parallel to check that things work. On
+#' Windows systems `summary_fun` does not have access to the global environment
+#' when running in parallel, so all computations must be made using only its
+#' `ests` and `fit` arguments (i.e., you can not use R objects from elsewhere
+#' in that function, even if they are available to you from the console).
 #'
 #' @importFrom utils txtProgressBar setTxtProgressBar getTxtProgressBar
 #' @importFrom stats as.formula AIC
 #' @importFrom mrds ddf dht
-# @importFrom foreach foreach "%dopar%"
-# @importFrom doMC registerDoMC
 #' @seealso [`summary.dht_bootstrap`][summary.dht_bootstrap] for how to
 #' summarize the results, [`bootdht_Nhat_summarize`][bootdht_Nhat_summarize]
 #' for an example summary function.
@@ -256,11 +252,13 @@ bootdht <- function(model,
                increment = function(pb){
                  setTxtProgressBar(pb, getTxtProgressBar(pb)+1)
                },
+               set = function(pb, n, max) setTxtProgressBar(pb, n),
                done      = function(pb){
                  setTxtProgressBar(pb, environment(pb$up)$max)
                })
   }else if(progress_bar == "none"){
     pb <- list(pb        = NA,
+               set = function(pb, n, max) invisible(),
                increment = function(pb) invisible(),
                done = function(pb) invisible())
   }else if(progress_bar == "progress"){
@@ -270,6 +268,7 @@ bootdht <- function(model,
       pb <- list(pb = progress::progress_bar$new(
                                        format="   [:bar] :percent eta: :eta",
                                        total=nboot, clear=FALSE, width=80),
+                 set = function(pb, n, max) pb$update(n/max),
                  increment = function(pb) pb$tick(),
                  done = function(pb) pb$update(1))
       pb$pb$tick(0)
@@ -281,26 +280,28 @@ bootdht <- function(model,
   # run the code
   if(cores > 1){
     if (!requireNamespace("foreach", quietly = TRUE) &
-        !requireNamespace("doParallel", quietly = TRUE) &
+        !requireNamespace("doSNOW", quietly = TRUE) &
         !requireNamespace("parallel", quietly = TRUE)){
       stop("Packages 'parallel', 'foreach' and 'doParallel' need to be installed to use multiple cores.")
     }
 
     # build the cluster
-    doParallel::registerDoParallel(cores)
+    cl <- parallel::makeCluster(cores, "SOCK")
+    doSNOW::registerDoSNOW(cl)
+
+    # setup the progress bar
+    opts <- list(progress=function(n) pb$set(pb$pb, n, nboot))
+    environment(opts$progress)$nboot <- nboot
+
     # needed to avoid a syntax error/check fail
     `%dopar2%` <- foreach::`%dopar%`
-    # export the progress bar object
-    exported <- c("pb")
     # fit the model nboot times over cores cores
     # note there is a bit of fiddling here with the progress bar to get it to
     # work (updates happen in this loop rather than in bootit)
-    boot_ests <- foreach::foreach(i=1:nboot, .export=exported) %dopar2% {
-      r <- bootit(dat, models=models, our_resamples=our_resamples,
-                  summary_fun=summary_fun, convert.units=convert.units,
-                  pb=list(increment=function(pb){invisible()}))
-      pb$increment(pb$pb)
-      r
+    boot_ests <- foreach::foreach(i=1:nboot, .options.snow=opts) %dopar2% {
+      bootit(dat, models=models, our_resamples=our_resamples,
+             summary_fun=summary_fun, convert.units=convert.units,
+             pb=list(increment=function(pb){invisible()}))
     }
     pb$done(pb$pb)
     # post-process

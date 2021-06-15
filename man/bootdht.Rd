@@ -97,19 +97,17 @@ This last option can be extremely time consuming.
 
 \section{Parallelization}{
 
-If \code{cores}>1 then the \code{foreach}/\code{doParallel} packages will be used to run the
+If \code{cores}>1 then the \code{foreach}/\code{doSNOW} packages will be used to run the
 computation over multiple cores of the computer. It is advised that you do
 not set \code{cores} to be greater than one less than the number of cores on your
 machine.
 
-Note that when running in parallel the progress bar may not update, or may
-jump backwards and forwards. It is also hard to debug any issues in
-\code{summary_fun} so it is best to run a small number of bootstraps first in
-parallel to check that things work. On Windows systems \code{summary_fun} does
-not have access to the global environment when running in parallel, so all
-computations must be made using only its \code{ests} and \code{fit} arguments (i.e.,
-you can not use R objects from elsewhere in that function, even if they are
-available to you from the console).
+It is also hard to debug any issues in \code{summary_fun} so it is best to run a
+small number of bootstraps first in parallel to check that things work. On
+Windows systems \code{summary_fun} does not have access to the global environment
+when running in parallel, so all computations must be made using only its
+\code{ests} and \code{fit} arguments (i.e., you can not use R objects from elsewhere
+in that function, even if they are available to you from the console).
 }
 
 \examples{
