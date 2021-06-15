@@ -290,10 +290,12 @@ bootdht <- function(model,
     doParallel::registerDoParallel(cores)
     # needed to avoid a syntax error/check fail
     `%dopar2%` <- foreach::`%dopar%`
+    # export the progress bar object
+    exported <- c("pb")
     # fit the model nboot times over cores cores
     # note there is a bit of fiddling here with the progress bar to get it to
     # work (updates happen in this loop rather than in bootit)
-    boot_ests <- foreach::foreach(i=1:nboot) %dopar2% {
+    boot_ests <- foreach::foreach(i=1:nboot, .export=exported) %dopar2% {
       r <- bootit(dat, models=models, our_resamples=our_resamples,
                   summary_fun=summary_fun, convert.units=convert.units,
                   pb=list(increment=function(pb){invisible()}))
