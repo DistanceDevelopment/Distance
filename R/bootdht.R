@@ -30,7 +30,7 @@
 #' @param progress_bar which progress bar should be used? Default "base" uses
 #' `txtProgressBar`, "none" suppresses output, "progress" uses the
 #' `progress` package, if installed.
-#' @param cores number of cores to use to compute the estimates. If >1 then the `foreach` package will be used to run the computation over multiple cores of the computer. It is advised that you do not set `cores` to be greater than one less than the number of cores on your machine.
+#' @param cores number of CPU cores to use to compute the estimates. See "Parallelization" below.
 #'
 #' @section Summary Functions:
 #' The function `summary_fun` allows the user to specify what summary
@@ -55,8 +55,23 @@
 #'   3. when `select_adjustments` is `TRUE` and `model` is a list of fitted
 #'   detection functions, each model fitted to each replicate and number of
 #'   adjustments is selected via AIC.
+#' This last option can be extremely time consuming.
 #'
-#' The last of these options can be very time consuming!
+#' @section Parallelization:
+#' If `cores`>1 then the `foreach`/`doParallel` packages will be used to run the
+#' computation over multiple cores of the computer. It is advised that you do
+#' not set `cores` to be greater than one less than the number of cores on your
+#' machine.
+#'
+#' Note that when running in parallel the progress bar may not update, or may
+#' jump backwards and forwards. It is also hard to debug any issues in
+#' `summary_fun` so it is best to run a small number of bootstraps first in
+#' parallel to check that things work. On Windows systems `summary_fun` does
+#' not have access to the global environment when running in parallel, so all
+#' computations must be made using only its `ests` and `fit` arguments (i.e.,
+#' you can not use R objects from elsewhere in that function, even if they are
+#' available to you from the console).
+#'
 #' @importFrom utils txtProgressBar setTxtProgressBar getTxtProgressBar
 #' @importFrom stats as.formula AIC
 #' @importFrom mrds ddf dht

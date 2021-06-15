@@ -58,7 +58,7 @@ must have been fitted with \code{adjustment!=NULL}.}
 \code{txtProgressBar}, "none" suppresses output, "progress" uses the
 \code{progress} package, if installed.}
 
-\item{cores}{number of cores to use to compute the estimates. If >1 then the \code{foreach} package will be used to run the computation over multiple cores of the computer. It is advised that you do not set \code{cores} to be greater than one less than the number of cores on your machine.}
+\item{cores}{number of CPU cores to use to compute the estimates. See "Parallelization" below.}
 }
 \description{
 Performs a bootstrap for simple distance sampling models using the same data
@@ -91,9 +91,25 @@ lowest AIC.
 \item when \code{select_adjustments} is \code{TRUE} and \code{model} is a list of fitted
 detection functions, each model fitted to each replicate and number of
 adjustments is selected via AIC.
+This last option can be extremely time consuming.
+}
 }
 
-The last of these options can be very time consuming!
+\section{Parallelization}{
+
+If \code{cores}>1 then the \code{foreach}/\code{doParallel} packages will be used to run the
+computation over multiple cores of the computer. It is advised that you do
+not set \code{cores} to be greater than one less than the number of cores on your
+machine.
+
+Note that when running in parallel the progress bar may not update, or may
+jump backwards and forwards. It is also hard to debug any issues in
+\code{summary_fun} so it is best to run a small number of bootstraps first in
+parallel to check that things work. On Windows systems \code{summary_fun} does
+not have access to the global environment when running in parallel, so all
+computations must be made using only its \code{ests} and \code{fit} arguments (i.e.,
+you can not use R objects from elsewhere in that function, even if they are
+available to you from the console).
 }
 
 \examples{
