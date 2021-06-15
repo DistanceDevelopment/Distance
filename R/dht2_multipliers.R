@@ -28,6 +28,12 @@ dht2_multipliers <- function(multipliers, bigdat){
     }
 
     for(ii in names(multipliers)){
+      # check that length is correct
+      if(nrow(multipliers[[ii]])>1 &
+         (all(names(multipliers[[ii]]) %in% c("rate", "df", "SE")) |
+          !any(names(multipliers[[ii]]) %in% names(bigdat)))){
+        stop("Multirow multipliers need column to link to the data")
+      }
       if(!is.data.frame(multipliers[[ii]])){
         stop(paste0("multipliers[[", ii, "]] must be a data.frame"))
       }

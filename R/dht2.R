@@ -88,7 +88,7 @@
 #' as "multipliers".
 #'
 #' The `multipliers` argument is a `list`, with 2 possible elements (`creation`
-#' and `decay` Each element of which is a `data.frame` and must have at least a
+#' and `decay`) Each element of which is a `data.frame` and must have at least a
 #' column named `rate`, which abundance estimates will be divided by (the term
 #' "multiplier" is a misnomer, but kept for compatibility with Distance for
 #' Windows). Additional columns can be added to give the standard error and
