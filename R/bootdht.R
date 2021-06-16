@@ -305,9 +305,13 @@ bootdht <- function(model,
              summary_fun=summary_fun, convert.units=convert.units,
              pb=list(increment=function(pb){invisible()}))
     }
+    # shutdown cluster
+    parallel::stopCluster(cl)
+
     # post-process
     nbootfail <- sum(unlist(lapply(boot_ests, is.na)))
     boot_ests <- Filter(function(x) !is.na(x), boot_ests)
+
   }else{
     boot_ests <- replicate(nboot,
                            bootit(dat, models=models, our_resamples,
