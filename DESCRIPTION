@@ -25,6 +25,7 @@ Suggests:
     covr,
     progress,
     parallel,
+    snow,
     doSNOW,
     foreach,
     testthat

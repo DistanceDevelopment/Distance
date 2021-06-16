@@ -58,10 +58,11 @@
 #' This last option can be extremely time consuming.
 #'
 #' @section Parallelization:
-#' If `cores`>1 then the `foreach`/`doSNOW` packages will be used to run the
-#' computation over multiple cores of the computer. It is advised that you do
-#' not set `cores` to be greater than one less than the number of cores on your
-#' machine.
+#' If `cores`>1 then the `foreach`/`snow`/`doSNOW` packages will be used to run
+#' the computation over multiple cores of the computer. To use this component
+#' you need to install those packages using: `install.packages(c("foreach",
+#' "doSNOW", "snow"))` It is advised that you do not set `cores` to be greater
+#' than one less than the number of cores on your machine.
 #'
 #' It is also hard to debug any issues in `summary_fun` so it is best to run a
 #' small number of bootstraps first in parallel to check that things work. On
@@ -281,6 +282,7 @@ bootdht <- function(model,
   if(cores > 1){
     if (!requireNamespace("foreach", quietly = TRUE) &
         !requireNamespace("doSNOW", quietly = TRUE) &
+        !requireNamespace("snow", quietly = TRUE) &
         !requireNamespace("parallel", quietly = TRUE)){
       stop("Packages 'parallel', 'foreach' and 'doParallel' need to be installed to use multiple cores.")
     }

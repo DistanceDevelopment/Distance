@@ -97,10 +97,10 @@ This last option can be extremely time consuming.
 
 \section{Parallelization}{
 
-If \code{cores}>1 then the \code{foreach}/\code{doSNOW} packages will be used to run the
-computation over multiple cores of the computer. It is advised that you do
-not set \code{cores} to be greater than one less than the number of cores on your
-machine.
+If \code{cores}>1 then the \code{foreach}/\code{snow}/\code{doSNOW} packages will be used to run
+the computation over multiple cores of the computer. To use this component
+you need to install those packages using: \code{install.packages(c("foreach", "doSNOW", "snow"))} It is advised that you do not set \code{cores} to be greater
+than one less than the number of cores on your machine.
 
 It is also hard to debug any issues in \code{summary_fun} so it is best to run a
 small number of bootstraps first in parallel to check that things work. On
