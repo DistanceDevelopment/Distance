@@ -94,6 +94,7 @@
 #' used.
 #' @param max.adjustments maximum number of adjustments to try (default 5) only
 #' used when `order=NULL`.
+#' @param er.method encounter rate variance calculation: default = 2 gives the method of Innes et al, using expected counts in the encounter rate. Setting to 1 gives observed counts (which matches Distance for Windows) and 0 uses binomial variance (only useful in the rare situation where study area = surveyed area). See [`dht.se`][mrds::dht.se] for more details.
 #' @return a list with elements:
 #'   * `ddf` a detection function model object.
 #'   * `dht` abundance/density information (if survey region data was supplied,
@@ -292,7 +293,7 @@ ds <- function(data, truncation=ifelse(is.null(cutpoints),
              region.table=NULL, sample.table=NULL, obs.table=NULL,
              convert.units=1, er.var=ifelse(transect=="line", "R2", "P3"),
              method="nlminb", quiet=FALSE, debug.level=0,
-             initial.values=NULL, max.adjustments=5){
+             initial.values=NULL, max.adjustments=5, er.method=2){
 
   # capture the call
   this_call <- match.call(expand.dots = FALSE)
@@ -694,6 +695,7 @@ ds <- function(data, truncation=ifelse(is.null(cutpoints),
     # setup dht options
     dht_options <- list(group         = dht.group,
                         ervar         = er.var,
+                        varflag       = er.method,
                         convert.units = convert.units)
 
     # if no obs.table

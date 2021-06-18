@@ -27,7 +27,8 @@ ds(
   quiet = FALSE,
   debug.level = 0,
   initial.values = NULL,
-  max.adjustments = 5
+  max.adjustments = 5,
+  er.method = 2
 )
 }
 \arguments{
@@ -145,6 +146,8 @@ used.}
 
 \item{max.adjustments}{maximum number of adjustments to try (default 5) only
 used when \code{order=NULL}.}
+
+\item{er.method}{encounter rate variance calculation: default = 2 gives the method of Innes et al, using expected counts in the encounter rate. Setting to 1 gives observed counts (which matches Distance for Windows) and 0 uses binomial variance (only useful in the rare situation where study area = surveyed area). See \code{\link[mrds:dht.se]{dht.se}} for more details.}
 }
 \value{
 a list with elements:

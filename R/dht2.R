@@ -695,6 +695,7 @@ if(mult){
                      na.rm=TRUE)) %>%
       # adjust if df is too small
       mutate(df = if_else(.data$Abundance_CV==0, 1, .data$df)) %>%
+      mutate(df = if_else(.data$df<1, 1, .data$df)) %>%
       # big C for Satterthwaite
       mutate(bigC = exp((abs(qt(ci_width, .data$df)) *
                      sqrt(log(1 + .data$Abundance_CV^2)))))
