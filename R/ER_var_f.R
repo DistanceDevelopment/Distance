@@ -64,9 +64,7 @@ ER_var_f <- function(erdat, innes, er_est, binomial_var=FALSE){
         mutate(ER_var_Nhat = ((.data$Area/sum(.data$Covered_area))*
                               .data$Nc*sum(.data$Effort))^2 *
                               .data$ER_var/
-                              sum(.data$transect_n_observations)^2 +
-                              ((.data$Area/sum(.data$Covered_area))*.data$Nc)^2*
-                              .data$group_var/.data$group_mean^2) %>%
+                              sum(.data$transect_n_observations)^2) %>%
         mutate(ER_var_Nhat = ifelse(length(unique(.data$Sample.Label))>1,
                                     .data$ER_var_Nhat,
                                     0))

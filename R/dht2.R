@@ -666,13 +666,14 @@ if(mult){
 
   # se and CV
   res <- res %>%
-    # first add the ER+group size and detfct variance components
+    # first add the ER and detfct variance components
     mutate(Abundance_CV = sqrt(sum(c(.data$ER_var_Nhat,
                                      .data$df_var),
                                na.rm=TRUE))/
                            .data$Abundance) %>%
-    # now add in the multiplier rate CV
+    # now add in the multiplier rate, group size CVs
     mutate(Abundance_CV = sqrt(sum(c(.data$Abundance_CV^2,
+                                     .data$group_CV^2,
                                      .data$rate_CV^2),
                                    na.rm=TRUE))) %>%
     mutate(Abundance_se = .data$Abundance_CV*.data$Abundance) %>%
@@ -692,7 +693,7 @@ if(mult){
                           .data$df_CV^4/(length(ddf$fitted) - length(ddf$par)),
                           .data$group_CV^4/(.data$n-1),
                           .data$rate_CV^4/.data$rate_df),
-                     na.rm=TRUE)) %>%
+                        na.rm=TRUE)) %>%
       # adjust if df is too small
       mutate(df = if_else(.data$Abundance_CV==0, 1, .data$df)) %>%
       mutate(df = if_else(.data$df<1, 1, .data$df)) %>%
@@ -753,20 +754,18 @@ if(mult){
         #  which is adding up the abundances
         dat_row <- dat_row %>%
           # for the density case weight by covered area
-          mutate(weight       = if_else(rep(est_density, nrow(dat_row)),
+          mutate(weight       = #if_else(rep(est_density, nrow(dat_row)),
                                         .data$Covered_area/
-                                         sum(.data$Covered_area), 1),
+                                         sum(.data$Covered_area),# 1),
                  Area         = sum(.data$Area),
                  Covered_area = sum(.data$Covered_area),
                  Effort       = sum(.data$Effort),
                  k            = sum(.data$k)) %>%
           # now summarize ER variance and degrees of freedom
-          mutate(ER_var       = sum(.data$weight^2*.data$ER_var,
-                                    na.rm=TRUE)) %>%
-          mutate(ER_var_Nhat  = sum(.data$weight^2*.data$ER_var_Nhat,
-                                    na.rm=TRUE)) %>%
-          mutate(ER_df = .data$ER_var_Nhat^2/
-                         sum((res$ER_var_Nhat^2/.data$ER_df)))
+          mutate(ER_var      = sum(.data$ER_var, na.rm=TRUE),
+                 ER_df       = sum(.data$ER_var_Nhat, na.rm=TRUE)^2/
+                                sum(.data$ER_var_Nhat^2/.data$ER_df),
+                 ER_var_Nhat = sum(.data$ER_var_Nhat, na.rm=TRUE))
       }else if(stratification %in% c("effort_sum", "replicate")){
         # check that all areas are the same value
         if(length(unique(dat_row$Area))>1 &
@@ -782,7 +781,6 @@ if(mult){
         }else{
           xt <- total_area/dat_row$Area
         }
-
 
         dat_row <- dat_row %>%
           mutate(weight       = xt * .data$Effort/sum(.data$Effort)) %>%
@@ -812,29 +810,36 @@ if(mult){
                                                          .data$ER_df)))
       }
 
+      # calculate mean abundance, unless we are doing replicate, where we need
+      # the per-stratum abundances for variance later
+      if(stratification != "replicate"){
+        if(est_density){
+          dat_row <- dat_row %>%
+            mutate(Abundance  = sum(.data$weight*.data$Abundance))
+        }else{
+          dat_row <- dat_row %>%
+            mutate(Abundance  = sum(.data$Abundance))
+        }
+      }
+
       # calculate other summaries
       dat_row <- dat_row %>%
         mutate(ER         = .data$n/.data$Effort) %>%
         mutate(ER_CV      = if_else(.data$ER==0,
                                     0,
-                                    sqrt(.data$ER_var)/.data$ER)) %>%
-        mutate(group_mean = mean(.data$group_mean),
-               group_var  = sum(.data$group_var)) %>%
-        mutate(group_CV   = if_else(.data$group_var==0, 0,
-                                    sqrt(.data$group_var)/.data$group_mean))
+                                    sqrt(.data$ER_var_Nhat)/.data$Abundance)) %>%
+        mutate(group_CV   = sqrt(sum(.data$weight^2 * .data$group_var/
+                                     .data$group_mean^2))) %>%
+        mutate(group_mean = mean(.data$group_mean))%>%
+        mutate(group_var  = (.data$group_CV*mean(.data$weight * .data$group_mean))^2)
 
-      # calculate mean abundance, unless we are doing replicate, where we need
-      # the per-stratum abundances for variance later
-      if(stratification != "replicate"){
-        dat_row <- dat_row %>%
-          mutate(Abundance  = sum(.data$weight*.data$Abundance))
-      }
 
       # calculate total variance for detection function
       vcov <- df_Nhat_unc$variance
-      df_tvar <- matrix(dat_row$weight, nrow=1) %*%
+      df_tvar <- matrix(rep(1, length(dat_row$weight)), nrow=1) %*%
                   vcov %*%
-                  matrix(dat_row$weight, ncol=1)
+                  matrix(rep(1, length(dat_row$weight)), ncol=1)
+
       dat_row <- dat_row %>%
         mutate(df_CV  = sqrt(df_tvar[1, 1])/dat_row$Abundance[1])
 
@@ -847,19 +852,14 @@ if(mult){
 
         dat_row <- dat_row %>%
           mutate(Abundance  = sum(.data$weight*.data$Abundance))
-      }else if(stratification=="effort_sum"){
-        # add the pre-weighted CVs
+      }else{
+        # add all CV sources to obtain variance
         tvar <- dat_row$Abundance[1]^2 *
                  sum(c(dat_row$ER_CV[1]^2,
                        dat_row$df_CV[1]^2,
                        dat_row$rate_CV[1]^2,
                        dat_row$group_CV[1]^2),
                      na.rm=TRUE)
-      }else{
-        # add all sources of variance (pre-weighted)
-        tvar <- dat_row$ER_var_Nhat[1] +
-                df_tvar +
-                dat_row$Abundance[1]^2*dat_row$rate_CV[1]^2
       }
 
       dat_row <- dat_row %>%
@@ -885,23 +885,16 @@ if(mult){
                          sqrt(log(1 + .data$Abundance_CV^2))))) %>%
           mutate(df = 0)
       }else{
-        df_tvar <- df_tvar[1, 1]
         dat_row <- dat_row %>%
-          # CV weights for Satterthwaite df
-          mutate(wtcv = sum(c((sqrt(.data$ER_var_Nhat)/.data$Abundance)^4/
-                                    .data$ER_df,
-                              (df_tvar/.data$Abundance^2)^2/
-                                (length(ddf$fitted) - length(ddf$par)),
-                              (.data$rate_SE/.data$Abundance)^4/.data$rate_df,
-                              (.data$group_var/.data$Abundance^2)^2/(.data$n-1)),
+          # sum of CVs^4
+          mutate(wtcv = sum(c(.data$ER_CV^4/.data$ER_df,
+                              .data$df_CV^4/(length(ddf$fitted) -
+                                             length(ddf$par)),
+                              .data$rate_CV^4/.data$rate_df,
+                              .data$group_CV^4/(length(ddf$fitted)-1)),
                             na.rm=TRUE)) %>%
           # calculate Satterthwaite df
-          mutate(df = sum(c((sqrt(.data$ER_var_Nhat)/.data$Abundance)^2,
-                            (sqrt(df_tvar)/.data$Abundance)^2,
-                            (.data$rate_SE/.data$Abundance)^2,
-                            (sqrt(.data$group_var)/.data$Abundance)^2),
-                          na.rm=TRUE)^2) %>%
-          mutate(df = .data$df/.data$wtcv) %>%
+          mutate(df = .data$Abundance_CV^4 / .data$wtcv) %>%
           mutate(bigC = exp((abs(qt(ci_width, .data$df)) *
                          sqrt(log(1 + .data$Abundance_CV^2))))) %>%
           # average multiplier
