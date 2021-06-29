@@ -135,26 +135,6 @@ test_that("undropped individual stratum covar levels don't cause errors",{
   expect_equivalent(d1, d2)
 })
 
-test_that("sample fractions make sense",{
-
-  data(wren_lt)
-
-  ll <- ds(wren_lt, convert.units=convert_units("meter", "kilometer", "hectare"),
-           adjustment=NULL)
-
-  samfrac <- dht2(ll, flatfile=wren_lt, strat_formula=~1, sample_fraction=0.5,
-                  convert_units=convert_units("meter", "kilometer", "hectare"))
-
-  wren_lt$Effort <- wren_lt$Effort * 0.5
-  manual <- dht2(ll, flatfile=wren_lt, strat_formula=~1,
-                  convert_units=convert_units("meter", "kilometer", "hectare"))
-
-  expect_equal(manual$Covered_area, samfrac$Covered_area)
-  expect_equal(manual$Abundance_se, samfrac$Abundance_se)
-  expect_equal(manual$Abundance, samfrac$Abundance)
-
-})
-
 
 # use amakihi for the next few examples
 data(amakihi)

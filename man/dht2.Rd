@@ -49,8 +49,10 @@ below and \code{\link[mrds:varn]{varn}}.}
 
 \item{multipliers}{\code{list} of \code{data.frame}s. See "Multipliers" below.}
 
-\item{sample_fraction}{what proportion of the transects was covered (e.g.,
-0.5 for one-sided line transects).}
+\item{sample_fraction}{proportion of the transect covered (e.g., 0.5 for
+one-sided line transects). May be specified as either a single number or a
+\code{data.frame} with 2 columns \code{Sample.Label} and \code{fraction} (if fractions are
+different for each transect).}
 
 \item{ci_width}{for use with confidence interval calculation (defined as
 1-alpha, so the default 95 will give a 95\% confidence interval).}

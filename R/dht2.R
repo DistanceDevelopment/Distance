@@ -21,8 +21,10 @@
 #' @param er_est encounter rate variance estimator to be used. See "Variance"
 #' below and [`varn`][mrds::varn].
 #' @param multipliers `list` of `data.frame`s. See "Multipliers" below.
-#' @param sample_fraction what proportion of the transects was covered (e.g.,
-#' 0.5 for one-sided line transects).
+#' @param sample_fraction proportion of the transect covered (e.g., 0.5 for
+#' one-sided line transects). May be specified as either a single number or a
+#' `data.frame` with 2 columns `Sample.Label` and `fraction` (if fractions are
+#' different for each transect).
 #' @param stratification what do strata represent, see "Stratification" below.
 #' @param ci_width for use with confidence interval calculation (defined as
 #' 1-alpha, so the default 95 will give a 95% confidence interval).
@@ -489,20 +491,8 @@ dht2 <- function(ddf, observations=NULL, transects=NULL, geo_strat=NULL,
   df_width <- ddf$ds$aux$width*convert_units
   df_left <- ddf$ds$aux$left*convert_units
 
-  # check that sample_fraction is positive and a single number
-  check_sample_fraction(sample_fraction)
-
-  # function to calculate covered area
-  area_calc <- function(width, effort, transect_type, sample_fraction){
-    # Note - this function does not need to account for left truncation, as
-    # it is taken care of when calculating average detection prob (by setting
-    # detection prob to 0 between 0 and left truncation distance)
-    if(transect_type=="point"){
-      return(effort*pi*width^2*sample_fraction)
-    }else{
-      return(effort*2*width*sample_fraction)
-    }
-  }
+  # handle sample fractions
+  bigdat <- dht2_sample_fraction(sample_fraction, bigdat)
 
   # TODO: clean-up the data, removing stratum labels with zero observations
   #       or NA labels (and warning)
@@ -558,7 +548,7 @@ dht2 <- function(ddf, observations=NULL, transects=NULL, geo_strat=NULL,
              Nc             = sum(.data$Nhat, na.rm=TRUE),
              # covered area per transect
              Covered_area   = area_calc(df_width, .data$Effort,
-                                         transect_type, sample_fraction),
+                                         transect_type, .data$sample_fraction),
              # get group size stats
              group_var      = if_else(.data$n_observations>1,
                                       var(.data$size, na.rm=TRUE)/
