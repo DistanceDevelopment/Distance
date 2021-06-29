@@ -90,5 +90,10 @@ dht2_multipliers <- function(multipliers, bigdat){
              rate_CV = 0)
     attr(bigdat, "multipliers") <- FALSE
   }
+
+  # we use var everywhere else!
+  bigdat$rate_var <- bigdat$rate_SE^2
+  bigdat$rate_SE <- NULL
+
   return(bigdat)
 }
