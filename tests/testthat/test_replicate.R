@@ -11,7 +11,7 @@ manual_rep <- function(effort, density){
   se.pooled <- sqrt(var.pooled)
   cv.pooled <- se.pooled / pool.over.grids
 
-  C <- exp(1.96*(sqrt(log(1+cv.pooled^2))))
+  C <- exp(qnorm(1-0.025)*(sqrt(log(1+cv.pooled^2))))
   bh.90.LCI <- pool.over.grids/C
   bh.90.UCI <- pool.over.grids*C
   return(c(pool.over.grids, se.pooled, cv.pooled, bh.90.LCI, bh.90.UCI))
@@ -21,16 +21,26 @@ manual_rep <- function(effort, density){
 test_that("Replicate works: minke", {
   skip_on_cran()
 
-devtools::load_all()
   data(minke)
+  minke$Area <- 715316
   mink.cov <- ds(minke, key="hr", formula=~Region.Label)
   mink.dht2 <- dht2(mink.cov, flatfile = minke,
                     strat_formula=~Region.Label,
                     stratification = "replicate", total_area = 715316)
   den_res <- attr(mink.dht2, "density")
-  manual <- manual_rep(den_res$Effort[1:2], den_res$Density[1:2])
 
-  expect_equal(manual, as.numeric(den_res[3, c("Density", "Density_se", "Density_CV", "LCI", "UCI")]))
+  # do manual calculations
+  # density
+  manual <- manual_rep(den_res$Effort[1:2], den_res$Density[1:2])
+  # abundance
+  manual2 <- manual_rep(mink.dht2$Effort[1:2], mink.dht2$Abundance[1:2])
+
+  # test
+  expect_equal(manual, as.numeric(den_res[3, c("Density", "Density_se",
+                                               "Density_CV", "LCI", "UCI")]))
+  expect_equal(manual2, as.numeric(mink.dht2[3, c("Abundance", "Abundance_se",
+                                                  "Abundance_CV", "LCI",
+                                                  "UCI")]))
 })
 
 test_that("Replicate works: Savannah sparrows", {
@@ -46,5 +56,7 @@ test_that("Replicate works: Savannah sparrows", {
   den_res <- attr(what, "density")
   manual <- manual_rep(den_res$Effort[1:4], den_res$Density[1:4])
 
-  expect_equal(manual, as.numeric(den_res[5, c("Density", "Density_se", "Density_CV", "LCI", "UCI")]))
+  expect_equal(manual, as.numeric(den_res[5, c("Density", "Density_se",
+                                               "Density_CV", "LCI", "UCI")]))
+
 })

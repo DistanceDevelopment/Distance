@@ -773,7 +773,9 @@ if(mult){
         }else{
           xt <- total_area/dat_row$Area
         }
-
+        if(stratification == "replicate"){
+          xt <- 1
+        }
 
         dat_row <- dat_row %>%
           mutate(weight       = xt * .data$Effort/sum(.data$Effort)) %>%
@@ -788,7 +790,6 @@ if(mult){
                  Covered_area = sum(.data$Covered_area),
                  Effort       = sum(.data$Effort),
                  k            = sum(.data$k))
-
       }else if(stratification=="object"){
         # things you want to add up like object type
         dat_row <- dat_row %>%
@@ -832,10 +833,11 @@ if(mult){
 
       # calculate total variance
       if(stratification=="replicate"){
+        nrep <- nrow(dat_row)
         # get "between" variance (empirical variance of strata)
-        tvar <- sum((dat_row$weight*dat_row$Abundance -
+        tvar <- sum((dat_row$Abundance -
                      sum(dat_row$weight*dat_row$Abundance))^2)/
-                    (nrow(dat_row)-2)
+                    (nrep-1)
         # now calculate abundance
         dat_row <- dat_row %>%
           mutate(Abundance  = sum(.data$weight*.data$Abundance))
@@ -875,49 +877,59 @@ if(mult){
         distinct()
 
       # compute degrees of freedom
-      if(binomial_var){
-        # normal approximation for binomial_var
+      if(stratification == "replicate"){
         dat_row <- dat_row %>%
-          mutate(bigC = exp((abs(qnorm(ci_width)) *
-                         sqrt(log(1 + .data$Abundance_CV^2))))) %>%
-          mutate(df = 0)
+          mutate(bigC = exp(qnorm(1-ci_width)*
+                        (sqrt(log(1+.data$Abundance_CV^2)))),
+                 df = nrep-1)
       }else{
-        df_tvar <- df_tvar[1, 1]
-        dat_row <- dat_row %>%
-          # average multiplier
-          mutate(rate          = mean(.data$rate),
-                 rate_df       = sum(.data$rate_df),
-                 rate_var      = sum(.data$rate_var),
-                 rate_var_Nhat = .data$Abundance^2 * .data$rate_CV^2,
-                 rate_CV       = sqrt(sum(.data$rate_var))/mean(.data$rate)) %>%
-          # CV weights for Satterthwaite df
-          mutate(wtcv = sum(c((sqrt(.data$ER_var_Nhat[1])/.data$Abundance[1])^4/
-                                    .data$ER_df[1],
-                              (df_tvar/.data$Abundance[1]^2)^2/
-                                (length(ddf$fitted) - length(ddf$par)),
+        if(binomial_var){
+          # normal approximation for binomial_var
+          dat_row <- dat_row %>%
+            mutate(bigC = exp((abs(qnorm(ci_width)) *
+                           sqrt(log(1 + .data$Abundance_CV^2))))) %>%
+            mutate(df = 0)
+        }else{
+          df_tvar <- df_tvar[1, 1]
+          dat_row <- dat_row %>%
+            # average multiplier
+            mutate(rate          = mean(.data$rate),
+                   rate_df       = sum(.data$rate_df),
+                   rate_var      = sum(.data$rate_var),
+                   rate_var_Nhat = .data$Abundance^2 * .data$rate_CV^2,
+                   rate_CV       = sqrt(sum(.data$rate_var))/mean(.data$rate))
+          dat_row <- dat_row %>%
+            # CV weights for Satterthwaite df
+            mutate(wtcv = sum(c((sqrt(.data$ER_var_Nhat[1])/
+                                      .data$Abundance[1])^4/
+                                 .data$ER_df[1],
+                                (df_tvar/.data$Abundance[1]^2)^2/
+                                  (length(ddf$fitted) - length(ddf$par)),
+                                if_else(.data$df==0, 0 ,
+                                        (.data$rate_var_Nhat[1]/
+                                         .data$Abundance[1]^2)^2/
+                                          .data$rate_df[1]),
+                                (.data$group_var_Nhat[1]/
+                                 .data$Abundance[1]^2)^2/
+                                 (length(ddf$fitted)-1)
+                               ),
+                              na.rm=TRUE)) %>%
+            # calculate Satterthwaite df
+            mutate(df = sum(c((sqrt(.data$ER_var_Nhat[1])/.data$Abundance[1])^2,
+                              (df_tvar/.data$Abundance[1]^2),
                               if_else(.data$df==0, 0 ,
                                       (.data$rate_var_Nhat[1]/
-                                       .data$Abundance[1]^2)^2/.data$rate_df[1]),
-                              (.data$group_var_Nhat[1]/.data$Abundance[1]^2)^2/
-                               (length(ddf$fitted)-1)
+                                       .data$Abundance[1]^2)),
+                              (.data$group_var_Nhat[1]/.data$Abundance[1]^2)
                              ),
-                            na.rm=TRUE)) %>%
-          # calculate Satterthwaite df
-          mutate(df = sum(c((sqrt(.data$ER_var_Nhat[1])/.data$Abundance[1])^2,
-                            (df_tvar/.data$Abundance[1]^2),
-                            if_else(.data$df==0, 0 ,
-                                    (.data$rate_var_Nhat[1]/
-                                     .data$Abundance[1]^2)),
-                            (.data$group_var_Nhat[1]/.data$Abundance[1]^2)
-                           ),
-                          na.rm=TRUE)^2) %>%
-          mutate(df = .data$df/.data$wtcv) %>%
-          mutate(bigC = exp((abs(qt(ci_width, .data$df)) *
-                         sqrt(log(1 + .data$Abundance_CV^2)))))
-        # drop weight column
-        dat_row$wtcv <- NULL
+                            na.rm=TRUE)^2) %>%
+            mutate(df = .data$df/.data$wtcv) %>%
+            mutate(bigC = exp((abs(qt(ci_width, .data$df)) *
+                           sqrt(log(1 + .data$Abundance_CV^2)))))
+          # drop weight column
+          dat_row$wtcv <- NULL
+        }
       }
-
       # actually calculate the CIs
       dat_row <- dat_row %>%
         mutate(LCI = .data$Abundance / .data$bigC,
@@ -950,9 +962,17 @@ if(mult){
       mutate(Density = .data$Abundance/.data$Area,
              df_var = .data$df_var/.data$Area^2) %>%
       mutate(Density_se = sqrt(.data$Abundance_se^2/.data$Area^2)) %>%
-      mutate(Density_CV = .data$Density_se/.data$Density) %>%
-      mutate(bigC = exp((abs(qt(ci_width, .data$df)) *
-                     sqrt(log(1 + .data$Density_CV^2))))) %>%
+      mutate(Density_CV = .data$Density_se/.data$Density)
+    if(stratification=="replicate"){
+      dens_res <- res %>%
+        mutate(bigC = exp((abs(qnorm(1-ci_width)) *
+                       sqrt(log(1 + .data$Density_CV^2)))))
+    }else{
+      dens_res <- res %>%
+        mutate(bigC = exp((abs(qt(ci_width, .data$df)) *
+                       sqrt(log(1 + .data$Density_CV^2)))))
+    }
+    dens_res <- res %>%
       mutate(LCI   = .data$Density / .data$bigC,
              UCI   = .data$Density * .data$bigC,
              Area  = .data$Covered_area) %>%
