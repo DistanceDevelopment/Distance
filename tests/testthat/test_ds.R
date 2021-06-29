@@ -61,6 +61,7 @@ test_that("Input errors are thrown correctly",{
 
 
 test_that("Simple models work",{
+  skip_on_cran()
 
   #Test that ds can deal with a numeric vector as input
   distances <- c(1.02, 0.89, 0.21, 1.83, 0.09, 1.34, 2.1, 0.98, 1.8, 0.32,
@@ -126,6 +127,7 @@ test_that("Simple models work",{
 
 
 test_that("Uniform does work after all",{
+  skip_on_cran()
 
   egdata <- egdata[egdata$observer==1,]
 
@@ -142,6 +144,7 @@ test_that("Uniform does work after all",{
 
 
 test_that("Truncation is handled",{
+  skip_on_cran()
 
   egdata <- egdata[egdata$observer==1,]
 
@@ -168,6 +171,7 @@ test_that("Truncation is handled",{
 })
 
 test_that("adjustments expand correctly",{
+  skip_on_cran()
 
   egdata <- egdata[egdata$observer==1,]
 
@@ -195,6 +199,7 @@ test_that("adjustments expand correctly",{
 
 # reported by Len Thomas 20 August
 test_that("Percentage truncation works when distances are missing",{
+  skip_on_cran()
 
   data(minke)
 
@@ -216,6 +221,7 @@ test_that("just distend and distbegin can be supplied", {
 
 # max adjustments arg
 test_that("max.adjustments works",{
+  skip_on_cran()
 
   egdata <- egdata[egdata$observer==1,]
 
@@ -256,6 +262,7 @@ test_that("max.adjustments works",{
 # warnings when bad models get fitted
 
 test_that("warnings of bad models get thrown",{
+  skip_on_cran()
 
   # data with spike for which hazard-rate estimates
   # 0 shape par

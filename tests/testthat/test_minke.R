@@ -53,6 +53,7 @@ make_old_abund_individual <- function(object){
 context("minke")
 
 test_that("South works",{
+  skip_on_cran()
 
   whales <- minke[minke$Region.Label=="South",]
   dat <- unflatten(whales)
@@ -91,6 +92,7 @@ test_that("South works",{
 })
 
 test_that("North works",{
+  skip_on_cran()
 
   whales <- minke[minke$Region.Label=="North",]
   dat <- unflatten(whales)
@@ -130,6 +132,7 @@ test_that("North works",{
 })
 
 test_that("Combined works",{
+  skip_on_cran()
 
   whales <- minke
   whales$Region.Label <- as.factor("Total")
@@ -172,6 +175,7 @@ test_that("Combined works",{
 
 
 test_that("stratification", {
+  skip_on_cran()
 
   whales <- minke
   # cutpoints
@@ -244,6 +248,7 @@ expect_equal(fs_st1$df, c(13.29, 18.97, 15.83), tol=1e-2)
 
 
 test_that("flat minke works", {
+  skip_on_cran()
 
   # compare dht and dht2
   strat.spec <- ds(minke_noobj, key="hr", formula=~Region.Label, tru=1.5)
@@ -260,6 +265,7 @@ test_that("flat minke works", {
 })
 
 test_that("minke dht vs dht2", {
+  skip_on_cran()
 
   uf <- unflatten(minke)
 
@@ -296,6 +302,7 @@ test_that("minke dht vs dht2", {
 })
 
 test_that("area=0, flat minke works", {
+  skip_on_cran()
 
   minke_noobj$Area <- 0
   # compare dht and dht2

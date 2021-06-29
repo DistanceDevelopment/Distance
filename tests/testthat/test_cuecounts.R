@@ -22,6 +22,7 @@ trunc <- 1.2
 context("cue counting")
 
 test_that("unbinned", {
+  skip_on_cran()
 
 #  Effort        :    36.47000    
 #  # samples     :    92
@@ -82,6 +83,7 @@ test_that("unbinned", {
 
 
 test_that("stratified estimation",{
+  skip_on_cran()
 #                         Estimate      %CV     df     95% Confidence Interval
 #                        ------------------------------------------------------
 # Stratum: 1. B                                              
@@ -117,8 +119,6 @@ test_that("stratified estimation",{
 #                 D      0.80664E-01   45.23    50.57 0.33921E-01  0.19182    
 #                 N       13552.       45.23    50.57  5699.0       32226.    
 #
-
-
 
   dat <- unflatten(CueCountingExample)
   dat <- dat$data

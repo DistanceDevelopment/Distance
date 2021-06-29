@@ -11,6 +11,7 @@ egdata <- book.tee.data$book.tee.dataframe
 egdata <- egdata[egdata$observer==1,]
 
 test_that("dht without obs.table",{
+  skip_on_cran()
 
   # first with obs table
   ds.dht.model<-suppressMessages(ds(egdata,4,region.table=region,
@@ -36,6 +37,7 @@ test_that("dht without obs.table",{
 # check density estimation when no area column present
 # https://github.com/DistanceDevelopment/Distance/issues/56
 test_that("no Area column works", {
+  skip_on_cran()
 
   # with separate data.frames
   ds_with_Area <- ds(egdata, 4, region.table=region, adjustment=NULL,

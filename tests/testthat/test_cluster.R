@@ -3,6 +3,7 @@
 context("cluster")
 
 test_that("cluster exercise works",{
+  skip_on_cran()
 
   # import data
   data(ClusterExercise)
@@ -86,6 +87,3 @@ test_that("cluster exercise works",{
   expect_equal(strat_N$Abundance_CV, c(26.38, 32.15, 41.25, 24.51)/100,
                tol=1e-2)
 })
-
-
-
