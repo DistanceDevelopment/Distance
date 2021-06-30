@@ -62,7 +62,8 @@ must have been fitted with \code{adjustment!=NULL}.}
 }
 \description{
 Performs a bootstrap for simple distance sampling models using the same data
-structures as \code{\link[mrds:dht]{dht}}.
+structures as \code{\link[mrds:dht]{dht}}. Note that only geographical stratification
+as supported in \code{dht} is allowed.
 }
 \section{Summary Functions}{
 

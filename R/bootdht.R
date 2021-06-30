@@ -1,7 +1,8 @@
 #' Bootstrap uncertainty estimation for distance sampling models
 #'
 #' Performs a bootstrap for simple distance sampling models using the same data
-#' structures as [`dht`][mrds::dht].
+#' structures as [`dht`][mrds::dht]. Note that only geographical stratification
+#' as supported in `dht` is allowed.
 #'
 #' @param model a model fitted by [`ds`][ds] or a list of models
 #' @param flatfile Data provided in the flatfile format. See
