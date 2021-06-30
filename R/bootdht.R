@@ -140,8 +140,7 @@ bootdht <- function(model,
   }
 
   # apply the sample fraction
-  check_sample_fraction(sample_fraction)
-  dat$Effort <- dat$Effort*sample_fraction
+  dat <- dht2_sample_fraction(sample_fraction, dat)
 
   # this can be generalized later on
   stratum_label <- "Region.Label"
@@ -154,6 +153,8 @@ bootdht <- function(model,
                                         resample_obs)]
 
   # process models
+  # this resolves all symbols in the call so arguments can be accessed when
+  # running in parallel
   models <- lapply(models, function(model){
     lpars <- as.list(model$call)
     for(i in seq(2, length(lpars))){
