@@ -96,6 +96,9 @@ checkdata <- function(data, region.table=NULL, sample.table=NULL,
       ## construct sample table
       sample.table <- unique(data[, c("Sample.Label", "Region.Label",
                                       "Effort")])
+      # remove sample/region combinations with no samples in them
+      sample.table <- sample.table[!is.na(sample.table$Effort), ]
+
 
       # possible that Effort is not the same for a given
       # Sample.Label+Region.Label -- this is BAD.
@@ -111,6 +114,8 @@ checkdata <- function(data, region.table=NULL, sample.table=NULL,
 
       ## construct obs
       obs.table <- unique(data[, c("object", "Region.Label","Sample.Label")])
+      # remove obs/region combinations with no samples in them
+      obs.table <- obs.table[!is.na(obs.table$Sample.Label), ]
       rownames(obs.table) <- 1:nrow(obs.table)
 
       # drop Region and Sample label columns
