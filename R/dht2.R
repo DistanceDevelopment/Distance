@@ -833,11 +833,12 @@ if(mult){
 
       # calculate total variance
       if(stratification=="replicate"){
+        # Buckland 2001, 3.84-3.87
         nrep <- nrow(dat_row)
         # get "between" variance (empirical variance of strata)
-        tvar <- sum((dat_row$Abundance -
+        tvar <- sum(dat_row$weight*(dat_row$Abundance -
                      sum(dat_row$weight*dat_row$Abundance))^2)/
-                    (nrep-1)
+                    (sum(dat_row$weight) * (nrep-1))
         # now calculate abundance
         dat_row <- dat_row %>%
           mutate(Abundance  = sum(.data$weight*.data$Abundance))
@@ -964,15 +965,15 @@ if(mult){
       mutate(Density_se = sqrt(.data$Abundance_se^2/.data$Area^2)) %>%
       mutate(Density_CV = .data$Density_se/.data$Density)
     if(stratification=="replicate"){
-      dens_res <- res %>%
+      dens_res <- dens_res %>%
         mutate(bigC = exp((abs(qnorm(1-ci_width)) *
                        sqrt(log(1 + .data$Density_CV^2)))))
     }else{
-      dens_res <- res %>%
+      dens_res <- dens_res %>%
         mutate(bigC = exp((abs(qt(ci_width, .data$df)) *
                        sqrt(log(1 + .data$Density_CV^2)))))
     }
-    dens_res <- res %>%
+    dens_res <- dens_res %>%
       mutate(LCI   = .data$Density / .data$bigC,
              UCI   = .data$Density * .data$bigC,
              Area  = .data$Covered_area) %>%
