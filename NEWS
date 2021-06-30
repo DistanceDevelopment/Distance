@@ -8,7 +8,7 @@ Distance 1.0.3
 * fix issue #85 when species was used in the detection function and for post-stratification. Thanks to jason-airst for reporting the bug.
 * fix dht2 bug where stratification="replicate" variance estimation was 0 due to order of operations
 * fix dht2 bug where stratification="effort_sum" encounter rate variance estimation, due to incorrect grouping of transects into strata. Thanks to Samantha Ball and Jamie McKaughan for reporting this issue.
-* bootdht can now run in parallel via the foreach/doSNOW packages, see the cores argument.
+* bootdht can now run in parallel via the foreach/doParallel packages, see the cores argument.
 * multiple multipliers can now be specified, for example to have different creation/decay rates for each stratum
 * new argument er.method to ds(), allows further refinement of encounter rate variance calculation. Default 2 is as before, use er.method=1 to get results which match Distance for Windows.
 * fix issues with Satterthwaite degrees of freedom calculations when geographical stratification was used with clustered observations

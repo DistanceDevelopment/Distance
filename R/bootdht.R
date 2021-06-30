@@ -59,11 +59,12 @@
 #' This last option can be extremely time consuming.
 #'
 #' @section Parallelization:
-#' If `cores`>1 then the `foreach`/`snow`/`doSNOW` packages will be used to run
-#' the computation over multiple cores of the computer. To use this component
-#' you need to install those packages using: `install.packages(c("foreach",
-#' "doSNOW", "snow"))` It is advised that you do not set `cores` to be greater
-#' than one less than the number of cores on your machine.
+#' If `cores`>1 then the `parallel`/`doParallel`/`foreach` packages will be
+#' used to run the computation over multiple cores of the computer. To use this
+#' component you need to install those packages using:
+#' `install.packages(c("foreach", "doParallel"))` It is advised that you do not
+#' set `cores` to be greater than one less than the number of cores on your
+#' machine.
 #'
 #' It is also hard to debug any issues in `summary_fun` so it is best to run a
 #' small number of bootstraps first in parallel to check that things work. On
@@ -249,6 +250,11 @@ bootdht <- function(model,
 
   cat(paste0("Performing ", nboot, " bootstraps\n"))
 
+  if(cores > 1 & progress_bar == "progress"){
+    progress_bar <- "base"
+    message("Falling back to \"base\" progress bar when using cores>1")
+  }
+
   # decide how to report progress
   if(progress_bar == "base"){
     pb <- list(pb        = txtProgressBar(0, nboot, style=3),
@@ -283,30 +289,27 @@ bootdht <- function(model,
   # run the code
   if(cores > 1){
     if (!requireNamespace("foreach", quietly = TRUE) &
-        !requireNamespace("doSNOW", quietly = TRUE) &
-        !requireNamespace("snow", quietly = TRUE) &
+        !requireNamespace("doParallel", quietly = TRUE) &
         !requireNamespace("parallel", quietly = TRUE)){
       stop("Packages 'parallel', 'foreach' and 'doParallel' need to be installed to use multiple cores.")
     }
 
     # build the cluster
-    cl <- parallel::makeCluster(cores, "SOCK")
-    doSNOW::registerDoSNOW(cl)
-
-    # setup the progress bar
-    opts <- list(progress=function(n) pb$set(pb$pb, n, nboot))
-    environment(opts$progress)$nboot <- nboot
+    cl <- parallel::makeCluster(cores, outfile="")
+    doParallel::registerDoParallel(cl)
 
     # needed to avoid a syntax error/check fail
     `%dopar2%` <- foreach::`%dopar%`
     # fit the model nboot times over cores cores
     # note there is a bit of fiddling here with the progress bar to get it to
     # work (updates happen in this loop rather than in bootit)
-    boot_ests <- foreach::foreach(i=1:nboot, .options.snow=opts) %dopar2% {
+    boot_ests <- foreach::foreach(i=1:nboot) %dopar2% {
       bootit(dat, models=models, our_resamples=our_resamples,
              summary_fun=summary_fun, convert.units=convert.units,
              pb=list(increment=function(pb){invisible()}))
+      pb$set(pb$pb, i, nboot)
     }
+    pb$done(pb$pb)
     # shutdown cluster
     parallel::stopCluster(cl)
 
