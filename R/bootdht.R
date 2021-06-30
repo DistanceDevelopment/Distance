@@ -250,9 +250,9 @@ bootdht <- function(model,
 
   cat(paste0("Performing ", nboot, " bootstraps\n"))
 
-  if(cores > 1 & progress_bar == "progress"){
-    progress_bar <- "base"
-    message("Falling back to \"base\" progress bar when using cores>1")
+  if(cores > 1 & progress_bar != "none"){
+    progress_bar <- "none"
+    message("Progress bars cannot be shown when using cores>1")
   }
 
   # decide how to report progress
@@ -307,9 +307,7 @@ bootdht <- function(model,
       bootit(dat, models=models, our_resamples=our_resamples,
              summary_fun=summary_fun, convert.units=convert.units,
              pb=list(increment=function(pb){invisible()}))
-      pb$set(pb$pb, i, nboot)
     }
-    pb$done(pb$pb)
     # shutdown cluster
     parallel::stopCluster(cl)
 
