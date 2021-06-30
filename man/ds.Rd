@@ -28,7 +28,8 @@ ds(
   debug.level = 0,
   initial.values = NULL,
   max.adjustments = 5,
-  er.method = 2
+  er.method = 2,
+  dht.se = TRUE
 )
 }
 \arguments{
@@ -148,6 +149,8 @@ used.}
 used when \code{order=NULL}.}
 
 \item{er.method}{encounter rate variance calculation: default = 2 gives the method of Innes et al, using expected counts in the encounter rate. Setting to 1 gives observed counts (which matches Distance for Windows) and 0 uses binomial variance (only useful in the rare situation where study area = surveyed area). See \code{\link[mrds:dht.se]{dht.se}} for more details.}
+
+\item{dht.se}{should uncertainty be calculated when using \code{dht}? Safe to leave as \code{TRUE}, used in \code{bootdht}.}
 }
 \value{
 a list with elements:
