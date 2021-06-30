@@ -27,6 +27,8 @@ unflatten <- function(data){
 
   ## construct sample table
   sample.table <- unique(data[,c("Sample.Label", "Region.Label", "Effort")])
+  # remove sample/region combinations with no samples in them
+  sample.table <- sample.table[!is.na(sample.table$Effort), ]
 
   # possible that Effort is not the same for a given
   # Sample.Label+Region.Label -- this is BAD.
