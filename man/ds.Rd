@@ -142,7 +142,7 @@ Default value \code{FALSE}.}
 of debugging output.}
 
 \item{initial.values}{a \code{list} of named starting values, see
-\href{mrds::'mrds-opt'}{\code{mrds-opt}}. Only allowed when AIC term selection is not
+\code{\link[mrds:mrds-opt]{mrds-opt}}. Only allowed when AIC term selection is not
 used.}
 
 \item{max.adjustments}{maximum number of adjustments to try (default 5) only
@@ -181,7 +181,7 @@ Examples of distance sampling analyses are available at
 \url{http://examples.distancesampling.org/}.
 
 Hints and tips on fitting (particularly optimisation issues) are on the
-\href{mrds::'mrds-opt'}{\code{mrds-opt}} manual page.
+\code{\link[mrds:mrds-opt]{mrds-opt}} manual page.
 }
 
 \section{Clusters/groups}{

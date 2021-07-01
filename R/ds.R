@@ -90,7 +90,7 @@
 #' @param quiet suppress non-essential messages (useful for bootstraps etc).
 #' Default value `FALSE`.
 #' @param initial.values a `list` of named starting values, see
-#' [`mrds-opt`](mrds::'mrds-opt'). Only allowed when AIC term selection is not
+#' [`mrds-opt`][mrds::mrds-opt]. Only allowed when AIC term selection is not
 #' used.
 #' @param max.adjustments maximum number of adjustments to try (default 5) only
 #' used when `order=NULL`.
@@ -115,7 +115,7 @@
 #' <http://examples.distancesampling.org/>.
 #'
 #' Hints and tips on fitting (particularly optimisation issues) are on the
-#' [`mrds-opt`](mrds::'mrds-opt') manual page.
+#' [`mrds-opt`][mrds::mrds-opt] manual page.
 #'
 #' @section Clusters/groups:
 #'  Note that if the data contains a column named `size`, cluster size will be
