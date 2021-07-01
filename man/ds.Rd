@@ -142,7 +142,7 @@ Default value \code{FALSE}.}
 of debugging output.}
 
 \item{initial.values}{a \code{list} of named starting values, see
-\code{\link[mrds:mrds-opt]{mrds-opt}}. Only allowed when AIC term selection is not
+\code{\link[mrds:`mrds-opt]{mrds-opt}}. Only allowed when AIC term selection is not
 used.}
 
 \item{max.adjustments}{maximum number of adjustments to try (default 5) only

@@ -90,7 +90,7 @@
 #' @param quiet suppress non-essential messages (useful for bootstraps etc).
 #' Default value `FALSE`.
 #' @param initial.values a `list` of named starting values, see
-#' [`mrds-opt`][mrds::mrds-opt]. Only allowed when AIC term selection is not
+#' [`mrds-opt`][mrds::`mrds-opt`]. Only allowed when AIC term selection is not
 #' used.
 #' @param max.adjustments maximum number of adjustments to try (default 5) only
 #' used when `order=NULL`.
