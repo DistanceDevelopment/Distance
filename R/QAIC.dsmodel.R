@@ -35,6 +35,11 @@ QAIC.dsmodel <- function(object, ...){
   # get the models
   models <- list(object, ...)
 
+  # if there is only one model, there is no comparison to make
+  if(length(models)<2){
+    stop("Only 1 model specified, no model selection can be performed")
+  }
+
   # based on qaic.pass1
   # Performs Pass 1 model selection based upon Method 1 of Howe et al. (2018)
   # c-hat is computed for the most parameter-rich model in the group qaic is
