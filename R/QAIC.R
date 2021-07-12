@@ -14,7 +14,9 @@
 #' freedom).
 #'
 #' @param object a fitted detection function object
-#' @param \dots optionally more fitted model objects.
+#' @param chat a value of \deqn{\hat{c}}{chat} to be used in QIAC calculation
+#' @param k penalty per parameter to be used; default 2
+#' @param \dots additional fitted model objects.
 #' @author David L Miller, based on code from Eric Rexstad
 #' @references Howe, E. J., Buckland, S. T., Després-Einspenner, M.-L., & Kühl, H. S. (2019). Model selection with overdispersed distance sampling data. Methods in Ecology and Evolution, 10(1), 38–47. \doi{10.1111/2041-210X.13082}
 #' @export
@@ -29,14 +31,19 @@
 #' model6 <- ds(minke, truncation=4, adjustment="cos", order=c(2, 4, 6))
 #' # calculate QAIC
 #' QAIC(model1, model2, model4, model6)
-# }
-QAIC.dsmodel <- function(object, ...){
+#'
+#' # using a pre-calculated chat
+#' chat <- attr(QAIC(model1, model2, model4, model6), "chat")
+#' QAIC(model1, chat=chat)
+#' }
+QAIC <- function(object, ..., chat=NULL, k=2){
 
   # get the models
   models <- list(object, ...)
+  models$chat <- models$k <- NULL
 
   # if there is only one model, there is no comparison to make
-  if(length(models)<2){
+  if(length(models)<2 & is.null(chat)){
     stop("Only 1 model specified, no model selection can be performed")
   }
 
@@ -55,14 +62,16 @@ QAIC.dsmodel <- function(object, ...){
   npar <- unlist(lapply(models, function(x) length(x$ddf$ds$par)))
   aic <-  unlist(lapply(models, function(x) x$ddf$criterion))
 
-  chat.bigmod <- chat(models[[which.max(npar)]])
+  if(is.null(chat)){
+    chat <- chat(models[[which.max(npar)]])
+  }
   qaics <- data.frame(df=npar,
-                      QAIC=unlist(lapply(models, qaic, chat=chat.bigmod)))
+                      QAIC=unlist(lapply(models, qaic, chat=chat, k=k)))
 
   # add row names
   call <- match.call(expand.dots=TRUE)
+  call$chat <- call$k <- NULL
   rownames(qaics) <- as.character(call)[-1]
-
   # add chat
   attr(qaics, "chat") <- chat
 
@@ -76,6 +85,6 @@ chat <- function(modobj) {
 }
 
 # compute QAIC for a dsmodel object given a c-hat
-qaic <- function(modobj, chat) {
-  2* modobj$ddf$ds$value/chat + 2 * (length(modobj$ddf$ds$pars)+1)
+qaic <- function(modobj, chat, k) {
+  2* modobj$ddf$ds$value/chat + k * (length(modobj$ddf$ds$pars)+1)
 }
