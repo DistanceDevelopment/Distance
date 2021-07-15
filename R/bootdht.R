@@ -161,7 +161,8 @@ bootdht <- function(model,
     lpars <- as.list(model$call)
     for(i in seq(2, length(lpars))){
       if(is.symbol(model$call[[names(lpars)[i]]])){
-        model$call[[names(lpars)[i]]] <- eval(lpars[[i]])
+        model$call[[names(lpars)[i]]] <- eval(lpars[[i]],
+                                              envir=parent.frame(n=3))
       }
     }
     model
