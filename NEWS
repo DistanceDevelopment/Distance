@@ -1,3 +1,8 @@
+Distance 1.0.4
+----------------------
+
+* fix bootdht issue where the arguments for ds() were not found
+
 Distance 1.0.3
 ----------------------
 
