@@ -2,6 +2,9 @@ Distance 1.0.4
 ----------------------
 
 * fix bootdht issue where the arguments for ds() were not found
+* bootdht_Nhat_summarize now reports the stratum labels as well as their abundance estimates for ease of use
+* add function QAIC to calculate QAIC for overdispersed data, such as that from camera trap distance sampling
+
 
 Distance 1.0.3
 ----------------------
