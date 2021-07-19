@@ -28,6 +28,7 @@
 #' must have been fitted with `adjustment!=NULL`.
 #' @param sample_fraction what proportion of the transects was covered (e.g.,
 #' 0.5 for one-sided line transects).
+#' @param multipliers `list` of multipliers. See "Multipliers" below.
 #' @param progress_bar which progress bar should be used? Default "base" uses
 #' `txtProgressBar`, "none" suppresses output, "progress" uses the
 #' `progress` package, if installed.
@@ -43,6 +44,30 @@
 #' are then concatenated using `rbind`. One can make these functions
 #' return any information within those objects, for example abundance or
 #' density estimates or the AIC for each model. See Examples below.
+#'
+#' @section Multipliers:
+#' It is often the case that we cannot measure distances to individuals or
+#' groups directly, but instead need to estimate distances to something they
+#' produce (e.g., for whales, their blows; for elephants their dung) -- this is
+#' referred to as indirect sampling. We may need to use estimates of production
+#' rate and decay rate for these estimates (in the case of dung or nests) or
+#' just production rates (in the case of songbird calls or whale blows). We
+#' refer to these conversions between "number of cues" and "number of animals"
+#' as "multipliers".
+#'
+#' The `multipliers` argument is a `list`, with 3 possible elements (`creation`
+#' and `decay`). Each element of which is either:
+#' * `data.frame` and must have at least a column named `rate`, which abundance
+#'    estimates will be divided by (the term "multiplier" is a misnomer, but
+#'    kept for compatibility with Distance for Windows). Additional columns can
+#'    be added to give the standard error and degrees of freedom for the rate
+#'    if known as `SE` and `df`, respectively. You can use a multirow
+#'    `data.frame` to have different rates for different geographical areas
+#'    (for example). In this case the rows need to have a column (or columns)
+#'    to `merge` with the data (for example `Region.Label`).
+#' * a `function` which will return a single estimate of the relevant
+#'   multiplier. See [make_activity_fn] for a helper function for use with the
+#'   [activity] package.
 #'
 #' @section Model selection:
 #' Model selection can be performed on a per-replicate basis within the
@@ -107,6 +132,7 @@ bootdht <- function(model,
                     convert.units=1,
                     select_adjustments=FALSE,
                     sample_fraction=1,
+                    multipliers=NULL,
                     progress_bar="base",
                     cores=1){
 
@@ -114,7 +140,7 @@ bootdht <- function(model,
     stop("At least one of resample_strata, resample_obs, resample_transects must be TRUE")
   }
 
-  # if we have a list...
+  # make everything a list...
   if(!all(class(model)=="list")){
     models <- list(model)
     # yes, I am a monster
@@ -126,8 +152,8 @@ bootdht <- function(model,
     convert.units <-  NULL
   }
 
+  # only use valid ds models
   for(i in seq_along(models)){
-    # only use valid ds models
     if(!all(class(models[[i]])=="dsmodel")){
       stop("Only models fitted by Distance::ds() may be used")
     }
@@ -143,6 +169,13 @@ bootdht <- function(model,
 
   # apply the sample fraction
   dat <- dht2_sample_fraction(sample_fraction, dat)
+
+  # process non-function multipliers
+  multipliers_nofun <- Filter(function(x) !is.function(x), multipliers)
+  dat <- dht2_multipliers(multipliers_nofun, dat)
+
+  # get any multiplier functions
+  multipliers_fun <- Filter(function(x) is.function(x), multipliers)
 
   # this can be generalized later on
   stratum_label <- "Region.Label"
@@ -170,84 +203,6 @@ bootdht <- function(model,
 
   # count failures
   nbootfail <- 0
-  # function to do a single bootstrap iteration
-  bootit <- function(bootdat, models, our_resamples, summary_fun,
-                     convert.units, pb, ...){
-    # sample at the right levels
-    for(sample_thingo in our_resamples){
-      # what are the possible samples at this level
-      levs <- unique(dat[[sample_thingo]])
-      nlevs <- length(levs)
-      levs <- sample(levs, nlevs, replace=TRUE)
-
-      # make a new data frame with the correct number of replicates of the
-      # per-stratum data in it
-      bootdat <- lapply(levs, function(x){
-        bootdat[bootdat[[sample_thingo]] == x, ]
-      })
-      # make a special index to make unique IDs later
-      iind <- rep(seq_len(length(bootdat)), lapply(bootdat, nrow))
-      # make list of data.frames into one frame
-      bootdat <- do.call("rbind", bootdat)
-      # put that ID in there
-      bootdat[[paste0(sample_thingo, "_ID")]] <- iind
-    }
-
-    # need unique object IDs
-    bootdat$object <- seq_len(nrow(bootdat))
-    # get the sample labels right
-    bootdat$Sample.Label <- paste0(bootdat[[sample_label]], "-",
-                                   bootdat[[paste0(sample_thingo, "_ID")]])
-
-    aics <- rep(NA, length(models))
-    for(i in seq_along(models)){
-      model <- models[[i]]
-
-      # setup the call to ds
-      df_call <- model$call
-
-      # if we want the number of adjustments to be selected each iteration...
-      if(select_adjustments){
-        df_call$order <- NULL
-      }
-      # insert the new data into the model
-      df_call$data <- bootdat
-      if(!is.null(convert.units)){
-        df_call$convert.units <- convert.units
-      }
-
-      # fit that and update what's in models
-      models[[i]] <- try(suppressMessages(eval(df_call)),
-                         silent=TRUE)
-
-      if(any(class(models[[i]]) == "try-error")){
-        # if the model failed, return NA
-        aics[i] <- NA
-      }else{
-        # if that wasn't bad, grab the AIC
-        aics[i] <- AIC(models[[i]])$AIC
-      }
-    }
-
-    # update progress bar
-    pb$increment(pb$pb)
-
-    if(all(is.na(aics))){
-      # if no models fitted, return NA
-      nbootfail <<- nbootfail + 1
-      return(NA)
-    }else{
-      fit <- models[[which.min(aics)]]
-      # handle errors
-      if(any(class(fit) == "try-error") ||
-         any(is.na(fit$ddf$hessian))){
-        nbootfail <<- nbootfail + 1
-        return(NA)
-      }else{
-        return(summary_fun(fit$dht, fit$ddf))
-      }
-    }
-  }
 
   cat(paste0("Performing ", nboot, " bootstraps\n"))
 
@@ -287,7 +242,7 @@ bootdht <- function(model,
     stop("progress_bar must be one of \"none\", \"base\" or \"progress\"")
   }
 
-  # run the code
+  # run the bootstrap
   if(cores > 1){
     if (!requireNamespace("foreach", quietly = TRUE) &
         !requireNamespace("doParallel", quietly = TRUE) &
@@ -296,7 +251,7 @@ bootdht <- function(model,
     }
 
     # build the cluster
-    cl <- parallel::makeCluster(cores, outfile="")
+    cl <- parallel::makeCluster(cores)
     doParallel::registerDoParallel(cl)
 
     # needed to avoid a syntax error/check fail
@@ -307,7 +262,9 @@ bootdht <- function(model,
     boot_ests <- foreach::foreach(i=1:nboot) %dopar2% {
       bootit(dat, models=models, our_resamples=our_resamples,
              summary_fun=summary_fun, convert.units=convert.units,
-             pb=list(increment=function(pb){invisible()}))
+             pb=list(increment=function(pb){invisible()}),
+             multipliers_fun=multipliers_fun, sample_label=sample_label,
+             select_adjustments=select_adjustments)
     }
     # shutdown cluster
     parallel::stopCluster(cl)
@@ -320,7 +277,10 @@ bootdht <- function(model,
     boot_ests <- replicate(nboot,
                            bootit(dat, models=models, our_resamples,
                                   summary_fun, convert.units=convert.units,
-                                  pb=pb), simplify=FALSE)
+                                  pb=pb, multipliers_fun=multipliers_fun,
+                                  sample_label=sample_label,
+                                  select_adjustments=select_adjustments),
+                           simplify=FALSE)
   }
   # the above is then a list of thingos, do the "right" thing and assume
   # they are data.frames and then rbind them all together
