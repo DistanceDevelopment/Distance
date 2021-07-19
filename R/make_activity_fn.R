@@ -21,16 +21,17 @@ make_activity_fn <- function(..., detector_daily_duration=24){
   }
 
   # save the arguments passed to the function
-  args <- as.list(match.call(fitact, expand.dots=TRUE))
+  call <- sys.call(sys.parent())
+  # save detection duration separately, as it's not an arg to fitact
+  detector_daily_duration <- call$detector_daily_duration
+  call$detector_daily_duration <- NULL
+  # actually do the call matching now
+  args <- as.list(match.call(fitact, call=call, expand.dots=TRUE))
   # remove the function name
   args[[1]] <- NULL
   # ensure we only get one rep and don't show progress bar
   args$reps <- 1
   args$show <- FALSE
-
-  # save detection duration separately, as it's not an arg to fitact
-  detector_daily_duration <- args$detector_daily_duration
-  args$detector_daily_duration <- NULL
 
   # function to return
   function(){
