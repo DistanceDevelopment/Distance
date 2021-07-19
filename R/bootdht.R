@@ -169,13 +169,19 @@ bootdht <- function(model,
 
   # apply the sample fraction
   dat <- dht2_sample_fraction(sample_fraction, dat)
+  dat$Effort <- dat$Effort * dat$sample_fraction
+  dat$sample_fraction <- NULL
 
   # process non-function multipliers
   multipliers_nofun <- Filter(function(x) !is.function(x), multipliers)
-  dat <- dht2_multipliers(multipliers_nofun, dat)
+  if(length(multipliers_nofun) > 0){
+    dat <- dht2_multipliers(multipliers_nofun, dat)
+  }else{
+    dat$rate <- 1
+  }
 
   # get any multiplier functions
-  multipliers_fun <- Filter(function(x) is.function(x), multipliers)
+  multipliers_fun <- Filter(is.function, multipliers)
 
   # this can be generalized later on
   stratum_label <- "Region.Label"
