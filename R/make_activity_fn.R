@@ -8,11 +8,12 @@
 #' passing it to `bootdht`. See examples for a template for use.
 #'
 #' @inheritParams activity::fitact
+#' @param detector_daily_duration by default we assume that detectors were able to detect animals for 24 hours, if they were only able to do this for some proportion of the day (say daylight hours), then adjust this argument accordingly
 #' @return a function which generates a single bootstrap estimate of
 #' availability
 #' @author David L Miller
 #' @export
-make_activity_fn <- function(...){
+make_activity_fn <- function(..., detector_daily_duration=24){
 
   # check we can use activity
   if (!requireNamespace("activity", quietly = TRUE)){
@@ -27,9 +28,14 @@ make_activity_fn <- function(...){
   args$reps <- 1
   args$show <- FALSE
 
+  # save detection duration separately, as it's not an arg to fitact
+  detector_daily_duration <- args$detector_daily_duration
+  args$detector_daily_duration <- NULL
+
   # function to return
   function(){
-    # return the lower %ile for one rep
-    unname(do.call(fitact, args)@act[3])
+    # return the lower %ile for one rep, rescaling for proportion of day
+    # where the detector was "on"
+    unname(do.call(fitact, args)@act[3])/(detector_daily_duration/24)
   }
 }
