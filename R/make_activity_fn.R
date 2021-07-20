@@ -23,9 +23,11 @@ make_activity_fn <- function(..., detector_daily_duration=24){
   # save the arguments passed to the function
   call <- sys.call(sys.parent())
   # save detection duration separately, as it's not an arg to fitact
-  detector_daily_duration <- call$detector_daily_duration
+  detector_daily_duration <- eval(substitute(call)$detector_daily_duration,
+                                  envir=parent.frame(n=1))
   call$detector_daily_duration <- NULL
-  # actually do the call matching now
+
+  # do the call matching
   args <- as.list(match.call(fitact, call=call, expand.dots=TRUE))
   # remove the function name
   args[[1]] <- NULL
@@ -35,9 +37,8 @@ make_activity_fn <- function(..., detector_daily_duration=24){
 
   # now eval all the args so that they are available to the parallel sessions
   for(i in seq(1, length(args))){
-    args[[i]] <- eval(args[[i]], envir=parent.frame(n=2))
+    args[[i]] <- eval(args[[i]], envir=parent.frame(n=1))
   }
-
 
   # function to return
   function(){
