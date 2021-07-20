@@ -260,12 +260,19 @@ bootdht <- function(model,
     cl <- parallel::makeCluster(cores)
     doParallel::registerDoParallel(cl)
 
+    # load the activity package in the other sessions
+    if(length(multipliers_fun) > 0){
+      packages <- c("activity")
+    }else{
+      packages <- ""
+    }
+
     # needed to avoid a syntax error/check fail
     `%dopar2%` <- foreach::`%dopar%`
     # fit the model nboot times over cores cores
     # note there is a bit of fiddling here with the progress bar to get it to
     # work (updates happen in this loop rather than in bootit)
-    boot_ests <- foreach::foreach(i=1:nboot) %dopar2% {
+    boot_ests <- foreach::foreach(i=1:nboot, .packages=packages) %dopar2% {
       bootit(dat, models=models, our_resamples=our_resamples,
              summary_fun=summary_fun, convert.units=convert.units,
              pb=list(increment=function(pb){invisible()}),

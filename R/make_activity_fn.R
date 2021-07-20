@@ -33,6 +33,12 @@ make_activity_fn <- function(..., detector_daily_duration=24){
   args$reps <- 1
   args$show <- FALSE
 
+  # now eval all the args so that they are available to the parallel sessions
+  for(i in seq(1, length(args))){
+    args[[i]] <- eval(args[[i]], envir=parent.frame(n=2))
+  }
+
+
   # function to return
   function(){
     # return the lower %ile for one rep, rescaling for proportion of day
