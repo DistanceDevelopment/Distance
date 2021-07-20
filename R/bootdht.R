@@ -207,9 +207,6 @@ bootdht <- function(model,
     model
   })
 
-  # count failures
-  nbootfail <- 0
-
   cat(paste0("Performing ", nboot, " bootstraps\n"))
 
   if(cores > 1 & progress_bar != "none"){
@@ -282,10 +279,6 @@ bootdht <- function(model,
     # shutdown cluster
     parallel::stopCluster(cl)
 
-    # post-process
-    nbootfail <- sum(unlist(lapply(boot_ests, is.na)))
-    boot_ests <- Filter(function(x) !is.na(x), boot_ests)
-
   }else{
     boot_ests <- replicate(nboot,
                            bootit(dat, models=models, our_resamples,
@@ -295,6 +288,11 @@ bootdht <- function(model,
                                   select_adjustments=select_adjustments),
                            simplify=FALSE)
   }
+  # how many failures
+  failures <- length(Filter(is.na, boot_ests))
+  # get just the "good" results
+  boot_ests <- Filter(function(x) !is.na(x), boot_ests)
+
   # the above is then a list of thingos, do the "right" thing and assume
   # they are data.frames and then rbind them all together
   boot_ests <- do.call(rbind.data.frame, boot_ests)
@@ -302,7 +300,7 @@ bootdht <- function(model,
   cat("\n")
 
   attr(boot_ests, "nboot") <- nboot
-  attr(boot_ests, "nbootfail") <- nbootfail
+  attr(boot_ests, "failures") <- failures
   class(boot_ests) <- "dht_bootstrap"
   return(boot_ests)
 }

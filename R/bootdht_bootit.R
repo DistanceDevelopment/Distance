@@ -107,14 +107,12 @@ bootit <- function(bootdat, models, our_resamples, summary_fun,
 
   if(all(is.na(aics))){
     # if no models fitted, return NA
-    nbootfail <<- nbootfail + 1
     return(NA)
   }else{
     fit <- models[[which.min(aics)]]
     # handle errors
     if(any(class(fit) == "try-error") ||
        any(is.na(fit$ddf$hessian))){
-      nbootfail <<- nbootfail + 1
       return(NA)
     }else{
       return(summary_fun(fit$dht, fit$ddf))
