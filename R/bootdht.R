@@ -256,6 +256,9 @@ bootdht <- function(model,
     # build the cluster
     cl <- parallel::makeCluster(cores)
     doParallel::registerDoParallel(cl)
+    # shutdown cluster when the function exits
+    # (this works even if the function crashes)
+    on.exit(parallel::stopCluster(cl))
 
     # load the activity package in the other sessions
     if(length(multipliers_fun) > 0){
@@ -276,8 +279,6 @@ bootdht <- function(model,
              multipliers_fun=multipliers_fun, sample_label=sample_label,
              select_adjustments=select_adjustments)
     }
-    # shutdown cluster
-    parallel::stopCluster(cl)
 
   }else{
     boot_ests <- replicate(nboot,

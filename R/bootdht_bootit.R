@@ -78,7 +78,7 @@ bootit <- function(bootdat, models, our_resamples, summary_fun,
         models[[i]]$dht$individuals$N$Estimate <- indN$Estimate/indN$rate
         models[[i]]$dht$individuals$D$Estimate <- indD$Estimate/indD$rate
       }else{
-        nN <- length(indN$Estimate)
+        nN <- length(indN$Estimate)-1
         models[[i]]$dht$individuals$N$Estimate <- c(indN$Estimate[1:nN]/
                                                     indN$rate[1:nN],
                                                     sum(indN$Estimate[1:nN]/
