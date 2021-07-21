@@ -173,7 +173,7 @@ bootdht <- function(model,
   dat$sample_fraction <- NULL
 
   # process non-function multipliers
-  multipliers_nofun <- Filter(function(x) !is.function(x), multipliers)
+  multipliers_nofun <- Filter(Negate(is.function), multipliers)
   if(length(multipliers_nofun) > 0){
     dat <- dht2_multipliers(multipliers_nofun, dat)
   }else{
@@ -289,10 +289,21 @@ bootdht <- function(model,
                                   select_adjustments=select_adjustments),
                            simplify=FALSE)
   }
+
+  # do some post-processing
+  fail_fun <- function(x) class(x)=="bootstrap_failure"
+  # add replicate IDs
+  bootids <- seq_len(length(boot_ests))
   # how many failures
-  failures <- length(Filter(is.na, boot_ests))
+  failures <- length(Filter(fail_fun, boot_ests))
+  # remove failures from IDs
+  bootids <- as.list(bootids[unlist(lapply(boot_ests, Negate(fail_fun)))])
   # get just the "good" results
-  boot_ests <- Filter(function(x) !is.na(x), boot_ests)
+  boot_ests <- Filter(Negate(fail_fun), boot_ests)
+  # add IDs to estimates list
+  boot_ests <- mapply(cbind.data.frame,
+                      boot_ests, bootstrap_ID=bootids,
+                      SIMPLIFY=FALSE)
 
   # the above is then a list of thingos, do the "right" thing and assume
   # they are data.frames and then rbind them all together
@@ -302,6 +313,6 @@ bootdht <- function(model,
 
   attr(boot_ests, "nboot") <- nboot
   attr(boot_ests, "failures") <- failures
-  class(boot_ests) <- "dht_bootstrap"
+  class(boot_ests) <- c("dht_bootstrap", "data.frame")
   return(boot_ests)
 }
