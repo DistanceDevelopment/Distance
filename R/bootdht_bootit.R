@@ -78,10 +78,15 @@ bootit <- function(bootdat, models, our_resamples, summary_fun,
         models[[i]]$dht$individuals$N$Estimate <- indN$Estimate/indN$rate
         models[[i]]$dht$individuals$D$Estimate <- indD$Estimate/indD$rate
       }else{
-        models[[i]]$dht$individuals$N$Estimate <- c(indN$Estimate/indN$rate,
-                                           sum(indN$Estimate/indN$rate))
-        models[[i]]$dht$individuals$D$Estimate <- c(indD$Estimate/indD$rate,
-                                           sum(indD$Estimate/indD$rate))
+        nN <- length(indN$Estimate)
+        models[[i]]$dht$individuals$N$Estimate <- c(indN$Estimate[1:nN]/
+                                                    indN$rate[1:nN],
+                                                    sum(indN$Estimate[1:nN]/
+                                                        indN$rate[1:nN]))
+        models[[i]]$dht$individuals$D$Estimate <- c(indD$Estimate[1:nN]/
+                                                    indD$rate[1:nN],
+                                                    sum(indD$Estimate[1:nN]/
+                                                        indD$rate[1:nN]))
       }
       # ... and for clusters
       if(any(names(models[[i]]$dht)=="clusters")){
@@ -93,10 +98,14 @@ bootit <- function(bootdat, models, our_resamples, summary_fun,
           models[[i]]$dht$clusters$N$Estimate <- clN$Estimate/clN$rate
           models[[i]]$dht$clusters$D$Estimate <- clD$Estimate/clD$rate
         }else{
-          models[[i]]$dht$clusters$N$Estimate <- c(clN$Estimate/clN$rate,
-                                          sum(clN$Estimate/clN$rate))
-          models[[i]]$dht$clusters$D$Estimate <- c(clD$Estimate/clD$rate,
-                                          sum(clD$Estimate/clD$rate))
+          models[[i]]$dht$clusters$N$Estimate <- c(clN$Estimate[1:nN]/
+                                                      clN$rate[1:nN],
+                                                      sum(clN$Estimate[1:nN]/
+                                                          clN$rate[1:nN]))
+          models[[i]]$dht$clusters$D$Estimate <- c(clD$Estimate[1:nN]/
+                                                      clD$rate[1:nN],
+                                                      sum(clD$Estimate[1:nN]/
+                                                          clD$rate[1:nN]))
         }
       }
     }
