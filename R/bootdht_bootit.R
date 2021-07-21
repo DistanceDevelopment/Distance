@@ -2,31 +2,9 @@
 bootit <- function(bootdat, models, our_resamples, summary_fun,
                    convert.units, pb, multipliers_fun, sample_label,
                    select_adjustments, ...){
-  # sample at the right levels
-  for(sample_thingo in our_resamples){
-    # what are the possible samples at this level
-    levs <- unique(bootdat[[sample_thingo]])
-    nlevs <- length(levs)
-    levs <- sample(levs, nlevs, replace=TRUE)
 
-    # make a new data frame with the correct number of replicates of the
-    # per-stratum data in it
-    bootdat <- lapply(levs, function(x){
-      bootdat[bootdat[[sample_thingo]] == x, ]
-    })
-    # make a special index to make unique IDs later
-    iind <- rep(seq_len(length(bootdat)), lapply(bootdat, nrow))
-    # make list of data.frames into one frame
-    bootdat <- do.call("rbind", bootdat)
-    # put that ID in there
-    bootdat[[paste0(sample_thingo, "_ID")]] <- iind
-  }
-
-  # need unique object IDs
-  bootdat$object <- seq_len(nrow(bootdat))
-  # get the sample labels right
-  bootdat$Sample.Label <- paste0(bootdat[[sample_label]], "-",
-                                 bootdat[[paste0(sample_thingo, "_ID")]])
+  # get resampled data
+  bootdat <- bootdht_resample_data(bootdat, our_resamples)
 
   aics <- rep(NA, length(models))
   for(i in seq_along(models)){
@@ -52,7 +30,9 @@ bootit <- function(bootdat, models, our_resamples, summary_fun,
     models[[i]] <- try(suppressMessages(eval(df_call)),
                        silent=TRUE)
 
-    if(any(class(models[[i]]) == "try-error")){
+    if(any(class(models[[i]]) == "try-error") |
+       any(is.na(models[[i]]$hessian)) |
+       is.null(models[[i]]$dht)){
       # if the model failed, return NA
       aics[i] <- NA
     }else{
@@ -63,8 +43,10 @@ bootit <- function(bootdat, models, our_resamples, summary_fun,
       rates <- unique(bootdat[, c("Region.Label", "rate")])
       # if there's only one stratum, it's always named Total
       if(nrow(rates)==1) rates$Region.Label <- "Total"
-      # take the product of all the functional multipliers
-      rates$rate <-  prod(unlist(lapply(multipliers_fun, function(f) f())))
+      # take the product of all the functional multipliers and the
+      # non-functional ones too
+      rates$rate <- rates$rate *
+                      prod(unlist(lapply(multipliers_fun, function(f) f())))
 
       # now need to merge the rates object onto the results, and re-scale
       # abundance/density estimates for individuals

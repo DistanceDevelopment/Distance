@@ -159,6 +159,9 @@ bootdht <- function(model,
     }
   }
   dat <- flatfile
+  if(!("object" %in% names(dat))){
+    dat$object <- 1:nrow(dat)
+  }
 
   # if we're using the default summary function and have Area 0 then
   # we're not going to have a good time
