@@ -261,7 +261,7 @@ bootdht <- function(model,
     if(length(multipliers_fun) > 0){
       packages <- c("activity")
     }else{
-      packages <- ""
+      packages <- NULL
     }
 
     # needed to avoid a syntax error/check fail
