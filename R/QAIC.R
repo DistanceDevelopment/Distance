@@ -76,7 +76,7 @@ QAIC <- function(object, ..., chat=NULL, k=2){
   }
 
   num.models <- length(models)
-  npar <- unlist(lapply(models, function(x) length(x$ddf$ds$par)))
+  npar <- unlist(lapply(models, function(x) length(x$ddf$par)))
   aic <-  unlist(lapply(models, function(x) x$ddf$criterion))
 
   if(is.null(chat)){
@@ -103,5 +103,5 @@ chat <- function(modobj) {
 
 # compute QAIC for a dsmodel object given a c-hat
 qaic <- function(modobj, chat, k) {
-  2* modobj$ddf$ds$value/chat + k * (length(modobj$ddf$ds$pars)+1)
+  2* modobj$ddf$ds$value/chat + k * (length(modobj$ddf$pars)+1)
 }
