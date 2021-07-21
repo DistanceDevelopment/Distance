@@ -25,6 +25,8 @@ summary.dht_bootstrap <- function(object, alpha=0.05, ...){
 
   class(object) <- "list"
   object <- as.data.frame(object)
+  # remove bootstrap ID for summary
+  object$bootstrap_ID <- NULL
 
   numcols <- unlist(lapply(object, is.numeric))
 
