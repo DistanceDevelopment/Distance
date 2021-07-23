@@ -7,6 +7,7 @@ Distance 1.0.4
 * bootdht is now less verbose when cores>1
 * bootdht now accepts multipliers
 * bootdht multipliers can now be specified using the activity package, see ?make_activity_fun
+* fix issue in Hermite adjustment order calculation when length(order)>1
 
 Distance 1.0.3
 ----------------------

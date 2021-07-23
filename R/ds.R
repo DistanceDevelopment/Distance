@@ -399,7 +399,7 @@ ds <- function(data, truncation=ifelse(is.null(cutpoints),
       order <- sort(order)
       if(adjustment=="poly"){
         if(any(order/2 != ceiling(order/2))){
-          stop("Adjustment orders must be even for Hermite and simple polynomials.")
+          stop("Adjustment orders must be even for simple polynomials.")
         }
       }
       if((adjustment=="herm" | adjustment=="cos") & key!="unif"){
@@ -423,11 +423,10 @@ ds <- function(data, truncation=ifelse(is.null(cutpoints),
         if(key=="unif" & adjustment=="cos"){
           order <- 1:order
         }
-
-        if(adjustment=="herm" | adjustment=="poly"){
-          order <- 2*order
-          order <- order[order<=2*order]
-        }
+      }
+      # make even
+      if(adjustment=="herm" | adjustment=="poly"){
+        order <- 2*order
       }
 
     }else{
