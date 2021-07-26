@@ -29,9 +29,9 @@ The first method of Howe et al (2019) employs a two-step process. First, an
 overdisersion factor (\deqn{\hat{c}_1}{chat1}) is computed for each key
 function family from the most complex model in each family (derived from the
 chi-squared goodness of fit test statistic divided by its degrees of
-freedom). If multiple detection functions are supplied to \code{QAIC}, then
-\code{chat} will be calculated automatically. Alternatively \code{chat} can be
-supplied as an argument.
+freedom). When multiple detection functions are supplied to \code{QAIC}, \code{chat}
+will be calculated automatically. Alternatively \code{chat} can be supplied as an
+argument.
 
 The second method (\deqn{\hat{c}_2}{chat2}) in the notation of Howe et al)
 uses the number of distance observations recorded per independent encounter
@@ -49,17 +49,41 @@ use the \code{chat} argument to specify it for one or more models.
 \examples{
 \dontrun{
 library(Distance)
-data(minke)
-model1 <- ds(minke, truncation=4, adjustment=NULL)
-model2 <- ds(minke, truncation=4, adjustment="cos", order=2)
-model4 <- ds(minke, truncation=4, adjustment="cos", order=c(2, 4))
-model6 <- ds(minke, truncation=4, adjustment="cos", order=c(2, 4, 6))
-# calculate QAIC
-QAIC(model1, model2, model4, model6)
+data("wren_cuecount")
 
-# using a pre-calculated chat
-chat <- attr(QAIC(model1, model2, model4, model6), "chat")
-QAIC(model1, chat=chat)
+# fit hazard-rate key models
+w3.hr0 <- ds(wren_cuecount, transect="point", key="hr", adjustment=NULL,
+             truncation=92.5)
+w3.hr1 <- ds(wren_cuecount, transect="point", key="hr", adjustment="cos",
+             order=2, truncation=92.5)
+w3.hr2 <- ds(wren_cuecount, transect="point", key="hr", adjustment="cos",
+             order=c(2, 4), truncation=92.5)
+
+# fit unform key models
+w3.u1 <- ds(wren_cuecount, transect="point", key="unif", adjustment="cos",
+            order=1, truncation=92.5)
+w3.u2 <- ds(wren_cuecount, transect="point", key="unif", adjustment="cos",
+            order=c(1,2), monotonicity="none",  truncation=92.5)
+w3.u3 <- ds(wren_cuecount, transect="point", key="unif", adjustment="cos",
+            order=c(1,2,3), monotonicity="none", truncation=92.5)
+
+# fit half-normal key functions
+w3.hn0 <- ds(wren_cuecount, transect="point", key="hn", adjustment=NULL,
+             truncation=92.5)
+w3.hn1 <- ds(wren_cuecount, transect="point", key="hn", adjustment="herm",
+             order=2, truncation=92.5)
+
+# stage 1: calculate QAIC per model set
+QAIC(w3.hr0, w3.hr1, w3.hr2)  # no adjustments smallest
+QAIC(w3.u1, w3.u2, w3.u3)     # 2 adjustment terms (by 0.07)
+QAIC(w3.hn0, w3.hn1)  # no adjustments smallest
+
+# stage 2: select using chi^2/degrees of freedom between sets
+chi2_select(w3.hr0, w3.u2, w3.hn0)
+
+# exmaple using a pre-calculated chat
+chat <- attr(QAIC(w3.hr0, w3.hr1, w3.hr2), "chat")
+QAIC(w3.hr0, chat=chat)
 }
 }
 \references{
