@@ -9,28 +9,28 @@
 #' which use the same key function in their detection function specification.
 #'
 #' The first method of Howe et al (2019) employs a two-step process. First, an
-#' overdisersion factor (\deqn{\hat{c}_1}{chat1}) is computed for each key
+#' overdisersion factor (\eqn{\hat{c}_1}{chat1}) is computed for each key
 #' function family from the most complex model in each family (derived from the
 #' chi-squared goodness of fit test statistic divided by its degrees of
 #' freedom). When multiple detection functions are supplied to `QAIC`, `chat`
 #' will be calculated automatically. Alternatively `chat` can be supplied as an
 #' argument.
 #'
-#' The second method (\deqn{\hat{c}_2}{chat2}) in the notation of Howe et al)
+#' The second method (\eqn{\hat{c}_2}{chat2}) in the notation of Howe et al)
 #' uses the number of distance observations recorded per independent encounter
 #' between an animal and an observer. This quantity can be calculated from the
 #' raw data. In camera trap surveys of solitary animals,
-#' \deqn{\hat{c}_2}{chat2} would be the mean number of distance observations
+#' \eqn{\hat{c}_2}{chat2} would be the mean number of distance observations
 #' recorded during a single pass by an animal in front of a trap. In surveys of
-#' social animals employing human observers, \deqn{\hat{c}_2}{chat2} would be
+#' social animals employing human observers, \eqn{\hat{c}_2}{chat2} would be
 #' the mean number of detected animals per detected group, and in camera trap
-#' surveys of social animals \deqn{\hat{c}_2}{chat2} the mean number of
+#' surveys of social animals \eqn{\hat{c}_2}{chat2} the mean number of
 #' distance observations recorded during an encounter between a group of
-#' animals and a CT. In this case one can calculate \deqn{\hat{c}_2}{chat2} and
+#' animals and a CT. In this case one can calculate \eqn{\hat{c}_2}{chat2} and
 #' use the `chat` argument to specify it for one or more models.
 #'
 #' @param object a fitted detection function object
-#' @param chat a value of \deqn{\hat{c}}{chat} to be used in QIAC calculation
+#' @param chat a value of \eqn{\hat{c}}{chat} to be used in QIAC calculation
 #' @param k penalty per parameter to be used; default 2
 #' @param \dots additional fitted model objects.
 #' @author David L Miller, based on code from Eric Rexstad and explanation from
