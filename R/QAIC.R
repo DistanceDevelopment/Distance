@@ -1,4 +1,4 @@
-#' QIAC Information Criterion for detection functions when data is overdispersed
+#' Tools for model selection when distance sampling data are overdispersed
 #'
 #' Overdispersion causes AIC to select overly-complex models, so analysts
 #' should specify the number/order of adjustment terms manually when fitting
@@ -8,13 +8,17 @@
 #' overdispersion. In both cases comparisons should be made between models
 #' which use the same key function in their detection function specification.
 #'
-#' The first method of Howe et al (2019) employs a two-step process. First, an
-#' overdisersion factor (\eqn{\hat{c}_1}{chat1}) is computed for each key
-#' function family from the most complex model in each family (derived from the
-#' chi-squared goodness of fit test statistic divided by its degrees of
-#' freedom). When multiple detection functions are supplied to `QAIC`, `chat`
-#' will be calculated automatically. Alternatively `chat` can be supplied as an
-#' argument.
+#' The first method of Howe et al (2019) employs a two-step process:
+#'  1. An overdisersion factor (\eqn{\hat{c}_1}{chat1}) is computed for each
+#'  key function family from the most complex model in each family (derived
+#'  from the chi-squared goodness of fit test statistic divided by its degrees
+#'  of freedom). When multiple detection functions are supplied to `QAIC`,
+#'  `chat` will be calculated automatically. Alternatively `chat` can be
+#'  supplied as an argument to `QAIC`.
+#'  2. To compare between key function classes, the chi-squared goodness of fit
+#'  test statistic divided by its degrees is used. The function `chi2_select`
+#'  performs this calculation.
+#' An example of this process is given in the examples below.
 #'
 #' The second method (\eqn{\hat{c}_2}{chat2}) in the notation of Howe et al)
 #' uses the number of distance observations recorded per independent encounter
@@ -33,11 +37,14 @@
 #' @param chat a value of \eqn{\hat{c}}{chat} to be used in QIAC calculation
 #' @param k penalty per parameter to be used; default 2
 #' @param \dots additional fitted model objects.
+#' @return a `data.frame` with one row per model supplied, in the same order as
+#'         given
 #' @author David L Miller, based on code from Eric Rexstad and explanation from
 #' Eric Howe.
 #' @references Howe, E. J., Buckland, S. T., Després-Einspenner, M.-L., & Kühl, H. S. (2019). Model selection with overdispersed distance sampling data. Methods in Ecology and Evolution, 10(1), 38–47. \doi{10.1111/2041-210X.13082}
 #' @export
 #' @importFrom stats logLik
+#' @aliases chi2_select
 #' @examples
 #' \dontrun{
 #' library(Distance)
@@ -119,9 +126,7 @@ QAIC <- function(object, ..., chat=NULL, k=2){
 }
 
 #' @export
-#' @aliases QAIC
-#' @param object a fitted detection function object
-#' @param \dots additional fitted model objects.
+#' @rdname QAIC
 chi2_select <- function(object, ...){
 
   # get the models

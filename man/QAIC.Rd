@@ -2,9 +2,12 @@
 % Please edit documentation in R/QAIC.R
 \name{QAIC}
 \alias{QAIC}
-\title{QIAC Information Criterion for detection functions when data is overdispersed}
+\alias{chi2_select}
+\title{Tools for model selection when distance sampling data are overdispersed}
 \usage{
 QAIC(object, ..., chat = NULL, k = 2)
+
+chi2_select(object, ...)
 }
 \arguments{
 \item{object}{a fitted detection function object}
@@ -14,6 +17,10 @@ QAIC(object, ..., chat = NULL, k = 2)
 \item{chat}{a value of \eqn{\hat{c}}{chat} to be used in QIAC calculation}
 
 \item{k}{penalty per parameter to be used; default 2}
+}
+\value{
+a \code{data.frame} with one row per model supplied, in the same order as
+given
 }
 \description{
 Overdispersion causes AIC to select overly-complex models, so analysts
@@ -25,13 +32,19 @@ overdispersion. In both cases comparisons should be made between models
 which use the same key function in their detection function specification.
 }
 \details{
-The first method of Howe et al (2019) employs a two-step process. First, an
-overdisersion factor (\eqn{\hat{c}_1}{chat1}) is computed for each key
-function family from the most complex model in each family (derived from the
-chi-squared goodness of fit test statistic divided by its degrees of
-freedom). When multiple detection functions are supplied to \code{QAIC}, \code{chat}
-will be calculated automatically. Alternatively \code{chat} can be supplied as an
-argument.
+The first method of Howe et al (2019) employs a two-step process:
+\enumerate{
+\item An overdisersion factor (\eqn{\hat{c}_1}{chat1}) is computed for each
+key function family from the most complex model in each family (derived
+from the chi-squared goodness of fit test statistic divided by its degrees
+of freedom). When multiple detection functions are supplied to \code{QAIC},
+\code{chat} will be calculated automatically. Alternatively \code{chat} can be
+supplied as an argument to \code{QAIC}.
+\item To compare between key function classes, the chi-squared goodness of fit
+test statistic divided by its degrees is used. The function \code{chi2_select}
+performs this calculation.
+An example of this process is given in the examples below.
+}
 
 The second method (\eqn{\hat{c}_2}{chat2}) in the notation of Howe et al)
 uses the number of distance observations recorded per independent encounter
