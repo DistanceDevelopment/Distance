@@ -35,7 +35,7 @@
 #' estimation.
 #'
 #' @param object a fitted detection function object
-#' @param chat a value of \eqn{\hat{c}}{chat} to be used in QIAC calculation
+#' @param chat a value of \eqn{\hat{c}}{chat} to be used in QAIC calculation
 #' @param k penalty per parameter to be used; default 2
 #' @param \dots additional fitted model objects.
 #' @return a `data.frame` with one row per model supplied, in the same order as
@@ -81,7 +81,7 @@
 #' # stage 2: select using chi^2/degrees of freedom between sets
 #' chi2_select(w3.hr0, w3.u2, w3.hn0)
 #'
-#' # exmaple using a pre-calculated chat
+#' # example using a pre-calculated chat
 #' chat <- attr(QAIC(w3.hr0, w3.hr1, w3.hr2), "chat")
 #' QAIC(w3.hr0, chat=chat)
 #' }
@@ -98,7 +98,7 @@ QAIC <- function(object, ..., chat=NULL, k=2){
 
   # based on qaic.pass1
   # Performs Pass 1 model selection based upon Method 1 of Howe et al. (2018)
-  # c-hat is computed for the most parameter-rich model in the group qaic is
+  # c-hat is computed for the most parameter-rich model in the group QAIC is
   # calculated for each model in group based upon this c-hat
 
   # check all models have the same key function
