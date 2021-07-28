@@ -26,38 +26,37 @@ given
 Overdispersion causes AIC to select overly-complex models, so analysts
 should specify the number/order of adjustment terms manually when fitting
 distance sampling models to data from camera traps, rather than allowing
-automated selection using AIC. Howe et al (2019) describes two methods for
-performing model selection of distance sampling models in the face of
-overdispersion. In both cases comparisons should be made between models
-which use the same key function in their detection function specification.
+automated selection using AIC. Howe et al (2019) described a two-step method
+for selecting among models of the detection function in the face of
+overdispersion.
 }
 \details{
-The first method of Howe et al (2019) employs a two-step process:
-\enumerate{
-\item An overdisersion factor (\eqn{\hat{c}_1}{chat1}) is computed for each
-key function family from the most complex model in each family (derived
-from the chi-squared goodness of fit test statistic divided by its degrees
-of freedom). When multiple detection functions are supplied to \code{QAIC},
-\code{chat} will be calculated automatically. Alternatively \code{chat} can be
-supplied as an argument to \code{QAIC}.
-\item To compare between key function classes, the chi-squared goodness of fit
-test statistic divided by its degrees is used. The function \code{chi2_select}
-performs this calculation.
-An example of this process is given in the examples below.
-}
+In step 1, and overdispersion factor (\eqn{\hat{c}}{chat}) is computed
+either (1) for each key function family, from the most complex model in each
+family, as the chi-square goodness of fit test statistic divided by its
+degrees of freedom (\eqn{\hat{c}_1}{chat1}), or (2) for all models in the
+candidate set, from the raw data (\eqn{\hat{c}_1}{chat2}). In camera trap
+surveys of solitary animals, \eqn{\hat{c}_1}{chat2} would be the mean number
+of distance observations recorded during a single pass by an animal in front
+of a trap. In surveys of social animals employing human observers,
+\eqn{\hat{c}_1}{chat2} would be the mean number of detected animals per
+detected group, and in camera trap surveys of social animals
+\eqn{\hat{c}_1}{chat2} the mean number of distance observations recorded
+during an encounter between a group of animals and a CT.  In step two, the
+chi-square goodness of fit statistic divided by its degrees of freedom is
+calculated for the QAIC-minimizing model within each key function, and the
+model with the lowest value is selected for estimation.
 
-The second method (\eqn{\hat{c}_2}{chat2}) in the notation of Howe et al)
-uses the number of distance observations recorded per independent encounter
-between an animal and an observer. This quantity can be calculated from the
-raw data. In camera trap surveys of solitary animals,
-\eqn{\hat{c}_2}{chat2} would be the mean number of distance observations
-recorded during a single pass by an animal in front of a trap. In surveys of
-social animals employing human observers, \eqn{\hat{c}_2}{chat2} would be
-the mean number of detected animals per detected group, and in camera trap
-surveys of social animals \eqn{\hat{c}_2}{chat2} the mean number of
-distance observations recorded during an encounter between a group of
-animals and a CT. In this case one can calculate \eqn{\hat{c}_2}{chat2} and
-use the \code{chat} argument to specify it for one or more models.
+The \code{QAIC()} function should only be used select among models with the same
+key function (step 1). \code{QAIC()} uses \eqn{\hat{c}_1}{chat1} by default,
+computing it from the model with the most parameters. Alternatively,
+\eqn{\hat{c}_1}{chat2} can be calculated from the raw data and included in
+the call to \code{QAIC()}. Users must identify the QAIC-minimizing model within
+key functions from the resulting \code{data.frame}, and provide these models as
+arguments in \code{ch2_select()}. \code{chi2_select()} then computes and reports the
+chi-square goodness of fit statistic divided by its degrees of freedom for
+each of those models. The model with the lowest value is recommended for
+estimation.
 }
 \examples{
 \dontrun{
