@@ -41,8 +41,9 @@
 #' `TRUE` and use the binomial variance estimator of Borchers et al.
 #' (1998). This is only valid when objects are not clustered. (This situation
 #' is rare.)
-#' @return a `data.frame` with estimates and attributes containing
-#' additional information
+#' @return a `data.frame` (of class `dht_result` for pretty printing) with
+#' estimates and attributes containing additional information, see "Outputs"
+#' for information on column names.
 #'
 #' @export
 #' @importFrom rlang .data
@@ -169,6 +170,36 @@
 #' this is slightly easier as we only have the radius and study area to
 #' consider, so the conversion is just such that the units of the truncation
 #' radius are the square root of the study area units.
+#'
+#' @section Output:
+#' On printing the output from call to `dht2`, three tables are produced. Below is a guide to the output columns names, per table.
+#'
+#' - Summary statistics table
+#'   - `Region.Label` Stratum name (this first column name depends on the `formula` supplied)
+#'   - `Area` Size of stratum
+#'   - `CoveredArea` Surveyed area in stratum (2 x w x L)
+#'   - `Effort` Transect length or number of point visits per stratum
+#'   - `n` Number of detections
+#'   - `k` Number of replicate transects
+#'   - `ER` Encounter rate
+#'   - `se.ER` Standard error of encounter rate
+#'   - `cv.ER` Coefficient of variation of encounter rate
+#' - Abundance or density estimates table:
+#'   - `Region.Label` As above
+#'   - `Estimate` Point estimate of abundance or density
+#'   - `se` Standard error
+#'   - `cv` Coefficient of variation
+#'   - `LCI` Lower confidence bound
+#'   - `UCI` Upper confidence bound
+#'   - `df` Degrees of freedom used for confidence interval computation
+#' - Components percentage of variance:
+#'   - `Region.Label` As above
+#'   - `Detection` Percent of variance in abundance/density associated with
+#'   detection function uncertainty
+#'   - `ER` Percent of variance in abundance/density associated with
+#'   variability in encounter rate
+#'   - `Multipliers` Percent of variance in abundance/density associated with
+#'   uncertainty in multipliers
 #'
 #' @references
 #'

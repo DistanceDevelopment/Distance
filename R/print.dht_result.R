@@ -1,4 +1,7 @@
 #' Print abundance estimates
+#'
+#' See [`dht2`][Distance::dht2] for information on printed column names.
+#'
 #' @export
 #' @param x object of class `dht_result`
 #' @param groups should abundance/density of groups be produced?

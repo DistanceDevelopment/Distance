@@ -16,5 +16,5 @@
 \item{\dots}{unused}
 }
 \description{
-Print abundance estimates
+See \code{\link[=dht2]{dht2}} for information on printed column names.
 }
