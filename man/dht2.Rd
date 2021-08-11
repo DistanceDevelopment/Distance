@@ -133,10 +133,10 @@ refer to these conversions between "number of cues" and "number of animals"
 as "multipliers".
 
 The \code{multipliers} argument is a \code{list}, with 2 possible elements (\code{creation}
-and \code{decay}) Each element of which is a \code{data.frame} and must have at least a
-column named \code{rate}, which abundance estimates will be divided by (the term
-"multiplier" is a misnomer, but kept for compatibility with Distance for
-Windows). Additional columns can be added to give the standard error and
+and \code{decay}). Each element of which is a \code{data.frame} and must have at least
+a column named \code{rate}, which abundance estimates will be divided by (the
+term "multiplier" is a misnomer, but kept for compatibility with Distance
+for Windows). Additional columns can be added to give the standard error and
 degrees of freedom for the rate if known as \code{SE} and \code{df}, respectively. You
 can use a multirow \code{data.frame} to have different rates for different
 geographical areas (for example). In this case the rows need to have a

@@ -4,7 +4,7 @@ object <- x
   cat("Bootstrap results\n\n")
   cat("Boostraps          :", object$nboot, "\n")
   cat("Successes          :", object$nbootsuccess, "\n")
-  cat("Failures           :", object$nbootfail, "\n")
+  cat("Failures           :", object$nbootfailures, "\n")
 
   cat("\n")
 

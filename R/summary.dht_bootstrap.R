@@ -19,12 +19,14 @@ summary.dht_bootstrap <- function(object, alpha=0.05, ...){
   x <- list()
 
   x$nboot <- attr(object, "nboot")
-  x$nbootsuccess <- attr(object, "nboot")-attr(object, "nbootfail")
-  x$nbootfail <- attr(object, "nbootfail")
+  x$nbootfailures <- attr(object, "failures")
+  x$nbootsuccess <- x$nboot - x$nbootfailures
   x$alpha <- alpha
 
   class(object) <- "list"
   object <- as.data.frame(object)
+  # remove bootstrap ID for summary
+  object$bootstrap_ID <- NULL
 
   numcols <- unlist(lapply(object, is.numeric))
 

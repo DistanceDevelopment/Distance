@@ -15,6 +15,7 @@ bootdht(
   convert.units = 1,
   select_adjustments = FALSE,
   sample_fraction = 1,
+  multipliers = NULL,
   progress_bar = "base",
   cores = 1
 )
@@ -22,8 +23,8 @@ bootdht(
 \arguments{
 \item{model}{a model fitted by \code{\link{ds}} or a list of models}
 
-\item{flatfile}{Data provided in the flatfile format. See
-\code{\link{flatfile}} for details.}
+\item{flatfile}{Data provided in the flatfile format. See \code{\link{flatfile}} for
+details.}
 
 \item{resample_strata}{should resampling happen at the stratum
 (\code{Region.Label}) level? (Default \code{FALSE})}
@@ -38,8 +39,7 @@ level? (Default \code{FALSE})}
 
 \item{summary_fun}{function that is used to obtain summary statistics from
 the bootstrap, see Summary Functions below. By default
-\code{\link{bootdht_Nhat_summarize}} is used, which just
-extracts abundance estimates.}
+\code{\link{bootdht_Nhat_summarize}} is used, which just extracts abundance estimates.}
 
 \item{convert.units}{conversion between units for abundance estimation, see
 "Units", below. (Defaults to 1, implying all of the units are "correct"
@@ -53,6 +53,8 @@ must have been fitted with \code{adjustment!=NULL}.}
 
 \item{sample_fraction}{what proportion of the transects was covered (e.g.,
 0.5 for one-sided line transects).}
+
+\item{multipliers}{\code{list} of multipliers. See "Multipliers" below.}
 
 \item{progress_bar}{which progress bar should be used? Default "base" uses
 \code{txtProgressBar}, "none" suppresses output, "progress" uses the
@@ -76,6 +78,34 @@ performed and should return a \code{data.frame}. Those \code{data.frame}s
 are then concatenated using \code{rbind}. One can make these functions
 return any information within those objects, for example abundance or
 density estimates or the AIC for each model. See Examples below.
+}
+
+\section{Multipliers}{
+
+It is often the case that we cannot measure distances to individuals or
+groups directly, but instead need to estimate distances to something they
+produce (e.g., for whales, their blows; for elephants their dung) -- this is
+referred to as indirect sampling. We may need to use estimates of production
+rate and decay rate for these estimates (in the case of dung or nests) or
+just production rates (in the case of songbird calls or whale blows). We
+refer to these conversions between "number of cues" and "number of animals"
+as "multipliers".
+
+The \code{multipliers} argument is a \code{list}, with 3 possible elements (\code{creation}
+and \code{decay}). Each element of which is either:
+\itemize{
+\item \code{data.frame} and must have at least a column named \code{rate}, which abundance
+estimates will be divided by (the term "multiplier" is a misnomer, but
+kept for compatibility with Distance for Windows). Additional columns can
+be added to give the standard error and degrees of freedom for the rate
+if known as \code{SE} and \code{df}, respectively. You can use a multirow
+\code{data.frame} to have different rates for different geographical areas
+(for example). In this case the rows need to have a column (or columns)
+to \code{merge} with the data (for example \code{Region.Label}).
+\item a \code{function} which will return a single estimate of the relevant
+multiplier. See \code{\link{make_activity_fn}} for a helper function for use with the
+\code{activity} package.
+}
 }
 
 \section{Model selection}{
@@ -132,7 +162,6 @@ summary(bootout)
 }
 }
 \seealso{
-\code{\link{summary.dht_bootstrap}} for how to
-summarize the results, \code{\link{bootdht_Nhat_summarize}}
-for an example summary function.
+\code{\link{summary.dht_bootstrap}} for how to summarize the results,
+\code{\link{bootdht_Nhat_summarize}} for an example summary function.
 }
