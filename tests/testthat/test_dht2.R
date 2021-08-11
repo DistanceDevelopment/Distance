@@ -213,3 +213,19 @@ test_that("varflag=0 works", {
   expect_equal(dht_old$individuals$D$lcl, dht2_zero$LCI, tol=1e-5)
   expect_equal(dht_old$individuals$D$ucl, dht2_zero$UCI, tol=1e-5)
 })
+
+
+test_that("0 effort errors", {
+
+  data(minke)
+  minke_df <- ds(minke, truncation=1.5, adjustment=NULL)
+  minke_dht2 <- dht2(minke_df, flatfile=minke, stratification="geographical",
+                     strat_formula=~Region.Label)
+  minke$Effort[minke$Region.Label=="South"] <- 0
+
+  # if some effort is actually zero
+  expect_error(dht2(minke_df, flatfile=minke, stratification="geographical",
+                    strat_formula=~Region.Label),
+               "Some transects have <=0 or NA Effort")
+
+})
