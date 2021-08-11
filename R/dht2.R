@@ -498,11 +498,6 @@ dht2 <- function(ddf, observations=NULL, transects=NULL, geo_strat=NULL,
   if(any(is.na(bigdat[["Effort"]])) || any(bigdat[["Effort"]] <= 0)){
     stop("Some transects have <=0 or NA Effort")
   }
-  if(any(aggregate(bigdat[["Effort"]], list(bigdat[[stratum_labels]]), sum)$x
-     <= 0)){
-    stop("Some strata have 0 or less Effort")
-  }
-
 
   # handle multipliers
   bigdat <- dht2_multipliers(multipliers, bigdat)
