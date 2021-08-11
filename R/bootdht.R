@@ -83,12 +83,13 @@
 #' This last option can be extremely time consuming.
 #'
 #' @section Parallelization:
-#' If `cores`>1 then the `parallel`/`doParallel`/`foreach` packages will be
-#' used to run the computation over multiple cores of the computer. To use this
-#' component you need to install those packages using:
-#' `install.packages(c("foreach", "doParallel"))` It is advised that you do not
-#' set `cores` to be greater than one less than the number of cores on your
-#' machine.
+#' If `cores`>1 then the `parallel`/`doParallel`/`foreach`/`doRNG` packages
+#' will be used to run the computation over multiple cores of the computer. To
+#' use this component you need to install those packages using:
+#' `install.packages(c("foreach", "doParallel", "doRNG"))` It is advised that
+#' you do not set `cores` to be greater than one less than the number of cores
+#' on your machine. The `doRNG` package is required to make analyses
+#' reproducible ([`set.seed`] can be used to ensure the same answers).
 #'
 #' It is also hard to debug any issues in `summary_fun` so it is best to run a
 #' small number of bootstraps first in parallel to check that things work. On
@@ -250,6 +251,7 @@ bootdht <- function(model,
   if(cores > 1){
     if (!requireNamespace("foreach", quietly = TRUE) &
         !requireNamespace("doParallel", quietly = TRUE) &
+        !requireNamespace("doRNG", quietly = TRUE) &
         !requireNamespace("parallel", quietly = TRUE)){
       stop("Packages 'parallel', 'foreach' and 'doParallel' need to be installed to use multiple cores.")
     }
@@ -269,11 +271,12 @@ bootdht <- function(model,
     }
 
     # needed to avoid a syntax error/check fail
-    `%dopar2%` <- foreach::`%dopar%`
+    `%dopar%` <- foreach::`%dopar%`
+    `%dorng2%` <- doRNG::`%dorng%`
     # fit the model nboot times over cores cores
     # note there is a bit of fiddling here with the progress bar to get it to
     # work (updates happen in this loop rather than in bootit)
-    boot_ests <- foreach::foreach(i=1:nboot, .packages=packages) %dopar2% {
+    boot_ests <- foreach::foreach(i=1:nboot, .packages=packages) %dorng2% {
       bootit(dat, models=models, our_resamples=our_resamples,
              summary_fun=summary_fun, convert.units=convert.units,
              pb=list(increment=function(pb){invisible()}),

@@ -128,12 +128,13 @@ This last option can be extremely time consuming.
 
 \section{Parallelization}{
 
-If \code{cores}>1 then the \code{parallel}/\code{doParallel}/\code{foreach} packages will be
-used to run the computation over multiple cores of the computer. To use this
-component you need to install those packages using:
-\code{install.packages(c("foreach", "doParallel"))} It is advised that you do not
-set \code{cores} to be greater than one less than the number of cores on your
-machine.
+If \code{cores}>1 then the \code{parallel}/\code{doParallel}/\code{foreach}/\code{doRNG} packages
+will be used to run the computation over multiple cores of the computer. To
+use this component you need to install those packages using:
+\code{install.packages(c("foreach", "doParallel", "doRNG"))} It is advised that
+you do not set \code{cores} to be greater than one less than the number of cores
+on your machine. The \code{doRNG} package is required to make analyses
+reproducible (\code{\link{set.seed}} can be used to ensure the same answers).
 
 It is also hard to debug any issues in \code{summary_fun} so it is best to run a
 small number of bootstraps first in parallel to check that things work. On
