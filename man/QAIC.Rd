@@ -14,7 +14,7 @@ chi2_select(object, ...)
 
 \item{\dots}{additional fitted model objects.}
 
-\item{chat}{a value of \eqn{\hat{c}}{chat} to be used in QIAC calculation}
+\item{chat}{a value of \eqn{\hat{c}}{chat} to be used in QAIC calculation}
 
 \item{k}{penalty per parameter to be used; default 2}
 }
@@ -93,7 +93,7 @@ QAIC(w3.hn0, w3.hn1)  # no adjustments smallest
 # stage 2: select using chi^2/degrees of freedom between sets
 chi2_select(w3.hr0, w3.u2, w3.hn0)
 
-# exmaple using a pre-calculated chat
+# example using a pre-calculated chat
 chat <- attr(QAIC(w3.hr0, w3.hr1, w3.hr2), "chat")
 QAIC(w3.hr0, chat=chat)
 }

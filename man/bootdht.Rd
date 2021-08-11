@@ -23,8 +23,8 @@ bootdht(
 \arguments{
 \item{model}{a model fitted by \code{\link{ds}} or a list of models}
 
-\item{flatfile}{Data provided in the flatfile format. See
-\code{\link{flatfile}} for details.}
+\item{flatfile}{Data provided in the flatfile format. See \code{\link{flatfile}} for
+details.}
 
 \item{resample_strata}{should resampling happen at the stratum
 (\code{Region.Label}) level? (Default \code{FALSE})}
@@ -39,8 +39,7 @@ level? (Default \code{FALSE})}
 
 \item{summary_fun}{function that is used to obtain summary statistics from
 the bootstrap, see Summary Functions below. By default
-\code{\link{bootdht_Nhat_summarize}} is used, which just
-extracts abundance estimates.}
+\code{\link{bootdht_Nhat_summarize}} is used, which just extracts abundance estimates.}
 
 \item{convert.units}{conversion between units for abundance estimation, see
 "Units", below. (Defaults to 1, implying all of the units are "correct"
@@ -104,8 +103,8 @@ if known as \code{SE} and \code{df}, respectively. You can use a multirow
 (for example). In this case the rows need to have a column (or columns)
 to \code{merge} with the data (for example \code{Region.Label}).
 \item a \code{function} which will return a single estimate of the relevant
-multiplier. See \link{make_activity_fn} for a helper function for use with the
-\link{activity} package.
+multiplier. See \code{\link{make_activity_fn}} for a helper function for use with the
+\code{activity} package.
 }
 }
 
@@ -163,7 +162,6 @@ summary(bootout)
 }
 }
 \seealso{
-\code{\link{summary.dht_bootstrap}} for how to
-summarize the results, \code{\link{bootdht_Nhat_summarize}}
-for an example summary function.
+\code{\link{summary.dht_bootstrap}} for how to summarize the results,
+\code{\link{bootdht_Nhat_summarize}} for an example summary function.
 }

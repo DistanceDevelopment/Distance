@@ -4,9 +4,9 @@
 #' structures as [`dht`][mrds::dht]. Note that only geographical stratification
 #' as supported in `dht` is allowed.
 #'
-#' @param model a model fitted by [`ds`][ds] or a list of models
-#' @param flatfile Data provided in the flatfile format. See
-#' [`flatfile`][flatfile] for details.
+#' @param model a model fitted by [`ds`] or a list of models
+#' @param flatfile Data provided in the flatfile format. See [`flatfile`] for
+#' details.
 #' @param convert.units conversion between units for abundance estimation, see
 #' "Units", below. (Defaults to 1, implying all of the units are "correct"
 #' already.) This takes precedence over any unit conversion stored in `model`.
@@ -19,8 +19,7 @@
 #' @param nboot number of bootstrap replicates
 #' @param summary_fun function that is used to obtain summary statistics from
 #' the bootstrap, see Summary Functions below. By default
-#' [`bootdht_Nhat_summarize`][bootdht_Nhat_summarize] is used, which just
-#' extracts abundance estimates.
+#' [`bootdht_Nhat_summarize`] is used, which just extracts abundance estimates.
 #' @param select_adjustments select the number of adjustments in each
 #' bootstrap, when `FALSE` the exact detection function specified in `model` is
 #' fitted to each replicate. Setting this option to `TRUE` can significantly
@@ -66,8 +65,8 @@
 #'    (for example). In this case the rows need to have a column (or columns)
 #'    to `merge` with the data (for example `Region.Label`).
 #' * a `function` which will return a single estimate of the relevant
-#'   multiplier. See [make_activity_fn] for a helper function for use with the
-#'   [activity] package.
+#'   multiplier. See [`make_activity_fn`] for a helper function for use with the
+#'   `activity` package.
 #'
 #' @section Model selection:
 #' Model selection can be performed on a per-replicate basis within the
@@ -101,9 +100,8 @@
 #' @importFrom utils txtProgressBar setTxtProgressBar getTxtProgressBar
 #' @importFrom stats as.formula AIC
 #' @importFrom mrds ddf dht
-#' @seealso [`summary.dht_bootstrap`][summary.dht_bootstrap] for how to
-#' summarize the results, [`bootdht_Nhat_summarize`][bootdht_Nhat_summarize]
-#' for an example summary function.
+#' @seealso [`summary.dht_bootstrap`] for how to summarize the results,
+#' [`bootdht_Nhat_summarize`] for an example summary function.
 #' @export
 #' @examples
 #' \dontrun{

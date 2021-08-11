@@ -7,6 +7,8 @@
 make_activity_fn(..., detector_daily_duration = 24)
 }
 \arguments{
+\item{\dots}{parameters specified by activity::fitact}
+
 \item{detector_daily_duration}{by default we assume that detectors were able to detect animals for 24 hours, if they were only able to do this for some proportion of the day (say daylight hours), then adjust this argument accordingly}
 }
 \value{
@@ -14,13 +16,15 @@ a function which generates a single bootstrap estimate of
 availability
 }
 \description{
-Use \link[activity:fitact]{activity::fitact} to fit an activity model.
+Helper to use a models specified using \code{\link[activity:fitact]{activity::fitact}} to fit an
+activity model and generate single realisations for bootstrapping with
+\code{\link{bootdht}}.
 }
 \details{
-Uses \link[activity:fitact]{activity::fitact} to generate single possible availability estimates
+Uses \code{\link[activity:fitact]{activity::fitact}} to generate single possible availability estimates
 based on bootstraps. The function returns another function, which can be
 passed to \code{bootdht}. It is recommended that you try out the function before
-passing it to \code{bootdht}. See examples for a template for use.
+passing it to \code{\link{bootdht}}. See examples for a template for use.
 }
 \author{
 David L Miller
