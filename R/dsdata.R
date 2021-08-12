@@ -345,7 +345,7 @@ NULL
 #'
 #' Buckland, S.T., D.R. Anderson, K.P. Burnham, J.L. Laake, D.L. Borchers, and
 #' L. Thomas. Advanced Distance Sampling: Estimating Abundance of Biological
-#' Populations. OUP Oxford, 2004.
+#' Populations. Oxford University Press. Oxford, 2004.
 NULL
 
 #' Sika deer pellet data from southern Scotland

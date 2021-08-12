@@ -11,7 +11,7 @@
 #' @param ests output from [`dht2`][dht2].
 #' @param fit fitted detection function object (unused).
 #' @return `data.frame` with two columns ("`Nhat`" and "`Label`"), giving the
-#' estimate(s) of abundance of individuals per stratumfrom each bootstrap
+#' estimate(s) of abundance of individuals per stratum from each bootstrap
 #' replicate. This `data.frame` can be examined for example, with
 #' [`quantile`][stats::quantile] to compute confidence intervals.
 #' @export

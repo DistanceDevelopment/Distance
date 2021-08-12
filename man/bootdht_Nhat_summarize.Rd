@@ -13,7 +13,7 @@ bootdht_Nhat_summarize(ests, fit)
 }
 \value{
 \code{data.frame} with two columns ("\code{Nhat}" and "\code{Label}"), giving the
-estimate(s) of abundance of individuals per stratumfrom each bootstrap
+estimate(s) of abundance of individuals per stratum from each bootstrap
 replicate. This \code{data.frame} can be examined for example, with
 \code{\link[stats:quantile]{quantile}} to compute confidence intervals.
 }
