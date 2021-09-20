@@ -86,20 +86,25 @@ NULL
 #' spreadsheet using [`readxl::read_xls`][readxl::read_xls] in or CSV using
 #' [`read.csv`][utils::read.csv].
 #'
-#' Each row of the data table corresponds to one observation and must have a
-#' the following columns:
+#' Each row of the data table corresponds to either: (1) an observation or (2)
+#' a sample (transect) without observations. In either case the following
+#' columns must be present:
 #'   * `distance` observed distance to object
 #'   * `Sample.Label` Identifier for the sample (transect id)
 #'   * `Effort` effort for this transect (e.g. line transect length or number
 #'   of times point transect was visited)
 #'   * `Region.Label` label for a given stratum (see below)
 #'   * `Area` area of the strata`
+#' When the row represents a transect without observations, `distance` and any
+#' other observation-specific covariates (including `size` and detection
+#' function covariates) take the value `NA`.
 #'
 #' Note that in the simplest case (one area surveyed only once) there is only
 #' one `Region.Label` and a single corresponding `Area` duplicated for each
 #' observation.
 #'
-#' The example given below was provided by Eric Rexstad.
+#' The example given below was provided by Eric Rexstad. Additional examples
+#' can be found at  <http://examples.distancesampling.org/>.
 #'
 #' @name flatfile
 #' @docType methods

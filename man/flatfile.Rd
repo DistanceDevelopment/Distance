@@ -12,22 +12,24 @@ spreadsheet using \code{\link[readxl:read_excel]{readxl::read_xls}} in or CSV us
 \code{\link[utils:read.table]{read.csv}}.
 }
 \details{
-Each row of the data table corresponds to one observation and must have a
-the following columns:
+Each row of the data table corresponds to either: (1) an observation or (2)
+a sample (transect) without observations. In either case the following
+columns must be present:
 \itemize{
 \item \code{distance} observed distance to object
 \item \code{Sample.Label} Identifier for the sample (transect id)
 \item \code{Effort} effort for this transect (e.g. line transect length or number
 of times point transect was visited)
 \item \code{Region.Label} label for a given stratum (see below)
-\item \code{Area} area of the strata`
+\item \code{Area} area of the strata\verb{When the row represents a transect without observations,}distance\verb{and any other observation-specific covariates (including}size\verb{and detection function covariates) take the value}NA`.
 }
 
 Note that in the simplest case (one area surveyed only once) there is only
 one \code{Region.Label} and a single corresponding \code{Area} duplicated for each
 observation.
 
-The example given below was provided by Eric Rexstad.
+The example given below was provided by Eric Rexstad. Additional examples
+can be found at  \url{http://examples.distancesampling.org/}.
 }
 \examples{
 \dontrun{
