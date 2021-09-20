@@ -49,48 +49,37 @@ bootit <- function(bootdat, models, our_resamples, summary_fun,
 
       # now need to merge the rates object onto the results, and re-scale
       # abundance/density estimates for individuals
-      indN <- merge(models[[i]]$dht$individuals$N, rates,
-                    by.x="Label", by.y="Region.Label",
-                    all.x=TRUE)
-      indD <- merge(models[[i]]$dht$individuals$D, rates,
-                    by.x="Label", by.y="Region.Label",
-                    all.x=TRUE)
-      if(nrow(indN)==1){
-        models[[i]]$dht$individuals$N$Estimate <- indN$Estimate/indN$rate
-        models[[i]]$dht$individuals$D$Estimate <- indD$Estimate/indD$rate
-      }else{
-        nN <- length(indN$Estimate)-1
-        models[[i]]$dht$individuals$N$Estimate <- c(indN$Estimate[1:nN]/
-                                                    indN$rate[1:nN],
-                                                    sum(indN$Estimate[1:nN]/
-                                                        indN$rate[1:nN]))
-        models[[i]]$dht$individuals$D$Estimate <- c(indD$Estimate[1:nN]/
-                                                    indD$rate[1:nN],
-                                                    sum(indD$Estimate[1:nN]/
-                                                        indD$rate[1:nN]))
-      }
-      # ... and for clusters
-      if(any(names(models[[i]]$dht)=="clusters")){
-        clN <- merge(models[[i]]$dht$clusters$N, rates,
+      which_ests <- c("N", "D")
+      if(!("Area" %in% names(bootdat))) which_ests <- "D"
+
+      for(est_type in which_ests){
+        ind <- merge(models[[i]]$dht$individuals[[est_type]], rates,
                      by.x="Label", by.y="Region.Label",
                      all.x=TRUE)
-        clD <- merge(models[[i]]$dht$clusters$D, rates,
-                     by.x="Label", by.y="Region.Label",
-                     all.x=TRUE)
-        if(nrow(indN)==1){
-          models[[i]]$dht$clusters$N$Estimate <- clN$Estimate/clN$rate
-          models[[i]]$dht$clusters$D$Estimate <- clD$Estimate/clD$rate
+        if(nrow(ind)==1){
+          models[[i]]$dht$individuals[[est_type]]$Estimate <- ind$Estimate/
+                                                              ind$rate
         }else{
-          models[[i]]$dht$clusters$N$Estimate <- c(clN$Estimate[1:nN]/
-                                                      clN$rate[1:nN],
-                                                      sum(clN$Estimate[1:nN]/
-                                                          clN$rate[1:nN]))
-          models[[i]]$dht$clusters$D$Estimate <- c(clD$Estimate[1:nN]/
-                                                      clD$rate[1:nN],
-                                                      sum(clD$Estimate[1:nN]/
-                                                          clD$rate[1:nN]))
+          nN <- length(ind$Estimate)-1
+          models[[i]]$dht$individuals[[est_type]]$Estimate <-
+            c(ind$Estimate[1:nN]/ind$rate[1:nN],
+              sum(ind$Estimate[1:nN]/ind$rate[1:nN]))
         }
-      }
+        # ... and for clusters
+        if(any(names(models[[i]]$dht)=="clusters")){
+          cl <- merge(models[[i]]$dht$clusters[[est_type]], rates,
+                      by.x="Label", by.y="Region.Label",
+                      all.x=TRUE)
+          if(nrow(cl)==1){
+            models[[i]]$dht$clusters[[est_type]]$Estimate <- cl$Estimate/
+                                                             cl$rate
+          }else{
+            models[[i]]$dht$clusters[[est_type]]$Estimate <-
+              c(cl$Estimate[1:nN]/cl$rate[1:nN],
+                sum(cl$Estimate[1:nN]/cl$rate[1:nN]))
+          }
+        } # end clusters
+      } # end loop over D, N (maybe)
     }
   }
 
