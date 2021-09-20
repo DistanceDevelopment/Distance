@@ -71,9 +71,11 @@ bootit <- function(bootdat, models, our_resamples, summary_fun,
       }
       # ... and for clusters
       if(any(names(models[[i]]$dht)=="clusters")){
-        clN <- merge(models[[i]]$dht$clusters$N, rates, by="Region.Label",
+        clN <- merge(models[[i]]$dht$clusters$N, rates,
+                     by.x="Label", by.y="Region.Label",
                      all.x=TRUE)
-        clD <- merge(models[[i]]$dht$clusters$D, rates, by="Region.Label",
+        clD <- merge(models[[i]]$dht$clusters$D, rates,
+                     by.x="Label", by.y="Region.Label",
                      all.x=TRUE)
         if(nrow(indN)==1){
           models[[i]]$dht$clusters$N$Estimate <- clN$Estimate/clN$rate
