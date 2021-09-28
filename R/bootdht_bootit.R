@@ -50,7 +50,8 @@ bootit <- function(bootdat, models, our_resamples, summary_fun,
       # now need to merge the rates object onto the results, and re-scale
       # abundance/density estimates for individuals
       which_ests <- c("N", "D")
-      if(!("Area" %in% names(bootdat))) which_ests <- "D"
+      which_ests <- which_ests[which_ests %in%
+                               names(models[[i]]$dht$individuals)]
 
       for(est_type in which_ests){
         ind <- merge(models[[i]]$dht$individuals[[est_type]], rates,
