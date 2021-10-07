@@ -41,7 +41,7 @@ test_that("Binning",{
   cp2 <- suppressMessages(ds(egdata,key="hn",order=0,
                   cutpoints=c(0,2,3,3.84)))
 
-  out <- "           Model Key function Formula $\\\\chi^2$ $p$-value $\\\\hat{P_a}$\n1  \\\\texttt{cp1}  Half-normal      ~1           0.7452328    0.6340415\n2 \\\\texttt{cp11}  Half-normal      ~1           0.7452328    0.6340415\n  se($\\\\hat{P_a}$) $\\\\Delta$AIC\n1       0.05389734            0\n2       0.05389734            0"
+  out <- "           Model Key function Formula $\\\\chi^2$ $p$-value $\\\\hat{P_a}$\n1  \\\\texttt{cp1}  Half-normal      ~1           0.8980817    0.6287014\n2 \\\\texttt{cp11}  Half-normal      ~1           0.8980817    0.6287014\n  se($\\\\hat{P_a}$) $\\\\Delta$AIC\n1       0.05262633            0\n2       0.05262633            0"
   expect_output(print(summarize_ds_models(cp1, cp11)), out, fixed=TRUE)
 
   # different bins
