@@ -36,8 +36,8 @@ create.bins <- function(data, cutpoints){
   # put all that together and make a data.frame
   data <- cbind(data,
                 # process to get bin beginnings/endings
-                distbegin = as.numeric(sub(".(\\d+),\\d+.", "\\1", chopped)),
-                distend = as.numeric(sub(".\\d+,(\\d+).", "\\1", chopped)))
+                distbegin = as.numeric(sub(".(\\d+\\.*\\d*),.+", "\\1", chopped)),
+                distend = as.numeric(sub(".+,(\\d+\\.*\\d*).", "\\1", chopped)))
   data <- data.frame(data)
 
   return(data)
