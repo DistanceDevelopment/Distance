@@ -3,6 +3,7 @@ Distance 1.0.4
 
 * fix bootdht issue when cluster results were requests (#103)
 * improve flatfile documentation (thanks to Maggie Blake for pointing this out)
+* fixed bug in cutpoint calculations in create.bins (#108)
 
 Distance 1.0.4
 ----------------------

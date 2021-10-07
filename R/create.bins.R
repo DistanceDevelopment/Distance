@@ -30,38 +30,14 @@ create.bins <- function(data, cutpoints){
   }
   data <- data[in.cp.ind, , drop=FALSE]
 
-  # pull out the distances (removing the NAs for now)
-  na.ind <- is.na(data$distance)
-  d <- data$distance[!na.ind]
-
-  # setup columns
-  distbegin <- rep(NA,length(d))
-  distend <- rep(NA,length(d))
-
-  for(i in 1:(length(cp)-1)){
-    # which elements of d lie between cutpoints i and i+1
-    ind <- which(d>=cp[i] & d<cp[i+1])
-
-    distbegin[ind] <- cp[i]
-    distend[ind]   <- cp[i+1]
-  }
-  # last cutpoint, include those observations AT the truncation point
-  ind <- which(d>=cp[i] & d<=cp[i+1])
-
-  distbegin[ind] <- cp[i]
-  distend[ind]   <- cp[i+1]
-
-
-  # handle NA distances, that we need to preserve
-  distbegin.na <- rep(NA, length(data$distance))
-  distend.na <- rep(NA, length(data$distance))
-  distbegin.na[!na.ind] <- distbegin
-  distend.na[!na.ind] <- distend
+  # use cut() to create bins
+  chopped <- as.character(cut(data$distance, breaks=cp, include.lowest=TRUE))
 
   # put all that together and make a data.frame
   data <- cbind(data,
-                distbegin=distbegin.na,
-                distend=distend.na)
+                # process to get bin beginnings/endings
+                distbegin = as.numeric(sub(".(\\d+),\\d+.", "\\1", chopped)),
+                distend = as.numeric(sub(".\\d+,(\\d+).", "\\1", chopped)))
   data <- data.frame(data)
 
   return(data)

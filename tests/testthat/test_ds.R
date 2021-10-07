@@ -33,9 +33,6 @@ test_that("Input errors are thrown correctly",{
   expect_error(ds(egdata,4,key="hn",adjustment="bananas"),
                suppressMessages(message("'arg' should be one of \"cos\", \"herm\", \"poly\"")))
 
-  # first cutpoint not zero when no left truncation
-  expect_error(ds(egdata,4,cutpoints=c(2,3,4)),
-               "The first cutpoint must be 0 or the left truncation distance!")
 
   # uniform without adjustments
   expect_error(ds(egdata,4,key="unif", adjustment=NULL),
@@ -59,6 +56,25 @@ test_that("Input errors are thrown correctly",{
 
 })
 
+
+test_that("binning works", {
+  # first cutpoint not zero when no left truncation
+  expect_error(ds(egdata,4,cutpoints=c(2,3,4)),
+               "The first cutpoint must be 0 or the left truncation distance!")
+
+  tst_distances <- data.frame(distance = c(0, 0, 0, 10, 50, 70, 110))
+  expect_equal(as.vector(table(create.bins(tst_distances,
+                                           c(0, 10, 65, 200))$distbegin)),
+               c(4, 1, 2))
+
+  # per bug #108
+  data("wren_snapshot")
+
+  binned <- expect_warning(create.bins(wren_snapshot,
+                                       c(0, 10, 20, 30, 40, 60, 80, 100)),
+                           "Some distances were outside bins and have been removed.")
+  expect_equal(as.vector(table(binned$distbegin)), c(3, 9, 19, 46, 28, 11))
+})
 
 test_that("Simple models work",{
   skip_on_cran()
