@@ -62,16 +62,16 @@ used, covariates cannot be included in the model.}
 \code{"cos"} is recommended. A value of \code{NULL} indicates that no adjustments are
 to be fitted.}
 
-\item{order}{orders of the adjustment terms to fit (as a vector/scalar), the
-default value (\code{NULL}) will select via AIC up to \code{max.adjustments}
+\item{order}{orders of the adjustment terms to fit (as a vector/scalar).
+The default value (\code{NULL}) will select via AIC up to \code{max.adjustments}
 adjustments. If a single number is given, that number is expanded to be
 \code{seq(term.min, order, by=1)} where \code{term.min} is the appropriate minimum
-order for this type of adjustment. For cosine adjustments, valid orders are
-integers greater than 2 (except when a uniform key is used, when the minimum
-order is 1). For Hermite polynomials, even integers equal or greater than 2
-are allowed and for simple polynomials even integers equal or greater than 2
-are allowed (though note these will be multiplied by 2, see Buckland et al,
-2001 for details on their specification).}
+order for this type of adjustment  (1 for cosine, 2 for simple and Hermite
+polynomial).   For simple and Hermite polynomials, the values generated
+then are multipled by 2 to give the order used by the fitting routine -
+for example, specifying 3 for a simple or Hermite polynomial series would
+give adjustments of order \code{c(2, 3) * 2 = 4} and \code{6}.
+See Buckland et al. 2001 for more details on adjustment term specification.}
 
 \item{scale}{the scale by which the distances in the adjustment terms are
 divided. Defaults to \code{"width"}, scaling by the truncation distance. If the
