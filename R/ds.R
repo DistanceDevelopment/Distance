@@ -94,8 +94,17 @@
 #' used.
 #' @param max_adjustments maximum number of adjustments to try (default 5) only
 #' used when `order=NULL`.
-#' @param er.method encounter rate variance calculation: default = 2 gives the method of Innes et al, using expected counts in the encounter rate. Setting to 1 gives observed counts (which matches Distance for Windows) and 0 uses binomial variance (only useful in the rare situation where study area = surveyed area). See [`dht.se`][mrds::dht.se] for more details.
-#' @param dht.se should uncertainty be calculated when using `dht`? Safe to leave as `TRUE`, used in `bootdht`.
+#' @param er_method encounter rate variance calculation: default = 2 gives the method of Innes et al, using expected counts in the encounter rate. Setting to 1 gives observed counts (which matches Distance for Windows) and 0 uses binomial variance (only useful in the rare situation where study area = surveyed area). See [`dht.se`][mrds::dht.se] for more details.
+#' @param dht_se should uncertainty be calculated when using `dht`? Safe to leave as `TRUE`, used in `bootdht`.
+#' @param dht.group deprecated, see same argument with underscore, above.
+#' @param region.table deprecated, see same argument with underscore, above.
+#' @param sample.table deprecated, see same argument with underscore, above.
+#' @param obs.table deprecated, see same argument with underscore, above.
+#' @param convert.units deprecated, see same argument with underscore, above.
+#' @param er.var deprecated, see same argument with underscore, above.
+#' @param debug.level deprecated, see same argument with underscore, above.
+#' @param initial.values deprecated, see same argument with underscore, above.
+#' @param max.adjustments deprecated, see same argument with underscore, above.
 #' @return a list with elements:
 #'   * `ddf` a detection function model object.
 #'   * `dht` abundance/density information (if survey region data was supplied,

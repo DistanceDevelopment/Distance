@@ -157,9 +157,27 @@ used.}
 \item{max_adjustments}{maximum number of adjustments to try (default 5) only
 used when \code{order=NULL}.}
 
-\item{er.method}{encounter rate variance calculation: default = 2 gives the method of Innes et al, using expected counts in the encounter rate. Setting to 1 gives observed counts (which matches Distance for Windows) and 0 uses binomial variance (only useful in the rare situation where study area = surveyed area). See \code{\link[mrds:dht.se]{dht.se}} for more details.}
+\item{er_method}{encounter rate variance calculation: default = 2 gives the method of Innes et al, using expected counts in the encounter rate. Setting to 1 gives observed counts (which matches Distance for Windows) and 0 uses binomial variance (only useful in the rare situation where study area = surveyed area). See \code{\link[mrds:dht.se]{dht.se}} for more details.}
 
-\item{dht.se}{should uncertainty be calculated when using \code{dht}? Safe to leave as \code{TRUE}, used in \code{bootdht}.}
+\item{dht_se}{should uncertainty be calculated when using \code{dht}? Safe to leave as \code{TRUE}, used in \code{bootdht}.}
+
+\item{dht.group}{deprecated, see same argument with underscore, above.}
+
+\item{region.table}{deprecated, see same argument with underscore, above.}
+
+\item{sample.table}{deprecated, see same argument with underscore, above.}
+
+\item{obs.table}{deprecated, see same argument with underscore, above.}
+
+\item{convert.units}{deprecated, see same argument with underscore, above.}
+
+\item{er.var}{deprecated, see same argument with underscore, above.}
+
+\item{debug.level}{deprecated, see same argument with underscore, above.}
+
+\item{initial.values}{deprecated, see same argument with underscore, above.}
+
+\item{max.adjustments}{deprecated, see same argument with underscore, above.}
 }
 \value{
 a list with elements:
