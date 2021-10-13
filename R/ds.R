@@ -341,8 +341,8 @@ ds <- function(data, truncation=ifelse(is.null(cutpoints),
       data$distend <- NULL
       data$distbegin <- NULL
     }
-    # send off to create.bins to make the correct columns in data
-    data <- create.bins(data, cutpoints)
+    # send off to create_bins to make the correct columns in data
+    data <- create_bins(data, cutpoints)
     binned <- TRUE
     breaks <- cutpoints
   }

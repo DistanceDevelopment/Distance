@@ -63,14 +63,14 @@ test_that("binning works", {
                "The first cutpoint must be 0 or the left truncation distance!")
 
   tst_distances <- data.frame(distance = c(0, 0, 0, 10, 50, 70, 110))
-  expect_equal(as.vector(table(create.bins(tst_distances,
+  expect_equal(as.vector(table(create_bins(tst_distances,
                                            c(0, 10, 65, 200))$distbegin)),
                c(4, 1, 2))
 
   # per bug #108
   data("wren_snapshot")
 
-  binned <- expect_warning(create.bins(wren_snapshot,
+  binned <- expect_warning(create_bins(wren_snapshot,
                                        c(0, 10, 20, 30, 40, 60, 80, 100)),
                            "Some distances were outside bins and have been removed.")
   expect_equal(as.vector(table(binned$distbegin)), c(3, 9, 19, 46, 28, 11))
@@ -180,7 +180,7 @@ test_that("Truncation is handled",{
                              cutpoints=c(0,1,2,3,3.8)))$ddf$meta.data$width,3.8)
 
   # largest bin
-  bin.data <- create.bins(egdata,c(0,1,2,3,3.8))
+  bin.data <- create_bins(egdata,c(0,1,2,3,3.8))
   expect_equal(suppressMessages(ds(bin.data, key="hn",
                                    order=0))$ddf$meta.data$width, 3.8)
 
@@ -228,7 +228,7 @@ test_that("Percentage truncation works when distances are missing",{
 
 test_that("just distend and distbegin can be supplied", {
   # make some data
-  bin.data <- create.bins(egdata, c(0, 1, 2, 3, 4))
+  bin.data <- create_bins(egdata, c(0, 1, 2, 3, 4))
   bin.data$distance <- NULL
   expect_message(ds.model <- ds(bin.data, 4, monotonicity=FALSE, key="hn",
                                 adjustment=NULL),

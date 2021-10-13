@@ -22,7 +22,7 @@ test_that("cluster exercise works",{
   dat <- unflatten(ClusterExercise)
   dat <- dat$data[!is.na(dat$data$distance), ]
   dat <- dat[dat$distance<=1.5, ]
-  dat <- Distance::create.bins(dat, seq(0, 1.5, len=8))
+  dat <- Distance::create_bins(dat, seq(0, 1.5, len=8))
   # fit the exact function fitted by Distance
   result <- ddf(dsmodel = ~mcds(key = "hr", formula = ~1),
                 data = dat, method = "ds",
