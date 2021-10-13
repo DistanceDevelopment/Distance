@@ -62,6 +62,8 @@ must have been fitted with \code{adjustment!=NULL}.}
 \code{progress} package, if installed.}
 
 \item{cores}{number of CPU cores to use to compute the estimates. See "Parallelization" below.}
+
+\item{convert.units}{deprecated, see same argument with underscore, above.}
 }
 \description{
 Performs a bootstrap for simple distance sampling models using the same data

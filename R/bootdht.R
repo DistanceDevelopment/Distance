@@ -32,6 +32,7 @@
 #' `txtProgressBar`, "none" suppresses output, "progress" uses the
 #' `progress` package, if installed.
 #' @param cores number of CPU cores to use to compute the estimates. See "Parallelization" below.
+#' @param convert.units deprecated, see same argument with underscore, above.
 #'
 #' @section Summary Functions:
 #' The function `summary_fun` allows the user to specify what summary
