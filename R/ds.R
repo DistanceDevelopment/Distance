@@ -10,7 +10,7 @@
 #' a numeric vector containing the distances.  NOTE!  If there is a column
 #' called `size` in the data then it will be interpreted as group/cluster size,
 #' see the section "Clusters/groups", below. One can supply data as a "flat
-#' file" and not supply `region.table`, `sample.table` and `obs.table`, see
+#' file" and not supply `region_table`, `sample_table` and `obs_table`, see
 #' "Data format", below and [`flatfile`][flatfile].
 #' @param truncation either truncation distance (numeric, e.g. 5) or percentage
 #' (as a string, e.g. "15%"). Can be supplied as a `list` with elements `left`
@@ -30,14 +30,14 @@
 #' `"cos"` is recommended. A value of `NULL` indicates that no adjustments are
 #' to be fitted.
 #' @param order orders of the adjustment terms to fit (as a vector/scalar). 
-#' The default value (`NULL`) will select via AIC up to `max.adjustments` 
+#' The default value (`NULL`) will select via AIC up to `max_adjustments` 
 #' adjustments. If a single number is given, that number is expanded to be 
 #' `seq(term.min, order, by=1)` where `term.min` is the appropriate minimum 
 #' order for this type of adjustment  (1 for cosine, 2 for simple and Hermite 
 #' polynomial).   For simple and Hermite polynomials, the values generated 
 #' then are multipled by 2 to give the order used by the fitting routine - 
 #' for example, specifying 3 for a simple or Hermite polynomial series would 
-#' give adjustments of order `c(2, 3) * 2 = 4` and `6`.  
+#' give adjustments of order `c(2, 3) * 2 = 4` and `6`.
 #' See Buckland et al. 2001 for more details on adjustment term specification. 
 #' @param scale the scale by which the distances in the adjustment terms are
 #' divided. Defaults to `"width"`, scaling by the truncation distance. If the
@@ -54,45 +54,45 @@
 #' (`"none"` or `FALSE`). See Monotonicity, below. (Default `"strict"`). By
 #' default it is on for models without covariates in the detection function,
 #' off when covariates are present.
-#' @param dht.group should density abundance estimates consider all groups to
-#' be size 1 (abundance of groups) `dht.group=TRUE` or should the abundance of
-#' individuals (group size is taken into account), `dht.group=FALSE`. Default
+#' @param dht_group should density abundance estimates consider all groups to
+#' be size 1 (abundance of groups) `dht_group=TRUE` or should the abundance of
+#' individuals (group size is taken into account), `dht_group=FALSE`. Default
 #' is `FALSE` (abundance of individuals is calculated).
-#' @param region.table `data.frame` with two columns:
+#' @param region_table `data_frame` with two columns:
 #'   * `Region.Label` label for the region
 #'   * `Area` area of the region
-#'   * `region.table` has one row for each stratum. If there is no
-#'   stratification then `region.table` has one entry with `Area` corresponding
+#'   * `region_table` has one row for each stratum. If there is no
+#'   stratification then `region_table` has one entry with `Area` corresponding
 #'   to the total survey area. If `Area` is omitted density estimates only are
 #'   produced.
-#' @param sample.table `data.frame` mapping the regions to the samples
+#' @param sample_table `data.frame` mapping the regions to the samples
 #' (i.e. transects). There are three columns:
 #'   * `Sample.Label` label for the sample
 #'   * `Region.Label` label for the region that the sample belongs to.
 #'   * `Effort` the effort expended in that sample (e.g. transect length).
-#' @param obs.table `data.frame` mapping the individual observations
+#' @param obs_table `data.frame` mapping the individual observations
 #' (objects) to regions and samples. There should be three columns:
 #'   * `object` unique numeric identifier for the observation
 #'   * `Region.Label` label for the region that the sample belongs to
 #'   * `Sample.Label` label for the sample
-#' @param convert.units conversion between units for abundance estimation, see
+#' @param convert_units conversion between units for abundance estimation, see
 #' "Units", below. (Defaults to 1, implying all of the units are "correct"
 #' already.)
-#' @param er.var encounter rate variance estimator to use when abundance
+#' @param er_var encounter rate variance estimator to use when abundance
 #' estimates are required. Defaults to "R2" for line transects and "P3" for
 #' point transects. See [`dht2`][dht2] for more information and if more
 #' complex options are required.
 #' @param method optimization method to use (any method usable by
 #' [`optim`][stats::optim] or [`optimx`][optimx::optimx]). Defaults to
 #' `"nlminb"`.
-#' @param debug.level print debugging output. `0`=none, `1-3` increasing levels
+#' @param debug_level print debugging output. `0`=none, `1-3` increasing levels
 #' of debugging output.
 #' @param quiet suppress non-essential messages (useful for bootstraps etc).
 #' Default value `FALSE`.
-#' @param initial.values a `list` of named starting values, see
+#' @param initial_values a `list` of named starting values, see
 #' [`mrds-opt`][mrds::mrds-opt]. Only allowed when AIC term selection is not
 #' used.
-#' @param max.adjustments maximum number of adjustments to try (default 5) only
+#' @param max_adjustments maximum number of adjustments to try (default 5) only
 #' used when `order=NULL`.
 #' @param er.method encounter rate variance calculation: default = 2 gives the method of Innes et al, using expected counts in the encounter rate. Setting to 1 gives observed counts (which matches Distance for Windows) and 0 uses binomial variance (only useful in the rare situation where study area = surveyed area). See [`dht.se`][mrds::dht.se] for more details.
 #' @param dht.se should uncertainty be calculated when using `dht`? Safe to leave as `TRUE`, used in `bootdht`.
@@ -102,9 +102,9 @@
 #'   else `NULL`)
 #'
 #' @section Details:
-#' If abundance estimates are required then the `data.frame`s `region.table`
-#' and `sample.table` must be supplied. If `data` does not contain the columns
-#' `Region.Label` and `Sample.Label` then the `data.frame` `obs.table` must
+#' If abundance estimates are required then the `data.frame`s `region_table`
+#' and `sample_table` must be supplied. If `data` does not contain the columns
+#' `Region.Label` and `Sample.Label` then the `data.frame` `obs_table` must
 #' also be supplied. Note that stratification only applies to abundance
 #' estimates and not at the detection function level.
 #'
@@ -176,32 +176,32 @@
 # THIS IS STOLEN FROM mrds, sorry Jeff!
 #' @section Units:
 #'  In extrapolating to the entire survey region it is important that the unit
-#'  measurements be consistent or converted for consistency.  A conversion
-#'  factor can be specified with the `convert.units` variable.  The values of
-#'  `Area` in `region.table`, must be made consistent with the units for
-#'  `Effort` in `sample.table` and the units of `distance` in the `data.frame`
-#'  that was analyzed.  It is easiest if the units of `Area` are the square of
+#'  measurements be consistent or converted for consistency. A conversion
+#'  factor can be specified with the `convert_units` argument. The values of
+#'  `Area` in `region_table`, must be made consistent with the units for
+#'  `Effort` in `sample_table` and the units of `distance` in the `data.frame`
+#'  that was analyzed. It is easiest if the units of `Area` are the square of
 #'  the units of `Effort` and then it is only necessary to convert the units of
 #'  `distance` to the units of `Effort`. For example, if `Effort` was entered
 #'  in kilometres and `Area` in square kilometres and `distance` in metres then
-#'  using `convert.units=0.001` would convert metres to kilometres, density
+#'  using `convert_units=0.001` would convert metres to kilometres, density
 #'  would be expressed in square kilometres which would then be consistent with
-#'  units for `Area`.  However, they can all be in different units as long as
-#'  the appropriate composite value for `convert.units` is chosen.  Abundance
+#'  units for `Area`. However, they can all be in different units as long as
+#'  the appropriate composite value for `convert_units` is chosen. Abundance
 #'  for a survey region can be expressed as: `A*N/a` where `A` is `Area` for
 #'  the survey region, `N` is the abundance in the covered (sampled) region,
 #'  and `a` is the area of the sampled region and is in units of `Effort *
-#'  distance`.  The sampled region `a` is multiplied by `convert.units`, so it
+#'  distance`. The sampled region `a` is multiplied by `convert_units`, so it
 #'  should be chosen such that the result is in the same units as `Area`.  For
 #'  example, if `Effort` was entered in kilometres, `Area` in hectares (100m x
-#'  100m) and `distance` in metres, then using `convert.units=10` will convert
+#'  100m) and `distance` in metres, then using `convert_units=10` will convert
 #'  `a` to units of hectares (100 to convert metres to 100 metres for distance
 #'  and .1 to convert km to 100m units).
 #'
 #' @section Data format:
 #' One can supply `data` only to simply fit a detection function. However, if
 #' abundance/density estimates are necessary further information is required.
-#' Either the `region.table`, `sample.table` and `obs.table` `data.frame`s can
+#' Either the `region_table`, `sample_table` and `obs_table` `data.frame`s can
 #' be supplied or all data can be supplied as a "flat file" in the `data`
 #' argument. In this format each row in data has additional information that
 #' would ordinarily be in the other tables. This usually means that there are
@@ -246,8 +246,8 @@
 #' samples <- book.tee.data$book.tee.samples
 #' obs <- book.tee.data$book.tee.obs
 #'
-#' ds.dht.model <- ds(tee.data, 4, region.table=region,
-#'                    sample.table=samples, obs.table=obs)
+#' ds.dht.model <- ds(tee.data, 4, region_table=region,
+#'                    sample_table=samples, obs_table=obs)
 #' summary(ds.dht.model)
 #'
 #' # specify order 2 cosine adjustments
@@ -287,26 +287,41 @@ ds <- function(data, truncation=ifelse(is.null(cutpoints),
              formula=~1, key=c("hn","hr","unif"),
              adjustment=c("cos","herm","poly"),
              order=NULL, scale=c("width","scale"),
-             cutpoints=NULL, dht.group=FALSE,
+             cutpoints=NULL, dht_group=FALSE,
              monotonicity=ifelse(formula==~1,
                                  "strict",
                                  "none"),
-             region.table=NULL, sample.table=NULL, obs.table=NULL,
-             convert.units=1, er.var=ifelse(transect=="line", "R2", "P3"),
-             method="nlminb", quiet=FALSE, debug.level=0,
-             initial.values=NULL, max.adjustments=5, er.method=2, dht.se=TRUE){
+             region_table=NULL, sample_table=NULL, obs_table=NULL,
+             convert_units=1, er_var=ifelse(transect=="line", "R2", "P3"),
+             method="nlminb", quiet=FALSE, debug_level=0,
+             initial_values=NULL, max_adjustments=5, er_method=2, dht_se=TRUE,
+             # deprecated below here:
+             dht.group,
+             region.table,
+             sample.table,
+             obs.table,
+             convert.units,
+             er.var,
+             debug.level,
+             initial.values,
+             max.adjustments){
 
   # capture the call
   this_call <- match.call(expand.dots = FALSE)
+
+  # check for deprecated arguments
+  .deprecated_args(c("dht.group", "region.table", "sample.table", "obs.table",
+                     "convert.units", "er.var", "debug.level", "initial.values",
+                     "max.adjustments"), this_call)
 
   # this routine just creates a call to mrds, it's not very exciting
   # or fancy, it does do a lot of error checking though
 
   # check the data, format into the correct tables if we have a flat file
-  data <- checkdata(data, region.table, sample.table, obs.table, formula)
-  region.table <- data$region.table
-  sample.table <- data$sample.table
-  obs.table    <- data$obs.table
+  data <- checkdata(data, region_table, sample_table, obs_table, formula)
+  region_table <- data$region.table
+  sample_table <- data$sample.table
+  obs_table    <- data$obs.table
   data         <- data$data
 
   # setup left and right truncation (width)
@@ -383,7 +398,7 @@ ds <- function(data, truncation=ifelse(is.null(cutpoints),
   }
 
   # if the user supplied order=0, that's equivalent to adjustment=NULL
-  if((!is.null(order) & all(order==0)) | max.adjustments==0){
+  if((!is.null(order) & all(order==0)) | max_adjustments==0){
     adjustment <- NULL
   }
 
@@ -442,19 +457,19 @@ ds <- function(data, truncation=ifelse(is.null(cutpoints),
         # this is according to p. 47 of IDS
         if(key=="unif" & adjustment=="cos"){
           # for Fourier...
-          order <- seq(2, max.adjustments)
+          order <- seq(2, max_adjustments)
           order <- c(1, order)
         }else if(adjustment=="poly"){
           # polynomials: even from 2
-          order <- seq(2, 2*max.adjustments, by=2)
+          order <- seq(2, 2*max_adjustments, by=2)
         }else if(adjustment=="herm"){
           # hermite: even from 4
-          order <- seq(2, max.adjustments)
+          order <- seq(2, max_adjustments)
           order <- 2*order
-          order <- order[1:max.adjustments]
+          order <- order[1:max_adjustments]
         }else if(adjustment=="cos"){
           # cosine: by 1 from 2
-          order <- seq(2, max.adjustments+1)
+          order <- seq(2, max_adjustments+1)
         }else{
           stop("Bad adjustment term definition")
         }
@@ -496,12 +511,12 @@ ds <- function(data, truncation=ifelse(is.null(cutpoints),
   }
 
   # set up the control options
-  control <- list(optimx.method=method, showit=debug.level)
+  control <- list(optimx.method=method, showit=debug_level)
 
   # if initial values were supplied, pass them on
-  if(!is.null(initial.values) & !aic.search){
-    control$initial <- initial.values
-  }else if(!is.null(initial.values) & aic.search){
+  if(!is.null(initial_values) & !aic.search){
+    control$initial <- initial_values
+  }else if(!is.null(initial_values) & aic.search){
     stop("Cannot supply initial values when using AIC term selection")
   }
 
@@ -688,29 +703,29 @@ ds <- function(data, truncation=ifelse(is.null(cutpoints),
   mono.chk <- mrds::check.mono(model, n.pts=20)
 
   ## Now calculate abundance/density using dht()
-  if(!is.null(region.table) & !is.null(sample.table)){
-    # if obs.table is not supplied, then data must have the Region.Label and
+  if(!is.null(region_table) & !is.null(sample_table)){
+    # if obs_table is not supplied, then data must have the Region.Label and
     # Sample.Label columns
 
     # setup dht options
-    dht_options <- list(group         = dht.group,
-                        ervar         = er.var,
-                        varflag       = er.method,
-                        convert.units = convert.units)
+    dht_options <- list(group         = dht_group,
+                        ervar         = er_var,
+                        varflag       = er_method,
+                        convert.units = convert_units)
 
-    # if no obs.table
-    if(is.null(obs.table)){
+    # if no obs_table
+    if(is.null(obs_table)){
       if(all(c("Region.Label", "Sample.Label") %in% names(data))){
 
         if(any(is.na(model$hessian))){
           message("Some variance-covariance matrix elements were NA, possible numerical problems; only estimating detection function.\n")
           dht.res <- NULL
         }else{
-          dht.res <- dht(model, region.table, sample.table,
-                         options=dht_options, se=dht.se)
+          dht.res <- dht(model, region_table, sample_table,
+                         options=dht_options, se=dht_se)
         }
       }else{
-        message("No obs.table supplied nor does data have Region.Label and Sample.Label columns, only estimating detection function.\n")
+        message("No obs_table supplied nor does data have Region.Label and Sample.Label columns, only estimating detection function.\n")
         dht.res <- NULL
       }
     }else{
@@ -725,8 +740,8 @@ ds <- function(data, truncation=ifelse(is.null(cutpoints),
         message("Some variance-covariance matrix elements were NA, possible numerical problems; only estimating detection function.\n")
         dht.res <- NULL
       }else{
-        dht.res <- dht(model, region.table, sample.table, obs.table,
-                       options=dht_options, se=dht.se)
+        dht.res <- dht(model, region_table, sample_table, obs_table,
+                       options=dht_options, se=dht_se)
       }
     }
   }else{

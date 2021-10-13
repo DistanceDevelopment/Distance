@@ -56,7 +56,7 @@ test_that("unbinned", {
 
   # selected hn detection
   df_hn <- ds(CueCountingExample, truncation=trunc, key="hn", transect="point",
-              adjustment=NULL, er.var="P3")
+              adjustment=NULL, er_var="P3")
 
   # unstratified
   fs <- dht2(df_hn, flatfile=CueCountingExample,

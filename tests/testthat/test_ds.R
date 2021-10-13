@@ -97,8 +97,8 @@ test_that("Simple models work",{
   egdata <- egdata[egdata$observer==1,]
 
   # half-normal key should get selected
-  ds.dht.model <- suppressMessages(ds(egdata,4,region.table=region,
-                                      sample.table=samples,obs.table=obs))
+  ds.dht.model <- suppressMessages(ds(egdata,4,region_table=region,
+                                      sample_table=samples,obs_table=obs))
   # pars and lnl
   expect_equal(ds.dht.model$ddf$par, 0.6632435,tol=par.tol)
   expect_equal(ds.dht.model$ddf$lnl, -154.5692, tol=lnl.tol)
@@ -106,8 +106,8 @@ test_that("Simple models work",{
 
   # specify order 2 cosine adjustments
   ds.model.cos2<-suppressMessages(ds(egdata,4,adjustment="cos",order=2,
-                                     region.table=region, sample.table=samples,
-                                     obs.table=obs,monotonicity=FALSE))
+                                     region_table=region, sample_table=samples,
+                                     obs_table=obs,monotonicity=FALSE))
   # pars and lnl
   #result <- ddf(dsmodel=~mcds(key="hn", formula=~1, adj.series="cos",
   #                            adj.order=2), data=egdata, method="ds",
@@ -120,7 +120,7 @@ test_that("Simple models work",{
   # specify order 2 and 4 cosine adjustments
   ds.model.cos24<-suppressMessages(suppressWarnings(ds(egdata,4,
                      adjustment="cos",order=c(2,4),
-                     region.table=region, sample.table=samples, obs.table=obs,
+                     region_table=region, sample_table=samples, obs_table=obs,
                      monotonicity=FALSE)))
   tp <- c(0.661391356, -0.008769883, -0.041465153)
   expect_equal(unname(ds.model.cos24$ddf$par), tp, tol=par.tol)
@@ -129,8 +129,8 @@ test_that("Simple models work",{
 
   # hazard rate
   ds.model.hr<-suppressMessages(ds(egdata,4,key="hr",
-                  adjustment=NULL, region.table=region,
-                  sample.table=samples, obs.table=obs))
+                  adjustment=NULL, region_table=region,
+                  sample_table=samples, obs_table=obs))
   #result <- ddf(dsmodel=~mcds(key="hr", formula=~1), data=egdata, method="ds",
   #              meta.data=list(width=4))
   tp <- c(0.9375891, 0.7245641)
@@ -242,7 +242,7 @@ test_that("max.adjustments works",{
   egdata <- egdata[egdata$observer==1,]
 
   # setting max.adjustments=0 gives no adjustments
-  expect_equal(summary(ds(egdata, 4, key="hn", max.adjustments=0,
+  expect_equal(summary(ds(egdata, 4, key="hn", max_adjustments=0,
                           adjustment="cos"))$ddf$name.message,
                "half-normal key function")
 
@@ -255,22 +255,22 @@ test_that("max.adjustments works",{
 
   # ignore warnings below from monotonicity checks, don't care about that here
   expect_equal(summary(suppressWarnings(
-                ds(dists, 20, key="hn", max.adjustments=3,
+                ds(dists, 20, key="hn", max_adjustments=3,
                    adjustment="cos")))$ddf$name.message,
                "half-normal key function with cosine(2,3,4) adjustments")
 
   expect_equal(summary(suppressWarnings(
-                ds(dists, 20, key="hn", max.adjustments=2,
+                ds(dists, 20, key="hn", max_adjustments=2,
                    adjustment="cos")))$ddf$name.message,
                "half-normal key function with cosine(2,3) adjustments")
 
   expect_equal(summary(suppressWarnings(
-                ds(dists, 20, key="hn", max.adjustments=1,
+                ds(dists, 20, key="hn", max_adjustments=1,
                    adjustment="cos")))$ddf$name.message,
                "half-normal key function with cosine(2) adjustments")
 
   expect_equal(summary(suppressWarnings(
-                ds(dists, 20, key="hn", max.adjustments=6,
+                ds(dists, 20, key="hn", max_adjustments=6,
                    adjustment="cos")))$ddf$name.message,
                "half-normal key function with cosine(2,3,4) adjustments")
 })

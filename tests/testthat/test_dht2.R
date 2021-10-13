@@ -139,8 +139,8 @@ test_that("undropped individual stratum covar levels don't cause errors",{
 # use amakihi for the next few examples
 data(amakihi)
 conv.am <- convert_units("meter", NULL, "hectare")
-easy.am <- ds(amakihi, transect="point", key="hr", convert.units = conv.am,
-              adjustment=NULL, er.var="P3")
+easy.am <- ds(amakihi, transect="point", key="hr", convert_units = conv.am,
+              adjustment=NULL, er_var="P3")
 uf <- unflatten(amakihi)
 
 test_that("density estimation, no innes", {

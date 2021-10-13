@@ -9,7 +9,7 @@ test_that("wren 5 minute counts works",{
   cu_wren_5min <- 1/sqrt(10000)
 
   w1_df_unif <- ds(wren_5min, transect="point", truncation=110, key="unif",
-                   convert.units=cu_wren_5min, order=c(1,2), er.var="P3")
+                   convert_units=cu_wren_5min, order=c(1,2), er_var="P3")
 
 
   # do the same thing with dht2
@@ -30,7 +30,7 @@ test_that("wren snapshot works",{
   cu_wren_snapshot <- 1/sqrt(10000)
 
   w2_df_hr <- ds(wren_snapshot, transect="point", truncation=110, key="hr",
-                 adjustment=NULL, convert.units=cu_wren_snapshot, er.var="P3")
+                 adjustment=NULL, convert_units=cu_wren_snapshot, er_var="P3")
 
   w2_nhat <- dht2(w2_df_hr, flatfile=wren_snapshot, strat_formula=~Region.Label,
                   convert_units=cu_wren_snapshot)
@@ -58,7 +58,7 @@ test_that("wren cue count works",{
   cu <- sqrt(0.0001)
 
   w3_df_hr <- ds(wren_cuecount, transect="point", truncation=92.5,
-                 adjustment=NULL, key="hr", er.var="P3")
+                 adjustment=NULL, key="hr", er_var="P3")
 
   w3_nhat <- dht2(w3_df_hr, flatfile=wren_cuecount, strat_formula=~Region.Label,
                   multipliers=list(creation=mult), convert_units=cu)

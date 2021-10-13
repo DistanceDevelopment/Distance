@@ -56,7 +56,7 @@ cu <- 1/(cu[3]/(cu[1]*cu[2]))
 
 test_that("no strat",{
 
-  df <- ds(Systematic_variance_2, convert.units=cu)
+  df <- ds(Systematic_variance_2, convert_units=cu)
 
 
   # fiddle with region labels
@@ -72,7 +72,7 @@ test_that("no strat",{
 
   # now do a fancy thing
   fs_st1 <- dht2(df$ddf, obs.table, sample.table, region.table,
-                     strat_formula=~Region, convert_units=cu)
+                 strat_formula=~Region, convert_units=cu)
 
   # test
 # work around stupid dht bug

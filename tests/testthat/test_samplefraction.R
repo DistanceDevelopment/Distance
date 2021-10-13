@@ -4,7 +4,7 @@ context("Sample fractions")
 
 data(wren_lt)
 
-ll <- ds(wren_lt, convert.units=convert_units("meter", "kilometer", "hectare"),
+ll <- ds(wren_lt, convert_units=convert_units("meter", "kilometer", "hectare"),
          adjustment=NULL)
 
 test_that("single sample fractions",{
