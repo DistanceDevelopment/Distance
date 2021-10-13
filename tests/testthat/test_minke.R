@@ -1,7 +1,7 @@
 # minke
 
-# test numerical tollerance
-tol <- 1e-6
+# test numerical tolerance
+tol <- 1e-5
 
 # make some results to check against
 data(minke, package="Distance")
@@ -121,11 +121,6 @@ test_that("North works",{
 
   #TODO: fix this!
   old <- whale.full.strat1$dht$individuals$N
-  old$Estimate <- as.numeric(old$Estimate)
-  old$cv <- as.numeric(old$cv)
-  old$ucl <- as.numeric(old$ucl)
-  old$lcl <- as.numeric(old$lcl)
-  old$df <- as.numeric(old$df)
   old$Label <- as.factor("North")
   expect_equal(old, make_old_abund_individual(fs_st1), tolerance=tol)
 
