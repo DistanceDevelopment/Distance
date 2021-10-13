@@ -2,6 +2,8 @@ Distance 1.0.4
 ----------------------
 * To improve consistency in functions and arguments in the package, some functions and arguments have changed from . separation to _:
   * create.bins -> create_bins
+  * bootdht:
+    * convert.units -> convert_units
 * fix bootdht issue when cluster results were requests (#103)
 * improve flatfile documentation (thanks to Maggie Blake for pointing this out)
 * fixed bug in cutpoint calculations in create.bins (#108)

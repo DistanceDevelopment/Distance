@@ -12,12 +12,13 @@ bootdht(
   resample_transects = TRUE,
   nboot = 100,
   summary_fun = bootdht_Nhat_summarize,
-  convert.units = 1,
+  convert_units = 1,
   select_adjustments = FALSE,
   sample_fraction = 1,
   multipliers = NULL,
   progress_bar = "base",
-  cores = 1
+  cores = 1,
+  convert.units = NULL
 )
 }
 \arguments{
@@ -41,7 +42,7 @@ level? (Default \code{FALSE})}
 the bootstrap, see Summary Functions below. By default
 \code{\link{bootdht_Nhat_summarize}} is used, which just extracts abundance estimates.}
 
-\item{convert.units}{conversion between units for abundance estimation, see
+\item{convert_units}{conversion between units for abundance estimation, see
 "Units", below. (Defaults to 1, implying all of the units are "correct"
 already.) This takes precedence over any unit conversion stored in \code{model}.}
 
