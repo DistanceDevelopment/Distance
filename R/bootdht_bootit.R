@@ -14,7 +14,7 @@ bootit <- function(bootdat, models, our_resamples, summary_fun,
     df_call <- model$call
 
     # don't calculate standard errors
-    df_call$dht.se <- FALSE
+    df_call$dht_se <- FALSE
 
     # if we want the number of adjustments to be selected each iteration...
     if(select_adjustments){
