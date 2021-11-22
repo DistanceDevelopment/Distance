@@ -318,6 +318,19 @@ ds <- function(data, truncation=ifelse(is.null(cutpoints),
   # capture the call
   this_call <- match.call(expand.dots = FALSE)
 
+  # deprecation work around for dsims
+  if("er.var" %in% names(this_call)){
+    this_call$er_var <- this_call$er.var
+    er_var <- er.var
+    this_call$er.var <- NULL
+    warning(paste0("Argument: er.var is deprecated, check documentation."))
+  }
+  if("max.adjustments" %in% names(this_call)){
+    this_call$max_adjustments <- this_call$max.adjustments
+    max_adjustments <- max.adjustments
+    this_call$max.adjustments <- NULL
+    warning(paste0("Argument: max.adjustments is deprecated, check documentation."))
+  }
   # check for deprecated arguments
   .deprecated_args(c("dht.group", "region.table", "sample.table", "obs.table",
                      "convert.units", "er.var", "debug.level", "initial.values",
