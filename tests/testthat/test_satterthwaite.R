@@ -19,7 +19,7 @@ test_that("group size, no strat", {
   minke$size <- groupsizes
 
   # fit and test dht
-  simple <- ds(minke, key="hr", truncation=1.5, er.method=1, adjustment=NULL)
+  simple <- ds(minke, key="hr", truncation=1.5, er_method=1, adjustment=NULL)
 
   expect_equal(simple$dht$individuals$D$Estimate, 0.57542E-01, tol=tol)
   expect_equal(simple$dht$clusters$D$Estimate, 0.25574E-01, tol=tol)
@@ -94,7 +94,7 @@ test_that("stratification works", {
   data(minke)
   minke$size <- groupsizes
 
-  simple2 <- ds(minke, key="hr", truncation=1.5, er.method=1, adjustment=NULL)
+  simple2 <- ds(minke, key="hr", truncation=1.5, er_method=1, adjustment=NULL)
 
   expect_equal(simple2$dht$individuals$D$Estimate,
                c(0.44945E-01, 0.92867E-01, 0.50621E-01), tol=tol)

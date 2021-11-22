@@ -7,7 +7,7 @@
 #' @param model a model fitted by [`ds`] or a list of models
 #' @param flatfile Data provided in the flatfile format. See [`flatfile`] for
 #' details.
-#' @param convert.units conversion between units for abundance estimation, see
+#' @param convert_units conversion between units for abundance estimation, see
 #' "Units", below. (Defaults to 1, implying all of the units are "correct"
 #' already.) This takes precedence over any unit conversion stored in `model`.
 #' @param resample_strata should resampling happen at the stratum
@@ -32,6 +32,7 @@
 #' `txtProgressBar`, "none" suppresses output, "progress" uses the
 #' `progress` package, if installed.
 #' @param cores number of CPU cores to use to compute the estimates. See "Parallelization" below.
+#' @param convert.units deprecated, see same argument with underscore, above.
 #'
 #' @section Summary Functions:
 #' The function `summary_fun` allows the user to specify what summary
@@ -128,12 +129,14 @@ bootdht <- function(model,
                     resample_transects=TRUE,
                     nboot=100,
                     summary_fun=bootdht_Nhat_summarize,
-                    convert.units=1,
+                    convert_units=1,
                     select_adjustments=FALSE,
                     sample_fraction=1,
                     multipliers=NULL,
                     progress_bar="base",
-                    cores=1){
+                    cores=1, convert.units=NULL){
+
+  .deprecated_args(c("convert.units"), as.list(match.call()))
 
   if(!any(c(resample_strata, resample_obs, resample_transects))){
     stop("At least one of resample_strata, resample_obs, resample_transects must be TRUE")

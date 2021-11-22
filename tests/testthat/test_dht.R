@@ -14,9 +14,9 @@ test_that("dht without obs.table",{
   skip_on_cran()
 
   # first with obs table
-  ds.dht.model<-suppressMessages(ds(egdata,4,region.table=region,
+  ds.dht.model<-suppressMessages(ds(egdata,4,region_table=region,
                                     monotonicity="strict",
-                                    sample.table=samples,obs.table=obs))
+                                    sample_table=samples,obs_table=obs))
 
   # check if you just forget obs.table an error is thrown
   # No longer throws error just displays to the user that it is only estimating
@@ -27,9 +27,9 @@ test_that("dht without obs.table",{
 
   # test that the result is the same if we do the correct merge
   dat <- merge(egdata, obs, by="object")
-  ds.dht.model2 <- suppressMessages(ds(dat, 4, region.table=region,
+  ds.dht.model2 <- suppressMessages(ds(dat, 4, region_table=region,
                                        monotonicity="strict",
-                                       sample.table=samples))
+                                       sample_table=samples))
   expect_equivalent(ds.dht.model$dht, ds.dht.model2$dht)
 
 })
@@ -40,12 +40,12 @@ test_that("no Area column works", {
   skip_on_cran()
 
   # with separate data.frames
-  ds_with_Area <- ds(egdata, 4, region.table=region, adjustment=NULL,
-                     sample.table=samples, obs.table=obs)
+  ds_with_Area <- ds(egdata, 4, region_table=region, adjustment=NULL,
+                     sample_table=samples, obs_table=obs)
 
   region$Area <- NULL
-  ds_no_Area <- ds(egdata, 4, region.table=region, adjustment=NULL,
-                   sample.table=samples, obs.table=obs)
+  ds_no_Area <- ds(egdata, 4, region_table=region, adjustment=NULL,
+                   sample_table=samples, obs_table=obs)
 
   # degrees of freedom/uncertainty will not match!
   # estimates should though!

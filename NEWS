@@ -1,6 +1,19 @@
 Distance 1.0.4
 ----------------------
-
+* To improve consistency in functions and arguments in the package, some functions and arguments have changed from . separation to _. An error is now thrown when the "old" arguments/functions using . are used. This error will be removed in Distance 1.0.6.
+  * create.bins() -> create_bins()
+  * bootdht():
+    * convert.units -> convert_units
+  * ds():
+    * dht.group       -> dht_group
+    * region.table    -> region_table
+    * sample.table    -> sample_table
+    * obs.table       -> obs_table
+    * convert.units   -> convert_units
+    * er.var          -> er_var
+    * debug.level     -> debug_level
+    * initial.values  -> initial_values
+    * max.adjustments -> max_adjustments
 * fix bootdht issue when cluster results were requests (#103)
 * improve flatfile documentation (thanks to Maggie Blake for pointing this out)
 * fixed bug in cutpoint calculations in create.bins (#108)

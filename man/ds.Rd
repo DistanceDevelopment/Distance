@@ -16,20 +16,29 @@ ds(
   order = NULL,
   scale = c("width", "scale"),
   cutpoints = NULL,
-  dht.group = FALSE,
+  dht_group = FALSE,
   monotonicity = ifelse(formula == ~1, "strict", "none"),
-  region.table = NULL,
-  sample.table = NULL,
-  obs.table = NULL,
-  convert.units = 1,
-  er.var = ifelse(transect == "line", "R2", "P3"),
+  region_table = NULL,
+  sample_table = NULL,
+  obs_table = NULL,
+  convert_units = 1,
+  er_var = ifelse(transect == "line", "R2", "P3"),
   method = "nlminb",
   quiet = FALSE,
-  debug.level = 0,
-  initial.values = NULL,
-  max.adjustments = 5,
-  er.method = 2,
-  dht.se = TRUE
+  debug_level = 0,
+  initial_values = NULL,
+  max_adjustments = 5,
+  er_method = 2,
+  dht_se = TRUE,
+  dht.group,
+  region.table,
+  sample.table,
+  obs.table,
+  convert.units,
+  er.var,
+  debug.level,
+  initial.values,
+  max.adjustments
 )
 }
 \arguments{
@@ -37,7 +46,7 @@ ds(
 a numeric vector containing the distances.  NOTE!  If there is a column
 called \code{size} in the data then it will be interpreted as group/cluster size,
 see the section "Clusters/groups", below. One can supply data as a "flat
-file" and not supply \code{region.table}, \code{sample.table} and \code{obs.table}, see
+file" and not supply \code{region_table}, \code{sample_table} and \code{obs_table}, see
 "Data format", below and \code{\link{flatfile}}.}
 
 \item{truncation}{either truncation distance (numeric, e.g. 5) or percentage
@@ -63,7 +72,7 @@ used, covariates cannot be included in the model.}
 to be fitted.}
 
 \item{order}{orders of the adjustment terms to fit (as a vector/scalar).
-The default value (\code{NULL}) will select via AIC up to \code{max.adjustments}
+The default value (\code{NULL}) will select via AIC up to \code{max_adjustments}
 adjustments. If a single number is given, that number is expanded to be
 \code{seq(term.min, order, by=1)} where \code{term.min} is the appropriate minimum
 order for this type of adjustment  (1 for cosine, 2 for simple and Hermite
@@ -85,9 +94,9 @@ distance) and the last is the distance to the end of the furthest bin.
 and \code{distend} then these will be used as bins if \code{cutpoints} is not
 specified. If both are specified, \code{cutpoints} has precedence.}
 
-\item{dht.group}{should density abundance estimates consider all groups to
-be size 1 (abundance of groups) \code{dht.group=TRUE} or should the abundance of
-individuals (group size is taken into account), \code{dht.group=FALSE}. Default
+\item{dht_group}{should density abundance estimates consider all groups to
+be size 1 (abundance of groups) \code{dht_group=TRUE} or should the abundance of
+individuals (group size is taken into account), \code{dht_group=FALSE}. Default
 is \code{FALSE} (abundance of individuals is calculated).}
 
 \item{monotonicity}{should the detection function be constrained for
@@ -96,17 +105,17 @@ monotonicity weakly (\code{"weak"}), strictly (\code{"strict"}) or not at all
 default it is on for models without covariates in the detection function,
 off when covariates are present.}
 
-\item{region.table}{\code{data.frame} with two columns:
+\item{region_table}{\code{data_frame} with two columns:
 \itemize{
 \item \code{Region.Label} label for the region
 \item \code{Area} area of the region
-\item \code{region.table} has one row for each stratum. If there is no
-stratification then \code{region.table} has one entry with \code{Area} corresponding
+\item \code{region_table} has one row for each stratum. If there is no
+stratification then \code{region_table} has one entry with \code{Area} corresponding
 to the total survey area. If \code{Area} is omitted density estimates only are
 produced.
 }}
 
-\item{sample.table}{\code{data.frame} mapping the regions to the samples
+\item{sample_table}{\code{data.frame} mapping the regions to the samples
 (i.e. transects). There are three columns:
 \itemize{
 \item \code{Sample.Label} label for the sample
@@ -114,7 +123,7 @@ produced.
 \item \code{Effort} the effort expended in that sample (e.g. transect length).
 }}
 
-\item{obs.table}{\code{data.frame} mapping the individual observations
+\item{obs_table}{\code{data.frame} mapping the individual observations
 (objects) to regions and samples. There should be three columns:
 \itemize{
 \item \code{object} unique numeric identifier for the observation
@@ -122,11 +131,11 @@ produced.
 \item \code{Sample.Label} label for the sample
 }}
 
-\item{convert.units}{conversion between units for abundance estimation, see
+\item{convert_units}{conversion between units for abundance estimation, see
 "Units", below. (Defaults to 1, implying all of the units are "correct"
 already.)}
 
-\item{er.var}{encounter rate variance estimator to use when abundance
+\item{er_var}{encounter rate variance estimator to use when abundance
 estimates are required. Defaults to "R2" for line transects and "P3" for
 point transects. See \code{\link{dht2}} for more information and if more
 complex options are required.}
@@ -138,19 +147,37 @@ complex options are required.}
 \item{quiet}{suppress non-essential messages (useful for bootstraps etc).
 Default value \code{FALSE}.}
 
-\item{debug.level}{print debugging output. \code{0}=none, \code{1-3} increasing levels
+\item{debug_level}{print debugging output. \code{0}=none, \code{1-3} increasing levels
 of debugging output.}
 
-\item{initial.values}{a \code{list} of named starting values, see
+\item{initial_values}{a \code{list} of named starting values, see
 \code{\link[mrds:mrds-opt]{mrds-opt}}. Only allowed when AIC term selection is not
 used.}
 
-\item{max.adjustments}{maximum number of adjustments to try (default 5) only
+\item{max_adjustments}{maximum number of adjustments to try (default 5) only
 used when \code{order=NULL}.}
 
-\item{er.method}{encounter rate variance calculation: default = 2 gives the method of Innes et al, using expected counts in the encounter rate. Setting to 1 gives observed counts (which matches Distance for Windows) and 0 uses binomial variance (only useful in the rare situation where study area = surveyed area). See \code{\link[mrds:dht.se]{dht.se}} for more details.}
+\item{er_method}{encounter rate variance calculation: default = 2 gives the method of Innes et al, using expected counts in the encounter rate. Setting to 1 gives observed counts (which matches Distance for Windows) and 0 uses binomial variance (only useful in the rare situation where study area = surveyed area). See \code{\link[mrds:dht.se]{dht.se}} for more details.}
 
-\item{dht.se}{should uncertainty be calculated when using \code{dht}? Safe to leave as \code{TRUE}, used in \code{bootdht}.}
+\item{dht_se}{should uncertainty be calculated when using \code{dht}? Safe to leave as \code{TRUE}, used in \code{bootdht}.}
+
+\item{dht.group}{deprecated, see same argument with underscore, above.}
+
+\item{region.table}{deprecated, see same argument with underscore, above.}
+
+\item{sample.table}{deprecated, see same argument with underscore, above.}
+
+\item{obs.table}{deprecated, see same argument with underscore, above.}
+
+\item{convert.units}{deprecated, see same argument with underscore, above.}
+
+\item{er.var}{deprecated, see same argument with underscore, above.}
+
+\item{debug.level}{deprecated, see same argument with underscore, above.}
+
+\item{initial.values}{deprecated, see same argument with underscore, above.}
+
+\item{max.adjustments}{deprecated, see same argument with underscore, above.}
 }
 \value{
 a list with elements:
@@ -168,9 +195,9 @@ analysis using \code{ds()}.
 }
 \section{Details}{
 
-If abundance estimates are required then the \code{data.frame}s \code{region.table}
-and \code{sample.table} must be supplied. If \code{data} does not contain the columns
-\code{Region.Label} and \code{Sample.Label} then the \code{data.frame} \code{obs.table} must
+If abundance estimates are required then the \code{data.frame}s \code{region_table}
+and \code{sample_table} must be supplied. If \code{data} does not contain the columns
+\code{Region.Label} and \code{Sample.Label} then the \code{data.frame} \code{obs_table} must
 also be supplied. Note that stratification only applies to abundance
 estimates and not at the detection function level.
 
@@ -251,24 +278,24 @@ detection function is monotonic, see \code{\link[mrds:check.mono]{check.mono}}.
 \section{Units}{
 
 In extrapolating to the entire survey region it is important that the unit
-measurements be consistent or converted for consistency.  A conversion
-factor can be specified with the \code{convert.units} variable.  The values of
-\code{Area} in \code{region.table}, must be made consistent with the units for
-\code{Effort} in \code{sample.table} and the units of \code{distance} in the \code{data.frame}
-that was analyzed.  It is easiest if the units of \code{Area} are the square of
+measurements be consistent or converted for consistency. A conversion
+factor can be specified with the \code{convert_units} argument. The values of
+\code{Area} in \code{region_table}, must be made consistent with the units for
+\code{Effort} in \code{sample_table} and the units of \code{distance} in the \code{data.frame}
+that was analyzed. It is easiest if the units of \code{Area} are the square of
 the units of \code{Effort} and then it is only necessary to convert the units of
 \code{distance} to the units of \code{Effort}. For example, if \code{Effort} was entered
 in kilometres and \code{Area} in square kilometres and \code{distance} in metres then
-using \code{convert.units=0.001} would convert metres to kilometres, density
+using \code{convert_units=0.001} would convert metres to kilometres, density
 would be expressed in square kilometres which would then be consistent with
-units for \code{Area}.  However, they can all be in different units as long as
-the appropriate composite value for \code{convert.units} is chosen.  Abundance
+units for \code{Area}. However, they can all be in different units as long as
+the appropriate composite value for \code{convert_units} is chosen. Abundance
 for a survey region can be expressed as: \code{A*N/a} where \code{A} is \code{Area} for
 the survey region, \code{N} is the abundance in the covered (sampled) region,
-and \code{a} is the area of the sampled region and is in units of \code{Effort * distance}.  The sampled region \code{a} is multiplied by \code{convert.units}, so it
+and \code{a} is the area of the sampled region and is in units of \code{Effort * distance}. The sampled region \code{a} is multiplied by \code{convert_units}, so it
 should be chosen such that the result is in the same units as \code{Area}.  For
 example, if \code{Effort} was entered in kilometres, \code{Area} in hectares (100m x
-100m) and \code{distance} in metres, then using \code{convert.units=10} will convert
+100m) and \code{distance} in metres, then using \code{convert_units=10} will convert
 \code{a} to units of hectares (100 to convert metres to 100 metres for distance
 and .1 to convert km to 100m units).
 }
@@ -277,7 +304,7 @@ and .1 to convert km to 100m units).
 
 One can supply \code{data} only to simply fit a detection function. However, if
 abundance/density estimates are necessary further information is required.
-Either the \code{region.table}, \code{sample.table} and \code{obs.table} \code{data.frame}s can
+Either the \code{region_table}, \code{sample_table} and \code{obs_table} \code{data.frame}s can
 be supplied or all data can be supplied as a "flat file" in the \code{data}
 argument. In this format each row in data has additional information that
 would ordinarily be in the other tables. This usually means that there are
@@ -309,8 +336,8 @@ region <- book.tee.data$book.tee.region
 samples <- book.tee.data$book.tee.samples
 obs <- book.tee.data$book.tee.obs
 
-ds.dht.model <- ds(tee.data, 4, region.table=region,
-                   sample.table=samples, obs.table=obs)
+ds.dht.model <- ds(tee.data, 4, region_table=region,
+                   sample_table=samples, obs_table=obs)
 summary(ds.dht.model)
 
 # specify order 2 cosine adjustments
