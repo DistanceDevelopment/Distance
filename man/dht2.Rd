@@ -119,6 +119,9 @@ abundance for. For abundance in the study area, at least one row is
 required. Required columns: \code{Area} (the area of that stratum). If there
 is >1 row, then additional columns, named in \code{strat_formula}.`
 }
+
+Note that if the \code{Area} column is set to all 0, then only density estimates
+will be returned.
 }
 
 \section{Multipliers}{

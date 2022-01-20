@@ -80,6 +80,9 @@
 #'   required. Required columns: `Area` (the area of that stratum). If there
 #'   is >1 row, then additional columns, named in `strat_formula`.`
 #'
+#' Note that if the `Area` column is set to all 0, then only density estimates
+#' will be returned.
+#'
 #' @section Multipliers:
 #' It is often the case that we cannot measure distances to individuals or
 #' groups directly, but instead need to estimate distances to something they
