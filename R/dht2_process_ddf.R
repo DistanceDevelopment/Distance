@@ -34,6 +34,7 @@ dht2_process_ddf <- function(ddf, convert_units, er_est){
 
   # storage for the "distance" data
   bigdat <- c()
+  obj_keep <- c()
   # storage for summaries
   ddf_summary <- list()
 
@@ -52,10 +53,10 @@ dht2_process_ddf <- function(ddf, convert_units, er_est){
     this_ddf$data <- droplevels(this_ddf$data)
 
     # only keep observations within the truncation
-    obj_keep <- this_ddf$data$object[this_ddf$data$distance <=
-                                      this_ddf$ds$aux$width &
-                                     this_ddf$data$distance >=
-                                      this_ddf$ds$aux$left]
+    obj_keep <- c(obj_keep, this_ddf$data$object[this_ddf$data$distance <=
+                                                  this_ddf$ds$aux$width &
+                                                 this_ddf$data$distance >=
+                                                  this_ddf$ds$aux$left])
 
     this_bigdat <- this_ddf$data[this_ddf$data$object %in% obj_keep, ]
     # transect type
