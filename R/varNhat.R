@@ -6,7 +6,7 @@ varNhat <- function(data, model){
   # format the data
   # definitely a bad idea, relies on dplyr's internal representation
   # faff here is to detect if there is an NA grouping and drop it
-  # this has all the group data in it
+  # this has all the grouping data in it
   grps <- attr(data, "groups")
   grps$.rows <- NULL
   # are there any NAs?
@@ -57,10 +57,20 @@ varNhat <- function(data, model){
   dm <- DeltaMethod(model$par, dhtd, vcov, sqrt(.Machine$double.eps),
                     model=model, data=data, area=area,
                     covered_area=covered_area, ind=ind)
-  attr(dm, "vardat_str") <- vardat_str
 
-  ret <- list(Nhat=dm)
+  # fiddle with variance data.frame
+  vardat_str$.rows <- NULL
+  vardat_str$df_var <- diag(dm$variance)
 
-  attr(ret, "vardat_str") <- vardat_str
+  # detection function p uncertainty
+  ddf_summary <- summary(model)
+  vardat_str$p_var <- ddf_summary$average.p.se[1,1]^2
+  vardat_str$p_average <- ddf_summary$average.p
+
+
+  # return the data.frame with the delta method stuff as an attribute
+  ret <- vardat_str
+  attr(ret, "dm") <- dm
+
   return(ret)
 }

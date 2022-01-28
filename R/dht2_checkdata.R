@@ -1,5 +1,5 @@
 # internal function to check input data
-dht2_checkdata <- function(ddf, observations, transects, geo_strat,
+dht2_checkdata <- function(ddf_colnames, observations, transects, geo_strat,
                            strat_formula, stratum_labels, geo_stratum_labels){
 
   # required columns for observations and transects
@@ -30,7 +30,7 @@ dht2_checkdata <- function(ddf, observations, transects, geo_strat,
   }
 
   # check the stratum label isn't in the ddf data
-  stratum_labels <- stratum_labels[!(stratum_labels %in% colnames(ddf$data))]
+  stratum_labels <- stratum_labels[!(stratum_labels %in% ddf_colnames)]
 
   # are there any stratum labels left? If so, something bad has happened
   if(length(stratum_labels) > 0){

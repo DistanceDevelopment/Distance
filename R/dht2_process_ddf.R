@@ -1,0 +1,103 @@
+# process the ddf object
+# other TODO:
+#   - handle grouped/ungrouped estimation (all one or the other??)
+#   - ignore flatfile for now?
+#   - handle point/line mixed ddfs
+#   - vector er_est?
+dht2_process_ddf <- function(ddf, convert_units, er_est){
+
+  # if we don't have a list, make a list
+  if(any(class(ddf) != "list")){
+    ddf <- list(ddf)
+  }
+
+  # we can have a different unit conversion per detection function, as a treat
+  if(length(convert_units) != 1){
+    if(length(convert_units)!=length(ddf)){
+      stop("convert_units must be either 1 number or have as many entries as there are detection functions")
+    }else{
+      convert_units <- rep(convert_units, length(ddf))
+    }
+  }
+
+  # we can have a different ER estimators per detection function, as a treat
+  # only check this if the par was set, else defaults get used below
+  if(attr(er_est, "missing")){
+    if(length(er_est) != 1){
+      if(length(er_est)!=length(ddf)){
+        stop("er_est must be either 1 number or have as many entries as there are detection functions")
+      }else{
+        er_est <- rep(er_est, length(ddf))
+      }
+    }
+  }
+
+  # storage for the "distance" data
+  bigdat <- c()
+  # storage for summaries
+  ddf_summary <- list()
+
+  # just bad vibes below this point...
+
+  for(i in seq_along(ddf)){
+
+    this_ddf <- ddf[[i]]
+    # just get the ds model if we have Distance::ds output
+    if(inherits(this_ddf, "dsmodel")){
+      this_ddf <- this_ddf$ddf
+    }
+
+
+    # drop unused levels of factors
+    this_ddf$data <- droplevels(this_ddf$data)
+
+    # only keep observations within the truncation
+    obj_keep <- this_ddf$data$object[this_ddf$data$distance <=
+                                      this_ddf$ds$aux$width &
+                                     this_ddf$data$distance >=
+                                      this_ddf$ds$aux$left]
+
+    this_bigdat <- this_ddf$data[this_ddf$data$object %in% obj_keep, ]
+    # transect type
+    this_bigdat$transect_type <- if(this_ddf$ds$aux$point) "point" else "line"
+    # apply unit conversion to truncations
+    this_bigdat$df_width <- this_ddf$ds$aux$width * convert_units
+
+    # get probabilities of detection
+    this_bigdat$p <- predict(this_ddf)$fitted
+
+    # add the number of data used to fit the detection function
+    this_bigdat$n_ddf <- length(this_ddf$fitted)
+    # number of parameters in the detection function
+    this_bigdat$n_par <- length(this_ddf$par)
+
+    # get default variance estimation
+    if(attr(er_est, "missing")){
+      if(this_ddf$ds$aux$point){
+        this_bigdat$er_est <- "P2"
+      }else{
+        this_bigdat$er_est <- "R2"
+      }
+    }else{
+      this_bigdat$er_est <- er_est[i]
+    }
+
+# TODO:
+## detection function uncertainty
+## do this sans-pipe, as we need cross-terms and to get the matrix
+#df_unc <- varNhat(res, ddf)
+
+    # put that back
+    ddf[[i]] <- this_ddf
+    bigdat <- rbind.data.frame(bigdat, this_bigdat)
+  }
+
+  if(any(table(bigdat$object) > 1)){
+    stop("object column but be unique over all data")
+  }
+
+  list(ddf = ddf,
+       bigdat = bigdat,
+       obj_keep = obj_keep,
+       summary  = ddf_summary)
+}
