@@ -21,16 +21,16 @@ dht2_process_ddf <- function(ddf, convert_units, er_est){
   }
 
   # we can have a different ER estimators per detection function, as a treat
-  # only check this if the par was set, else defaults get used below
+  # only check this if the par was set, else defaults get used
   if(attr(er_est, "missing")){
-    if(length(er_est) != 1){
-      if(length(er_est)!=length(ddf)){
-        stop("er_est must be either 1 number or have as many entries as there are detection functions")
-      }else{
-        er_est <- rep(er_est, length(ddf))
-      }
+    er_est <- er_est[as.numeric(unlist(lapply(ddf,
+                                              function(x) x$ds$aux$point)))+1]
+  }else if(length(er_est) != 1){
+    if(length(er_est)!=length(ddf)){
+      stop("er_est must be either 1 number or have as many entries as there are detection functions")
     }
   }
+
 
   # storage for the "distance" data
   bigdat <- c()
@@ -67,31 +67,22 @@ dht2_process_ddf <- function(ddf, convert_units, er_est){
     # get probabilities of detection
     this_bigdat$p <- predict(this_ddf)$fitted
 
-    # add the number of data used to fit the detection function
-    this_bigdat$n_ddf <- length(this_ddf$fitted)
-    # number of parameters in the detection function
-    this_bigdat$n_par <- length(this_ddf$par)
 
-    # get default variance estimation
-    if(attr(er_est, "missing")){
-      if(this_ddf$ds$aux$point){
-        this_bigdat$er_est <- "P2"
-      }else{
-        this_bigdat$er_est <- "R2"
-      }
-    }else{
-      this_bigdat$er_est <- er_est[i]
-    }
+    # get variance estimation
+    this_bigdat$er_est <- er_est[i]
 
-# TODO:
-## detection function uncertainty
-## do this sans-pipe, as we need cross-terms and to get the matrix
-#df_unc <- varNhat(res, ddf)
+    # add a detection function identifier for this bit of the data
+    this_bigdat$ddf_id <- i
 
     # put that back
     ddf[[i]] <- this_ddf
     bigdat <- rbind.data.frame(bigdat, this_bigdat)
   }
+
+  # total number of data used to fit the detection functions
+  bigdat$n_ddf <- sum(unlist(lapply(ddf, function(x) length(x$fitted))))
+  # total number of parameters in the detection function
+  bigdat$n_par <- sum(unlist(lapply(ddf, function(x) length(x$par))))
 
   if(any(table(bigdat$object) > 1)){
     stop("object column but be unique over all data")

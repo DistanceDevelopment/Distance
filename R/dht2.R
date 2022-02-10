@@ -255,9 +255,10 @@ dht2 <- function(ddf, observations=NULL, transects=NULL, geo_strat=NULL,
                  total_area=NULL, binomial_var=FALSE){
 
   # get default variance estimation
-  attr(er_est, "missing") <- FALSE
   if(missing(er_est)){
     attr(er_est, "missing") <- TRUE
+  }else{
+    attr(er_est, "missing") <- FALSE
   }
 
   # check we have a valid stratification option
@@ -663,8 +664,8 @@ if(mult){
     select(!!stratum_labels, "Area", "Nc", "n", "ER_var", "Effort", "k",
            "Covered_area", "df_var", "group_var", "group_mean",
            "group_var_Nhat", "ER_var_Nhat", "rate_var", "rate_var_Nhat", "rate",
-           "rate_df", "rate_CV", "p_var", "p_average", "n_ddf", "n_par",
-           "er_est") %>%
+           "rate_df", "rate_CV", #"p_var", "p_average",
+           "n_ddf", "n_par", "er_est") %>%
     ## now just get the distinct cases
     distinct()
 
@@ -735,8 +736,20 @@ if(mult){
     distinct()
 
 
-  # make a summary
+  # make a summary of each stratum group
   res <- as.data.frame(res)
+
+  if(length(ddf)>1){
+    res <- res %>%
+      group_by_at(.vars=stratum_labels) %>%
+      mutate(df_CV = sqrt(sum(.data$df_CV^2)),
+             p_average = .data$n/.data$Nc) %>%
+      mutate(df_var = (.data$df_CV * .data$p_average)^2) %>%
+      ungroup() %>%
+      distinct()
+    res$p_average <- NULL
+  }
+
   # TODO: this is untested for multiple strata
   # https://github.com/DistanceDevelopment/Distance/issues/46
   # here we loop over the different stratification variables in the below
@@ -854,13 +867,13 @@ if(mult){
       # calculate total variance for detection function(s)
       df_tvar <- 0
       for(i in seq_along(deltamethod)){
-        df_tvar <- df_tvar + (matrix(dat_row$weight, nrow=1) %*%
-                     deltamethod[[i]]$variance %*%
-                    matrix(dat_row$weight, ncol=1))
+        these_weights <- matrix(dat_row$weight, nrow=1)
+        df_tvar <- df_tvar + (these_weights %*%
+                     deltamethod[[i]]$variance %*% t(these_weights))
       }
+      # detection function CV
       dat_row <- dat_row %>%
         mutate(df_CV  = sqrt(df_tvar)/dat_row$Abundance[1])
-
 
       # calculate total variance
       if(stratification=="replicate"){
@@ -888,7 +901,7 @@ if(mult){
         # add sources of variance
         tvar <- dat_row$ER_var_Nhat[1] +
                 df_tvar +
-                dat_row$Abundance[1]^2*dat_row$rate_CV[1]^2
+                dat_row$Abundance[1]^2 * dat_row$rate_CV[1]^2
         # add-in group size component if not doing Innes et al
         if(!innes){
           tvar <- dat_row$group_var_Nhat[1] +

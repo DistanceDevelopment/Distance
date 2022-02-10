@@ -5,7 +5,7 @@ variance_contributions <- function(res){
   CV_cont <- data.frame(ER          = res$ER_CV,
                         Groups      = sqrt(res$group_var)/res$group_mean,
                         Multipliers = res$rate_CV,
-                        Detection   = sqrt(res$p_var)/res$p_average)
+                        Detection   = res$df_CV)
 
   # remove Multipliers if not there
   if(all(is.na(CV_cont$Multipliers) | is.nan(CV_cont$Multipliers) |
