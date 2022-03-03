@@ -26,9 +26,8 @@
 #' gives hazard-rate and `"unif"` gives uniform. Note that if uniform key is
 #' used, covariates cannot be included in the model.
 #' @param adjustment adjustment terms to use; `"cos"` gives cosine (default),
-#' `"herm"` gives Hermite polynomial and `"poly"` gives simple polynomial.
-#' `"cos"` is recommended. A value of `NULL` indicates that no adjustments are
-#' to be fitted.
+#' `"herm"` gives Hermite polynomial and `"poly"` gives simple polynomial. A
+#' value of `NULL` indicates that no adjustments are to be fitted.
 #' @param order orders of the adjustment terms to fit (as a vector/scalar). 
 #' The default value (`NULL`) will select via AIC up to `max_adjustments` 
 #' adjustments. If a single number is given, that number is expanded to be 

@@ -67,9 +67,8 @@ gives hazard-rate and \code{"unif"} gives uniform. Note that if uniform key is
 used, covariates cannot be included in the model.}
 
 \item{adjustment}{adjustment terms to use; \code{"cos"} gives cosine (default),
-\code{"herm"} gives Hermite polynomial and \code{"poly"} gives simple polynomial.
-\code{"cos"} is recommended. A value of \code{NULL} indicates that no adjustments are
-to be fitted.}
+\code{"herm"} gives Hermite polynomial and \code{"poly"} gives simple polynomial. A
+value of \code{NULL} indicates that no adjustments are to be fitted.}
 
 \item{order}{orders of the adjustment terms to fit (as a vector/scalar).
 The default value (\code{NULL}) will select via AIC up to \code{max_adjustments}
