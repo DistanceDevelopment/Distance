@@ -210,6 +210,40 @@ test_that("adjustments expand correctly",{
   expect_equal(suppressWarnings(summary(ds(egdata, 4, key="unif",
                                            order=2))$ddf$name.message),
                "uniform key function with cosine(1,2) adjustments")
+})
+
+test_that("adjustments orders start correctly",{
+  skip_on_cran()
+
+  # hn+poly starts at 4
+  expect_message(ds(egdata, trunc = 4, key = "hn", adj = "poly"),
+                 "Fitting half-normal key function with simple polynomial\\(4\\) adjustments")
+  # hn+cos starts at 2
+  expect_message(ds(egdata, trunc = 4, key = "hn", adj = "cos"),
+                 "Fitting half-normal key function with cosine\\(2\\) adjustments")
+  # hn+herm starts at 4
+  expect_message(ds(egdata, trunc = 4, key = "hn", adj = "herm"),
+                 "Fitting half-normal key function with Hermite\\(4\\) adjustments")
+
+  # hr+poly starts at 4
+  expect_message(ds(egdata, trunc = 4, key = "hr", adj = "poly"),
+                 "Fitting hazard-rate key function with simple polynomial\\(4\\) adjustments")
+  # hr+cos starts at 2
+  expect_message(ds(egdata, trunc = 4, key = "hr", adj = "cos"),
+                 "Fitting hazard-rate key function with cosine\\(2\\) adjustments")
+  # hr+herm starts at 4
+  expect_message(ds(egdata, trunc = 4, key = "hr", adj = "herm"),
+                 "Fitting hazard-rate key function with Hermite\\(4\\) adjustments")
+
+  # unif+poly starts at 4
+  expect_message(ds(egdata, trunc = 4, key = "unif", adj = "poly"),
+                 "Fitting uniform key function with simple polynomial\\(4\\) adjustments")
+  # unif+cos starts at 2
+  expect_message(ds(egdata, trunc = 4, key = "unif", adj = "cos"),
+                 "Fitting uniform key function with cosine\\(1\\) adjustments")
+  # unif+herm starts at 4
+  expect_message(ds(egdata, trunc = 4, key = "unif", adj = "herm"),
+                 "Fitting uniform key function with Hermite\\(4\\) adjustments")
 
 })
 
@@ -225,7 +259,6 @@ test_that("Percentage truncation works when distances are missing",{
 
 
 # just distend and distbegin can be supplied
-
 test_that("just distend and distbegin can be supplied", {
   # make some data
   bin.data <- create_bins(egdata, c(0, 1, 2, 3, 4))
@@ -276,7 +309,6 @@ test_that("max.adjustments works",{
 })
 
 # warnings when bad models get fitted
-
 test_that("warnings of bad models get thrown",{
   skip_on_cran()
 
