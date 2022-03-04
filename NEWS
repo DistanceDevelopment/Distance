@@ -17,6 +17,8 @@ Distance 1.0.5
 * fix bootdht issue when cluster results were requests (#103)
 * improve flatfile documentation (thanks to Maggie Blake for pointing this out)
 * fixed bug in cutpoint calculations in create.bins (#108)
+* order argument to ds() is now only used to specify order, to fix a given number of adjustments use the new argument nadj (see ?ds for more info)
+* fix bug where polynomial adjustments started at the wrong order (2 rather than 4)
 
 Distance 1.0.4
 ----------------------

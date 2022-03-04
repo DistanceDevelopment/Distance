@@ -64,6 +64,6 @@ test_that("no Area column works", {
   # totals line doesn't match here as the proportion of effort between
   # strata is different
   expect_equal(minke_with_Area$dht$individuals$D[1:2,],
-               minke_no_Area$dht$individuals$D[1:2,])
+               minke_no_Area$dht$individuals$D[1:2,], tol=1e-6)
 
 })
