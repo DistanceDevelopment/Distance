@@ -206,6 +206,12 @@ test_that("adjustments expand correctly",{
                                            nadj=2))$ddf$name.message),
                "uniform key function with cosine(1,2) adjustments")
 
+  #unif + poly(2)
+  expect_equal(suppressWarnings(summary(ds(egdata, 4, key="unif",
+                                           adjustment="poly",
+                                           nadj=1))$ddf$name.message),
+               "uniform key function with simple polynomial(2) adjustments")
+
   # hn + cos(2,3)
   expect_equal(suppressWarnings(summary(ds(egdata, 4, key="hn",
                                            order=2:3))$ddf$name.message),

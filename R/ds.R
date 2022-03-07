@@ -457,18 +457,7 @@ ds <- function(data, truncation=ifelse(is.null(cutpoints),
       }
 
     }else if(!is.null(nadj)){
-      # this is according to p. 47 of IDS.
-      if(adjustment %in% c("poly", "herm")){
-        # simple and Hermite polynomials
-        order <- seq(4, by=2, length.out=nadj)
-      }else if(adjustment=="cos" & key=="unif"){
-        # Fourier
-        order <- 1:nadj
-      }else{
-        # cosine
-        order <- seq(2, by=1, length.out=nadj)
-      }
-
+      order <- get_adj_orders(nadj, key, adjustment)
     }else{
 
       # if there are covariates then don't do the AIC search
@@ -479,19 +468,7 @@ ds <- function(data, truncation=ifelse(is.null(cutpoints),
       # otherwise go ahead and set up the candidate adjustment orders
         aic.search <- TRUE
 
-        # this is according to p. 47 of IDS
-        if(key=="unif" & adjustment=="cos"){
-          # for Fourier...
-          order <- 1:max_adjustments
-        }else if(adjustment %in% c("poly", "herm")){
-          # simple and Hermite poly: even from 4
-          order <- seq(4, by=2, length.out=max_adjustments)
-        }else if(adjustment=="cos"){
-          # cosine: by 1 from 2
-          order <- seq(2, by=1, length.out=max_adjustments)
-        }else{
-          stop("Bad adjustment term definition")
-        }
+        order <- get_adj_orders(max_adjustments, key, adjustment)
       }
     }
 
