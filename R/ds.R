@@ -434,9 +434,9 @@ ds <- function(data, truncation=ifelse(is.null(cutpoints),
     aic.search <- FALSE
     if(!is.null(order)){
 
-      # if both are supplied
+      # if both nadj and order are supplied
       if(!is.null(nadj)){
-        warning("order and nadj supplied, ignoring nadj")
+        if(length(order) != nadj) stop("The number of adjustment orders specified in 'order' must match 'nadj'")
       }
 
       if(any(order != ceiling(order))){
@@ -448,7 +448,6 @@ ds <- function(data, truncation=ifelse(is.null(cutpoints),
     }else if(!is.null(nadj)){
       order <- get_adj_orders(nadj, key, adjustment)
     }else{
-
       # if there are covariates then don't do the AIC search
       if(formula != ~1){
         aic.search <- FALSE
@@ -456,7 +455,6 @@ ds <- function(data, truncation=ifelse(is.null(cutpoints),
       }else{
       # otherwise go ahead and set up the candidate adjustment orders
         aic.search <- TRUE
-
         order <- get_adj_orders(max_adjustments, key, adjustment)
       }
     }

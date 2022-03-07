@@ -128,3 +128,13 @@ test_that("max.adjustments works",{
                "half-normal key function with cosine(2,3,4) adjustments")
 })
 
+test_that("errors thrown",{
+
+  egdata <- egdata[egdata$observer==1,]
+
+  # nadj and length(order) don't match
+  expect_error(suppressWarnings(summary(ds(egdata, 4, key="hn", order=c(2,3),
+                                           nadj=1))$ddf$name.message),
+               "The number of adjustment orders specified in 'order' must match 'nadj'")
+
+})
