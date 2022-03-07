@@ -443,18 +443,7 @@ ds <- function(data, truncation=ifelse(is.null(cutpoints),
           stop("Adjustment orders must be integers.")
       }
 
-      # check for each adjustment type
       order <- sort(order)
-      if(adjustment=="poly"){
-        if(any(order/2 != ceiling(order/2))){
-          stop("Adjustment orders must be even for simple polynomials.")
-        }
-      }
-      if((adjustment=="herm" | adjustment=="cos") & key!="unif"){
-        if(any(order==1)){
-          stop("Adjustment orders for Hermite polynomials and cosines must start at 2.")
-        }
-      }
 
     }else if(!is.null(nadj)){
       order <- get_adj_orders(nadj, key, adjustment)
