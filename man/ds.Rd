@@ -13,6 +13,7 @@ ds(
   formula = ~1,
   key = c("hn", "hr", "unif"),
   adjustment = c("cos", "herm", "poly"),
+  nadj = NULL,
   order = NULL,
   scale = c("width", "scale"),
   cutpoints = NULL,
@@ -70,16 +71,24 @@ used, covariates cannot be included in the model.}
 \code{"herm"} gives Hermite polynomial and \code{"poly"} gives simple polynomial. A
 value of \code{NULL} indicates that no adjustments are to be fitted.}
 
-\item{order}{orders of the adjustment terms to fit (as a vector/scalar).
-The default value (\code{NULL}) will select via AIC up to \code{max_adjustments}
-adjustments. If a single number is given, that number is expanded to be
-\code{seq(term.min, order, by=1)} where \code{term.min} is the appropriate minimum
-order for this type of adjustment  (1 for cosine, 2 for simple and Hermite
-polynomial).   For simple and Hermite polynomials, the values generated
-then are multipled by 2 to give the order used by the fitting routine -
-for example, specifying 3 for a simple or Hermite polynomial series would
-give adjustments of order \code{c(2, 3) * 2 = 4} and \code{6}.
-See Buckland et al. 2001 for more details on adjustment term specification.}
+\item{nadj}{the number of adjustment terms to fit. The default value
+(\code{NULL}) will select via AIC (using a sequential forward selection
+algorithm) up to \code{max.adjustment} adjustments (unless \code{order} is specified).
+A non-negative integer value will cause the specified number of adjustments
+to be fitted. The order of adjustment terms used will depend on the \code{key}
+and \code{adjustment}. For \code{key="unif"}, adjustments of order 1, 2, 3, ... are
+fitted when \code{adjustment = "cos"} and order 2, 4, 6, ... otherwise. For
+\code{key="hn"} or \code{"hr"} adjustments of order 2, 3, 4, ... are fitted when
+\code{adjustment = "cos"} and order 4, 6, 8, ... otherwise. See Buckland et al.
+(2001, p. 47) for details.}
+
+\item{order}{order of adjustment terms to fit. The default value (\code{NULL})
+results in \code{ds} choosing the orders to use - see \code{nadj}. Otherwise a scalar
+positive integer value can be used to fit a single adjustment term of the
+specified order, and a vector of positive integers to fit multiple
+adjustment terms of the specified orders. For simple and Hermite polynomial
+adjustments, only even orders are allowed. The number of adjustment terms
+specified here must match \code{nadj} (or \code{nadj} can be the default \code{NULL} value).}
 
 \item{scale}{the scale by which the distances in the adjustment terms are
 divided. Defaults to \code{"width"}, scaling by the truncation distance. If the

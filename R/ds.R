@@ -28,16 +28,23 @@
 #' @param adjustment adjustment terms to use; `"cos"` gives cosine (default),
 #' `"herm"` gives Hermite polynomial and `"poly"` gives simple polynomial. A
 #' value of `NULL` indicates that no adjustments are to be fitted.
-#' @param order orders of the adjustment terms to fit (as a vector/scalar). 
-#' The default value (`NULL`) will select via AIC up to `max_adjustments` 
-#' adjustments. If a single number is given, that number is expanded to be 
-#' `seq(term.min, order, by=1)` where `term.min` is the appropriate minimum 
-#' order for this type of adjustment  (1 for cosine, 2 for simple and Hermite 
-#' polynomial).   For simple and Hermite polynomials, the values generated 
-#' then are multipled by 2 to give the order used by the fitting routine - 
-#' for example, specifying 3 for a simple or Hermite polynomial series would 
-#' give adjustments of order `c(2, 3) * 2 = 4` and `6`.
-#' See Buckland et al. 2001 for more details on adjustment term specification. 
+#' @param nadj the number of adjustment terms to fit. The default value
+#' (`NULL`) will select via AIC (using a sequential forward selection
+#' algorithm) up to `max.adjustment` adjustments (unless `order` is specified).
+#' A non-negative integer value will cause the specified number of adjustments
+#' to be fitted. The order of adjustment terms used will depend on the `key`
+#' and `adjustment`. For `key="unif"`, adjustments of order 1, 2, 3, ... are
+#' fitted when `adjustment = "cos"` and order 2, 4, 6, ... otherwise. For
+#' `key="hn"` or `"hr"` adjustments of order 2, 3, 4, ... are fitted when
+#' `adjustment = "cos"` and order 4, 6, 8, ... otherwise. See Buckland et al.
+#' (2001, p. 47) for details.
+#' @param order order of adjustment terms to fit. The default value (`NULL`)
+#' results in `ds` choosing the orders to use - see `nadj`. Otherwise a scalar
+#' positive integer value can be used to fit a single adjustment term of the
+#' specified order, and a vector of positive integers to fit multiple
+#' adjustment terms of the specified orders. For simple and Hermite polynomial
+#' adjustments, only even orders are allowed. The number of adjustment terms
+#' specified here must match `nadj` (or `nadj` can be the default `NULL` value).
 #' @param scale the scale by which the distances in the adjustment terms are
 #' divided. Defaults to `"width"`, scaling by the truncation distance. If the
 #' key is uniform only `"width"` will be used. The other option is `"scale"`:
@@ -292,13 +299,12 @@ ds <- function(data, truncation=ifelse(is.null(cutpoints),
                                             max(data$distend)),
                                      max(cutpoints)),
              transect="line",
-             formula=~1, key=c("hn","hr","unif"),
-             adjustment=c("cos","herm","poly"),
-             order=NULL, scale=c("width","scale"),
+             formula=~1, key=c("hn", "hr", "unif"),
+             adjustment=c("cos", "herm", "poly"),
+             nadj=NULL,
+             order=NULL, scale=c("width", "scale"),
              cutpoints=NULL, dht_group=FALSE,
-             monotonicity=ifelse(formula==~1,
-                                 "strict",
-                                 "none"),
+             monotonicity=ifelse(formula==~1, "strict", "none"),
              region_table=NULL, sample_table=NULL, obs_table=NULL,
              convert_units=1, er_var=ifelse(transect=="line", "R2", "P3"),
              method="nlminb", quiet=FALSE, debug_level=0,
@@ -424,49 +430,24 @@ ds <- function(data, truncation=ifelse(is.null(cutpoints),
   }
 
   if(!is.null(adjustment)){
-
+    # by default don't do AIC selection, will turn on later
+    aic.search <- FALSE
     if(!is.null(order)){
-      aic.search <- FALSE
+
+      # if both nadj and order are supplied
+      if(!is.null(nadj)){
+        if(length(order) != nadj) stop("The number of adjustment orders specified in 'order' must match 'nadj'")
+      }
+
       if(any(order != ceiling(order))){
           stop("Adjustment orders must be integers.")
       }
 
-      # check for each adjustment type
       order <- sort(order)
-      if(adjustment=="poly"){
-        if(any(order/2 != ceiling(order/2))){
-          stop("Adjustment orders must be even for simple polynomials.")
-        }
-      }
-      if((adjustment=="herm" | adjustment=="cos") & key!="unif"){
-        if(any(order==1)){
-          stop("Adjustment orders for Hermite polynomials and cosines must start at 2.")
-        }
-      }
 
-      # if a single number is provided do adjmin:order
-      if(length(order)==1){
-        # this is according to p. 47 of IDS.
-        if(adjustment=="poly"){
-          order <- 1:order
-        }else if(adjustment=="cos" & key=="unif"){
-          order <- order
-        }else{
-          order <- 2:order
-        }
-
-        # for Fourier...
-        if(key=="unif" & adjustment=="cos"){
-          order <- 1:order
-        }
-      }
-      # make even
-      if(adjustment=="herm" | adjustment=="poly"){
-        order <- 2*order
-      }
-
+    }else if(!is.null(nadj)){
+      order <- get_adj_orders(nadj, key, adjustment)
     }else{
-
       # if there are covariates then don't do the AIC search
       if(formula != ~1){
         aic.search <- FALSE
@@ -474,26 +455,7 @@ ds <- function(data, truncation=ifelse(is.null(cutpoints),
       }else{
       # otherwise go ahead and set up the candidate adjustment orders
         aic.search <- TRUE
-
-        # this is according to p. 47 of IDS
-        if(key=="unif" & adjustment=="cos"){
-          # for Fourier...
-          order <- seq(2, max_adjustments)
-          order <- c(1, order)
-        }else if(adjustment=="poly"){
-          # polynomials: even from 2
-          order <- seq(2, 2*max_adjustments, by=2)
-        }else if(adjustment=="herm"){
-          # hermite: even from 4
-          order <- seq(2, max_adjustments)
-          order <- 2*order
-          order <- order[1:max_adjustments]
-        }else if(adjustment=="cos"){
-          # cosine: by 1 from 2
-          order <- seq(2, max_adjustments+1)
-        }else{
-          stop("Bad adjustment term definition")
-        }
+        order <- get_adj_orders(max_adjustments, key, adjustment)
       }
     }
 

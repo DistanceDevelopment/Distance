@@ -186,67 +186,6 @@ test_that("Truncation is handled",{
 
 })
 
-test_that("adjustments expand correctly",{
-  skip_on_cran()
-
-  egdata <- egdata[egdata$observer==1,]
-
-  # hn + cos(2)
-  expect_equal(suppressWarnings(summary(ds(egdata, 4, key="hn",
-                                           order=2))$ddf$name.message),
-               "half-normal key function with cosine(2) adjustments")
-
-  # hn + cos(2,3)
-  expect_equal(suppressWarnings(summary(ds(egdata, 4, key="hn",
-                                           order=2:3))$ddf$name.message),
-               "half-normal key function with cosine(2,3) adjustments")
-
-  # hn + cos(2,3,4,5)
-  expect_equal(suppressWarnings(summary(ds(egdata, 4, key="hn",
-                                           order=5))$ddf$name.message),
-               "half-normal key function with cosine(2,3,4,5) adjustments")
-
-  #unif + cos(1,2)
-  expect_equal(suppressWarnings(summary(ds(egdata, 4, key="unif",
-                                           order=2))$ddf$name.message),
-               "uniform key function with cosine(1,2) adjustments")
-})
-
-test_that("adjustments orders start correctly",{
-  skip_on_cran()
-
-  # hn+poly starts at 4
-  expect_message(ds(egdata, trunc = 4, key = "hn", adj = "poly"),
-                 "Fitting half-normal key function with simple polynomial\\(4\\) adjustments")
-  # hn+cos starts at 2
-  expect_message(ds(egdata, trunc = 4, key = "hn", adj = "cos"),
-                 "Fitting half-normal key function with cosine\\(2\\) adjustments")
-  # hn+herm starts at 4
-  expect_message(ds(egdata, trunc = 4, key = "hn", adj = "herm"),
-                 "Fitting half-normal key function with Hermite\\(4\\) adjustments")
-
-  # hr+poly starts at 4
-  expect_message(ds(egdata, trunc = 4, key = "hr", adj = "poly"),
-                 "Fitting hazard-rate key function with simple polynomial\\(4\\) adjustments")
-  # hr+cos starts at 2
-  expect_message(ds(egdata, trunc = 4, key = "hr", adj = "cos"),
-                 "Fitting hazard-rate key function with cosine\\(2\\) adjustments")
-  # hr+herm starts at 4
-  expect_message(ds(egdata, trunc = 4, key = "hr", adj = "herm"),
-                 "Fitting hazard-rate key function with Hermite\\(4\\) adjustments")
-
-  # unif+poly starts at 4
-  expect_message(ds(egdata, trunc = 4, key = "unif", adj = "poly"),
-                 "Fitting uniform key function with simple polynomial\\(4\\) adjustments")
-  # unif+cos starts at 2
-  expect_message(ds(egdata, trunc = 4, key = "unif", adj = "cos"),
-                 "Fitting uniform key function with cosine\\(1\\) adjustments")
-  # unif+herm starts at 4
-  expect_message(ds(egdata, trunc = 4, key = "unif", adj = "herm"),
-                 "Fitting uniform key function with Hermite\\(4\\) adjustments")
-
-})
-
 # reported by Len Thomas 20 August
 test_that("Percentage truncation works when distances are missing",{
   skip_on_cran()
@@ -266,46 +205,6 @@ test_that("just distend and distbegin can be supplied", {
   expect_message(ds.model <- ds(bin.data, 4, monotonicity=FALSE, key="hn",
                                 adjustment=NULL),
                  "^Columns \"distbegin\" and \"distend\" in data: performing a binned analysis....*")
-})
-
-# max adjustments arg
-test_that("max.adjustments works",{
-  skip_on_cran()
-
-  egdata <- egdata[egdata$observer==1,]
-
-  # setting max.adjustments=0 gives no adjustments
-  expect_equal(summary(ds(egdata, 4, key="hn", max_adjustments=0,
-                          adjustment="cos"))$ddf$name.message,
-               "half-normal key function")
-
-  # some delicious stake
-  data(stake77)
-  dists <- stake77$PD[stake77$Obs2==1]
-  dists <- c(dists, dists[dists>10])
-  dists <- c(dists, dists[dists<5])
-  dists <- c(dists, dists[dists<5])
-
-  # ignore warnings below from monotonicity checks, don't care about that here
-  expect_equal(summary(suppressWarnings(
-                ds(dists, 20, key="hn", max_adjustments=3,
-                   adjustment="cos")))$ddf$name.message,
-               "half-normal key function with cosine(2,3,4) adjustments")
-
-  expect_equal(summary(suppressWarnings(
-                ds(dists, 20, key="hn", max_adjustments=2,
-                   adjustment="cos")))$ddf$name.message,
-               "half-normal key function with cosine(2,3) adjustments")
-
-  expect_equal(summary(suppressWarnings(
-                ds(dists, 20, key="hn", max_adjustments=1,
-                   adjustment="cos")))$ddf$name.message,
-               "half-normal key function with cosine(2) adjustments")
-
-  expect_equal(summary(suppressWarnings(
-                ds(dists, 20, key="hn", max_adjustments=6,
-                   adjustment="cos")))$ddf$name.message,
-               "half-normal key function with cosine(2,3,4) adjustments")
 })
 
 # warnings when bad models get fitted
