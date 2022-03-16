@@ -13,7 +13,7 @@
 }
 \value{
 a numeric value giving the log-likelihood with two attributes:
-\code{"df"} the "egrees of freedom for the model (number of parameters) and
+\code{"df"} the "degrees of freedom for the model (number of parameters) and
 \code{"nobs"} the number of observations used to fit the model
 }
 \description{
