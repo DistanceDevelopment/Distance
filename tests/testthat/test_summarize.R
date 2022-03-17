@@ -11,6 +11,7 @@ egdata <- book.tee.data$book.tee.dataframe
 egdata <- egdata[!duplicated(egdata$object), ]
 
 test_that("Error on different truncation distance", {
+  skip_on_cran()
   set.seed(100)
   # some models
   t4 <- ds(egdata, 4)
@@ -33,6 +34,7 @@ test_that("Error on different truncation distance", {
 
 
 test_that("Binning",{
+  skip_on_cran()
 
   # largest cutpoint
   cp1 <- suppressMessages(ds(egdata, key="hn", order=0,
