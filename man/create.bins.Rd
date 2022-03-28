@@ -16,7 +16,7 @@ argument \code{data} with two extra columns \code{distbegin} and
 \code{distend}.
 }
 \description{
-\code{create.bins} is now deprecated, please use \url{create_bins}
+\code{create.bins} is now deprecated, please use \code{\link{create_bins}}
 }
 \author{
 David L. Miller

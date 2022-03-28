@@ -21,8 +21,28 @@ ignored for line transects}
 match what is supplied to original \code{plot} command. Defaults to
 "Sturges" breaks, as in \code{\link[graphics:hist]{hist}}. Only used if \code{pdf=TRUE}}
 }
+\value{
+invisibly, the values of detectability over the truncation range.
+}
 \description{
-Add covariate levels detection function plots
+Add a line or lines to a plot of the detection function which correspond to
+a a given covariate combination. These can be particularly useful when there
+is a small number of factor levels or if quantiles of a continuous covariate
+are specified.
+}
+\details{
+All covariates must be specified in \code{data}. Plots can become quite busy
+when this approach is used. It may be useful to fix some covariates at their
+median level and plot set values of a covariate of interest. For example
+setting weather (e.g., Beaufort) to its median and plotting levels of
+observer, then creating a second plot for a fixed observer with levels of
+weather.
+
+Arguments to \code{\link{lines}} are supplied in \dots and aesthetics like
+line type (\code{lty}), line width (\code{lwd}) and colour (\code{col}) are
+recycled. By default \code{lty} is used to distinguish between the lines. It
+may be useful to add a \code{\link{legend}} to the plot (lines are plotted
+in the order of \code{data}).
 }
 \note{
 This function is located in the \code{mrds} package but the
@@ -52,4 +72,7 @@ plot(result, showpoints=FALSE, pdf=TRUE)
 add_df_covar_line(result,
                   data.frame(OBs=na.omit(unique(amakihi$OBs))), pdf=TRUE)
 }
+}
+\author{
+David L Miller
 }
