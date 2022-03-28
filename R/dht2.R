@@ -308,6 +308,11 @@ dht2 <- function(ddf, observations=NULL, transects=NULL, geo_strat=NULL,
     stop("Only one level of stratification is currently supported")
   }
 
+  # process multiple detection functions
+  ddf_proc <- dht2_process_ddf(ddf, convert_units, er_est)
+  bigdat <- ddf_proc$bigdat
+  ddf <- ddf_proc$ddf
+
   if(!is.null(observations) & !is.null(transects)){
     if(!is.null(geo_strat)){
       # what if there were as.factor()s in the formula?
@@ -328,12 +333,6 @@ dht2 <- function(ddf, observations=NULL, transects=NULL, geo_strat=NULL,
     # - check column names don't conflict with columns created below
     #    - list of protected column names that can't be in the data
     #         protected <- c("p", ".Label", )
-
-
-    # process multiple detection functions
-    ddf_proc <- dht2_process_ddf(ddf, convert_units, er_est)
-    bigdat <- ddf_proc$bigdat
-    ddf <- ddf_proc$ddf
 
     # check the data
     dht2_checkdata(colnames(bigdat), observations, transects, geo_strat,
@@ -388,7 +387,6 @@ dht2 <- function(ddf, observations=NULL, transects=NULL, geo_strat=NULL,
       stratum_labels <- c("Label", stratum_labels)
     }
   }else if(!is.null(flatfile)){
-stop("flatfile not supported in this release yet, dave fix this")
     # if we have a flatfile
     # TODO: check flatfile format here
     # should this just run Distance:::checkdata(flatfile)?
@@ -405,6 +403,10 @@ stop("flatfile not supported in this release yet, dave fix this")
 
     # check regular columns exist
     flatfile_labels <- c("distance", "Sample.Label", "Effort", "Area")
+    # if we're doing multiple detection functions we need to have object
+    if(length(ddf) > 1){
+      flatfile_labels <- c(flatfile_labels, "object")
+    }
 
     if(!all(flatfile_labels %in% names(flatfile))){
       stop(paste("Column(s):",
@@ -412,9 +414,14 @@ stop("flatfile not supported in this release yet, dave fix this")
                        collapse=", "),
                  "not in `flatfile`"))
     }
+
     # safely truncate the data, respecting the data structure
-    flatfile <- safetruncate(flatfile, ddf$meta.data$width, ddf$meta.data$left)
-    bigdat <- flatfile
+    for(i in seq_along(ddf)){
+      this_flatfile <- flatfile[flatfile$object %in% ddf[[i]]$data$object, ]
+      flatfile <- safetruncate(flatfile, ddf$meta.data$width, ddf$meta.data$left)
+## TODO: flatfile stuff
+    #bigdat <- flatfile
+    #bigdat <- flatfile[flatfile$object %in% ddf_proc$obj_keep, ]
 
     # what if there were as.factor()s in the formula?
     bigdat <- safe_factorize(strat_formula, bigdat)

@@ -3,7 +3,7 @@
 #   - handle grouped/ungrouped estimation (all one or the other??)
 #   - ignore flatfile for now?
 #   - handle point/line mixed ddfs
-#   - vector er_est?
+#   - fix Total degrees of freedom
 dht2_process_ddf <- function(ddf, convert_units, er_est){
 
   # if we don't have a list, make a list
