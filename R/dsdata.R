@@ -341,7 +341,7 @@ NULL
 #' @references
 #' Borchers, D. L., S.T. Buckland, and W. Zucchini. 2002. Estimating Animal
 #' Abundance: Closed Populations. Statistics for Biology and Health. London:
-#' Springer-Verlag. <https://www.springer.com/gp/book/9781852335601>
+#' Springer-Verlag. <https://link.springer.com/gp/book/9781852335601>
 #'
 #' Buckland, S.T., D.R. Anderson, K.P. Burnham, J.L. Laake, D.L. Borchers, and
 #' L. Thomas. Advanced Distance Sampling: Estimating Abundance of Biological

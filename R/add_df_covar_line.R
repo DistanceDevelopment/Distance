@@ -1,6 +1,6 @@
 #' Add covariate levels detection function plots
 #'
-#' @inherit mrds::add_df_covar_line
+#' @inherit mrds::add.df.covar.line
 #' @name add_df_covar_line
 #' @docType methods
 #' @param ddf a fitted detection function object.

@@ -186,33 +186,6 @@ test_that("Truncation is handled",{
 
 })
 
-test_that("adjustments expand correctly",{
-  skip_on_cran()
-
-  egdata <- egdata[egdata$observer==1,]
-
-  # hn + cos(2)
-  expect_equal(suppressWarnings(summary(ds(egdata, 4, key="hn",
-                                           order=2))$ddf$name.message),
-               "half-normal key function with cosine(2) adjustments")
-
-  # hn + cos(2,3)
-  expect_equal(suppressWarnings(summary(ds(egdata, 4, key="hn",
-                                           order=2:3))$ddf$name.message),
-               "half-normal key function with cosine(2,3) adjustments")
-
-  # hn + cos(2,3,4,5)
-  expect_equal(suppressWarnings(summary(ds(egdata, 4, key="hn",
-                                           order=5))$ddf$name.message),
-               "half-normal key function with cosine(2,3,4,5) adjustments")
-
-  #unif + cos(1,2)
-  expect_equal(suppressWarnings(summary(ds(egdata, 4, key="unif",
-                                           order=2))$ddf$name.message),
-               "uniform key function with cosine(1,2) adjustments")
-
-})
-
 # reported by Len Thomas 20 August
 test_that("Percentage truncation works when distances are missing",{
   skip_on_cran()
@@ -225,7 +198,6 @@ test_that("Percentage truncation works when distances are missing",{
 
 
 # just distend and distbegin can be supplied
-
 test_that("just distend and distbegin can be supplied", {
   # make some data
   bin.data <- create_bins(egdata, c(0, 1, 2, 3, 4))
@@ -235,48 +207,7 @@ test_that("just distend and distbegin can be supplied", {
                  "^Columns \"distbegin\" and \"distend\" in data: performing a binned analysis....*")
 })
 
-# max adjustments arg
-test_that("max.adjustments works",{
-  skip_on_cran()
-
-  egdata <- egdata[egdata$observer==1,]
-
-  # setting max.adjustments=0 gives no adjustments
-  expect_equal(summary(ds(egdata, 4, key="hn", max_adjustments=0,
-                          adjustment="cos"))$ddf$name.message,
-               "half-normal key function")
-
-  # some delicious stake
-  data(stake77)
-  dists <- stake77$PD[stake77$Obs2==1]
-  dists <- c(dists, dists[dists>10])
-  dists <- c(dists, dists[dists<5])
-  dists <- c(dists, dists[dists<5])
-
-  # ignore warnings below from monotonicity checks, don't care about that here
-  expect_equal(summary(suppressWarnings(
-                ds(dists, 20, key="hn", max_adjustments=3,
-                   adjustment="cos")))$ddf$name.message,
-               "half-normal key function with cosine(2,3,4) adjustments")
-
-  expect_equal(summary(suppressWarnings(
-                ds(dists, 20, key="hn", max_adjustments=2,
-                   adjustment="cos")))$ddf$name.message,
-               "half-normal key function with cosine(2,3) adjustments")
-
-  expect_equal(summary(suppressWarnings(
-                ds(dists, 20, key="hn", max_adjustments=1,
-                   adjustment="cos")))$ddf$name.message,
-               "half-normal key function with cosine(2) adjustments")
-
-  expect_equal(summary(suppressWarnings(
-                ds(dists, 20, key="hn", max_adjustments=6,
-                   adjustment="cos")))$ddf$name.message,
-               "half-normal key function with cosine(2,3,4) adjustments")
-})
-
 # warnings when bad models get fitted
-
 test_that("warnings of bad models get thrown",{
   skip_on_cran()
 

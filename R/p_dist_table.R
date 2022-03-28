@@ -1,7 +1,7 @@
 #' Distribution of probabilities of detection
 #'
 #' @name p_dist_table
-#' @inherit mrds::p_dist_table
+#' @inherit mrds::p.dist.table
 #' @param object fitted detection function
 #' @param bins how the results should be binned
 #' @param proportion should proportions be returned as well as counts?
