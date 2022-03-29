@@ -1,10 +1,9 @@
 # process the ddf object
 # other TODO:
 #   - handle grouped/ungrouped estimation (all one or the other??)
-#   - ignore flatfile for now?
 #   - handle point/line mixed ddfs
 #   - fix Total degrees of freedom
-dht2_process_ddf <- function(ddf, convert_units, er_est){
+dht2_process_ddf <- function(ddf, convert_units, er_est, strat_formula){
 
   # if we don't have a list, make a list
   if(any(class(ddf) != "list")){
@@ -31,7 +30,6 @@ dht2_process_ddf <- function(ddf, convert_units, er_est){
     }
   }
 
-
   # storage for the "distance" data
   bigdat <- c()
   obj_keep <- c()
@@ -39,7 +37,6 @@ dht2_process_ddf <- function(ddf, convert_units, er_est){
   ddf_summary <- list()
 
   # just bad vibes below this point...
-
   for(i in seq_along(ddf)){
 
     this_ddf <- ddf[[i]]
@@ -48,17 +45,22 @@ dht2_process_ddf <- function(ddf, convert_units, er_est){
       this_ddf <- this_ddf$ddf
     }
 
-
     # drop unused levels of factors
     this_ddf$data <- droplevels(this_ddf$data)
 
-    # only keep observations within the truncation
-    obj_keep <- c(obj_keep, this_ddf$data$object[this_ddf$data$distance <=
-                                                  this_ddf$ds$aux$width &
-                                                 this_ddf$data$distance >=
-                                                  this_ddf$ds$aux$left])
+    # only keep observations within the truncation (but do it safely
+    # when we have flat files)
+    this_bigdat <- safetruncate(this_ddf,
+                                this_ddf$ds$aux$width, this_ddf$ds$aux$left)
 
-    this_bigdat <- this_ddf$data[this_ddf$data$object %in% obj_keep, ]
+    #obj_keep <- c(obj_keep, this_ddf$data$object[this_ddf$data$distance <=
+    #                                              this_ddf$ds$aux$width &
+    #                                             this_ddf$data$distance >=
+    #                                              this_ddf$ds$aux$left])
+
+    #this_bigdat <- this_ddf$data[this_ddf$data$object %in% obj_keep, ]
+    obj_keep <- c(obj_keep, this_bigdat$object)
+
     # transect type
     this_bigdat$transect_type <- if(this_ddf$ds$aux$point) "point" else "line"
     # apply unit conversion to truncations
@@ -67,12 +69,15 @@ dht2_process_ddf <- function(ddf, convert_units, er_est){
     # get probabilities of detection
     this_bigdat$p <- predict(this_ddf)$fitted
 
-
     # get variance estimation
     this_bigdat$er_est <- er_est[i]
 
     # add a detection function identifier for this bit of the data
     this_bigdat$ddf_id <- i
+
+    # ensure as.factor in formula are propagated to the data
+    bigdat <- safe_factorize(strat_formula, bigdat)
+
 
     # put that back
     ddf[[i]] <- this_ddf

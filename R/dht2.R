@@ -309,7 +309,7 @@ dht2 <- function(ddf, observations=NULL, transects=NULL, geo_strat=NULL,
   }
 
   # process multiple detection functions
-  ddf_proc <- dht2_process_ddf(ddf, convert_units, er_est)
+  ddf_proc <- dht2_process_ddf(ddf, convert_units, er_est, strat_formula)
   bigdat <- ddf_proc$bigdat
   ddf <- ddf_proc$ddf
 
@@ -324,9 +324,9 @@ dht2 <- function(ddf, observations=NULL, transects=NULL, geo_strat=NULL,
       geo_stratum_labels <- NULL
     }
 
-    # what if there were as.factor()s in the formula?
-    transects <- safe_factorize(strat_formula, transects)
-    observations <- safe_factorize(strat_formula, observations)
+#    # what if there were as.factor()s in the formula?
+#    transects <- safe_factorize(strat_formula, transects)
+#    observations <- safe_factorize(strat_formula, observations)
 
     # TODO: do some data checking at this point
     # - check duplicate column names (e.g., obs$sex and df$data$sex)
@@ -402,11 +402,7 @@ dht2 <- function(ddf, observations=NULL, transects=NULL, geo_strat=NULL,
     }
 
     # check regular columns exist
-    flatfile_labels <- c("distance", "Sample.Label", "Effort", "Area")
-    # if we're doing multiple detection functions we need to have object
-    if(length(ddf) > 1){
-      flatfile_labels <- c(flatfile_labels, "object")
-    }
+    flatfile_labels <- c("distance", "Sample.Label", "Effort", "Area", "object")
 
     if(!all(flatfile_labels %in% names(flatfile))){
       stop(paste("Column(s):",
@@ -415,16 +411,20 @@ dht2 <- function(ddf, observations=NULL, transects=NULL, geo_strat=NULL,
                  "not in `flatfile`"))
     }
 
-    # safely truncate the data, respecting the data structure
-    for(i in seq_along(ddf)){
-      this_flatfile <- flatfile[flatfile$object %in% ddf[[i]]$data$object, ]
-      flatfile <- safetruncate(flatfile, ddf$meta.data$width, ddf$meta.data$left)
-## TODO: flatfile stuff
-    #bigdat <- flatfile
-    #bigdat <- flatfile[flatfile$object %in% ddf_proc$obj_keep, ]
-
-    # what if there were as.factor()s in the formula?
-    bigdat <- safe_factorize(strat_formula, bigdat)
+#    # safely truncate the data, respecting the data structure
+#    flatfiles_per_ddf <- list()
+#    for(i in seq_along(ddf)){
+#      flatfiles_per_ddf[[i]] <- flatfile[flatfile$object %in%
+#                                         ddf[[i]]$data$object, ]
+#      flatfiles_per_ddf[[i]] <- safetruncate(flatfiles_per_ddf[[i]],
+#                                             ddf[[i]]$meta.data$width,
+#                                             ddf[[i]]$meta.data$left)
+#    }
+#    # stick it together
+#    bigdat <- do.call(rbind, flatfiles_per_ddf)
+#
+#    # ensure as.factor in formula are propagated to the data
+#    bigdat <- safe_factorize(strat_formula, bigdat)
 
     # check strat columns are in the data
     if(!all(stratum_labels %in% names(bigdat))){
@@ -445,12 +445,20 @@ dht2 <- function(ddf, observations=NULL, transects=NULL, geo_strat=NULL,
     }
     # sort by object ID
     bigdat <- bigdat[order(bigdat$object), ]
-    # remove the rows where there were no observations
-    bigdat_nona <- bigdat[!is.na(bigdat$object), ]
-    # get probabilities of detection
-    pp <- predict(ddf, newdata=bigdat_nona, compute=TRUE)$fitted
-    bigdat$p <- NA
-    bigdat$p[!is.na(bigdat$object)] <- pp
+#    # remove the rows where there were no observations
+#    bigdat_nona <- bigdat[!is.na(bigdat$object), ]
+#
+#    # get probabilities of detection
+#    bigdat$p <- NA
+#    #bigdat$p[!is.na(bigdat$object)] <- pp
+#    for(i in seq_along(ddf)){
+#      ind <- ddf[[i]]$data$object
+#      pp <- predict(ddf[[i]],
+#                    newdata=bigdat_nona[bigdat_nona$object %in% ind, ],
+#                    compute=TRUE)$fitted
+#      bigdat$p[bigdat$object %in% ind] <- pp
+#    }
+
 
     if(strat_formula==~1){
       bigdat$Area <- sum(unique(bigdat[, c("Area", "Region.Label")])$Area)
