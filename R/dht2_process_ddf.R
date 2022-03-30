@@ -21,10 +21,7 @@ dht2_process_ddf <- function(ddf, convert_units, er_est, strat_formula){
 
   # we can have a different ER estimators per detection function, as a treat
   # only check this if the par was set, else defaults get used
-  if(attr(er_est, "missing")){
-    er_est <- er_est[as.numeric(unlist(lapply(ddf,
-                                              function(x) x$ds$aux$point)))+1]
-  }else if(length(er_est) != 1){
+  if(!attr(er_est, "missing") & length(er_est) != 1){
     if(length(er_est)!=length(ddf)){
       stop("er_est must be either 1 number or have as many entries as there are detection functions")
     }
@@ -48,18 +45,13 @@ dht2_process_ddf <- function(ddf, convert_units, er_est, strat_formula){
     # drop unused levels of factors
     this_ddf$data <- droplevels(this_ddf$data)
 
-    # only keep observations within the truncation (but do it safely
-    # when we have flat files)
-    this_bigdat <- safetruncate(this_ddf,
-                                this_ddf$ds$aux$width, this_ddf$ds$aux$left)
+    # only keep observations within the truncation
+    obj_keep <- c(obj_keep, this_ddf$data$object[this_ddf$data$distance <=
+                                                  this_ddf$ds$aux$width &
+                                                 this_ddf$data$distance >=
+                                                  this_ddf$ds$aux$left])
 
-    #obj_keep <- c(obj_keep, this_ddf$data$object[this_ddf$data$distance <=
-    #                                              this_ddf$ds$aux$width &
-    #                                             this_ddf$data$distance >=
-    #                                              this_ddf$ds$aux$left])
-
-    #this_bigdat <- this_ddf$data[this_ddf$data$object %in% obj_keep, ]
-    obj_keep <- c(obj_keep, this_bigdat$object)
+    this_bigdat <- this_ddf$data[this_ddf$data$object %in% obj_keep, ]
 
     # transect type
     this_bigdat$transect_type <- if(this_ddf$ds$aux$point) "point" else "line"
@@ -70,7 +62,9 @@ dht2_process_ddf <- function(ddf, convert_units, er_est, strat_formula){
     this_bigdat$p <- predict(this_ddf)$fitted
 
     # get variance estimation
-    this_bigdat$er_est <- er_est[i]
+    if(attr(er_est, "missing")){
+      this_bigdat$er_est <- er_est[as.numeric(this_ddf$ds$aux$point)+1]
+    }
 
     # add a detection function identifier for this bit of the data
     this_bigdat$ddf_id <- i
