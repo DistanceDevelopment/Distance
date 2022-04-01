@@ -418,7 +418,8 @@ dht2 <- function(ddf, observations=NULL, transects=NULL, geo_strat=NULL,
                                           ddf_proc$obj_keep) |
                                          is.na(flatfile$object), ]
       flatfiles_per_ddf[[i]] <- left_join(flatfiles_per_ddf[[i]],
-                                      ddf_proc$bigdat)
+                                          ddf_proc$bigdat,
+                                          by=c("distance", "Sample.Label", "Effort", "object"))
     }
     # stick it together
     bigdat <- unique(do.call(rbind, flatfiles_per_ddf))
@@ -469,7 +470,7 @@ dht2 <- function(ddf, observations=NULL, transects=NULL, geo_strat=NULL,
       aj <- anti_join(ex, bigdat, by=c("Sample.Label", stratum_labels))
       # join the unrepresented sample combinations to the extra cols
       # (i.e., add Area, Effort data to aj)
-      aj <- left_join(aj, unique(bigdat[, c("Sample.Label","Effort","Area")]),
+      aj <- left_join(aj, unique(bigdat[, c("Sample.Label", "Effort", "Area")]),
                       by="Sample.Label")
 
       # remove the transects with no stratum data
