@@ -64,6 +64,8 @@ dht2_process_ddf <- function(ddf, convert_units, er_est, strat_formula){
     # get variance estimation
     if(attr(er_est, "missing")){
       this_bigdat$er_est <- er_est[as.numeric(this_ddf$ds$aux$point)+1]
+    }else{
+      this_bigdat$er_est <- er_est[i]
     }
 
     # add a detection function identifier for this bit of the data
@@ -71,7 +73,6 @@ dht2_process_ddf <- function(ddf, convert_units, er_est, strat_formula){
 
     # ensure as.factor in formula are propagated to the data
     bigdat <- safe_factorize(strat_formula, bigdat)
-
 
     # put that back
     ddf[[i]] <- this_ddf

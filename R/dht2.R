@@ -411,16 +411,32 @@ dht2 <- function(ddf, observations=NULL, transects=NULL, geo_strat=NULL,
                  "not in `flatfile`"))
     }
 
-    # safely truncate the data, respecting the data structure
+    if(length(ddf) == 1){
+      flatfile$ddf_id <- 1
+    }else{
+      if(is.null(flatfile$ddf_id) ||
+         !all(1:length(ddf) %in% unique(flatfile$ddf_id))){
+        stop("flatfile must include ddf_id column to identify samples to detection functions")
+      }
+    }
+
+    # join the extra ddf data onto the flatfile
     flatfiles_per_ddf <- list()
+    ddf_sample_data <- unique(ddf_proc$bigdat[, c("Sample.Label", "transect_type",
+                                           "df_width", "er_est", "ddf_id",
+                                           "n_ddf", "n_par")])
     for(i in seq_along(ddf)){
       flatfiles_per_ddf[[i]] <- flatfile[(flatfile$object %in%
-                                          ddf_proc$obj_keep) |
-                                         is.na(flatfile$object), ]
-      # without suppressMessages here we end up with the join info
-      # printed, which I think we don't want
-      flatfiles_per_ddf[[i]] <- suppressMessages(left_join(flatfiles_per_ddf[[i]],
-                                          ddf_proc$bigdat))
+                                          ddf_proc$obj_keep) &
+                                          flatfile$ddf_id == i, ]
+      # join p
+      flatfiles_per_ddf[[i]] <- inner_join(flatfiles_per_ddf[[i]],
+                                          ddf_proc$bigdat[!is.na(ddf_proc$bigdat$object), c("object", "p")],
+                                          by="object")
+      # join ddf info
+      flatfiles_per_ddf[[i]] <- left_join(flatfiles_per_ddf[[i]],
+                                          ddf_sample_data,
+                                          by="Sample.Label")
     }
     # stick it together
     bigdat <- unique(do.call(rbind, flatfiles_per_ddf))
@@ -1047,7 +1063,7 @@ if(mult){
       select(!!stratum_labels, "Area", "n", "ER_var", "Effort", "k",
              "Density", "Density_CV", "Density_se", "UCI", "LCI", "df",
              "Covered_area", "df_var", "group_var", "group_mean",
-             "rate_var", "rate", "rate_df", "rate_CV", "p_var", "p_average",
+             "rate_var", "rate", "rate_df", "rate_CV", #"p_var", "p_average",
              "er_est")
 
     # store this
