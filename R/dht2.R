@@ -417,9 +417,10 @@ dht2 <- function(ddf, observations=NULL, transects=NULL, geo_strat=NULL,
       flatfiles_per_ddf[[i]] <- flatfile[(flatfile$object %in%
                                           ddf_proc$obj_keep) |
                                          is.na(flatfile$object), ]
-      flatfiles_per_ddf[[i]] <- left_join(flatfiles_per_ddf[[i]],
-                                          ddf_proc$bigdat,
-                                          by=c("distance", "Sample.Label", "Effort", "object"))
+      # without suppressMessages here we end up with the join info
+      # printed, which I think we don't want
+      flatfiles_per_ddf[[i]] <- suppressMessages(left_join(flatfiles_per_ddf[[i]],
+                                          ddf_proc$bigdat))
     }
     # stick it together
     bigdat <- unique(do.call(rbind, flatfiles_per_ddf))
