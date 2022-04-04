@@ -1,5 +1,11 @@
+Distance 1.0.6
+----------------------
+
+* Fix bug in auto binning data when using flatfile (#116)
+
 Distance 1.0.5
 ----------------------
+
 * To improve consistency in functions and arguments in the package, some functions and arguments have changed from . separation to _. An error is now thrown when the "old" arguments/functions using . are used. This error will be removed in Distance 1.0.6.
   * create.bins() -> create_bins()
   * bootdht():

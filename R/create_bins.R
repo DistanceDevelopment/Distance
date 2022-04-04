@@ -24,7 +24,8 @@ create_bins <- function(data, cutpoints){
   cp <- cutpoints
 
   # remove distances outside bins
-  in.cp.ind <- data$distance>=cp[1] & data$distance<=cp[length(cp)]
+  in.cp.ind <- is.na(data$distance) |
+                (data$distance>=cp[1] & data$distance<=cp[length(cp)])
   if(!all(in.cp.ind)){
     warning("Some distances were outside bins and have been removed.")
   }

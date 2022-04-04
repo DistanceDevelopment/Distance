@@ -100,7 +100,7 @@ test_that("Simple models work",{
   ds.dht.model <- suppressMessages(ds(egdata,4,region_table=region,
                                       sample_table=samples,obs_table=obs))
   # pars and lnl
-  expect_equal(ds.dht.model$ddf$par, 0.6632435,tol=par.tol)
+  expect_equal(ds.dht.model$ddf$par, 0.6632435, tol=par.tol)
   expect_equal(ds.dht.model$ddf$lnl, -154.5692, tol=lnl.tol)
   expect_equal(ds.dht.model$dht$individuals$N$Estimate[3], 652.0909, tol=N.tol)
 
@@ -207,8 +207,44 @@ test_that("just distend and distbegin can be supplied", {
                  "^Columns \"distbegin\" and \"distend\" in data: performing a binned analysis....*")
 })
 
+test_that("cutpoints work with flatfile", {
+  #https://github.com/DistanceDevelopment/Distance/issues/116
+  skip_on_cran()
+  distbegin <- c(rep(0,2), rep(1,36), rep(2, 29), rep(3, 17), rep(4,62),
+                 rep(5,27),rep(6,11), rep(7,7), rep(NA,102))
+  distend <- c(rep(1,2), rep(2,36), rep(3, 29), rep(4, 17), rep(5,62),
+               rep(6,27),rep(7,11), rep(8,7), rep(NA,102))
+  pigs <- data.frame(distance = (distbegin+distend)/2,
+                     Region.Label = sample(c(rep("A", 200), rep("B", 93)),
+                                           293, replace=TRUE),
+                     Area         = 0)
+
+  units <- convert_units("meter", NULL, "square kilometer")
+
+  hn0_bushpig <- ds(pigs, transect = "point", key = "hn", adjustment = NULL,
+                    convert_units = units,  cutpoints = c(seq(0,8,1)),
+                    formula = ~Region.Label)
+
+  hn0_bushpig <- ds(pigs, transect = "point", key = "hn", adjustment = NULL,
+                    convert_units = units,  cutpoints = c(seq(0,8,1)),
+                    formula = ~Region.Label)
+
+  pigs2 <- data.frame(distance  = (distbegin+distend)/2,
+                      distbegin = distbegin,
+                      distend   = distend,
+                      Region.Label = pigs$Region.Label,
+                      Area         = 0)
+
+  hn1_bushpig <- ds(pigs2, transect = "point", key = "hn", adjustment = NULL,
+                    convert_units = units, formula = ~Region.Label)
+
+  expect_equal(hn0_bushpig$ddf$par, hn1_bushpig$ddf$par, tol=par.tol)
+  expect_equal(hn0_bushpig$ddf$lnl, hn1_bushpig$ddf$lnl, tol=lnl.tol)
+
+})
+
 # warnings when bad models get fitted
-test_that("warnings of bad models get thrown",{
+test_that("warnings of bad models get thrown", {
   skip_on_cran()
 
   # data with spike for which hazard-rate estimates
