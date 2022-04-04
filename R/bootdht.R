@@ -150,8 +150,8 @@ bootdht <- function(model,
     models <- model
   }
 
-  if(missing(convert.units)){
-    convert.units <-  NULL
+  if(missing(convert_units)){
+    convert_units <-  NULL
   }
 
   # only use valid ds models
@@ -281,7 +281,7 @@ bootdht <- function(model,
     # work (updates happen in this loop rather than in bootit)
     boot_ests <- foreach::foreach(i=1:nboot, .packages=packages) %dorng2% {
       bootit(dat, models=models, our_resamples=our_resamples,
-             summary_fun=summary_fun, convert.units=convert.units,
+             summary_fun=summary_fun, convert_units=convert_units,
              pb=list(increment=function(pb){invisible()}),
              multipliers_fun=multipliers_fun, sample_label=sample_label,
              select_adjustments=select_adjustments)
@@ -290,7 +290,7 @@ bootdht <- function(model,
   }else{
     boot_ests <- replicate(nboot,
                            bootit(dat, models=models, our_resamples,
-                                  summary_fun, convert.units=convert.units,
+                                  summary_fun, convert_units=convert_units,
                                   pb=pb, multipliers_fun=multipliers_fun,
                                   sample_label=sample_label,
                                   select_adjustments=select_adjustments),
