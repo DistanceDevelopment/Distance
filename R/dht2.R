@@ -992,12 +992,13 @@ if(mult){
                    rate_CV       = sqrt(sum(.data$rate_var))/mean(.data$rate))
           dat_row <- dat_row %>%
             # CV weights for Satterthwaite df
-            mutate(wtcv = sum(c((sqrt(.data$ER_var_Nhat[1])/
-                                      .data$Abundance[1])^4/
+            # denominator of Buckland et al 2001, eqn 3.75
+            mutate(wtcv = sum(c((.data$ER_var_Nhat[1]/
+                                      .data$Abundance[1]^2)^2/
                                  .data$ER_df[1],
                                 (df_tvar/.data$Abundance[1]^2)^2/
                                   (.data$n_ddf - .data$n_par),
-                                if_else(.data$df==0, 0 ,
+                                if_else(.data$df==0, 0,
                                         (.data$rate_var_Nhat[1]/
                                          .data$Abundance[1]^2)^2/
                                           .data$rate_df[1]),
@@ -1007,8 +1008,10 @@ if(mult){
                                ),
                               na.rm=TRUE)) %>%
             # calculate Satterthwaite df
-            mutate(df = sum(c((sqrt(.data$ER_var_Nhat[1])/.data$Abundance[1])^2,
-                              (df_tvar/.data$Abundance[1]^2),
+            # each element is CV^2, then sum and square again to get CV^4
+            # numerator of Buckland et al 2001, eqn 3.75
+            mutate(df = sum(c(.data$ER_var_Nhat[1]/.data$Abundance[1]^2,
+                              df_tvar/.data$Abundance[1]^2,
                               if_else(.data$df==0, 0 ,
                                       (.data$rate_var_Nhat[1]/
                                        .data$Abundance[1]^2)),
