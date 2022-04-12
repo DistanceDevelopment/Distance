@@ -6,6 +6,7 @@
 # note that as in mrds::dht we assume independence between strata
 #  so the vcov matric for ER is diagonal (excluding the "total" row/col)
 # erdat is assumed to be grouped by stratum labels at this point
+#' @importFrom dplyr group_vars
 ER_var_f <- function(erdat, innes, binomial_var=FALSE){
   if(binomial_var){
     # "varflag=0"
