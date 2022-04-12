@@ -312,6 +312,7 @@ dht2 <- function(ddf, observations=NULL, transects=NULL, geo_strat=NULL,
   ddf_proc <- dht2_process_ddf(ddf, convert_units, er_est, strat_formula)
   bigdat <- ddf_proc$bigdat
   ddf <- ddf_proc$ddf
+  transect_data <- ddf_proc$transect_data
 
   if(!is.null(observations) & !is.null(transects)){
     if(!is.null(geo_strat)){
@@ -346,7 +347,6 @@ dht2 <- function(ddf, observations=NULL, transects=NULL, geo_strat=NULL,
     # only keep observations within the truncation
     observations <- observations[observations$object %in% ddf_proc$obj_keep, ]
 
-
     # merge onto the observation frame
     bigdat <- merge(bigdat, observations, all.x=TRUE, by="object",
                     suffixes=c("DUPLICATE", ""))
@@ -355,6 +355,13 @@ dht2 <- function(ddf, observations=NULL, transects=NULL, geo_strat=NULL,
     if(any(grepl("DUPLICATE", names(bigdat)))){
       bigdat[, grepl("DUPLICATE", names(bigdat))] <- NULL
     }
+
+    # handle when there is only one detection function
+    if(length(ddf) == 1){
+      transects$ddf_id <- 1
+    }
+    # merge transect type onto the sample table
+    transects <- merge(transects, transect_data, all.x=TRUE, by="ddf_id")
 
     # merge onto transects
     join_labs <- intersect(names(bigdat), names(transects))
@@ -380,7 +387,7 @@ dht2 <- function(ddf, observations=NULL, transects=NULL, geo_strat=NULL,
         geo_stratum_labels <- ".Label"
       }
       # TODO: do something here with strat_formula
-      bigdat <- merge(bigdat, geo_strat, all.x=TRUE, by=geo_stratum_labels)
+      bigdat <- merge(bigdat, geo_strat, all.x=TRUE, by=c(geo_stratum_labels, "Area"))
     }else{
       bigdat$Area <- NA
       bigdat$Label <- "Total"
@@ -591,7 +598,7 @@ dht2 <- function(ddf, observations=NULL, transects=NULL, geo_strat=NULL,
       mutate(n = .data$n_observations)
   # if we didn't have any areas, then set to 1 and estimate density
   est_density <- FALSE
-  if(all(res$Area == 0) | all(is.na(res$Area))){
+  if(all(res$Area == 0 | is.na(res$Area))){
     res$Area <- 1
     est_density <- TRUE
   }
@@ -656,12 +663,12 @@ if(mult){
     mutate(k            = length(.data$Sample.Label),
            Effort       = sum(.data$Effort),
            Covered_area = sum(.data$Covered_area)) %>%
-      mutate(group_var_Nhat = (.data$Area/.data$Covered_area *
-                               .data$Nc)^2*
-                              .data$group_var/.data$group_mean^2) %>%
-      mutate(rate_var_Nhat = (.data$Area/.data$Covered_area *
-                               .data$Nc)^2*
-                              .data$rate_var/.data$rate^2) %>%
+    mutate(group_var_Nhat = (.data$Area/.data$Covered_area *
+                             .data$Nc)^2*
+                            .data$group_var/.data$group_mean^2) %>%
+    mutate(rate_var_Nhat = (.data$Area/.data$Covered_area *
+                             .data$Nc)^2*
+                            .data$rate_var/.data$rate^2) %>%
     ## keep only these columns
     select(!!stratum_labels, "Area", "Nc", "n", "ER_var", "Effort", "k",
            "Covered_area", "df_var", "group_var", "group_mean",

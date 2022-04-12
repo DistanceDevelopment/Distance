@@ -1,7 +1,6 @@
 # process the ddf object
 # other TODO:
 #   - handle grouped/ungrouped estimation (all one or the other??)
-#   - handle point/line mixed ddfs
 #   - fix Total degrees of freedom
 dht2_process_ddf <- function(ddf, convert_units, er_est, strat_formula){
 
@@ -21,8 +20,11 @@ dht2_process_ddf <- function(ddf, convert_units, er_est, strat_formula){
 
   # we can have a different ER estimators per detection function, as a treat
   # only check this if the par was set, else defaults get used
-  if(!attr(er_est, "missing") & length(er_est) != 1){
-    if(length(er_est)!=length(ddf)){
+  if(!attr(er_est, "missing")){
+    if(length(er_est) == 1){
+      er_est <- rep(er_est, length(ddf))
+      attr(er_est, "missing") <- FALSE
+    }else if(length(er_est)!=length(ddf)){
       stop("er_est must be either 1 number or have as many entries as there are detection functions")
     }
   }
@@ -32,6 +34,10 @@ dht2_process_ddf <- function(ddf, convert_units, er_est, strat_formula){
   obj_keep <- c()
   # storage for summaries
   ddf_summary <- list()
+  transect_data <- data.frame(ddf_id = 1:length(ddf),
+                              transect_type = rep(NA, length(ddf)),
+                              er_est = rep(NA, length(ddf)),
+                              df_width = rep(NA, length(ddf)))
 
   # just bad vibes below this point...
   for(i in seq_along(ddf)){
@@ -50,28 +56,33 @@ dht2_process_ddf <- function(ddf, convert_units, er_est, strat_formula){
                                                   this_ddf$ds$aux$width &
                                                  this_ddf$data$distance >=
                                                   this_ddf$ds$aux$left])
-
     this_bigdat <- this_ddf$data[this_ddf$data$object %in% obj_keep, ]
-
-    # transect type
-    this_bigdat$transect_type <- if(this_ddf$ds$aux$point) "point" else "line"
-    # apply unit conversion to truncations
-    this_bigdat$df_width <- this_ddf$ds$aux$width * convert_units
 
     # get probabilities of detection
     this_bigdat$p <- predict(this_ddf)$fitted
 
-    # get variance estimation
-    if(attr(er_est, "missing")){
-      this_bigdat$er_est <- er_est[as.numeric(this_ddf$ds$aux$point)+1]
-    }
-
-    # add a detection function identifier for this bit of the data
-    this_bigdat$ddf_id <- i
-
     # ensure as.factor in formula are propagated to the data
     bigdat <- safe_factorize(strat_formula, bigdat)
 
+    # get variance estimation
+    if(attr(er_est, "missing")){
+      er_estl <- er_est[as.numeric(this_ddf$ds$aux$point)+1]
+    }else{
+      er_estl <- er_est[i]
+    }
+    # transect data
+    transect_data[i,] <- data.frame(ddf_id = i,
+                                    # transect type
+                                    transect_type = if(this_ddf$ds$aux$point){
+                                                      "point"}else{"line"},
+                                    # ER variance estimation
+                                    er_est = er_estl,
+                                    # apply unit conversion to truncations
+                                    df_width = this_ddf$ds$aux$width *
+                                               convert_units)
+
+    # add a detection function identifier for this bit of the data
+    this_bigdat$ddf_id <- i
 
     # put that back
     ddf[[i]] <- this_ddf
@@ -79,16 +90,18 @@ dht2_process_ddf <- function(ddf, convert_units, er_est, strat_formula){
   }
 
   # total number of data used to fit the detection functions
-  bigdat$n_ddf <- sum(unlist(lapply(ddf, function(x) length(x$fitted))))
+  transect_data$n_ddf <- sum(unlist(lapply(ddf, function(x) length(x$fitted))))
   # total number of parameters in the detection function
-  bigdat$n_par <- sum(unlist(lapply(ddf, function(x) length(x$par))))
+  transect_data$n_par <- sum(unlist(lapply(ddf, function(x) length(x$par))))
 
   if(any(table(bigdat$object) > 1)){
     stop("object column but be unique over all data")
   }
 
+
   list(ddf = ddf,
        bigdat = bigdat,
        obj_keep = obj_keep,
+       transect_data = transect_data,
        summary  = ddf_summary)
 }
