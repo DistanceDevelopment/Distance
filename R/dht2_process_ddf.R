@@ -2,6 +2,8 @@
 # other TODO:
 #   - handle grouped/ungrouped estimation (all one or the other??)
 #   - fix Total degrees of freedom
+#   - left truncation
+#   - dummy ddf
 dht2_process_ddf <- function(ddf, convert_units, er_est, strat_formula){
 
   # if we don't have a list, make a list

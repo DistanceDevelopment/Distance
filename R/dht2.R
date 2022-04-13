@@ -365,7 +365,7 @@ dht2 <- function(ddf, observations=NULL, transects=NULL, geo_strat=NULL,
 
     # merge onto transects
     join_labs <- intersect(names(bigdat), names(transects))
-    join_labs <- join_labs[c("Sample.Label", geo_stratum_labels) %in% join_labs]
+    #join_labs <- join_labs[c("Sample.Label", geo_stratum_labels) %in% join_labs]
     bigdat <- merge(bigdat, transects, all.x=TRUE, all.y=TRUE,
                     by=join_labs,
                     suffixes=c("DUPLICATE", ""))
