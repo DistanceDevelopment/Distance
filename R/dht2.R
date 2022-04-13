@@ -373,6 +373,26 @@ dht2 <- function(ddf, observations=NULL, transects=NULL, geo_strat=NULL,
     if(any(grepl("DUPLICATE", names(bigdat)))){
       bigdat[, grepl("DUPLICATE", names(bigdat))] <- NULL
     }
+    if(stratification=="object"){
+      # what are all the possible combinations of obs level stratum
+      # levels and sample labels?
+      ex <- expand.grid(lapply(bigdat[, c("Sample.Label", stratum_labels)],
+                               function(x) unique(na.omit(x))),
+                        stringsAsFactors=FALSE)
+      # which are not represented in the data?
+      aj <- anti_join(ex, bigdat, by=c("Sample.Label", stratum_labels))
+      # join the unrepresented sample combinations to the extra cols
+      # (i.e., add Area, Effort data to aj)
+      aj <- left_join(aj, bigdat,
+                      by=c(stratum_labels))
+
+      # remove the transects with no stratum data
+      bigdat2 <- filter_at(bigdat, stratum_labels, function(x) !is.na(x))
+      aj <- filter_at(aj, stratum_labels, function(x) !is.na(x))
+
+      # rbind that onto the original data
+      bigdat <- bind_rows(bigdat2, aj)
+    }
 
     # merge on the geographical strata
     if(!is.null(geo_strat)){
@@ -387,7 +407,7 @@ dht2 <- function(ddf, observations=NULL, transects=NULL, geo_strat=NULL,
         geo_stratum_labels <- ".Label"
       }
       # TODO: do something here with strat_formula
-      bigdat <- merge(bigdat, geo_strat, all.x=TRUE, by=c(geo_stratum_labels, "Area"))
+      bigdat <- merge(bigdat, geo_strat, all.x=TRUE)#, by=c(geo_stratum_labels, "Area"))
     }else{
       bigdat$Area <- NA
       bigdat$Label <- "Total"
