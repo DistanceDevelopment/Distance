@@ -3,7 +3,7 @@
 context("cluster")
 
 test_that("cluster exercise works",{
-  skip_on_cran()
+  #skip_on_cran()
 
   # import data
   data(ClusterExercise)

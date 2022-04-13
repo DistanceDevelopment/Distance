@@ -98,7 +98,6 @@ dht2_process_ddf <- function(ddf, convert_units, er_est, strat_formula){
     stop("object column but be unique over all data")
   }
 
-
   list(ddf = ddf,
        bigdat = bigdat,
        obj_keep = obj_keep,

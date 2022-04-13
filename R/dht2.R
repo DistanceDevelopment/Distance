@@ -418,15 +418,29 @@ dht2 <- function(ddf, observations=NULL, transects=NULL, geo_strat=NULL,
                  "not in `flatfile`"))
     }
 
-    # safely truncate the data, respecting the data structure
+    if(length(ddf) == 1){
+      flatfile$ddf_id <- 1
+    }else{
+      if(is.null(flatfile$ddf_id) ||
+         !all(1:length(ddf) %in% unique(flatfile$ddf_id))){
+        stop("flatfile must include ddf_id column to identify samples to detection functions")
+      }
+    }
+
+    # join the extra ddf data onto the flatfile
     flatfiles_per_ddf <- list()
     for(i in seq_along(ddf)){
       flatfiles_per_ddf[[i]] <- flatfile[(flatfile$object %in%
-                                          ddf_proc$obj_keep) |
-                                         is.na(flatfile$object), ]
+                                          ddf_proc$obj_keep) &
+                                          flatfile$ddf_id == i, ]
+      # join p
+      flatfiles_per_ddf[[i]] <- inner_join(flatfiles_per_ddf[[i]],
+                                          ddf_proc$bigdat[!is.na(ddf_proc$bigdat$object), c("object", "p")],
+                                          by="object")
+      # join ddf info
       flatfiles_per_ddf[[i]] <- left_join(flatfiles_per_ddf[[i]],
-                                          ddf_proc$bigdat,
-                                          by=c("distance", "Sample.Label", "Effort", "object"))
+                                          transect_data,
+                                          by="ddf_id")
     }
     # stick it together
     bigdat <- unique(do.call(rbind, flatfiles_per_ddf))
@@ -477,7 +491,9 @@ dht2 <- function(ddf, observations=NULL, transects=NULL, geo_strat=NULL,
       aj <- anti_join(ex, bigdat, by=c("Sample.Label", stratum_labels))
       # join the unrepresented sample combinations to the extra cols
       # (i.e., add Area, Effort data to aj)
-      aj <- left_join(aj, unique(bigdat[, c("Sample.Label", "Effort", "Area")]),
+      aj <- left_join(aj, unique(bigdat[, c("Sample.Label", "Effort", "Area",
+                                            "ddf_id", "transect_type", "er_est",
+                                            "df_width", "n_ddf", "n_par")]),
                       by="Sample.Label")
 
       # remove the transects with no stratum data
@@ -673,7 +689,7 @@ if(mult){
     select(!!stratum_labels, "Area", "Nc", "n", "ER_var", "Effort", "k",
            "Covered_area", "df_var", "group_var", "group_mean",
            "group_var_Nhat", "ER_var_Nhat", "rate_var", "rate_var_Nhat", "rate",
-           "rate_df", "rate_CV", #"p_var", "p_average",
+           "rate_df", "rate_CV", "p_var", "p_average",
            "n_ddf", "n_par", "er_est") %>%
     ## now just get the distinct cases
     distinct()
@@ -982,12 +998,13 @@ if(mult){
                    rate_CV       = sqrt(sum(.data$rate_var))/mean(.data$rate))
           dat_row <- dat_row %>%
             # CV weights for Satterthwaite df
-            mutate(wtcv = sum(c((sqrt(.data$ER_var_Nhat[1])/
-                                      .data$Abundance[1])^4/
+            # denominator of Buckland et al 2001, eqn 3.75
+            mutate(wtcv = sum(c((.data$ER_var_Nhat[1]/
+                                      .data$Abundance[1]^2)^2/
                                  .data$ER_df[1],
                                 (df_tvar/.data$Abundance[1]^2)^2/
                                   (.data$n_ddf - .data$n_par),
-                                if_else(.data$df==0, 0 ,
+                                if_else(.data$df==0, 0,
                                         (.data$rate_var_Nhat[1]/
                                          .data$Abundance[1]^2)^2/
                                           .data$rate_df[1]),
@@ -997,8 +1014,10 @@ if(mult){
                                ),
                               na.rm=TRUE)) %>%
             # calculate Satterthwaite df
-            mutate(df = sum(c((sqrt(.data$ER_var_Nhat[1])/.data$Abundance[1])^2,
-                              (df_tvar/.data$Abundance[1]^2),
+            # each element is CV^2, then sum and square again to get CV^4
+            # numerator of Buckland et al 2001, eqn 3.75
+            mutate(df = sum(c(.data$ER_var_Nhat[1]/.data$Abundance[1]^2,
+                              df_tvar/.data$Abundance[1]^2,
                               if_else(.data$df==0, 0 ,
                                       (.data$rate_var_Nhat[1]/
                                        .data$Abundance[1]^2)),
