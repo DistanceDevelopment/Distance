@@ -41,7 +41,7 @@ ER_var_f <- function(erdat, innes, binomial_var=FALSE){
     if(innes){
       # this is the "varflag=2"
       erdat <- erdat %>%
-        mutate(ER_var = varn(.data$Effort, .data$transect_Nc, type=er_est)) %>%
+        mutate(ER_var = varn(.data$Effort, .data$transect_Nc, type=unqiue(.data$er_est))) %>%
         mutate(ER_var = ifelse(length(unique(.data$Sample.Label))>1,
                                .data$ER_var,
                                0))# %>%
