@@ -450,8 +450,9 @@ dht2 <- function(ddf, observations=NULL, transects=NULL, geo_strat=NULL,
     # join the extra ddf data onto the flatfile
     flatfiles_per_ddf <- list()
     for(i in seq_along(ddf)){
-      flatfiles_per_ddf[[i]] <- flatfile[(flatfile$object %in%
-                                          ddf_proc$obj_keep) &
+      flatfiles_per_ddf[[i]] <- flatfile[((flatfile$object %in%
+                                           ddf_proc$obj_keep) |
+                                          is.na(flatfile$object)) &
                                           flatfile$ddf_id == i, ]
       # join p
       flatfiles_per_ddf[[i]] <- inner_join(flatfiles_per_ddf[[i]],
