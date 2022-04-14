@@ -977,14 +977,14 @@ if(mult){
           mutate(wtcv = sum(c((sqrt(rvar)/.data$Abundance[1])^4/
                                .data$ER_df[1],
                               (df_tvar/.data$Abundance[1]^2)^2/
-                                (.data$n_ddf - .data$n_par),
+                                (.data$n_ddf[1] - .data$n_par[1]),
                               if_else(.data$df==0, 0 ,
                                       (.data$rate_var_Nhat[1]/
                                        .data$Abundance[1]^2)^2/
                                         .data$rate_df[1]),
                               (.data$group_var_Nhat[1]/
                                .data$Abundance[1]^2)^2/
-                               (.data$n_ddf-1)
+                               (.data$n_ddf[1]-1)
                              ),
                             na.rm=TRUE)) %>%
           # calculate Satterthwaite df
@@ -1025,14 +1025,14 @@ if(mult){
                                       .data$Abundance[1]^2)^2/
                                  .data$ER_df[1],
                                 (df_tvar/.data$Abundance[1]^2)^2/
-                                  (.data$n_ddf - .data$n_par),
+                                  (.data$n_ddf[1] - .data$n_par[1]),
                                 if_else(.data$df==0, 0,
                                         (.data$rate_var_Nhat[1]/
                                          .data$Abundance[1]^2)^2/
                                           .data$rate_df[1]),
                                 (.data$group_var_Nhat[1]/
                                  .data$Abundance[1]^2)^2/
-                                 (.data$n_ddf-1)
+                                 (.data$n_ddf[1]-1)
                                ),
                               na.rm=TRUE)) %>%
             # calculate Satterthwaite df
