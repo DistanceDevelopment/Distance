@@ -455,7 +455,7 @@ dht2 <- function(ddf, observations=NULL, transects=NULL, geo_strat=NULL,
                                           is.na(flatfile$object)) &
                                           flatfile$ddf_id == i, ]
       # join p
-      flatfiles_per_ddf[[i]] <- inner_join(flatfiles_per_ddf[[i]],
+      flatfiles_per_ddf[[i]] <- left_join(flatfiles_per_ddf[[i]],
                                  ddf_proc$bigdat[!is.na(ddf_proc$bigdat$object),
                                                  c("object", "p")],
                                            by="object")
