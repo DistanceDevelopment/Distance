@@ -678,7 +678,8 @@ if(mult){
       select(!!stratum_labels, "Sample.Label", "Area", "n", "Nc", "transect_n",
              "Effort", "Covered_area", "df_var", "transect_Nc", "group_var",
              "group_mean", "Nc_cuecorrected", "rate_var",  "rate", "rate_df",
-             "rate_CV", "p_var", "p_average", "transect_n_observations",
+             "rate_CV", #"p_var", "p_average",
+             "transect_n_observations",
              "n_ddf", "n_par", "er_est") %>%
       # keep only unique rows
       distinct()
@@ -711,7 +712,7 @@ if(mult){
     select(!!stratum_labels, "Area", "Nc", "n", "ER_var", "Effort", "k",
            "Covered_area", "df_var", "group_var", "group_mean",
            "group_var_Nhat", "ER_var_Nhat", "rate_var", "rate_var_Nhat", "rate",
-           "rate_df", "rate_CV", "p_var", "p_average",
+           "rate_df", "rate_CV", #"p_var", "p_average",
            "n_ddf", "n_par", "er_est") %>%
     ## now just get the distinct cases
     distinct()
