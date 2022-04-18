@@ -88,6 +88,14 @@ dht2_process_ddf <- function(ddf, convert_units, er_est, strat_formula){
 
     # put that back
     ddf[[i]] <- this_ddf
+
+    this_bigdat$Effort <- NULL
+    this_bigdat$observer <- NULL
+    this_bigdat$detected <- NULL
+    this_bigdat$Area <- NULL
+    this_bigdat$distbegin <- NULL
+    this_bigdat$distend <- NULL
+
     bigdat <- rbind.data.frame(bigdat, this_bigdat)
   }
 

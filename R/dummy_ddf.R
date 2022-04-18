@@ -40,6 +40,10 @@ dummy_ddf <- function(data, width, left=0, transect="line"){
   # make the method be "dummy"
   df_obj$method <- "dummy"
 
+  # hessian?
+  df_obj$hessian <- matrix(1, 1, 1)
+  df_obj$par <- 0
+
   class(df_obj) <- c("fake_ddf", "ds", "ddf")
   return(df_obj)
 }
@@ -84,6 +88,7 @@ print.fake_ddf <- function(x, ...){
 
 #' @export
 summary.fake_ddf <- function(object, ...){
+  object$average.p.se <- matrix(0, 1, 1)
   class(object) <- "summary.fake_ddf"
   return(object)
 }
