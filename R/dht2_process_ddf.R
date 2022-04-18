@@ -55,32 +55,32 @@ dht2_process_ddf <- function(ddf, convert_units, er_est, strat_formula){
 
     # only keep observations within the truncation
     obj_keep <- c(obj_keep, this_ddf$data$object[this_ddf$data$distance <=
-                                                  this_ddf$ds$aux$width &
+                                                  this_ddf$meta.data$width &
                                                  this_ddf$data$distance >=
-                                                  this_ddf$ds$aux$left])
+                                                  this_ddf$meta.data$left])
     this_bigdat <- this_ddf$data[this_ddf$data$object %in% obj_keep, ]
 
     # get probabilities of detection
     this_bigdat$p <- predict(this_ddf)$fitted
 
     # ensure as.factor in formula are propagated to the data
-    bigdat <- safe_factorize(strat_formula, bigdat)
+    this_bigdat <- safe_factorize(strat_formula, this_bigdat)
 
     # get variance estimation
     if(attr(er_est, "missing")){
-      er_estl <- er_est[as.numeric(this_ddf$ds$aux$point)+1]
+      er_estl <- er_est[as.numeric(this_ddf$meta.data$point)+1]
     }else{
       er_estl <- er_est[i]
     }
     # transect data
     transect_data[i,] <- data.frame(ddf_id = i,
                                     # transect type
-                                    transect_type = if(this_ddf$ds$aux$point){
+                                    transect_type=if(this_ddf$meta.data$point){
                                                       "point"}else{"line"},
                                     # ER variance estimation
                                     er_est = er_estl,
                                     # apply unit conversion to truncations
-                                    df_width = this_ddf$ds$aux$width *
+                                    df_width = this_ddf$meta.data$width *
                                                convert_units)
 
     # add a detection function identifier for this bit of the data
