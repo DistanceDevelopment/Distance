@@ -773,15 +773,14 @@ if(mult){
       this_stra_row[] <- NA
       this_stra_row[[this_stratum]] <- "Total"
 
-      dat_row <- dat_row %>%
-        mutate(n  = sum(.data$n))
-
       #### stratification options
       ## in Distance for Windows these are in terms of density
       if(stratification=="geographical"){
         # "weighting by area"
         #  which is adding up the abundances
         dat_row <- dat_row %>%
+          # ER ignoring strata
+          mutate(ER_var = varn(resT$Effort, resT$transect_n, er_est)) %>%
           # for the density case weight by covered area
           mutate(weight       = if_else(rep(est_density, nrow(dat_row)),
                                         .data$Covered_area/
@@ -790,9 +789,7 @@ if(mult){
                  Covered_area = sum(.data$Covered_area),
                  Effort       = sum(.data$Effort),
                  k            = sum(.data$k)) %>%
-          # now summarize ER variance and degrees of freedom
-          mutate(ER_var       = sum(.data$weight^2 * .data$ER_var,
-                                    na.rm=TRUE)) %>%
+          # now summarize ER variance (Nhat version) and degrees of freedom
           mutate(ER_var_Nhat  = sum(.data$weight^2 * .data$ER_var_Nhat,
                                     na.rm=TRUE)) %>%
           mutate(ER_df = .data$ER_var_Nhat^2/
@@ -845,14 +842,15 @@ if(mult){
 
       # calculate other summaries
       dat_row <- dat_row %>%
-        mutate(ER         = .data$n/.data$Effort) %>%
-        mutate(ER_CV      = if_else(.data$ER==0,
+        mutate(n = sum(.data$n)) %>%
+        mutate(ER = .data$n/.data$Effort) %>%
+        mutate(ER_CV = if_else(.data$ER==0,
                                     0,
                                     sqrt(.data$ER_var)/.data$ER)) %>%
         mutate(group_mean     = mean(.data$group_mean),
                group_var      = sum(.data$group_var),
                group_var_Nhat = sum(.data$group_var_Nhat)) %>%
-        mutate(group_CV   = if_else(.data$group_var==0, 0,
+        mutate(group_CV = if_else(.data$group_var==0, 0,
                                     sqrt(.data$group_var)/.data$group_mean))
 
       # calculate mean abundance, unless we are doing replicate, where we need
@@ -920,7 +918,9 @@ if(mult){
       dat_row <- dat_row %>%
         distinct()
 
-      # compute degrees of freedom
+      ## compute degrees of freedom
+
+      # replicate
       if(stratification == "replicate"){
         dat_row <- dat_row %>%
           mutate(wtcv = sum(c((sqrt(rvar)/.data$Abundance[1])^4/
@@ -952,6 +952,7 @@ if(mult){
           # drop weight column
           dat_row$wtcv <- NULL
       }else{
+      # non-replicate case
         if(binomial_var){
           # normal approximation for binomial_var
           dat_row <- dat_row %>%
