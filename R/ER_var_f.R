@@ -35,13 +35,21 @@ ER_var_f <- function(erdat, innes, er_est, binomial_var=FALSE){
         arrange(.data$Sample.Label)
     }
 
+    erdat <- erdat %>%
+      mutate(ER_var = varn(.data$Effort, .data$transect_n_observations,
+                           type=er_est)) %>%
+      mutate(ER_var = ifelse(length(unique(.data$Sample.Label))>1,
+                             .data$ER_var, 0))
+
     # should the estimator of Innes et al be used?
     if(innes){
       # this is the "varflag=2"
       erdat <- erdat %>%
-        mutate(ER_var = varn(.data$Effort, .data$transect_Nc, type=er_est)) %>%
-        mutate(ER_var = ifelse(length(unique(.data$Sample.Label))>1,
-                               .data$ER_var,
+        # note that the ER reported in summary is using n/L but we need to use
+        # the N/L estimate for the total variance calculation
+        mutate(ER_var_Nc = varn(.data$Effort, .data$transect_Nc, type=er_est)) %>%
+        mutate(ER_var_Nc = ifelse(length(unique(.data$Sample.Label))>1,
+                               .data$ER_var_Nc,
                                0)) %>%
         # put ER var on the Nhat scale
         mutate(ER_var_Nhat = varn(.data$Effort/(sum(.data$Effort)*
@@ -56,10 +64,6 @@ ER_var_f <- function(erdat, innes, er_est, binomial_var=FALSE){
     # else use "classic" ER estimator, see e.g. Fewster et al
       # this is the "varflag=1"
       erdat <- erdat %>%
-        mutate(ER_var = varn(.data$Effort, .data$transect_n_observations,
-                             type=er_est)) %>%
-        mutate(ER_var = ifelse(length(unique(.data$Sample.Label))>1,
-                               .data$ER_var, 0)) %>%
         # put ER var on the Nhat scale
         mutate(ER_var_Nhat = ((.data$Area/sum(.data$Covered_area))*
                               .data$Nc*sum(.data$Effort))^2 *
