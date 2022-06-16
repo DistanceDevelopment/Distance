@@ -154,7 +154,7 @@ test_that("Uniform does work after all",{
 
   # try to fit with unif+cos(1,2)
   dd <- suppressMessages(ds(egdata,4,key="unif",order=c(1,2)))
-  expect_equal(dd$ddf$par, c(0.7050144, -0.1056291), tol=par.tol)
+  expect_equal(unname(dd$ddf$par), c(0.7050144, -0.1056291), tol=par.tol)
 
 })
 
