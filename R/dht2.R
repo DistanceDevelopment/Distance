@@ -50,7 +50,7 @@
 #' @importFrom stats qt na.omit predict terms var qnorm
 #' @importFrom dplyr group_by group_by_at mutate ungroup select distinct
 #' mutate_if if_else summarize_all "%>%" filter_at inner_join anti_join
-#' bind_rows left_join arrange vars
+#' bind_rows left_join arrange vars summarize
 #' @importFrom mrds DeltaMethod
 #' @section Data:
 #' The data format allows for complex stratification schemes to be set-up. Three
