@@ -4,31 +4,32 @@
 varNhat <- function(data, model){
 
   # format the data
-  # definitely a bad idea, relies on dplyr's internal representation
+  # relies on dplyr's internal representation
   # faff here is to detect if there is an NA grouping and drop it
   # this has all the group data in it
   grps <- attr(data, "groups")
   grps$.rows <- NULL
+  strat_vars <- colnames(grps)
   # are there any NAs?
   grps <- apply(grps, 1, function(x) any(is.na(x)))
-  # just get the indices that we want
+  # get structure
   vardat_str <- attr(data, "groups")[!grps, , drop=FALSE]
-  ind <- vardat_str$.rows
 
+  # get the covered area and survey area summaries per strata
   grp_dat <- data %>%
-    select(Covered_area, Area, Sample.Label) %>%
+    select("Covered_area", "Area", "Sample.Label", !!strat_vars) %>%
     distinct() %>%
-    summarize(Covered_area = sum(Covered_area),
-              Area         = Area) %>%
+    summarize(Covered_area = sum(.data$Covered_area),
+              Area         = .data$Area) %>%
     distinct()
 
+  # join the per-stratum data onto the frame
   data$Covered_area <- NULL
   data$Area <- NULL
-
-  data <- left_join(data, grp_dat)
+  data <- left_join(data, grp_dat, by=strat_vars)
 
   # function to calculate Nhat
-  dhtd <- function(par, data, model){#, area, covered_area, ind){
+  dhtd <- function(par, data, model){
     # set par
     model$par <- par
 
