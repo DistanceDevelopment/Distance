@@ -21,8 +21,14 @@ test_that("Error on different truncation distance", {
   t14 <- suppressWarnings(ds(egdata, list(left=1, right=4)))
 
   # when things are okay!
-  out <- "           Model                                       Key function Formula\n1   \\\\texttt{t4}                                        Half-normal      ~1\n2  \\\\texttt{t42}                                        Half-normal      ~1\n3 \\\\texttt{t4hr} Hazard-rate with cosine adjustment term of order 2      ~1\n  C-vM p-value $\\\\hat{P_a}$ se($\\\\hat{P_a}$) $\\\\Delta$AIC\n1    0.7789695    0.5842744       0.04637627     0.000000\n2    0.7789695    0.5842744       0.04637627     0.000000\n3    0.8170780    0.5556728       0.07197555     2.501712"
-  expect_output(print(summarize_ds_models(t4, t42, t4hr)), out, fixed=TRUE)
+  out <- read.table(text="
+\\texttt{t4}                                              Half-normal      ~1    0.7789695         0.5842744       0.04637627         0.000000
+\\texttt{t42}                                             Half-normal      ~1    0.7789695         0.5842744       0.04637627         0.000000
+\\texttt{t4hr} \"Hazard-rate with cosine adjustment term of order 2\"      ~1    0.8170780         0.5556728       0.07197555         2.501712
+", header=FALSE)
+  names(out) <- c("Model", "Key function", "Formula", "C-vM p-value",
+                "$\\hat{P_a}$", "se($\\hat{P_a}$)", "$\\Delta$AIC")
+  expect_equal(summarize_ds_models(t4, t42, t4hr), out, fixed=TRUE, tol=par.tol)
 
   # right truncation different
   expect_error(summarize_ds_models(t3, t4))
@@ -43,8 +49,15 @@ test_that("Binning",{
   cp2 <- suppressMessages(ds(egdata, key="hn", order=0,
                   cutpoints=c(0, 2, 3, 3.84)))
 
-  out <- "           Model Key function Formula $\\\\chi^2$ $p$-value $\\\\hat{P_a}$\n1  \\\\texttt{cp1}  Half-normal      ~1           0.8980817    0.6287014\n2 \\\\texttt{cp11}  Half-normal      ~1           0.8980817    0.6287014\n  se($\\\\hat{P_a}$) $\\\\Delta$AIC\n1       0.05262633            0\n2       0.05262633            0"
-  expect_output(print(summarize_ds_models(cp1, cp11)), out, fixed=TRUE)
+  out <- read.table(text="
+\\texttt{cp1}  Half-normal      ~1      0.8980817    0.6287014    0.05262633  0
+\\texttt{cp11}  Half-normal     ~1      0.8980817    0.6287014    0.05262633  0
+", header=FALSE)
+
+
+  names(out) <- c("Model", "Key function", "Formula", "$\\chi^2$ $p$-value",
+                  "$\\hat{P_a}$", "se($\\hat{P_a}$)", "$\\Delta$AIC")
+  expect_equal(summarize_ds_models(cp1, cp11), out, fixed=TRUE, tol=par.tol)
 
   # different bins
   expect_error(summarize_ds_models(cp1, cp11, cp2))
