@@ -1,4 +1,3 @@
-# this code is HORRIBLE
 # Calculate the variance contribution of the detection function
 #  to abundance estimates
 varNhat <- function(data, model){
