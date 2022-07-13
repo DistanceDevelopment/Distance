@@ -103,7 +103,8 @@
 #' @importFrom stats as.formula AIC
 #' @importFrom mrds ddf dht
 #' @seealso [`summary.dht_bootstrap`] for how to summarize the results,
-#' [`bootdht_Nhat_summarize`] for an example summary function.
+#' [`bootdht_Nhat_summarize`] and [`bootdht_Dhat_summarize`] for an examples of
+#' summary functions.
 #' @export
 #' @examples
 #' \dontrun{

@@ -167,5 +167,6 @@ summary(bootout)
 }
 \seealso{
 \code{\link{summary.dht_bootstrap}} for how to summarize the results,
-\code{\link{bootdht_Nhat_summarize}} for an example summary function.
+\code{\link{bootdht_Nhat_summarize}} and \code{\link{bootdht_Dhat_summarize}} for an examples of
+summary functions.
 }
