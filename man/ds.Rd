@@ -207,7 +207,11 @@ If abundance estimates are required then the \code{data.frame}s \code{region_tab
 and \code{sample_table} must be supplied. If \code{data} does not contain the columns
 \code{Region.Label} and \code{Sample.Label} then the \code{data.frame} \code{obs_table} must
 also be supplied. Note that stratification only applies to abundance
-estimates and not at the detection function level.
+estimates and not at the detection function level. Density and abundance
+estimates, and corresponding estimates of variance and confidence intervals,
+are calculated using the methods described in Buckland et al. (2001)
+sections 3.6.1 and 3.7.1 (further details can be found in the documentation
+for \code{\link[mrds:dht]{dht}}).
 
 For more advanced abundance/density estimation please see the
 \code{\link[mrds:dht]{dht}} and \code{\link{dht2}} functions.
