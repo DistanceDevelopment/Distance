@@ -33,11 +33,6 @@ test_that("Input errors are thrown correctly",{
   expect_error(ds(egdata,4,key="hn",adjustment="bananas"),
                suppressMessages(message("'arg' should be one of \"cos\", \"herm\", \"poly\"")))
 
-
-  # uniform without adjustments
-  expect_error(ds(egdata,4,key="unif", adjustment=NULL),
-               "Can't use uniform key with no adjustments.")
-
   # uniform with covariates?
   expect_error(ds(egdata,4,key="unif",formula=~size),
                "Can't use uniform key with covariates.")
