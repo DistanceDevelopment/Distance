@@ -23,7 +23,7 @@ bootit <- function(bootdat, models, our_resamples, summary_fun,
     # insert the new data into the model
     df_call$data <- bootdat
     if(!is.null(convert_units)){
-      df_call$convert.units <- convert_units
+      df_call$convert_units <- convert_units
     }
 
     # fit that and update what's in models
