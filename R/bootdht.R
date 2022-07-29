@@ -199,6 +199,9 @@ bootdht <- function(model,
   our_resamples <- possible_resamples[c(resample_strata, resample_transects,
                                         resample_obs)]
 
+  # make sure these are characters for resampling
+  dat[, our_resamples] <- lapply(dat[, our_resamples, drop=FALSE], as.character)
+
   # process models
   # this resolves all symbols in the call so arguments can be accessed when
   # running in parallel
