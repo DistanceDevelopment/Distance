@@ -1,5 +1,5 @@
 Package: Distance
-Maintainer: Laura Marshall <dave@ninepointeightone.net>
+Maintainer: Laura Marshall <lhm@st-andrews.ac.uk>
 License: GPL (>= 2)
 Title: Distance Sampling Detection Function and Abundance Estimation
 LazyLoad: yes
@@ -20,6 +20,7 @@ Depends:
     mrds (>= 2.2.1)
 Imports:
     dplyr,
+    methods,
     rlang
 Suggests:
     covr,
