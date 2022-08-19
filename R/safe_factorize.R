@@ -15,8 +15,7 @@ safe_factorize <- function(formula, data){
     return(data)
   }
 
-  if(class(try(model.frame(formula, data), silent=TRUE)) !=
-       "try-error"){
+  if(!inherits(try(model.frame(formula, data), silent=TRUE), "try-error")){
     dn <- colnames(data)
     mf <- model.frame(formula, data)
     mf <- mf[, !(names(mf) %in% names(data)), drop=FALSE]
