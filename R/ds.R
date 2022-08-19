@@ -621,7 +621,7 @@ ds <- function(data, truncation=ifelse(is.null(cutpoints),
     }
 
     # if that worked
-    if(any(class(model)!="try-error")){
+    if(!inherits(model, "try-error")){
       if(model$ds$converge==0){
 
         model$name.message <- sub("^Fitting ","",this.message)

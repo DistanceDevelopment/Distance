@@ -144,7 +144,7 @@ bootdht <- function(model,
   }
 
   # make everything a list...
-  if(!all(class(model)=="list")){
+  if(!inherits(model, "list")){
     models <- list(model)
     # yes, I am a monster
   }else{
@@ -157,7 +157,7 @@ bootdht <- function(model,
 
   # only use valid ds models
   for(i in seq_along(models)){
-    if(!all(class(models[[i]])=="dsmodel")){
+    if(!is(models[[i]], "dsmodel")){
       stop("Only models fitted by Distance::ds() may be used")
     }
   }
@@ -302,7 +302,7 @@ bootdht <- function(model,
   }
 
   # do some post-processing
-  fail_fun <- function(x) class(x)=="bootstrap_failure"
+  fail_fun <- function(x) inherits(x, "bootstrap_failure")
   # add replicate IDs
   bootids <- seq_len(length(boot_ests))
   # how many failures

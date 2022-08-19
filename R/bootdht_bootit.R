@@ -30,7 +30,7 @@ bootit <- function(bootdat, models, our_resamples, summary_fun,
     models[[i]] <- try(suppressMessages(eval(df_call)),
                        silent=TRUE)
 
-    if(any(class(models[[i]]) == "try-error") ||
+    if(inherits(models[[i]], "try-error") ||
        is.null(models[[i]]$dht)){
       # if the model failed, return NA
       aics[i] <- NA
@@ -95,7 +95,7 @@ bootit <- function(bootdat, models, our_resamples, summary_fun,
   }else{
     fit <- models[[which.min(aics)]]
     # handle errors
-    if(any(class(fit) == "try-error") ||
+    if(inherits(fit, "try-error") ||
        any(is.na(fit$ddf$hessian))){
       ret <- NA
       class(ret) <- "bootstrap_failure"
