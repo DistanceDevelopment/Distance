@@ -333,7 +333,8 @@ ds <- function(data, truncation=ifelse(is.null(cutpoints),
     this_call$er_var <- this_call$er.var
     er_var <- er.var
     this_call$er.var <- NULL
-    warning(paste0("Argument: er.var is deprecated, check documentation."))
+    warning(paste0("Argument: er.var is deprecated, check documentation."),
+            immediate.=TRUE)
   }
   if("max.adjustments" %in% names(this_call)){
     this_call$max_adjustments <- this_call$max.adjustments
