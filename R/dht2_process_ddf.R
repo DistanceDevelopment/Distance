@@ -2,7 +2,6 @@
 # other TODO:
 #   - handle grouped/ungrouped estimation (all one or the other??)
 #   - fix Total degrees of freedom
-#   - left truncation
 #   - dummy ddf
 dht2_process_ddf <- function(ddf, convert_units, er_est, strat_formula){
 
@@ -39,7 +38,8 @@ dht2_process_ddf <- function(ddf, convert_units, er_est, strat_formula){
   transect_data <- data.frame(ddf_id = 1:length(ddf),
                               transect_type = rep(NA, length(ddf)),
                               er_est = rep(NA, length(ddf)),
-                              df_width = rep(NA, length(ddf)))
+                              df_width = rep(NA, length(ddf)),
+                              df_left = rep(NA, length(ddf)))
 
   # just bad vibes below this point...
   for(i in seq_along(ddf)){
@@ -81,6 +81,8 @@ dht2_process_ddf <- function(ddf, convert_units, er_est, strat_formula){
                                     er_est = er_estl,
                                     # apply unit conversion to truncations
                                     df_width = this_ddf$meta.data$width *
+                                               convert_units,
+                                    df_left = this_ddf$meta.data$left *
                                                convert_units)
 
     # add a detection function identifier for this bit of the data
