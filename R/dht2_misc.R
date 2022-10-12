@@ -1,13 +1,10 @@
 # misc internal functions for dht2/bootdht
 # calculate covered area
-area_calc <- function(width, effort, transect_type, sample_fraction){
-  # Note - this function does not need to account for left truncation, as
-  # it is taken care of when calculating average detection prob (by setting
-  # detection prob to 0 between 0 and left truncation distance)
+area_calc <- function(width, left, effort, transect_type, sample_fraction){
   if(transect_type=="point"){
-    return(effort*pi*width^2*sample_fraction)
+    return(effort*pi*(width^2-left^2)*sample_fraction)
   }else{
-    return(effort*2*width*sample_fraction)
+    return(effort*2*(width-left)*sample_fraction)
   }
 }
 
