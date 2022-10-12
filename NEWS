@@ -10,6 +10,7 @@ Distance 1.0.6
 * convert.units in bootdht() was not properly implemented in previous release, fixed (#122)
 * fix bug in detection function variance estimation (#125)
 * fix bug in bootstrap where columns needed to be character (thanks to Nick Wilkinson for finding this)
+* fix bug in covered area calculation for dht2 (#135)
 
 Distance 1.0.5
 ----------------------
