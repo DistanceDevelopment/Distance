@@ -36,7 +36,8 @@ line transects). See "Data" below.}
 \item{geo_strat}{\code{data.frame} with information about any geographical
 stratification. See "Data" below.}
 
-\item{flatfile}{data in the flatfile format, see \code{\link{flatfile}}.}
+\item{flatfile}{data in the flatfile format, see \code{\link{flatfile}}. Note
+that the \code{object} column is required.}
 
 \item{strat_formula}{a formula giving the stratification structure (see
 "Stratification" below). Currently only one level of stratification is

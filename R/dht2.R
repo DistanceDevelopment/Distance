@@ -16,7 +16,8 @@
 #' line transects). See "Data" below.
 #' @param geo_strat `data.frame` with information about any geographical
 #' stratification. See "Data" below.
-#' @param flatfile data in the flatfile format, see [`flatfile`][flatfile].
+#' @param flatfile data in the flatfile format, see [`flatfile`][flatfile]. Note
+#' that the `object` column is required.
 #' @param convert_units conversion factor between units for the distances,
 #' effort and area. See "Units" below. Can supply one per detection function in
 #' `ddf`.
