@@ -14,13 +14,13 @@ test_that("wren 5 minute counts works",{
 
   # do the same thing with dht2
   w1_nhat <- dht2(w1_df_unif, flatfile=wren_5min, strat_formula=~Region.Label,
-                  convert_units=cu_wren_5min)
+                  convert_units=cu_wren_5min, er_est="P3")
 
-  expect_equal(attr(w1_nhat,"density")$Density, 1.2945, tol=1e-2)
-  expect_equal(attr(w1_nhat,"density")$LCI, 0.79504, tol=1e-2)
-  expect_equal(attr(w1_nhat,"density")$UCI, 2.1077, tol=1e-2)
-  expect_equal(attr(w1_nhat,"density")$Density_se, 0.32442, tol=1e-2)
-  expect_equal(attr(w1_nhat,"density")$Density_CV, 0.2506, tol=1e-2)
+  expect_equal(attr(w1_nhat,"density")$Density, 1.2945, tol=1e-3)
+  expect_equal(attr(w1_nhat,"density")$LCI, 0.79504, tol=1e-3)
+  expect_equal(attr(w1_nhat,"density")$UCI, 2.1077, tol=1e-3)
+  expect_equal(attr(w1_nhat,"density")$Density_se, 0.32442, tol=1e-3)
+  expect_equal(attr(w1_nhat,"density")$Density_CV, 0.2506, tol=1e-3)
 })
 
 
@@ -34,11 +34,11 @@ test_that("wren snapshot works",{
 
   w2_nhat <- dht2(w2_df_hr, flatfile=wren_snapshot, strat_formula=~Region.Label,
                   convert_units=cu_wren_snapshot)
-  expect_equal(attr(w2_nhat,"density")$Density, 1.0232, tol=1e-1)
-  expect_equal(attr(w2_nhat,"density")$LCI, 0.79487, tol=1e-2)
-  expect_equal(attr(w2_nhat,"density")$UCI, 1.3171, tol=1e-2)
-  expect_equal(attr(w2_nhat,"density")$Density_se, 0.13089, tol=1e-2)
-  expect_equal(attr(w2_nhat,"density")$Density_CV, .1279, tol=1e-2)
+  expect_equal(attr(w2_nhat,"density")$Density, 1.0232, tol=1e-3)
+  expect_equal(attr(w2_nhat,"density")$LCI, 0.79487, tol=1e-3)
+  expect_equal(attr(w2_nhat,"density")$UCI, 1.3171, tol=1e-3)
+  expect_equal(attr(w2_nhat,"density")$Density_se, 0.13089, tol=1e-6)
+  expect_equal(attr(w2_nhat,"density")$Density_CV, .1279, tol=1e-3)
 })
 
 
