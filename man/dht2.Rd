@@ -23,7 +23,8 @@ dht2(
 )
 }
 \arguments{
-\item{ddf}{model fitted by \code{\link[=ds]{ds}} or \code{\link[mrds:ddf]{ddf}}}
+\item{ddf}{model fitted by \code{\link[=ds]{ds}} or \code{\link[mrds:ddf]{ddf}}.
+Multiple detection functions can be supplied as a \code{list}.}
 
 \item{observations}{\code{data.frame} to link detection function data (indexed by
 \code{object} column IDs) to the transects (indexed by \code{Sample.Label} column
@@ -42,10 +43,12 @@ stratification. See "Data" below.}
 supported.}
 
 \item{convert_units}{conversion factor between units for the distances,
-effort and area. See "Units" below.}
+effort and area. See "Units" below. Can supply one per detection function in
+\code{ddf}.}
 
 \item{er_est}{encounter rate variance estimator to be used. See "Variance"
-below and \code{\link[mrds:varn]{varn}}.}
+below and \code{\link[mrds:varn]{varn}}. Can supply one per detection function in
+\code{ddf}.}
 
 \item{multipliers}{\code{list} of \code{data.frame}s. See "Multipliers" below.}
 

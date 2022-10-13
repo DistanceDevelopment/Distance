@@ -218,6 +218,10 @@ test_that("varflag=0 works", {
 test_that("0 effort errors", {
 
   data(minke)
+
+  minke$object <- NA
+  minke$object[!is.na(minke$distance)] <- 1:sum(!is.na(minke$distance))
+
   minke_df <- ds(minke, truncation=1.5, adjustment=NULL)
   minke_dht2 <- dht2(minke_df, flatfile=minke, stratification="geographical",
                      strat_formula=~Region.Label)
@@ -226,6 +230,6 @@ test_that("0 effort errors", {
   # if some effort is actually zero
   expect_error(dht2(minke_df, flatfile=minke, stratification="geographical",
                     strat_formula=~Region.Label),
-               "Some transects have <=0 or NA Effort")
+               "Some transects have Effort <=0 or NA")
 
 })

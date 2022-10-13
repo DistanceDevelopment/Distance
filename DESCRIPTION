@@ -3,7 +3,7 @@ Maintainer: Laura Marshall <lhm@st-andrews.ac.uk>
 License: GPL (>= 2)
 Title: Distance Sampling Detection Function and Abundance Estimation
 LazyLoad: yes
-Author: David Lawrence Miller
+Author: David Lawrence Miller, T.J. Clark-Wolf
 Description: A simple way of fitting detection functions to distance sampling
     data for both line and point transects. Adjustment term selection, left and
     right truncation as well as monotonicity constraints and binning are
@@ -11,7 +11,7 @@ Description: A simple way of fitting detection functions to distance sampling
     Horvitz-Thompson-like estimator) if survey area information is provided. See
     Miller et al. (2019) <doi:10.18637/jss.v089.i01> for more information on
     methods and <https://examples.distancesampling.org/> for example analyses.
-Version: 1.0.6.9001
+Version: 1.0.6.9002
 URL: https://github.com/DistanceDevelopment/Distance/
 BugReports: https://github.com/DistanceDevelopment/Distance/issues
 Language: en-GB

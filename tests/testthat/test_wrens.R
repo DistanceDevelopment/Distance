@@ -14,7 +14,7 @@ test_that("wren 5 minute counts works",{
 
   # do the same thing with dht2
   w1_nhat <- dht2(w1_df_unif, flatfile=wren_5min, strat_formula=~Region.Label,
-                      convert_units=cu_wren_5min)
+                  convert_units=cu_wren_5min)
 
   expect_equal(attr(w1_nhat,"density")$Density, 1.2945, tol=1e-2)
   expect_equal(attr(w1_nhat,"density")$LCI, 0.79504, tol=1e-2)

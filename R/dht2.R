@@ -4,7 +4,8 @@
 #' compute abundance estimates over required areas. The function also allows
 #' for stratification and variance estimation via various schemes (see below).
 #'
-#' @param ddf model fitted by [`ds`][Distance::ds] or [`ddf`][mrds::ddf]
+#' @param ddf model fitted by [`ds`][Distance::ds] or [`ddf`][mrds::ddf].
+#' Multiple detection functions can be supplied as a `list`.
 #' @param strat_formula a formula giving the stratification structure (see
 #' "Stratification" below). Currently only one level of stratification is
 #' supported.
@@ -17,9 +18,11 @@
 #' stratification. See "Data" below.
 #' @param flatfile data in the flatfile format, see [`flatfile`][flatfile].
 #' @param convert_units conversion factor between units for the distances,
-#' effort and area. See "Units" below.
+#' effort and area. See "Units" below. Can supply one per detection function in
+#' `ddf`.
 #' @param er_est encounter rate variance estimator to be used. See "Variance"
-#' below and [`varn`][mrds::varn].
+#' below and [`varn`][mrds::varn]. Can supply one per detection function in
+#' `ddf`.
 #' @param multipliers `list` of `data.frame`s. See "Multipliers" below.
 #' @param sample_fraction proportion of the transect covered (e.g., 0.5 for
 #' one-sided line transects). May be specified as either a single number or a
@@ -251,18 +254,11 @@ dht2 <- function(ddf, observations=NULL, transects=NULL, geo_strat=NULL,
                  stratification="geographical",
                  total_area=NULL, binomial_var=FALSE){
 
-  # just get the ds model if we have Distance::ds output
-  if(inherits(ddf, "dsmodel")){
-    ddf <- ddf$ddf
-  }
-
   # get default variance estimation
-  if(all(er_est == c("R2", "P2"))){
-    if(ddf$ds$aux$point){
-      er_est <- "P2"
-    }else{
-      er_est <- "R2"
-    }
+  if(missing(er_est)){
+    attr(er_est, "missing") <- TRUE
+  }else{
+    attr(er_est, "missing") <- FALSE
   }
 
   # check we have a valid stratification option
@@ -283,12 +279,28 @@ dht2 <- function(ddf, observations=NULL, transects=NULL, geo_strat=NULL,
     stop("Only 'innes' or 'binomial_var' may be TRUE")
   }
 
+
+  # what are the stratum labels specicied in strat_formula?
+  stratum_labels <- attr(terms(strat_formula), "term.labels")
+
+  # TODO: currently break if >1 stratum is defined
+  # https://github.com/DistanceDevelopment/Distance/issues/46
+  if(length(stratum_labels) > 1){
+    stop("Only one level of stratification is currently supported")
+  }
+
+  # process multiple detection functions
+  ddf_proc <- dht2_process_ddf(ddf, convert_units, er_est, strat_formula)
+  bigdat <- ddf_proc$bigdat
+  ddf <- ddf_proc$ddf
+  transect_data <- ddf_proc$transect_data
+
   # grouped estimation
   # time to recurse
-  if(!is.null(ddf$data$size) & !all(ddf$data$size==1) ){
+  if(!ddf_proc$groupsizeone){
     mc <- match.call(expand.dots = FALSE)
     dddf <- ddf
-    dddf$data$size <- 1
+    dddf <- lapply(dddf, \(x){x$data$size <- 1;x})
     mc$ddf <- dddf
     if(!is.null(flatfile)){
       ff <- flatfile
@@ -302,18 +314,6 @@ dht2 <- function(ddf, observations=NULL, transects=NULL, geo_strat=NULL,
   }
   # ^^ we'll save this output later on
 
-  # holder of transect type
-  transect_type <- if(ddf$ds$aux$point) "point" else "line"
-
-  # what are the stratum labels specicied in strat_formula?
-  stratum_labels <- attr(terms(strat_formula), "term.labels")
-
-  # TODO: currently break if >1 stratum is defined
-  # https://github.com/DistanceDevelopment/Distance/issues/46
-  if(length(stratum_labels) > 1){
-    stop("Only one level of stratification is currently supported")
-  }
-
   if(!is.null(observations) & !is.null(transects)){
     if(!is.null(geo_strat)){
       # what if there were as.factor()s in the formula?
@@ -324,7 +324,6 @@ dht2 <- function(ddf, observations=NULL, transects=NULL, geo_strat=NULL,
     }else{
       geo_stratum_labels <- NULL
     }
-
 
     # what if there were as.factor()s in the formula?
     transects <- safe_factorize(strat_formula, transects)
@@ -337,25 +336,18 @@ dht2 <- function(ddf, observations=NULL, transects=NULL, geo_strat=NULL,
     #         protected <- c("p", ".Label", )
 
     # check the data
-    dht2_checkdata(ddf, observations, transects, geo_strat, strat_formula,
-                   stratum_labels, geo_stratum_labels)
+    dht2_checkdata(colnames(bigdat), observations, transects, geo_strat,
+                   strat_formula, stratum_labels, geo_stratum_labels)
 
     # drop unused levels of factors
-    ddf$data <- droplevels(ddf$data)
     observations <- droplevels(observations)
     transects <- droplevels(transects)
     geo_strat <- droplevels(geo_strat)
 
-    # prepare data
-    obj_keep <- ddf$data$object[ddf$data$distance <= ddf$ds$aux$width &
-                                ddf$data$distance >= ddf$ds$aux$left]
-    bigdat <- ddf$data[ddf$data$object %in% obj_keep, ]
-    observations <- observations[observations$object %in% obj_keep, ]
+    # only keep observations within the truncation
+    observations <- observations[observations$object %in% ddf_proc$obj_keep, ]
 
-
-    # get probabilities of detection
-    bigdat$p <- predict(ddf)$fitted
-
+    # merge onto the observation frame
     bigdat <- merge(bigdat, observations, all.x=TRUE, by="object",
                     suffixes=c("DUPLICATE", ""))
 
@@ -364,15 +356,42 @@ dht2 <- function(ddf, observations=NULL, transects=NULL, geo_strat=NULL,
       bigdat[, grepl("DUPLICATE", names(bigdat))] <- NULL
     }
 
+    # handle when there is only one detection function
+    if(length(ddf) == 1){
+      transects$ddf_id <- 1
+    }
+    # merge transect type onto the sample table
+    transects <- merge(transects, transect_data, all.x=TRUE, by="ddf_id")
+
     # merge onto transects
     join_labs <- intersect(names(bigdat), names(transects))
-    join_labs <- join_labs[c("Sample.Label", geo_stratum_labels) %in% join_labs]
+    #join_labs <- join_labs[c("Sample.Label", geo_stratum_labels) %in% join_labs]
     bigdat <- merge(bigdat, transects, all.x=TRUE, all.y=TRUE,
                     by=join_labs,
                     suffixes=c("DUPLICATE", ""))
     # remove Sample.Label dupes
     if(any(grepl("DUPLICATE", names(bigdat)))){
       bigdat[, grepl("DUPLICATE", names(bigdat))] <- NULL
+    }
+    if(stratification=="object"){
+      # what are all the possible combinations of obs level stratum
+      # levels and sample labels?
+      ex <- expand.grid(lapply(bigdat[, c("Sample.Label", stratum_labels)],
+                               function(x) unique(na.omit(x))),
+                        stringsAsFactors=FALSE)
+      # which are not represented in the data?
+      aj <- anti_join(ex, bigdat, by=c("Sample.Label", stratum_labels))
+      # join the unrepresented sample combinations to the extra cols
+      # (i.e., add Area, Effort data to aj)
+      aj <- left_join(aj, bigdat,
+                      by=c(stratum_labels))
+
+      # remove the transects with no stratum data
+      bigdat2 <- filter_at(bigdat, stratum_labels, function(x) !is.na(x))
+      aj <- filter_at(aj, stratum_labels, function(x) !is.na(x))
+
+      # rbind that onto the original data
+      bigdat <- bind_rows(bigdat2, aj)
     }
 
     # merge on the geographical strata
@@ -388,7 +407,7 @@ dht2 <- function(ddf, observations=NULL, transects=NULL, geo_strat=NULL,
         geo_stratum_labels <- ".Label"
       }
       # TODO: do something here with strat_formula
-      bigdat <- merge(bigdat, geo_strat, all.x=TRUE, by=geo_stratum_labels)
+      bigdat <- merge(bigdat, geo_strat, all.x=TRUE)#, by=c(geo_stratum_labels, "Area"))
     }else{
       bigdat$Area <- NA
       bigdat$Label <- "Total"
@@ -409,20 +428,49 @@ dht2 <- function(ddf, observations=NULL, transects=NULL, geo_strat=NULL,
       flatfile$distance <- (flatfile$distend+flatfile$distbegin)/2
     }
 
-    # check regular columns exist
-    flatfile_labels <- c("distance", "Sample.Label", "Effort", "Area")
+    # labels needed for flatfile
+    flatfile_labels <- c("distance", "Sample.Label", "Effort", "Area", "object")
 
+    # check we have a ddf_id column
+    if(length(ddf) == 1){
+      flatfile$ddf_id <- 1
+    }else{
+      if(is.null(flatfile$ddf_id) ||
+         !all(1:length(ddf) %in% unique(flatfile$ddf_id))){
+        stop("flatfile must include ddf_id column to identify samples to detection functions")
+      }
+    }
+
+    # check regular columns exist
     if(!all(flatfile_labels %in% names(flatfile))){
       stop(paste("Column(s):",
                  paste(flatfile_labels[!(flatfile_labels %in% names(flatfile))],
                        collapse=", "),
                  "not in `flatfile`"))
     }
-    # safely truncate the data, respecting the data structure
-    flatfile <- safetruncate(flatfile, ddf$meta.data$width, ddf$meta.data$left)
-    bigdat <- flatfile
 
-    # what if there were as.factor()s in the formula?
+    # join the extra ddf data onto the flatfile
+    flatfiles_per_ddf <- list()
+    for(i in seq_along(ddf)){
+      flatfiles_per_ddf[[i]] <- flatfile[((flatfile$object %in%
+                                           ddf_proc$obj_keep) |
+                                          is.na(flatfile$object)) &
+                                          flatfile$ddf_id == i, ]
+      # join p
+      flatfiles_per_ddf[[i]] <- left_join(flatfiles_per_ddf[[i]],
+                                 ddf_proc$bigdat[!is.na(ddf_proc$bigdat$object),
+                                                 c("object", "p")],
+                                           by="object")
+      # join ddf info
+      flatfiles_per_ddf[[i]] <- left_join(flatfiles_per_ddf[[i]],
+                                          transect_data,
+                                          by="ddf_id")
+    }
+    # stick it together
+    #bigdat <- unique(do.call(rbind, flatfiles_per_ddf))
+    bigdat <- do.call(rbind, flatfiles_per_ddf)
+
+    # ensure as.factor in formula are propagated to the data
     bigdat <- safe_factorize(strat_formula, bigdat)
 
     # check strat columns are in the data
@@ -444,12 +492,6 @@ dht2 <- function(ddf, observations=NULL, transects=NULL, geo_strat=NULL,
     }
     # sort by object ID
     bigdat <- bigdat[order(bigdat$object), ]
-    # remove the rows where there were no observations
-    bigdat_nona <- bigdat[!is.na(bigdat$object), ]
-    # get probabilities of detection
-    pp <- predict(ddf, newdata=bigdat_nona, compute=TRUE)$fitted
-    bigdat$p <- NA
-    bigdat$p[!is.na(bigdat$object)] <- pp
 
     if(strat_formula==~1){
       bigdat$Area <- sum(unique(bigdat[, c("Area", "Region.Label")])$Area)
@@ -474,7 +516,10 @@ dht2 <- function(ddf, observations=NULL, transects=NULL, geo_strat=NULL,
       aj <- anti_join(ex, bigdat, by=c("Sample.Label", stratum_labels))
       # join the unrepresented sample combinations to the extra cols
       # (i.e., add Area, Effort data to aj)
-      aj <- left_join(aj, unique(bigdat[,c("Sample.Label","Effort","Area")]),
+      aj <- left_join(aj, unique(bigdat[, c("Sample.Label", "Effort", "Area",
+                                            "ddf_id", "transect_type", "er_est",
+                                            "df_width", "df_left", "n_ddf",
+                                            "n_par")]),
                       by="Sample.Label")
 
       # remove the transects with no stratum data
@@ -492,14 +537,13 @@ dht2 <- function(ddf, observations=NULL, transects=NULL, geo_strat=NULL,
        length(na.omit(unique(bigdat[,stratum_labels])))){
       stop(">1 Area defined for a single stratum label, check data")
     }
-
-  }else{
-    stop("Need to supply either observations, transects and geo_strat OR flatfile")
+  }else{ # end flatfile processing
+    stop("Need to supply either observations, transects and geo_strat OR flatfile, see the \"Data\" section of ?dht2")
   }
 
   # stop if any of the transects has zero or negative effort
   if(any(is.na(bigdat[["Effort"]])) || any(bigdat[["Effort"]] <= 0)){
-    stop("Some transects have <=0 or NA Effort")
+    stop("Some transects have Effort <=0 or NA")
   }
 
   # handle multipliers
@@ -524,11 +568,8 @@ dht2 <- function(ddf, observations=NULL, transects=NULL, geo_strat=NULL,
     stop("NAs in distance column do not match those in the object column, check data")
   }
 
-  # now do some calculations
+  # Horvitz-Thompson-corrected per-sighting counts
   bigdat$Nhat <- bigdat$size/bigdat$p
-
-  df_width <- ddf$ds$aux$width*convert_units
-  df_left <- ddf$ds$aux$left*convert_units
 
   # handle sample fractions
   bigdat <- dht2_sample_fraction(sample_fraction, bigdat)
@@ -586,8 +627,9 @@ dht2 <- function(ddf, observations=NULL, transects=NULL, geo_strat=NULL,
              # abundance estimate per stratum in covered area
              Nc             = sum(.data$Nhat, na.rm=TRUE),
              # covered area per transect
-             Covered_area   = area_calc(df_width, df_left, .data$Effort,
-                                        transect_type, .data$sample_fraction),
+             Covered_area   = area_calc(.data$df_width, .data$df_left,
+                                        .data$Effort, .data$transect_type,
+                                        .data$sample_fraction),
              # get group size stats
              group_var      = if_else(.data$n_observations>1,
                                       var(.data$size, na.rm=TRUE)/
@@ -598,7 +640,7 @@ dht2 <- function(ddf, observations=NULL, transects=NULL, geo_strat=NULL,
       mutate(n = .data$n_observations)
   # if we didn't have any areas, then set to 1 and estimate density
   est_density <- FALSE
-  if(all(res$Area == 0) | all(is.na(res$Area))){
+  if(all(res$Area == 0 | is.na(res$Area))){
     res$Area <- 1
     est_density <- TRUE
   }
@@ -615,18 +657,15 @@ if(mult){
 
   # detection function uncertainty
   # do this sans-pipe, as we need cross-terms and to get the matrix
-  df_unc <- varNhat(res, ddf)
-  df_Nhat_unc <- df_unc$Nhat
+  df_unc <- lapply(ddf, varNhat, data=res)
 
-  # extract groupings
-  vardat <- attr(df_unc, "vardat_str")
-  vardat$.rows <- NULL
-  vardat$df_var <- diag(df_Nhat_unc$variance)
-
-  # detection function p uncertainty
-  ddf_summary <- summary(ddf)
-  vardat$p_var <- ddf_summary$average.p.se[1,1]^2
-  vardat$p_average <- ddf_summary$average.p
+  # now need to post-process
+  # first pull the deltamethod results
+  deltamethod <- lapply(df_unc, attr, "dm")
+  # stick all the data.frame bits together
+  # first removing all of the deltamethod bits we extracted above
+  vardat <- lapply(df_unc, function(x){ attr(x, "dm") <- NULL; x})
+  vardat <- do.call(rbind.data.frame, vardat)
 
   # we interrupt your regularly-scheduled grouping to bring you...
   # detection function uncertainty
@@ -643,7 +682,9 @@ if(mult){
       select(!!stratum_labels, "Sample.Label", "Area", "n", "Nc", "transect_n",
              "Effort", "Covered_area", "df_var", "transect_Nc", "group_var",
              "group_mean", "Nc_cuecorrected", "rate_var",  "rate", "rate_df",
-             "rate_CV", "p_var", "p_average", "transect_n_observations") %>%
+             "rate_CV", #"p_var", "p_average",
+             "transect_n_observations",
+             "n_ddf", "n_par", "er_est") %>%
       # keep only unique rows
       distinct()
 
@@ -657,7 +698,7 @@ if(mult){
   resT <- ungroup(res)
 
   # calculate ER variance
-  res <- ER_var_f(res, innes=innes, er_est=er_est, binomial_var=binomial_var)
+  res <- ER_var_f(res, innes=innes, binomial_var=binomial_var)
 
   # calculate final summaries
   res <- res %>%
@@ -665,17 +706,18 @@ if(mult){
     mutate(k            = length(.data$Sample.Label),
            Effort       = sum(.data$Effort),
            Covered_area = sum(.data$Covered_area)) %>%
-      mutate(group_var_Nhat = (.data$Area/.data$Covered_area *
-                               .data$Nc)^2*
-                              .data$group_var/.data$group_mean^2) %>%
-      mutate(rate_var_Nhat = (.data$Area/.data$Covered_area *
-                               .data$Nc)^2*
-                              .data$rate_var/.data$rate^2) %>%
+    mutate(group_var_Nhat = (.data$Area/.data$Covered_area *
+                             .data$Nc)^2*
+                            .data$group_var/.data$group_mean^2) %>%
+    mutate(rate_var_Nhat = (.data$Area/.data$Covered_area *
+                             .data$Nc)^2*
+                            .data$rate_var/.data$rate^2) %>%
     ## keep only these columns
     select(!!stratum_labels, "Area", "Nc", "n", "ER_var", "Effort", "k",
            "Covered_area", "df_var", "group_var", "group_mean",
            "group_var_Nhat", "ER_var_Nhat", "rate_var", "rate_var_Nhat", "rate",
-           "rate_df", "rate_CV", "p_var", "p_average") %>%
+           "rate_df", "rate_CV", #"p_var", "p_average",
+           "n_ddf", "n_par", "er_est") %>%
     ## now just get the distinct cases
     distinct()
 
@@ -690,7 +732,7 @@ if(mult){
   }
   res <- res %>%
     mutate(ER_CV = sqrt(.data$ER_var)/.data$ER,
-           ER_df = compute_df(.data$k, type=er_est)) %>%
+           ER_df = compute_df(.data$k, type=.data$er_est)) %>%
     # calculate stratum abundance estimate
     mutate(Abundance = (.data$Area/.data$Covered_area) * .data$Nc) %>%
     mutate(df_CV = sqrt(.data$df_var)/.data$Abundance) %>%
@@ -723,7 +765,7 @@ if(mult){
     res <- res %>%
       mutate(df = .data$Abundance_CV^4/
                     sum(c(if_else(.data$k==1, 0, .data$ER_CV^4/.data$ER_df),
-                          .data$df_CV^4/(length(ddf$fitted) - length(ddf$par)),
+                          .data$df_CV^4/(.data$n_ddf - .data$n_par),
                           .data$group_CV^4/(.data$n-1),
                           .data$rate_CV^4/.data$rate_df),
                      na.rm=TRUE)) %>%
@@ -746,8 +788,20 @@ if(mult){
     distinct()
 
 
-  # make a summary
+  # make a summary of each stratum group
   res <- as.data.frame(res)
+
+  if(length(ddf)>1){
+    res <- res %>%
+      group_by_at(.vars=stratum_labels) %>%
+      mutate(df_CV = sqrt(sum(.data$df_CV^2)),
+             p_average = .data$n/.data$Nc) %>%
+      mutate(df_var = (.data$df_CV * .data$p_average)^2) %>%
+      ungroup() %>%
+      distinct()
+    res$p_average <- NULL
+  }
+
   # TODO: this is untested for multiple strata
   # https://github.com/DistanceDevelopment/Distance/issues/46
   # here we loop over the different stratification variables in the below
@@ -780,7 +834,8 @@ if(mult){
         #  which is adding up the abundances
         dat_row <- dat_row %>%
           # ER ignoring strata
-          mutate(ER_var = varn(resT$Effort, resT$transect_n, er_est)) %>%
+          mutate(ER_var = varn(resT$Effort, resT$transect_n,
+                               unique(.data$er_est))) %>%
           # for the density case weight by covered area
           mutate(weight       = if_else(rep(est_density, nrow(dat_row)),
                                         .data$Covered_area/
@@ -815,7 +870,8 @@ if(mult){
 
         dat_row <- dat_row %>%
           mutate(weight       = xt * .data$Effort/sum(.data$Effort)) %>%
-          mutate(ER_var       = sum((.data$Effort/sum(.data$Effort))^2*.data$ER_var,
+          mutate(ER_var       = sum((.data$Effort/sum(.data$Effort))^2*
+                                    .data$ER_var,
                                     na.rm=TRUE)) %>%
           mutate(ER_var_Nhat  = sum(.data$weight^2*.data$ER_var_Nhat,
                                     na.rm=TRUE)) %>%
@@ -860,14 +916,16 @@ if(mult){
           mutate(Abundance  = sum(.data$weight*.data$Abundance))
       }
 
-      # calculate total variance for detection function
-      vcov <- df_Nhat_unc$variance
-      df_tvar <- matrix(dat_row$weight, nrow=1) %*%
-                  vcov %*%
-                  matrix(dat_row$weight, ncol=1)
+      # calculate total variance for detection function(s)
+      df_tvar <- 0
+      for(i in seq_along(deltamethod)){
+        these_weights <- matrix(dat_row$weight, nrow=1)
+        df_tvar <- df_tvar + (these_weights %*%
+                     deltamethod[[i]]$variance %*% t(these_weights))
+      }
+      # detection function CV
       dat_row <- dat_row %>%
-        mutate(df_CV  = sqrt(df_tvar[1, 1])/dat_row$Abundance[1])
-
+        mutate(df_CV  = sqrt(df_tvar)/dat_row$Abundance[1])
 
       # calculate total variance
       if(stratification=="replicate"){
@@ -895,7 +953,7 @@ if(mult){
         # add sources of variance
         tvar <- dat_row$ER_var_Nhat[1] +
                 df_tvar +
-                dat_row$Abundance[1]^2*dat_row$rate_CV[1]^2
+                dat_row$Abundance[1]^2 * dat_row$rate_CV[1]^2
         # add-in group size component if not doing Innes et al
         if(!innes){
           tvar <- dat_row$group_var_Nhat[1] +
@@ -926,14 +984,14 @@ if(mult){
           mutate(wtcv = sum(c((sqrt(rvar)/.data$Abundance[1])^4/
                                .data$ER_df[1],
                               (df_tvar/.data$Abundance[1]^2)^2/
-                                (length(ddf$fitted) - length(ddf$par)),
+                                (.data$n_ddf[1] - .data$n_par[1]),
                               if_else(.data$df==0, 0 ,
                                       (.data$rate_var_Nhat[1]/
                                        .data$Abundance[1]^2)^2/
                                         .data$rate_df[1]),
                               (.data$group_var_Nhat[1]/
                                .data$Abundance[1]^2)^2/
-                               (length(ddf$fitted)-1)
+                               (.data$n_ddf[1]-1)
                              ),
                             na.rm=TRUE)) %>%
           # calculate Satterthwaite df
@@ -946,7 +1004,7 @@ if(mult){
                            ),
                           na.rm=TRUE)^2) %>%
           mutate(df = .data$df/.data$wtcv) %>%
-          #mutate(df = .data$ER_df + (nrep - length(ddf$par))) %>%
+          #mutate(df = .data$ER_df + (nrep - .data$n_par)) %>%
           mutate(bigC = exp((abs(qt(ci_width, .data$df)) *
                            sqrt(log(1 + .data$Abundance_CV^2)))))
           # drop weight column
@@ -970,23 +1028,26 @@ if(mult){
                    rate_CV       = sqrt(sum(.data$rate_var))/mean(.data$rate))
           dat_row <- dat_row %>%
             # CV weights for Satterthwaite df
-            mutate(wtcv = sum(c((sqrt(.data$ER_var_Nhat[1])/
-                                      .data$Abundance[1])^4/
+            # denominator of Buckland et al 2001, eqn 3.75
+            mutate(wtcv = sum(c((.data$ER_var_Nhat[1]/
+                                      .data$Abundance[1]^2)^2/
                                  .data$ER_df[1],
                                 (df_tvar/.data$Abundance[1]^2)^2/
-                                  (length(ddf$fitted) - length(ddf$par)),
-                                if_else(.data$df==0, 0 ,
+                                  (.data$n_ddf[1] - .data$n_par[1]),
+                                if_else(.data$df==0, 0,
                                         (.data$rate_var_Nhat[1]/
                                          .data$Abundance[1]^2)^2/
                                           .data$rate_df[1]),
                                 (.data$group_var_Nhat[1]/
                                  .data$Abundance[1]^2)^2/
-                                 (length(ddf$fitted)-1)
+                                 (.data$n_ddf[1]-1)
                                ),
                               na.rm=TRUE)) %>%
             # calculate Satterthwaite df
-            mutate(df = sum(c((sqrt(.data$ER_var_Nhat[1])/.data$Abundance[1])^2,
-                              (df_tvar/.data$Abundance[1]^2),
+            # each element is CV^2, then sum and square again to get CV^4
+            # numerator of Buckland et al 2001, eqn 3.75
+            mutate(df = sum(c(.data$ER_var_Nhat[1]/.data$Abundance[1]^2,
+                              df_tvar/.data$Abundance[1]^2,
                               if_else(.data$df==0, 0 ,
                                       (.data$rate_var_Nhat[1]/
                                        .data$Abundance[1]^2)),
@@ -1041,7 +1102,8 @@ if(mult){
       select(!!stratum_labels, "Area", "n", "ER_var", "Effort", "k",
              "Density", "Density_CV", "Density_se", "UCI", "LCI", "df",
              "Covered_area", "df_var", "group_var", "group_mean",
-             "rate_var", "rate", "rate_df", "rate_CV", "p_var", "p_average")
+             "rate_var", "rate", "rate_df", "rate_CV", #"p_var", "p_average",
+             "er_est")
 
     # store this
     attr(res, "density") <- dens_res
@@ -1054,13 +1116,13 @@ if(mult){
   # save the sample level estimates
   attr(res, "sample_res") <- res_sample
   # detection function variance data
-  attr(res, "df_var") <- df_Nhat_unc
+  attr(res, "df_var") <- deltamethod
   # save the variance proportions
   attr(res, "prop_var") <- variance_contributions(res)
   # save grouped analysis (might be NULL)
   attr(res, "grouped") <- grouped
   # save enounter rate variance information
-  attr(res, "ER_var") <- c(er_est, innes, binomial_var)
+  attr(res, "ER_var") <- list(unique(res$er_est), innes, binomial_var)
   # save stratification type
   attr(res, "stratification") <- stratification
   # save multiplier info

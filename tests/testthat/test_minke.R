@@ -245,6 +245,9 @@ expect_equal(fs_st1$df, c(13.29, 18.97, 15.83), tol=1e-2)
 test_that("flat minke works", {
   skip_on_cran()
 
+  minke_noobj$object <- NA
+  minke_noobj$object[!is.na(minke_noobj$distance)] <- 1:sum(!is.na(minke_noobj$distance))
+
   # compare dht and dht2
   strat.spec <- ds(minke_noobj, key="hr", formula=~Region.Label, tru=1.5)
 
@@ -263,6 +266,9 @@ test_that("minke dht vs dht2", {
   skip_on_cran()
 
   uf <- unflatten(minke)
+  minke$object <- NA
+  minke$object[!is.na(minke$distance)] <- 1:sum(!is.na(minke$distance))
+
 
   # compare dht and dht2
   mfit <- ds(minke, key="hr", formula=~Region.Label, tru=1.5)
@@ -298,6 +304,9 @@ test_that("minke dht vs dht2", {
 
 test_that("area=0, flat minke works", {
   skip_on_cran()
+
+  minke_noobj$object <- NA
+  minke_noobj$object[!is.na(minke_noobj$distance)] <- 1:sum(!is.na(minke_noobj$distance))
 
   minke_noobj$Area <- 0
   # compare dht and dht2

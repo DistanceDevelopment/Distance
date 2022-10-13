@@ -14,9 +14,9 @@ print.dht_result <- function(x, report="abundance", groups=FALSE, ...){
   substr(resulttype, 1, 1) <- toupper(substr(resulttype, 1, 1))
   cat(resulttype, "estimates from distance sampling\n")
   cat("Stratification :", attr(x, "stratification"), "\n")
-  cat("Variance       :", paste0(attr(x, "ER_var")[1], ","),
-      ifelse(attr(x, "ER_var")[3], "binomial",
-             ifelse(attr(x, "ER_var")[2], "N/L", "n/L")), "\n")
+  cat("Variance       :", paste0(attr(x, "ER_var")[[1]], ","),
+      ifelse(attr(x, "ER_var")[[3]], "binomial",
+             ifelse(attr(x, "ER_var")[[2]], "N/L", "n/L")), "\n")
   cat("Multipliers    :", ifelse(is.null(attr(x, "multipliers")),
                                  "none",
                                  paste(attr(x, "multipliers"), collapse=", ")),
