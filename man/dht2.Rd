@@ -37,7 +37,7 @@ line transects). See "Data" below.}
 stratification. See "Data" below.}
 
 \item{flatfile}{data in the flatfile format, see \code{\link{flatfile}}. Note
-that the \code{object} column is required.}
+that the \code{object} column (uniquely identifying the observations) is required.}
 
 \item{strat_formula}{a formula giving the stratification structure (see
 "Stratification" below). Currently only one level of stratification is

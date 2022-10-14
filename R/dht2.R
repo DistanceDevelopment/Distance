@@ -17,7 +17,7 @@
 #' @param geo_strat `data.frame` with information about any geographical
 #' stratification. See "Data" below.
 #' @param flatfile data in the flatfile format, see [`flatfile`][flatfile]. Note
-#' that the `object` column is required.
+#' that the `object` column (uniquely identifying the observations) is required.
 #' @param convert_units conversion factor between units for the distances,
 #' effort and area. See "Units" below. Can supply one per detection function in
 #' `ddf`.
@@ -444,10 +444,10 @@ dht2 <- function(ddf, observations=NULL, transects=NULL, geo_strat=NULL,
 
     # check regular columns exist
     if(!all(flatfile_labels %in% names(flatfile))){
-      stop(paste("Column(s):",
+      stop(paste("Missing column(s) in `flatfile`:",
                  paste(flatfile_labels[!(flatfile_labels %in% names(flatfile))],
                        collapse=", "),
-                 "not in `flatfile`"))
+                 ". See ?dht2 for more information."))
     }
 
     # join the extra ddf data onto the flatfile
