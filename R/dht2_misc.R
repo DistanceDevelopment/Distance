@@ -5,12 +5,10 @@ area_calc <- function(width, left, effort, transect_type, sample_fraction){
   res <- rep(NA, length(width))
 
   res[transect_type=="point"] <- effort[transect_type=="point"]*pi*
-                                  (width[transect_type=="point"]^2-
-                                   left[transect_type=="point"]^2)*
+                                  width[transect_type=="point"]^2*
                                   sample_fraction[transect_type=="point"]
   res[transect_type=="line"] <- effort[transect_type=="line"]*2*
-                                 (width[transect_type=="line"]-
-                                   left[transect_type=="line"])*
+                                 width[transect_type=="line"]*
                                  sample_fraction[transect_type=="line"]
 
   return(res)

@@ -16,6 +16,7 @@ the angle of view of the camera (42 degrees for these cameras)
 this data set)
 \item \code{Effort}  temporal effort, i.e. the number of 2-second time-steps over
 which the camera operated
+\item \code{object} unique object ID
 \item \code{distance}  radial distance (m) to interval midpoint
 }
 }
