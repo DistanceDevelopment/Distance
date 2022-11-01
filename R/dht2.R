@@ -453,18 +453,45 @@ dht2 <- function(ddf, observations=NULL, transects=NULL, geo_strat=NULL,
     # join the extra ddf data onto the flatfile
     flatfiles_per_ddf <- list()
     for(i in seq_along(ddf)){
-      flatfiles_per_ddf[[i]] <- flatfile[((flatfile$object %in%
-                                           ddf_proc$obj_keep) |
-                                          is.na(flatfile$object)) &
-                                          flatfile$ddf_id == i, ]
+      # get this ddfs rows
+      this_flatfile <- flatfile[flatfile$ddf_id == i, ]
+
+      # get the detected objects that we want to keep
+      # first get the detections
+      flatfiles_per_ddf[[i]] <- this_flatfile[!is.na(this_flatfile$object), , drop=FALSE]
+
+      # need to check if the truncation will drop any samples
+      dropped <- flatfiles_per_ddf[[i]][!(flatfiles_per_ddf[[i]]$object %in%
+                                                ddf_proc$obj_keep), ,drop=FALSE]
+
+      # keep observations inside truncation
+      flatfiles_per_ddf[[i]] <- flatfiles_per_ddf[[i]][
+                                              (flatfiles_per_ddf[[i]]$object %in%
+                                                ddf_proc$obj_keep), ,drop=FALSE]
+
+      # get the samples that didn't have observations
+      if(nrow(dropped)>0){
+        dropped$distance <- NA
+        dropped$object <- NA
+        dropped <- dropped[!duplicated(dropped$Sample.Label), , drop=FALSE]
+        dropped <- dropped[!(dropped$Sample.Label %in% flatfiles_per_ddf[[i]]$Sample.Label),]
+      }
+
+      # bind together the ...            VV observations inside the truncation
+      flatfiles_per_ddf[[i]] <- rbind(flatfiles_per_ddf[[i]],
+                                      # any transects dropped by the trunc
+                                      dropped,
+                                      # samples without observations
+                                      this_flatfile[is.na(this_flatfile$object),
+                                                    , drop=FALSE])
+
       # join p
       flatfiles_per_ddf[[i]] <- left_join(flatfiles_per_ddf[[i]],
                                  ddf_proc$bigdat[!is.na(ddf_proc$bigdat$object),
                                                  c("object", "p")],
                                            by="object")
       # join ddf info
-      flatfiles_per_ddf[[i]] <- left_join(flatfiles_per_ddf[[i]],
-                                          transect_data,
+      flatfiles_per_ddf[[i]] <- left_join(flatfiles_per_ddf[[i]],transect_data, 
                                           by="ddf_id")
     }
     # stick it together
