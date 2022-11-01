@@ -12,6 +12,7 @@
 \item \code{Area} stratum area  (square nautical mile)
 \item \code{Sample.Label} transect identifier
 \item \code{Effort} transect length  (nautical mile)
+\item \code{object} unique object ID
 \item \code{distance} observed distance  (nautical mile)
 \item \code{Cluster.strat} strata based on cluster size: 1, 2 and 3+
 \item \code{size} cluster size

@@ -23,6 +23,7 @@
 #'   * `Area` stratum area  (square nautical mile)
 #'   * `Sample.Label` transect identifier
 #'   * `Effort` transect length  (nautical mile)
+#'   * `object` unique object ID
 #'   * `distance` observed distance  (nautical mile)
 #'   * `Cluster.strat` strata based on cluster size: 1, 2 and 3+
 #'   * `size` cluster size
@@ -514,6 +515,7 @@ NULL
 #'   this data set)
 #'   * `Effort`  temporal effort, i.e. the number of 2-second time-steps over
 #'   which the camera operated
+#'   * `object` unique object ID
 #'   * `distance`  radial distance (m) to interval midpoint
 #' @source Howe, E.J., Buckland, S.T., Després-Einspenner, M.-L. and Kühl, H.S.
 #' (2017), Distance sampling with camera traps. Methods Ecol Evol, 8:
