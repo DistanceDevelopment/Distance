@@ -423,7 +423,7 @@ dht2 <- function(ddf, observations=NULL, transects=NULL, geo_strat=NULL,
     # this overwrites the column that's there BUT that's okay
     # since we need to make sure it's consistent with the bins
     if(is.null(flatfile$distance)){
-      if(!(c("distend", "distbegin") %in% names(flatfile))){
+      if(!all((c("distend", "distbegin") %in% names(flatfile)))){
         stop("flatfile must include columns named either 'distance' or 'distbegin' and 'distend'")
       }
       flatfile$distance <- (flatfile$distend+flatfile$distbegin)/2
