@@ -447,7 +447,7 @@ dht2 <- function(ddf, observations=NULL, transects=NULL, geo_strat=NULL,
       stop(paste("Missing column(s) in `flatfile`:",
                  paste(flatfile_labels[!(flatfile_labels %in% names(flatfile))],
                        collapse=", "),
-                 ". See ?dht2 for more information."))
+                 ". See ?dht2 for more information."), call. = FALSE)
     }
 
     # join the extra ddf data onto the flatfile
