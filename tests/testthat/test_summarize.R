@@ -1,5 +1,5 @@
 # test ds()
-par.tol <- 1e-5
+par.tol <- 1e-4
 N.tol <- 1e-3
 lnl.tol <- 1e-4
 

@@ -23,7 +23,8 @@ dht2(
 )
 }
 \arguments{
-\item{ddf}{model fitted by \code{\link[=ds]{ds}} or \code{\link[mrds:ddf]{ddf}}}
+\item{ddf}{model fitted by \code{\link[=ds]{ds}} or \code{\link[mrds:ddf]{ddf}}.
+Multiple detection functions can be supplied as a \code{list}.}
 
 \item{observations}{\code{data.frame} to link detection function data (indexed by
 \code{object} column IDs) to the transects (indexed by \code{Sample.Label} column
@@ -35,17 +36,20 @@ line transects). See "Data" below.}
 \item{geo_strat}{\code{data.frame} with information about any geographical
 stratification. See "Data" below.}
 
-\item{flatfile}{data in the flatfile format, see \code{\link{flatfile}}.}
+\item{flatfile}{data in the flatfile format, see \code{\link{flatfile}}. Note
+that the \code{object} column (uniquely identifying the observations) is required.}
 
 \item{strat_formula}{a formula giving the stratification structure (see
 "Stratification" below). Currently only one level of stratification is
 supported.}
 
 \item{convert_units}{conversion factor between units for the distances,
-effort and area. See "Units" below.}
+effort and area. See "Units" below. Can supply one per detection function in
+\code{ddf}.}
 
 \item{er_est}{encounter rate variance estimator to be used. See "Variance"
-below and \code{\link[mrds:varn]{varn}}.}
+below and \code{\link[mrds:varn]{varn}}. Can supply one per detection function in
+\code{ddf}.}
 
 \item{multipliers}{\code{list} of \code{data.frame}s. See "Multipliers" below.}
 

@@ -14,13 +14,14 @@ test_that("wren 5 minute counts works",{
 
   # do the same thing with dht2
   w1_nhat <- dht2(w1_df_unif, flatfile=wren_5min, strat_formula=~Region.Label,
-                      convert_units=cu_wren_5min)
+                  convert_units=cu_wren_5min, er_est="P3")
 
-  expect_equal(attr(w1_nhat,"density")$Density, 1.2945, tol=1e-2)
-  expect_equal(attr(w1_nhat,"density")$LCI, 0.79504, tol=1e-2)
-  expect_equal(attr(w1_nhat,"density")$UCI, 2.1077, tol=1e-2)
-  expect_equal(attr(w1_nhat,"density")$Density_se, 0.32442, tol=1e-2)
-  expect_equal(attr(w1_nhat,"density")$Density_CV, 0.2506, tol=1e-2)
+  d_stuff <- w1_df_unif$dht$individuals$D
+  expect_equal(attr(w1_nhat,"density")$Density, d_stuff$Estimate, tol=1e-3)
+  expect_equal(attr(w1_nhat,"density")$LCI, d_stuff$lcl, tol=1e-3)
+  expect_equal(attr(w1_nhat,"density")$UCI, d_stuff$ucl, tol=1e-3)
+  expect_equal(attr(w1_nhat,"density")$Density_se, d_stuff$se, tol=1e-3)
+  expect_equal(attr(w1_nhat,"density")$Density_CV, d_stuff$cv, tol=1e-3)
 })
 
 
@@ -33,12 +34,20 @@ test_that("wren snapshot works",{
                  adjustment=NULL, convert_units=cu_wren_snapshot, er_var="P3")
 
   w2_nhat <- dht2(w2_df_hr, flatfile=wren_snapshot, strat_formula=~Region.Label,
-                  convert_units=cu_wren_snapshot)
-  expect_equal(attr(w2_nhat,"density")$Density, 1.0232, tol=1e-1)
-  expect_equal(attr(w2_nhat,"density")$LCI, 0.79487, tol=1e-2)
-  expect_equal(attr(w2_nhat,"density")$UCI, 1.3171, tol=1e-2)
-  expect_equal(attr(w2_nhat,"density")$Density_se, 0.13089, tol=1e-2)
-  expect_equal(attr(w2_nhat,"density")$Density_CV, .1279, tol=1e-2)
+                  convert_units=cu_wren_snapshot, er_est="P3")
+
+  d_stuff <- w2_df_hr$dht$individuals$D
+
+  expect_equal(attr(w2_nhat,"density")$n, w2_df_hr$dht$individuals$summary$n)
+  expect_equal(attr(w2_nhat,"density")$k, w2_df_hr$dht$individuals$summary$k[1])
+  expect_equal(attr(w2_nhat,"density")$Effort, w2_df_hr$dht$individuals$summary$Effort)
+  expect_equal(attr(w2_nhat,"density")$Covered_area,
+               w2_df_hr$dht$individuals$summary$CoveredArea)
+  expect_equal(attr(w2_nhat,"density")$Density, d_stuff$Estimate, tol=1e-3)
+  expect_equal(attr(w2_nhat,"density")$LCI, d_stuff$lcl, tol=1e-3)
+  expect_equal(attr(w2_nhat,"density")$UCI, d_stuff$ucl, tol=1e-3)
+  expect_equal(attr(w2_nhat,"density")$Density_se, d_stuff$se, tol=1e-6)
+  expect_equal(attr(w2_nhat,"density")$Density_CV, d_stuff$cv, tol=1e-3)
 })
 
 
@@ -58,10 +67,10 @@ test_that("wren cue count works",{
   cu <- sqrt(0.0001)
 
   w3_df_hr <- ds(wren_cuecount, transect="point", truncation=92.5,
-                 adjustment=NULL, key="hr", er_var="P3")
+                 adjustment=NULL, key="hr", er_var="P3", convert_units=cu)
 
   w3_nhat <- dht2(w3_df_hr, flatfile=wren_cuecount, strat_formula=~Region.Label,
-                  multipliers=list(creation=mult), convert_units=cu)
+                  multipliers=list(creation=mult), convert_units=cu, er_est="P3")
 
 
   expect_equal(w3_nhat$Abundance_se, 8.0002, tol=1e-2)

@@ -17,7 +17,9 @@ a sample (transect) without observations. In either case the following
 columns must be present:
 \itemize{
 \item \code{distance} observed distance to object
-\item \code{Sample.Label} Identifier for the sample (transect id)
+\item \code{object} a unique identifier for each observation (only required when
+using \code{\link{dht2}})
+\item \code{Sample.Label} identifier for the sample (transect id)
 \item \code{Effort} effort for this transect (e.g. line transect length or number
 of times point transect was visited)
 \item \code{Region.Label} label for a given stratum (see below)

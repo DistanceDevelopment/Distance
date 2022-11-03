@@ -1,5 +1,9 @@
 test_that("mutlipliers errors",{
   data("minke")
+  minke$object <- NA
+  minke$object[!is.na(minke$distance)] <- 1:sum(!is.na(minke$distance))
+
+
   easy <- ds(data=minke, key="hr", truncation=1.5)
   # bad labels
   mult <- list(cration = data.frame(rate=c(0.41, 0.47),

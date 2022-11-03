@@ -17,6 +17,8 @@ test_that("group size, no strat", {
   minke$Region.Label <- "same"
   minke$Area <- 1000000
   minke$size <- groupsizes
+  minke$object <- NA
+  minke$object[!is.na(minke$distance)] <- 1:sum(!is.na(minke$distance))
 
   # fit and test dht
   simple <- ds(minke, key="hr", truncation=1.5, er_method=1, adjustment=NULL)
@@ -93,6 +95,8 @@ test_that("stratification works", {
                   2, 1, 10, 1, 7, 2, 1, 1, 1, 1, 3, 1, NA, 1, 1, 1, 1, 1, NA)
   data(minke)
   minke$size <- groupsizes
+  minke$object <- NA
+  minke$object[!is.na(minke$distance)] <- 1:sum(!is.na(minke$distance))
 
   simple2 <- ds(minke, key="hr", truncation=1.5, er_method=1, adjustment=NULL)
 
