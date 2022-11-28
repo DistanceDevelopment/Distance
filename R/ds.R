@@ -100,8 +100,18 @@
 #' used.
 #' @param max_adjustments maximum number of adjustments to try (default 5) only
 #' used when `order=NULL`.
-#' @param er_method encounter rate variance calculation: default = 2 gives the method of Innes et al, using expected counts in the encounter rate. Setting to 1 gives observed counts (which matches Distance for Windows) and 0 uses binomial variance (only useful in the rare situation where study area = surveyed area). See [`dht.se`][mrds::dht.se] for more details.
-#' @param dht_se should uncertainty be calculated when using `dht`? Safe to leave as `TRUE`, used in `bootdht`.
+#' @param er_method encounter rate variance calculation: default = 2 gives the
+#' method of Innes et al, using expected counts in the encounter rate. Setting
+#' to 1 gives observed counts (which matches Distance for Windows) and 0 uses
+#' binomial variance (only useful in the rare situation where study area =
+#' surveyed area). See [`dht.se`][mrds::dht.se] for more details.
+#' @param dht_se should uncertainty be calculated when using `dht`? Safe to
+#' leave as `TRUE`, used in `bootdht`.
+#' @param skip_mcds should `ds` skip running analyses using `MCDS.exe` (if
+#' available)? See [`mcds-dot-exe`](mrds::`mcds-dot-exe`] for setup
+#' instructions.
+#' @param skip_R should `ds` skip running analyses using R? If `MCDS.exe` is
+#' available setting this option to `TRUE` will only use `MCDS.exe`.
 #' @param dht.group deprecated, see same argument with underscore, above.
 #' @param region.table deprecated, see same argument with underscore, above.
 #' @param sample.table deprecated, see same argument with underscore, above.
@@ -314,6 +324,7 @@ ds <- function(data, truncation=ifelse(is.null(cutpoints),
              convert_units=1, er_var=ifelse(transect=="line", "R2", "P3"),
              method="nlminb", quiet=FALSE, debug_level=0,
              initial_values=NULL, max_adjustments=5, er_method=2, dht_se=TRUE,
+             skip_mcds=FALSE, skip_R=FALSE,
              # deprecated below here:
              dht.group,
              region.table,
@@ -496,7 +507,8 @@ ds <- function(data, truncation=ifelse(is.null(cutpoints),
   }
 
   # set up the control options
-  control <- list(optimx.method=method, showit=debug_level)
+  control <- list(optimx.method=method, showit=debug_level,
+                  skipR=skip_R, skipMCDS=skip_mcds)
 
   # if initial values were supplied, pass them on
   if(!is.null(initial_values) & !aic.search){
