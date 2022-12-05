@@ -429,7 +429,7 @@ dht2 <- function(ddf, observations=NULL, transects=NULL, geo_strat=NULL,
     # this overwrites the column that's there BUT that's okay
     # since we need to make sure it's consistent with the bins
     if(is.null(flatfile$distance)){
-      if(!(c("distend", "distbegin") %in% names(flatfile))){
+      if(!all((c("distend", "distbegin") %in% names(flatfile)))){
         stop("flatfile must include columns named either 'distance' or 'distbegin' and 'distend'")
       }
       flatfile$distance <- (flatfile$distend+flatfile$distbegin)/2
@@ -453,7 +453,7 @@ dht2 <- function(ddf, observations=NULL, transects=NULL, geo_strat=NULL,
       stop(paste("Missing column(s) in `flatfile`:",
                  paste(flatfile_labels[!(flatfile_labels %in% names(flatfile))],
                        collapse=", "),
-                 ". See ?dht2 for more information."))
+                 ". See ?dht2 for more information."), call. = FALSE)
     }
 
     # join the extra ddf data onto the flatfile
