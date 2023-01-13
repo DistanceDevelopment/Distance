@@ -29,8 +29,17 @@
 summarize_ds_models <- function(..., sort="AIC", output="latex",
                                 delta_only=TRUE){
 
-  # get the models
-  models <- list(...)
+  ## get the models
+  # Create list when ... not a list
+  if (class(try(class(...) != "list", silent = TRUE)) == "try-error") {
+    models <- list(...)
+  } else {
+    if (class(...) != "list") {
+      models <- list(...)
+    } else {
+      models <- ...
+    }
+  }
 
   # get the model names
   model_names <- setdiff(as.character(match.call(expand.dots=TRUE)),
