@@ -30,22 +30,26 @@ summarize_ds_models <- function(..., sort="AIC", output="latex",
                                 delta_only=TRUE){
 
   ## get the models
-  # Create list when ... not a list
+  # create list when ... not a list
   if (class(try(class(...) != "list", silent = TRUE)) == "try-error") {
     models <- list(...)
+    # get the model names
+    model_names <- setdiff(as.character(match.call(expand.dots=TRUE)),
+                           as.character(match.call(expand.dots=FALSE)))
   } else {
     if (class(...) != "list") {
       models <- list(...)
+      # get the model names
+      model_names <- setdiff(as.character(match.call(expand.dots=TRUE)),
+                             as.character(match.call(expand.dots=FALSE)))
     } else {
       models <- unlist(list(...), recursive = FALSE)
+      # get the model names
+      model_names <- names(models)
     }
   }
 
-  # get the model names
-  model_names <- setdiff(as.character(match.call(expand.dots=TRUE)),
-                         as.character(match.call(expand.dots=FALSE)))
-
-
+  
   ## checking
   # can't compare models with different truncations
   r_truncs <- unlist(lapply(models, function(x) x$ddf$meta.data$width))
