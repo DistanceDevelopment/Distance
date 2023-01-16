@@ -37,7 +37,7 @@ summarize_ds_models <- function(..., sort="AIC", output="latex",
     if (class(...) != "list") {
       models <- list(...)
     } else {
-      models <- ...
+      models <- unlist(list(...), recursive = FALSE)
     }
   }
 
