@@ -1,5 +1,6 @@
 # Calculate the variance contribution of the detection function
 #  to abundance estimates
+#' @importFrom dplyr reframe
 varNhat <- function(data, model){
 
   # format the data
@@ -18,7 +19,7 @@ varNhat <- function(data, model){
   grp_dat <- data %>%
     select("Covered_area", "Area", "Sample.Label", !!strat_vars) %>%
     distinct() %>%
-    summarize(Covered_area = sum(.data$Covered_area),
+    reframe(Covered_area = sum(.data$Covered_area),
               Area         = .data$Area) %>%
     distinct()
 
@@ -38,7 +39,7 @@ varNhat <- function(data, model){
 
     res <- data %>%
       mutate(Nc = (.data$size/.data$p)/.data$rate) %>%
-      summarize(N = (.data$Area/.data$Covered_area) *
+      reframe(N = (.data$Area/.data$Covered_area) *
                      sum(.data$Nc, na.rm=TRUE)) %>%
       distinct()
 
