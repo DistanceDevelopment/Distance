@@ -1,3 +1,8 @@
+Distance 1.0.8
+----------------------
+
+* Support for using MCDS.exe from Distance for Windows to run analyses. You can now download MCDS.exe using mrds::download_MCDS_dot_exe run analyses using this engine, rather (or in tandem with) the usual R optimizers provided in mrds. ds will pick the best (by likelihood) and return that. See ?ds and ?"mcds-dot-exe" for more details.
+
 Distance 1.0.7
 ----------------------
 
