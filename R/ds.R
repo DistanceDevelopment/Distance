@@ -537,7 +537,7 @@ ds <- function(data, truncation=ifelse(is.null(cutpoints),
   }else if(!is.null(adjustment)){
     for.ind <- length(order)
   }else{
-    for.ind <- 1
+    for.ind <- 0
   }
 
   # dummy last model
@@ -628,7 +628,7 @@ ds <- function(data, truncation=ifelse(is.null(cutpoints),
                                       control=control,
                                       meta.data = meta.data), silent=quiet))
 
-    # turn-off monotonicity if we have a key only model
+    # reset monotonicity
     if(i==0){
       meta.data$mono <- mono.save
       meta.data$mono.strict <- mono.strict.save

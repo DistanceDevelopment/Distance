@@ -4,7 +4,8 @@ get_adj_orders <- function(n, key, adjustment){
   # this is according to p. 47 of IDS
   if(key=="unif" & adjustment=="cos"){
     # for Fourier...
-    order <- 1:n
+    #order <- 1:n
+    order <- seq(1, by = 1, length.out = n)
   }else if(adjustment %in% c("poly", "herm")){
     # simple and Hermite poly: even from 4 (unless uniform)
     starto <- 4
