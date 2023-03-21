@@ -115,7 +115,7 @@ dht2_process_ddf <- function(ddf, convert_units, er_est, strat_formula){
   transect_data$n_par <- sum(unlist(lapply(ddf, function(x) length(x$par))))
 
   if(any(table(bigdat$object) > 1)){
-    stop("object column but be unique over all data")
+    stop("object column must be unique over all data")
   }
 
   list(ddf = ddf,

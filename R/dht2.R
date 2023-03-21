@@ -296,6 +296,12 @@ dht2 <- function(ddf, observations=NULL, transects=NULL, geo_strat=NULL,
   ddf <- ddf_proc$ddf
   transect_data <- ddf_proc$transect_data
 
+  # we don't support effort sum or replicate for multiddf
+  if((length(ddf) > 1) &
+     (stratification %in% c("effort_sum", "replicate"))){
+    stop("Effort-sum and replicate stratification not supported with multiple detection functions")
+  }
+
   # grouped estimation
   # time to recurse
   if(!ddf_proc$groupsizeone){
