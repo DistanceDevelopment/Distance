@@ -42,14 +42,15 @@ print.summary.dsmodel <- function (x,...){
   cat("Number of observations : ", x$n, "\n")
   cat("Distance range         : ", x$left, " - ", x$width, "\n")
 
-  cat("\nModel :", model.description(model), "\n")
+  cat("\nModel       :", model.description(model), "\n")
   # Remind the user that monotonicity constraints were enforced
   if(x$mono & x$mono.strict){
     cat("\nStrict monotonicity constraints were enforced.\n")
   }else if(x$mono){
     cat("\nMonotonicity constraints were enforced.\n")
   }
-  cat("AIC   :", x$aic, "\n")
+  cat("AIC         : ", x$aic, "\n")
+  cat("Optimisation: ", x$optimise, "\n")
 
   # parameter summaries
   cat("\nDetection function parameters\n")
