@@ -107,11 +107,11 @@
 #' surveyed area). See [`dht.se`][mrds::dht.se] for more details.
 #' @param dht_se should uncertainty be calculated when using `dht`? Safe to
 #' leave as `TRUE`, used in `bootdht`.
-#' @param skip_mcds should `ds` skip running analyses using `MCDS.exe` (if
-#' available)? See [`mcds-dot-exe`](mrds::`mcds-dot-exe`] for setup
-#' instructions.
-#' @param skip_R should `ds` skip running analyses using R? If `MCDS.exe` is
-#' available setting this option to `TRUE` will only use `MCDS.exe`.
+#' @param optimizer By default this is set to 'both'. In this case 
+#'   the R optimizer will be used and if present the MCDS optimizer will also 
+#'   be used. The result with the best likelihood value will be selected. To 
+#'   run only a specified optimizer set this value to either 'R' or 'MCDS'. 
+#'   See [`mcds_dot_exe`](mrds::`mcds_dot_exe`] for setup instructions.
 #' @param dht.group deprecated, see same argument with underscore, above.
 #' @param region.table deprecated, see same argument with underscore, above.
 #' @param sample.table deprecated, see same argument with underscore, above.
@@ -324,7 +324,7 @@ ds <- function(data, truncation=ifelse(is.null(cutpoints),
              convert_units=1, er_var=ifelse(transect=="line", "R2", "P3"),
              method="nlminb", quiet=FALSE, debug_level=0,
              initial_values=NULL, max_adjustments=5, er_method=2, dht_se=TRUE,
-             skip_mcds=FALSE, skip_R=FALSE,
+             optimizer = "both",
              # deprecated below here:
              dht.group,
              region.table,
@@ -508,7 +508,7 @@ ds <- function(data, truncation=ifelse(is.null(cutpoints),
 
   # set up the control options
   control <- list(optimx.method=method, showit=debug_level,
-                  skipR=skip_R, skipMCDS=skip_mcds)
+                  optimizer = optimizer)
 
   # if initial values were supplied, pass them on
   if(!is.null(initial_values) & !aic.search){

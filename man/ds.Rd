@@ -31,8 +31,7 @@ ds(
   max_adjustments = 5,
   er_method = 2,
   dht_se = TRUE,
-  skip_mcds = FALSE,
-  skip_R = FALSE,
+  optimizer = "both",
   dht.group,
   region.table,
   sample.table,
@@ -176,12 +175,11 @@ surveyed area). See \code{\link[mrds:dht.se]{dht.se}} for more details.}
 \item{dht_se}{should uncertainty be calculated when using \code{dht}? Safe to
 leave as \code{TRUE}, used in \code{bootdht}.}
 
-\item{skip_mcds}{should \code{ds} skip running analyses using \code{MCDS.exe} (if
-available)? See \code{\link{mcds-dot-exe}}(mrds::\code{mcds-dot-exe}] for setup
-instructions.}
-
-\item{skip_R}{should \code{ds} skip running analyses using R? If \code{MCDS.exe} is
-available setting this option to \code{TRUE} will only use \code{MCDS.exe}.}
+\item{optimizer}{By default this is set to 'both'. In this case
+the R optimizer will be used and if present the MCDS optimizer will also
+be used. The result with the best likelihood value will be selected. To
+run only a specified optimizer set this value to either 'R' or 'MCDS'.
+See \code{\link{mcds_dot_exe}}(mrds::\code{mcds_dot_exe}] for setup instructions.}
 
 \item{dht.group}{deprecated, see same argument with underscore, above.}
 
