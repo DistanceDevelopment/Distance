@@ -726,6 +726,10 @@ ds <- function(data, truncation=ifelse(is.null(cutpoints),
         if(any(is.na(model$hessian))){
           message("Some variance-covariance matrix elements were NA, possible numerical problems; only estimating detection function.\n")
           dht.res <- NULL
+          # If hessian is NULL - with the exception of the unif with no adj
+        }else if(is.null(model$hessian) && !(model$ds$aux$ddfobj$type == "unif" && is.null(model$ds$aux$ddfobj$adjustment))){
+          message("No hessian, possible numerical problems; only estimating detection function.\n")
+          dht.res <- NULL
         }else{
           dht.res <- dht(model, region_table, sample_table,
                          options=dht_options, se=dht_se)
@@ -744,6 +748,10 @@ ds <- function(data, truncation=ifelse(is.null(cutpoints),
 
       if(any(is.na(model$hessian))){
         message("Some variance-covariance matrix elements were NA, possible numerical problems; only estimating detection function.\n")
+        dht.res <- NULL
+        # If hessian is NULL - with the exception of the unif with no adj
+      }else if(is.null(model$hessian) && !(model$ds$aux$ddfobj$type == "unif" && is.null(model$ds$aux$ddfobj$adjustment))){
+        message("No hessian, possible numerical problems; only estimating detection function.\n")
         dht.res <- NULL
       }else{
         dht.res <- dht(model, region_table, sample_table, obs_table,
