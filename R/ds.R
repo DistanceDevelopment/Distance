@@ -697,7 +697,7 @@ ds <- function(data, truncation=ifelse(is.null(cutpoints),
   } # end for() over adjustments
 
   if(is.null(model)){
-    stop("No models could be fitted.")
+    stop("No models could be fitted.", call. = FALSE)
   }
 
   # check that hazard models have a reasonable scale parameter
