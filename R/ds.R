@@ -112,6 +112,9 @@
 #'   be used. The result with the best likelihood value will be selected. To 
 #'   run only a specified optimizer set this value to either 'R' or 'MCDS'. 
 #'   See [`mcds_dot_exe`](mrds::`mcds_dot_exe`] for setup instructions.
+#' @param winebin If you are trying to use our MCDS.exe optimizer on a
+#'   non-windows system then you may need to specify the winebin. Please 
+#'   see [`mcds_dot_exe`](mrds::`mcds_dot_exe`] for more details.
 #' @param dht.group deprecated, see same argument with underscore, above.
 #' @param region.table deprecated, see same argument with underscore, above.
 #' @param sample.table deprecated, see same argument with underscore, above.
@@ -325,6 +328,7 @@ ds <- function(data, truncation=ifelse(is.null(cutpoints),
              method="nlminb", quiet=FALSE, debug_level=0,
              initial_values=NULL, max_adjustments=5, er_method=2, dht_se=TRUE,
              optimizer = "both",
+             winebin = NULL,
              # deprecated below here:
              dht.group,
              region.table,
@@ -508,7 +512,7 @@ ds <- function(data, truncation=ifelse(is.null(cutpoints),
 
   # set up the control options
   control <- list(optimx.method=method, showit=debug_level,
-                  optimizer = optimizer)
+                  optimizer = optimizer, winebin = winebin)
 
   # if initial values were supplied, pass them on
   if(!is.null(initial_values) & !aic.search){
