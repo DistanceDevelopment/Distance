@@ -9,7 +9,8 @@ test_that("wren 5 minute counts works",{
   cu_wren_5min <- 1/sqrt(10000)
 
   w1_df_unif <- ds(wren_5min, transect="point", truncation=110, key="unif",
-                   convert_units=cu_wren_5min, order=c(1,2), er_var="P3")
+                   convert_units=cu_wren_5min, order=c(1,2), er_var="P3",
+                   optimizer = "R")
 
 
   # do the same thing with dht2

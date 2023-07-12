@@ -187,7 +187,9 @@ test_that("Percentage truncation works when distances are missing",{
 
   data(minke)
 
-  expect_equal(ds(minke, truncation="15%", adjustment=NULL)$ddf$criterion,
+  expect_equal(ds(minke, truncation="15%", 
+                  adjustment=NULL, 
+                  optimizer = "R")$ddf$criterion,
                -8.1705496, tol=1e-5)
 })
 

@@ -14,9 +14,9 @@ test_that("Error on different truncation distance", {
   skip_on_cran()
   set.seed(100)
   # some models
-  t4 <- ds(egdata, 4)
+  t4 <- ds(egdata, 4, optimizer = "R")
   t42 <- t4
-  t4hr <- suppressWarnings(ds(egdata, 4, key="hr"))
+  t4hr <- suppressWarnings(ds(egdata, 4, key="hr", optimizer = "R"))
   t3 <- suppressWarnings(ds(egdata, 3))
   t14 <- suppressWarnings(ds(egdata, list(left=1, right=4)))
 
