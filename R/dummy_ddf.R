@@ -57,7 +57,7 @@ dummy_ddf <- function(data, width, left=0, transect="line"){
 #' @param object model object
 #' @param newdata how many 1s should we return?
 #' @param compute unused, compatibility with [`mrds::predict`][mrds::predict]
-#' @param int.range unused, compatability with [`mrds::predict`][mrds::predict]
+#' @param int.range unused, compatibility with [`mrds::predict`][mrds::predict]
 #' @param esw should the strip width be returned?
 #' @param \dots for S3 consistency
 #' @author David L Miller
