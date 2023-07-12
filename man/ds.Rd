@@ -180,11 +180,11 @@ leave as \code{TRUE}, used in \code{bootdht}.}
 the R optimizer will be used and if present the MCDS optimizer will also
 be used. The result with the best likelihood value will be selected. To
 run only a specified optimizer set this value to either 'R' or 'MCDS'.
-See \href{mrds::`mcds_dot_exe`}{\code{mcds_dot_exe}} for setup instructions.}
+See \code{\link[mrds:mcds_dot_exe]{mcds_dot_exe}} for setup instructions.}
 
 \item{winebin}{If you are trying to use our MCDS.exe optimizer on a
 non-windows system then you may need to specify the winebin. Please
-see \href{mrds::`mcds_dot_exe`}{\code{mcds_dot_exe}} for more details.}
+see \code{\link[mrds:mcds_dot_exe]{mcds_dot_exe}} for more details.}
 
 \item{dht.group}{deprecated, see same argument with underscore, above.}
 
