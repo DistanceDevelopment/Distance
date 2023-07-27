@@ -9,7 +9,6 @@
 #' passed to `bootdht`. It is recommended that you try out the function before
 #' passing it to [`bootdht`]. See examples for a template for use.
 #'
-#' @inheritParams activity::fitact
 #' @param \dots parameters specified by activity::fitact
 #' @param detector_daily_duration by default we assume that detectors were able to detect animals for 24 hours, if they were only able to do this for some proportion of the day (say daylight hours), then adjust this argument accordingly
 #' @return a function which generates a single bootstrap estimate of

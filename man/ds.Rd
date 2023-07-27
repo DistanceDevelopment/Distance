@@ -31,6 +31,8 @@ ds(
   max_adjustments = 5,
   er_method = 2,
   dht_se = TRUE,
+  optimizer = "both",
+  winebin = NULL,
   dht.group,
   region.table,
   sample.table,
@@ -165,9 +167,24 @@ used.}
 \item{max_adjustments}{maximum number of adjustments to try (default 5) only
 used when \code{order=NULL}.}
 
-\item{er_method}{encounter rate variance calculation: default = 2 gives the method of Innes et al, using expected counts in the encounter rate. Setting to 1 gives observed counts (which matches Distance for Windows) and 0 uses binomial variance (only useful in the rare situation where study area = surveyed area). See \code{\link[mrds:dht.se]{dht.se}} for more details.}
+\item{er_method}{encounter rate variance calculation: default = 2 gives the
+method of Innes et al, using expected counts in the encounter rate. Setting
+to 1 gives observed counts (which matches Distance for Windows) and 0 uses
+binomial variance (only useful in the rare situation where study area =
+surveyed area). See \code{\link[mrds:dht.se]{dht.se}} for more details.}
 
-\item{dht_se}{should uncertainty be calculated when using \code{dht}? Safe to leave as \code{TRUE}, used in \code{bootdht}.}
+\item{dht_se}{should uncertainty be calculated when using \code{dht}? Safe to
+leave as \code{TRUE}, used in \code{bootdht}.}
+
+\item{optimizer}{By default this is set to 'both'. In this case
+the R optimizer will be used and if present the MCDS optimizer will also
+be used. The result with the best likelihood value will be selected. To
+run only a specified optimizer set this value to either 'R' or 'MCDS'.
+See \code{\link[mrds:mcds_dot_exe]{mcds_dot_exe}} for setup instructions.}
+
+\item{winebin}{If you are trying to use our MCDS.exe optimizer on a
+non-windows system then you may need to specify the winebin. Please
+see \code{\link[mrds:mcds_dot_exe]{mcds_dot_exe}} for more details.}
 
 \item{dht.group}{deprecated, see same argument with underscore, above.}
 

@@ -20,7 +20,7 @@
 
 \item{compute}{unused, compatibility with \code{\link[mrds:predict.ds]{mrds::predict}}}
 
-\item{int.range}{unused, compatability with \code{\link[mrds:predict.ds]{mrds::predict}}}
+\item{int.range}{unused, compatibility with \code{\link[mrds:predict.ds]{mrds::predict}}}
 
 \item{esw}{should the strip width be returned?}
 

@@ -100,8 +100,21 @@
 #' used.
 #' @param max_adjustments maximum number of adjustments to try (default 5) only
 #' used when `order=NULL`.
-#' @param er_method encounter rate variance calculation: default = 2 gives the method of Innes et al, using expected counts in the encounter rate. Setting to 1 gives observed counts (which matches Distance for Windows) and 0 uses binomial variance (only useful in the rare situation where study area = surveyed area). See [`dht.se`][mrds::dht.se] for more details.
-#' @param dht_se should uncertainty be calculated when using `dht`? Safe to leave as `TRUE`, used in `bootdht`.
+#' @param er_method encounter rate variance calculation: default = 2 gives the
+#' method of Innes et al, using expected counts in the encounter rate. Setting
+#' to 1 gives observed counts (which matches Distance for Windows) and 0 uses
+#' binomial variance (only useful in the rare situation where study area =
+#' surveyed area). See [`dht.se`][mrds::dht.se] for more details.
+#' @param dht_se should uncertainty be calculated when using `dht`? Safe to
+#' leave as `TRUE`, used in `bootdht`.
+#' @param optimizer By default this is set to 'both'. In this case 
+#'   the R optimizer will be used and if present the MCDS optimizer will also 
+#'   be used. The result with the best likelihood value will be selected. To 
+#'   run only a specified optimizer set this value to either 'R' or 'MCDS'. 
+#'   See [`mcds_dot_exe`][mrds::mcds_dot_exe] for setup instructions.
+#' @param winebin If you are trying to use our MCDS.exe optimizer on a
+#'   non-windows system then you may need to specify the winebin. Please 
+#'   see [`mcds_dot_exe`][mrds::mcds_dot_exe] for more details.
 #' @param dht.group deprecated, see same argument with underscore, above.
 #' @param region.table deprecated, see same argument with underscore, above.
 #' @param sample.table deprecated, see same argument with underscore, above.
@@ -314,6 +327,8 @@ ds <- function(data, truncation=ifelse(is.null(cutpoints),
              convert_units=1, er_var=ifelse(transect=="line", "R2", "P3"),
              method="nlminb", quiet=FALSE, debug_level=0,
              initial_values=NULL, max_adjustments=5, er_method=2, dht_se=TRUE,
+             optimizer = "both",
+             winebin = NULL,
              # deprecated below here:
              dht.group,
              region.table,
@@ -496,7 +511,8 @@ ds <- function(data, truncation=ifelse(is.null(cutpoints),
   }
 
   # set up the control options
-  control <- list(optimx.method=method, showit=debug_level)
+  control <- list(optimx.method=method, showit=debug_level,
+                  optimizer = optimizer, winebin = winebin)
 
   # if initial values were supplied, pass them on
   if(!is.null(initial_values) & !aic.search){
@@ -685,7 +701,7 @@ ds <- function(data, truncation=ifelse(is.null(cutpoints),
   } # end for() over adjustments
 
   if(is.null(model)){
-    stop("No models could be fitted.")
+    stop("No models could be fitted.", call. = FALSE)
   }
 
   # check that hazard models have a reasonable scale parameter
@@ -714,6 +730,10 @@ ds <- function(data, truncation=ifelse(is.null(cutpoints),
         if(any(is.na(model$hessian))){
           message("Some variance-covariance matrix elements were NA, possible numerical problems; only estimating detection function.\n")
           dht.res <- NULL
+          # If hessian is NULL - with the exception of the unif with no adj
+        }else if(is.null(model$hessian) && !(model$ds$aux$ddfobj$type == "unif" && is.null(model$ds$aux$ddfobj$adjustment))){
+          message("No hessian, possible numerical problems; only estimating detection function.\n")
+          dht.res <- NULL
         }else{
           dht.res <- dht(model, region_table, sample_table,
                          options=dht_options, se=dht_se)
@@ -732,6 +752,10 @@ ds <- function(data, truncation=ifelse(is.null(cutpoints),
 
       if(any(is.na(model$hessian))){
         message("Some variance-covariance matrix elements were NA, possible numerical problems; only estimating detection function.\n")
+        dht.res <- NULL
+        # If hessian is NULL - with the exception of the unif with no adj
+      }else if(is.null(model$hessian) && !(model$ds$aux$ddfobj$type == "unif" && is.null(model$ds$aux$ddfobj$adjustment))){
+        message("No hessian, possible numerical problems; only estimating detection function.\n")
         dht.res <- NULL
       }else{
         dht.res <- dht(model, region_table, sample_table, obs_table,
