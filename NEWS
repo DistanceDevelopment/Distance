@@ -1,3 +1,8 @@
+Distance 1.0.9
+----------------------
+
+* Changed the default encounter rate estimator for point transect surveys from P3 to P2. (Issue #138)
+
 Distance 1.0.8
 ----------------------
 

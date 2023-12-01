@@ -23,7 +23,7 @@ ds(
   sample_table = NULL,
   obs_table = NULL,
   convert_units = 1,
-  er_var = ifelse(transect == "line", "R2", "P3"),
+  er_var = ifelse(transect == "line", "R2", "P2"),
   method = "nlminb",
   quiet = FALSE,
   debug_level = 0,
@@ -146,8 +146,9 @@ produced.
 already.)}
 
 \item{er_var}{encounter rate variance estimator to use when abundance
-estimates are required. Defaults to "R2" for line transects and "P3" for
-point transects. See \code{\link{dht2}} for more information and if more
+estimates are required. Defaults to "R2" for line transects and "P2" for
+point transects (>= 1.0.9, earlier versions <= 1.0.8 used the "P3" estimator
+by default for points). See \code{\link{dht2}} for more information and if more
 complex options are required.}
 
 \item{method}{optimization method to use (any method usable by

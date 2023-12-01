@@ -85,8 +85,9 @@
 #' "Units", below. (Defaults to 1, implying all of the units are "correct"
 #' already.)
 #' @param er_var encounter rate variance estimator to use when abundance
-#' estimates are required. Defaults to "R2" for line transects and "P3" for
-#' point transects. See [`dht2`][dht2] for more information and if more
+#' estimates are required. Defaults to "R2" for line transects and "P2" for
+#' point transects (>= 1.0.9, earlier versions <= 1.0.8 used the "P3" estimator 
+#' by default for points). See [`dht2`][dht2] for more information and if more
 #' complex options are required.
 #' @param method optimization method to use (any method usable by
 #' [`optim`][stats::optim] or [`optimx`][optimx::optimx]). Defaults to
@@ -324,7 +325,7 @@ ds <- function(data, truncation=ifelse(is.null(cutpoints),
              cutpoints=NULL, dht_group=FALSE,
              monotonicity=ifelse(formula==~1, "strict", "none"),
              region_table=NULL, sample_table=NULL, obs_table=NULL,
-             convert_units=1, er_var=ifelse(transect=="line", "R2", "P3"),
+             convert_units=1, er_var=ifelse(transect=="line", "R2", "P2"),
              method="nlminb", quiet=FALSE, debug_level=0,
              initial_values=NULL, max_adjustments=5, er_method=2, dht_se=TRUE,
              optimizer = "both",
