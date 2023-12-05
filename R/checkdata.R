@@ -25,10 +25,16 @@ checkdata <- function(data, region.table=NULL, sample.table=NULL,
     }
   }
 
+  
+  # Make sure that the user has only specified either distance or distend / distbegin (need to do this check first as then Distance creates the distance column)
+  if(!is.null(data$distance) && !is.null(data$distbegin) && !is.null(data$distend)){
+    stop("You can only specify either a 'distance' column or 'distbegin' and 'distend' columns in your data.", call. = FALSE)
+  }
+  
   # make sure that the data are in the right format first
   if(is.null(data$distance)){
     if(is.null(data$distend) & is.null(data$distbegin)){
-      stop("Your data must (at least) have a column called 'distance' or 'distbegin' and 'distend'!")
+      stop("Your data must (at least) have a column called 'distance' or 'distbegin' and 'distend'!", call. = FALSE)
     }else{
       data$distance <- (data$distend + data$distbegin)/2
     }
