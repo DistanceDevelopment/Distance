@@ -176,6 +176,8 @@ test_that("Truncation is handled",{
 
   # largest bin
   bin.data <- create_bins(egdata,c(0,1,2,3,3.8))
+  # Remove distance column
+  bin.data <- subset(bin.data, select = -c(distance))
   expect_equal(suppressMessages(ds(bin.data, key="hn",
                                    order=0))$ddf$meta.data$width, 3.8)
 
@@ -226,8 +228,7 @@ test_that("cutpoints work with flatfile", {
                     convert_units = units,  cutpoints = c(seq(0,8,1)),
                     formula = ~Region.Label)
 
-  pigs2 <- data.frame(distance  = (distbegin+distend)/2,
-                      distbegin = distbegin,
+  pigs2 <- data.frame(distbegin = distbegin,
                       distend   = distend,
                       Region.Label = pigs$Region.Label,
                       Area         = 0)
