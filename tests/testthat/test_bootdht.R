@@ -82,3 +82,72 @@ test_that("resamples work - strata/sample/object", {
 
   expect_equal(obs$save.ind, c(6, 1, 9, 6, 6, 2, 3, 8, 11, 6, 13, 8))
 })
+
+# generate some data to test on
+dat <- data.frame(Sample.Label = 1:10)
+dat$Region.Label <- c(rep(1, 5), rep(2, 5))
+set.seed(115)
+dat2 <- dat
+dat2$Region.Label <- paste("YEAR", as.character(dat2$Region.Label), sep = "")
+dat2 <- rbind(dat2, dat2, dat2)
+dat2$distance <- abs(rnorm(nrow(dat2), 0, 25))
+dat2$Effort <- 1000
+dat2$Area <- 100
+dat2$size <- rpois(nrow(dat2), 20)
+dat2$object <- 1:nrow(dat2)
+
+conversion.factor <- convert_units("meter", "meter", "square kilometer")
+
+fit.ds <- ds(data=dat2,
+             truncation=50,
+             key="hn",
+             adjustment=NULL,
+             convert_units=conversion.factor,
+             formula=~size)
+
+
+
+test_that("Issue #158 is fixes (stratum names > 'Total' bug)", {
+  
+  skip_on_cran()
+  
+  set.seed(225)
+  easybootn <- suppressMessages(bootdht(model=fit.ds,
+                       flatfile=dat2,
+                       summary_fun=bootdht_Nhat_summarize,
+                       convert_units=conversion.factor,
+                       sample_fraction=1,
+                       nboot=3, cores=1,
+                       progress_bar = "none"))
+
+  # Make check table
+  check.tab <- easybootn %>% dplyr::group_by(Label) %>%
+    dplyr::summarize(LCI=quantile(Nhat,probs=0.025,na.rm=TRUE),
+                     UCI=quantile(Nhat,probs=0.975,na.rm=TRUE))
+  
+  # This was TRUE should now be FALSE after fix
+  expect_false(any(is.na(check.tab$LCI)))
+  
+  # Now check cluster fix
+  bootdht_NChat_summarize <- function(ests, fit) {
+    return(data.frame(Label = ests$clusters$N$Label,
+                      Nhat  = ests$cluster$N$Estimate))
+  }
+  
+  set.seed(225)
+  easybootn <- suppressMessages(bootdht(model=fit.ds,
+                       flatfile=dat2,
+                       summary_fun=bootdht_NChat_summarize,
+                       convert_units=conversion.factor,
+                       sample_fraction=1,
+                       nboot=3, cores=1,
+                       progress_bar = "none"))
+  # Make check table
+  check.tab <- easybootn %>% dplyr::group_by(Label) %>%
+    dplyr::summarize(LCI=quantile(Nhat,probs=0.025,na.rm=TRUE),
+                     UCI=quantile(Nhat,probs=0.975,na.rm=TRUE))
+  
+  # This was TRUE should now be FALSE after fix
+  expect_false(any(is.na(check.tab$LCI)))
+})
+
