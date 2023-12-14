@@ -61,6 +61,11 @@ bootit <- function(bootdat, models, our_resamples, summary_fun,
           models[[i]]$dht$individuals[[est_type]]$Estimate <- ind$Estimate/
                                                               ind$rate
         }else{
+          # Need to re-order (incase strata names come after total)
+          label.order <- models[[i]]$dht$individuals[[est_type]]$Label
+          index <- match(label.order, ind$Label)
+          ind <- ind[index,]
+          # Now extract relevant values
           nN <- length(ind$Estimate)-1
           models[[i]]$dht$individuals[[est_type]]$Estimate <-
             c(ind$Estimate[1:nN]/ind$rate[1:nN],
@@ -75,6 +80,11 @@ bootit <- function(bootdat, models, our_resamples, summary_fun,
             models[[i]]$dht$clusters[[est_type]]$Estimate <- cl$Estimate/
                                                              cl$rate
           }else{
+            # Need to re-order cl (incase strata names come after total)
+            label.order <- models[[i]]$dht$clusters[[est_type]]$Label
+            index <- match(label.order, cl$Label)
+            cl <- cl[index,]
+            # Now extract relevant values
             models[[i]]$dht$clusters[[est_type]]$Estimate <-
               c(cl$Estimate[1:nN]/cl$rate[1:nN],
                 sum(cl$Estimate[1:nN]/cl$rate[1:nN]))
