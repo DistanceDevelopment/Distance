@@ -216,7 +216,7 @@ bootdht <- function(model,
     model
   })
 
-  cat(paste0("Performing ", nboot, " bootstraps\n"))
+  message(paste0("Performing ", nboot, " bootstraps\n"))
 
   if(cores > 1 & progress_bar != "none"){
     progress_bar <- "none"
