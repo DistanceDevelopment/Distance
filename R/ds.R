@@ -54,11 +54,15 @@
 #' key is uniform only `"width"` will be used. The other option is `"scale"`:
 #' the scale parameter of the detection
 #' @param cutpoints if the data are binned, this vector gives the cutpoints of
-#' the bins. Ensure that the first element is 0 (or the left truncation
+#' the bins. Supplying a distance column in your data and specifying cutpoints
+#' is the recommended approach for all standard binned analyses.
+#' Ensure that the first element is 0 (or the left truncation
 #' distance) and the last is the distance to the end of the furthest bin.
-#' (Default `NULL`, no binning.) Note that if `data` has columns `distbegin`
-#' and `distend` then these will be used as bins if `cutpoints` is not
-#' specified. If both are specified, `cutpoints` has precedence.
+#' (Default `NULL`, no binning.) If you have provided `distbegin` and `distend`
+#' columns in your data (note this should only be used when your cutpoints 
+#' are not constant across all your data, e.g. planes flying at differing 
+#' altitudes) then do not specify the cutpoints argument as this will cause
+#' the `distbegin` and `distend` columns in your data to be overwritten. 
 #' @param monotonicity should the detection function be constrained for
 #' monotonicity weakly (`"weak"`), strictly (`"strict"`) or not at all
 #' (`"none"` or `FALSE`). See Monotonicity, below. (Default `"strict"`). By

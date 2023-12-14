@@ -102,11 +102,15 @@ key is uniform only \code{"width"} will be used. The other option is \code{"scal
 the scale parameter of the detection}
 
 \item{cutpoints}{if the data are binned, this vector gives the cutpoints of
-the bins. Ensure that the first element is 0 (or the left truncation
+the bins. Supplying a distance column in your data and specifying cutpoints
+is the recommended approach for all standard binned analyses.
+Ensure that the first element is 0 (or the left truncation
 distance) and the last is the distance to the end of the furthest bin.
-(Default \code{NULL}, no binning.) Note that if \code{data} has columns \code{distbegin}
-and \code{distend} then these will be used as bins if \code{cutpoints} is not
-specified. If both are specified, \code{cutpoints} has precedence.}
+(Default \code{NULL}, no binning.) If you have provided \code{distbegin} and \code{distend}
+columns in your data (note this should only be used when your cutpoints
+are not constant across all your data, e.g. planes flying at differing
+altitudes) then do not specify the cutpoints argument as this will cause
+the \code{distbegin} and \code{distend} columns in your data to be overwritten.}
 
 \item{dht_group}{should density abundance estimates consider all groups to
 be size 1 (abundance of groups) \code{dht_group=TRUE} or should the abundance of
