@@ -28,16 +28,20 @@
 #' @param adjustment adjustment terms to use; `"cos"` gives cosine (default),
 #' `"herm"` gives Hermite polynomial and `"poly"` gives simple polynomial. A
 #' value of `NULL` indicates that no adjustments are to be fitted.
-#' @param nadj the number of adjustment terms to fit. The default value
-#' (`NULL`) will select via AIC (using a sequential forward selection
-#' algorithm) up to `max.adjustment` adjustments (unless `order` is specified).
-#' A non-negative integer value will cause the specified number of adjustments
-#' to be fitted. The order of adjustment terms used will depend on the `key`
-#' and `adjustment`. For `key="unif"`, adjustments of order 1, 2, 3, ... are
-#' fitted when `adjustment = "cos"` and order 2, 4, 6, ... otherwise. For
-#' `key="hn"` or `"hr"` adjustments of order 2, 3, 4, ... are fitted when
-#' `adjustment = "cos"` and order 4, 6, 8, ... otherwise. See Buckland et al.
-#' (2001, p. 47) for details.
+#' @param nadj the number of adjustment terms to fit. In the absence of 
+#' covariates in the formula, the default value (`NULL`) will select via AIC 
+#' (using a sequential forward selection algorithm) up to `max.adjustment` 
+#' adjustments (unless `order` is specified). When covariates are present 
+#' in the model formula, the default value of `NULL` results in no adjustment 
+#' terms being fitted in the model. A non-negative integer value will cause 
+#' the specified number of adjustments to be fitted. Supplying an integer 
+#' value will allow the use of adjustment terms in addition to specifying 
+#' covariates in the model. The order of adjustment terms used will depend 
+#' on the `key`and `adjustment`. For `key="unif"`, adjustments of order 
+#' 1, 2, 3, ... are fitted when `adjustment = "cos"` and order 2, 4, 6, ... 
+#' otherwise. For `key="hn"` or `"hr"` adjustments of order 2, 3, 4, ... are 
+#' fitted when `adjustment = "cos"` and order 4, 6, 8, ... otherwise. See 
+#' Buckland et al. (2001, p. 47) for details.
 #' @param order order of adjustment terms to fit. The default value (`NULL`)
 #' results in `ds` choosing the orders to use - see `nadj`. Otherwise a scalar
 #' positive integer value can be used to fit a single adjustment term of the
