@@ -31,6 +31,8 @@ dat <- dat[!(dat$Sample.Label %in% dat2$Sample.Label),]
 dat$object <- NA
 dat <- rbind(dat, dat2)
 dat$save.ind <- 1:nrow(dat)
+dat$distance <- rnorm(nrow(dat), 0, 50)
+dat$distance <- ifelse(is.na(dat$object),NA,dat$distance)
 
 
 test_that("resamples work - strata", {
@@ -107,7 +109,7 @@ fit.ds <- ds(data=dat2,
 
 
 
-test_that("Issue #158 is fixes (stratum names > 'Total' bug)", {
+test_that("Issue #158 is fixed (stratum names > 'Total' bug)", {
   
   skip_on_cran()
   
@@ -151,3 +153,22 @@ test_that("Issue #158 is fixes (stratum names > 'Total' bug)", {
   expect_false(any(is.na(check.tab$LCI)))
 })
 
+
+# Test data from Eric
+data(minke)
+# convert exact distances into bins
+vals <- seq(0,2,.2)
+minke$bin <- cut(minke$distance, breaks=seq(0, 2, .2), right=FALSE, labels=FALSE)
+minke$distbegin <- vals[minke$bin]
+minke$distend <- vals[minke$bin+1]
+# remove exact distances
+minke$distance <- NULL
+
+test_that("Issue #158 is fixed (stratum names > 'Total' bug)", {
+  
+  skip_on_cran()
+  mod1 <- ds(minke)
+  set.seed(225)
+  bootout <- bootdht(mod1, flatfile=minke,  nboot=3)
+  expect_true(nrow(bootout) > 0)
+})
