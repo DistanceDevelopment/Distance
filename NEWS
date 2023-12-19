@@ -2,6 +2,9 @@ Distance 1.0.9
 ----------------------
 
 * Changed the default encounter rate estimator for point transect surveys from P3 to P2. (Issue #138)
+* Fixed bug which produced NA's when stratum names came after 'Total' in the alphabet. (Issue #158)
+* Added additional documentation explaining the adjustment term options when covariates are in the model. (Issue #156)
+* Fixed dht bootstrap to work when distbegin and distend are supplied but not distance. (Issue #147)
 
 Distance 1.0.8
 ----------------------
