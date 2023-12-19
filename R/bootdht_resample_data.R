@@ -62,10 +62,19 @@ bootdht_resample_data <- function(bootdat, our_resamples,
 
   # concatenate list elements to data.frame
   rr <- do.call(rbind.data.frame, obs)
+  
+  # Check if there is a distance column otherwise look for distbegin
+  if("distance" %in% names(rr)){
+   dist_col <- "distance"
+  }else if("distbegin" %in% names(rr)){
+   dist_col <- "distbegin"
+  }else{
+   stop("No distance nor distbegin column in the bootstrap dataset.", call. = FALSE)
+  }
 
   # reset the object IDs to be unique (where there are observations)
-  rr[[obs_label]][is.na(rr[["distance"]])] <- NA
-  rr[[obs_label]][!is.na(rr[["distance"]])] <- 1:length(rr[[obs_label]][!is.na(rr[["distance"]])])
+  rr[[obs_label]][is.na(rr[[dist_col]])] <- NA
+  rr[[obs_label]][!is.na(rr[[dist_col]])] <- 1:length(rr[[obs_label]][!is.na(rr[[dist_col]])])
 
   return(rr)
 }
