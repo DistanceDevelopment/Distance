@@ -18,6 +18,16 @@ bootdht_resample_data <- function(bootdat, our_resamples,
 
   # get all samples per stratum
   samps_per_strata <- unique(bf[, c(stratum_label, sample_label)])
+  # Check that the sampler names are unique across strata
+  # The number of unique sampler names should be the same as the rows in samps_per_strata
+  if(!nrow(samps_per_strata) == length(unique(samps_per_strata[[sample_label]]))){
+    # Copy old sample IDs
+    bootdat$old.Sample.Label <- bootdat[[sample_label]]
+    # Update to unique sample labels by combining stratum label and sample label
+    bootdat[[sample_label]] <- paste(bootdat[[stratum_label]], bootdat[[sample_label]], sep = ".")
+    samps_per_strata[[sample_label]] <- paste(samps_per_strata[[stratum_label]], samps_per_strata[[sample_label]], sep = ".")
+    bf[[sample_label]] <- paste(bf[[stratum_label]], bf[[sample_label]], sep = ".")
+  }
   samps_per_strata <- by(bf[,c(stratum_label, sample_label)],
                          bf[[stratum_label]],
                          function(x) unique(x[[sample_label]]))

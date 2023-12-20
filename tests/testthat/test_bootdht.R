@@ -172,3 +172,23 @@ test_that("Issue #158 is fixed (stratum names > 'Total' bug)", {
   bootout <- bootdht(mod1, flatfile=minke,  nboot=3)
   expect_true(nrow(bootout) > 0)
 })
+
+
+
+# generate some data to test on
+dat <- data.frame(object = 1:60, Sample.Label = rep(1:10,6),
+                  Area = 100, Effort = 1000)
+dat$Region.Label <- c(rep("StrataA", 30), rep("StrataB", 30))
+dat$distance <- abs(rnorm(nrow(dat), 0, 25))
+dat$size <- rpois(nrow(dat), 20)
+dat$ref.object <- dat$object
+
+test_that("Issue #157 is fixed", {
+  
+  set.seed(123)
+  obs <- bootdht_resample_data(dat, c("Sample.Label"))
+  
+  #unique(obs[,c("Region.Label","Sample.Label")])
+  # test that there are 10 samplers in each strata
+  # check that the correct original object ID's are associated with each sampler
+})
