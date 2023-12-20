@@ -18,6 +18,11 @@ bootdht_resample_data <- function(bootdat, our_resamples,
 
   # get all samples per stratum
   samps_per_strata <- unique(bf[, c(stratum_label, sample_label)])
+  # Check that the sampler names are unique across strata
+  # The number of unique sampler names should be the same as the rows in samps_per_strata
+  if(sample_label %in% our_resamples && !nrow(samps_per_strata) == length(unique(samps_per_strata[[sample_label]]))){
+    stop("Cannot bootstrap on samplers within strata as sampler ID values are not unique across strata. Please ensure all Sample.Label values are unique.", call. = FALSE)
+  }
   samps_per_strata <- by(bf[,c(stratum_label, sample_label)],
                          bf[[stratum_label]],
                          function(x) unique(x[[sample_label]]))

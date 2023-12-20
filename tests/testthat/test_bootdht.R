@@ -172,3 +172,19 @@ test_that("Issue #158 is fixed (stratum names > 'Total' bug)", {
   bootout <- bootdht(mod1, flatfile=minke,  nboot=3)
   expect_true(nrow(bootout) > 0)
 })
+
+
+# generate some data to test on
+dat <- data.frame(object = 1:60, Sample.Label = rep(1:10,6),
+                  Area = 100, Effort = 1000)
+dat$Region.Label <- c(rep("StrataA", 30), rep("StrataB", 30))
+dat$distance <- abs(rnorm(nrow(dat), 0, 25))
+dat$size <- rpois(nrow(dat), 20)
+dat$ref.object <- dat$object
+
+test_that("Error raised when sampler ID not unique", {
+  
+  set.seed(123)
+  expect_error(bootdht_resample_data(dat, c("Sample.Label")), 
+               "Cannot bootstrap on samplers within strata as sampler ID values are not unique across strata. Please ensure all Sample.Label values are unique.")
+})
