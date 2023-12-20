@@ -164,7 +164,7 @@ minke$distend <- vals[minke$bin+1]
 # remove exact distances
 minke$distance <- NULL
 
-test_that("Issue #158 is fixed (stratum names > 'Total' bug)", {
+test_that("Issue #147 is fixed (bootdht with distbegin/distend)", {
   
   skip_on_cran()
   mod1 <- ds(minke)
@@ -181,8 +181,7 @@ dat$Region.Label <- c(rep("StrataA", 30), rep("StrataB", 30))
 dat$distance <- abs(rnorm(nrow(dat), 0, 25))
 dat$size <- rpois(nrow(dat), 20)
 dat$ref.object <- dat$object
-
-test_that("Error raised when sampler ID not unique", {
+test_that("Error raised when sampler ID not unique (Issue #157)", {
   
   set.seed(123)
   expect_error(bootdht_resample_data(dat, c("Sample.Label")), 

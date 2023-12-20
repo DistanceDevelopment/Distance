@@ -25,7 +25,10 @@ bootdht(
 \item{model}{a model fitted by \code{\link{ds}} or a list of models}
 
 \item{flatfile}{Data provided in the flatfile format. See \code{\link{flatfile}} for
-details.}
+details. Please note, it is a current limitation of bootdht that all
+Sample.Label identifiers must be unique across all strata, i.e.transect
+ids must not be re-used from one strata to another. An easy way to achieve
+this is to paste together the stratum names and transect ids.}
 
 \item{resample_strata}{should resampling happen at the stratum
 (\code{Region.Label}) level? (Default \code{FALSE})}
