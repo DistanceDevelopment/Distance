@@ -6,6 +6,7 @@ Distance 1.0.9
 * Added additional documentation explaining the adjustment term options when covariates are in the model. (Issue #156)
 * Fixed dht bootstrap to work when distbegin and distend are supplied but not distance. (Issue #147)
 * Added a warning for the dht bootstrap when Sample.Label values are not unique across all strata. (Issue #157)
+* Distance 1.0.9 depends on mrds >= 2.3.0 due to re-named documentation page links.
 
 Distance 1.0.8
 ----------------------
