@@ -281,7 +281,7 @@ dht2 <- function(ddf, observations=NULL, transects=NULL, geo_strat=NULL,
   }
 
 
-  # what are the stratum labels specicied in strat_formula?
+  # what are the stratum labels specified in strat_formula?
   stratum_labels <- attr(terms(strat_formula), "term.labels")
 
   # TODO: currently break if >1 stratum is defined
