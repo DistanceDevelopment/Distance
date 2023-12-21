@@ -148,6 +148,13 @@ Windows systems \code{summary_fun} does not have access to the global environmen
 when running in parallel, so all computations must be made using only its
 \code{ests} and \code{fit} arguments (i.e., you can not use R objects from elsewhere
 in that function, even if they are available to you from the console).
+
+Another consequence of the global environment being unavailable inside
+parallel bootstraps is that any starting values in the model object passed
+in to \code{bootdht} must be hard coded (otherwise you get back 0 successful
+bootstraps). For a worked example showing this, see the camera trap distance
+sampling online example at
+\url{https://examples.distancesampling.org/Distance-cameratraps/camera-distill.html}.
 }
 
 \examples{
