@@ -122,6 +122,9 @@ navbar:
 footer:
   structure:
     right: donate
-    left: built_with
+    left: clarity
   components:
     donate: "If you wish to donate to development and maintenance"
+    clarity:  "We improve our site and software support by using Microsoft Clarity to see <br>
+      how you use our website. By using our site, you agree that we and Microsoft <br>
+      can collect and use this data. Clarity is GDPR compliant."
