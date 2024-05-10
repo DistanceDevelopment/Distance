@@ -1,0 +1,238 @@
+---
+title: "Solving the size bias problem"
+description: |
+  Eastern tropical Pacific spotted dolphin surveys from tuna fishing vessels.
+author:
+  - name: Eric Rexstad 
+    url: http://distancesampling.org
+    affiliation: CREEM, Univ of St Andrews
+    affiliation_url: https://creem.st-andrews.ac.uk
+date: "`r format(Sys.time(), '%B %Y')`"
+output: 
+  bookdown::html_document2:
+    number_sections: false
+    toc: true
+    toc_depth: 2
+    base_format: rmarkdown::html_vignette
+pkgdown:
+  as_is: true 
+bibliography: size.bib
+csl: ../apa.csl
+vignette: >
+  %\VignetteIndexEntry{Solving the size bias problem}
+  %\VignetteEngine{knitr::rmarkdown}
+  \usepackage[utf8]{inputenc}
+---
+
+```{r echo=FALSE, message=FALSE}
+knitr::opts_chunk$set(echo=FALSE)
+library(kableExtra)
+library(vioplot)
+options(scipen = 999)
+```
+
+In this example we have a sample of sightings data from eastern tropical Pacific (ETP) offshore spotted dolphin, collected by observers board tuna vessels (the data were made available by the Inter-American Tropical Tuna Commission - IATTC). More details about surveys of dolphins in the ETP can be found in @gerrodette_2005 and @swfc_2008. In the ETP, schools of yellow fin tuna commonly associate with schools of certain species of dolphins, and so vessels fishing for tuna often search for dolphins in the hopes of also locating tuna. For each school detected by the tuna vessels, the observer records the species, sighting angle and distance (later converted to perpendicular distance and truncated at 5 nautical miles), school size, and a number of covariates associated with each detected school.
+
+A variety of search methods were used to find the dolphins from these tuna vessels.  The coding in the data set is shown below. 
+
+```{r echo=FALSE}
+search <- data.frame(Method=c("Crows nest","Bridge","Helicopter","Radar"), code=c(0,2,3,5))
+knitr::kable(search, caption="Search method coding from tuna vessels in ETP.") %>%
+        kable_styling(bootstrap_options = "condensed", full_width = F)
+```
+
+Some of these methods may have a wider range of search than the others, and so it is possible that the detection function varies according to the method being used.
+
+For each sighting the initial cue type is recorded. This may be birds flying above the school, splashes on the water, floating objects such as logs, or some other unspecified cue. 
+
+```{r echo=FALSE}
+cue <- data.frame(Cue=c("Birds","Splashes","Unspecified cue","Floating objects"), code=c(1,2,3,4))
+knitr::kable(cue, caption="Cue coding from tuna vessels in ETP.") %>%
+        kable_styling(bootstrap_options = "condensed", full_width = F)
+```
+
+Another covariate that potentially affects the detection function is sea state. Beaufort levels are grouped into two categories, the first including Beaufort values ranging from 0 to 2 (coded as 1) and the second containing values from 3 to 5 (coded as 2).
+
+The sample data encompasses sightings made over a three month summer period.
+
+```{r echo=FALSE}
+month <- data.frame(Month=c("June","July","August"), code=c(6,7,8))
+knitr::kable(month, caption="Month coding from tuna vessels in ETP.") %>%
+        kable_styling(bootstrap_options = "condensed", full_width = F)
+```
+
+# Prepare data for analysis
+
+```{r prep, message=FALSE}
+library(Distance)
+data("ETP_Dolphin")
+```
+
+# Exploratory data analysis
+
+As described, there are a number of potential covariates that might influence dolphin detectability.  Rather than throw all covariates into detection function models, examine the distribution of detection distances (y-axis of figure below) as a function of the plausible factor covariates.
+
+```{r EDA, fig.dim=c(8,6), fig.cap="Exploratory data analysis using violin plots.  Prepared using the `vioplot` package.  Number of detections show above plots.", echo=FALSE}
+par(mfrow = c(2, 2),     # 2x2 layout
+    oma = c(2, 2, 0, 0), # two rows of text at the outer left and bottom margin
+    mar = c(1, 2, 1, 0), # space for one row of text at ticks and to separate plots
+    mgp = c(0, 0, 0),    # axis label at 2 rows distance, tick labels at 1 row
+    xpd = NA,
+    cex.lab=0.8, cex.main=0.7, cex.axis=0.6)  
+with(ETP_Dolphin, vioplot(
+  distance[Search.method==0],
+  distance[Search.method==2],
+  distance[Search.method==3],
+  distance[Search.method==5],
+  names=c("Crows nest","Bridge","Helicopter","Radar"),
+  col=rgb(0.1,0.4,0.7,0.7), main="Search method"))
+ndetects <- table(ETP_Dolphin$Search.method)
+for (i in 1:4) {
+  text(i, 5.15, paste("n =", ndetects[i]), cex=0.6)
+}
+
+with(ETP_Dolphin, vioplot(
+  distance[Cue.type==1],
+  distance[Cue.type==2],
+  distance[Cue.type==3],
+  distance[Cue.type==4],
+  names=c("Birds","Splashes","Other","Floating obj."),
+  col=rgb(0.1,0.4,0.7,0.7), main="Cue type"))
+ndetects <- table(ETP_Dolphin$Cue.type)
+for (i in 1:4) {
+  text(i, 5.15, paste("n =", ndetects[i]), cex=0.6)
+}
+
+with(ETP_Dolphin, vioplot(
+  distance[Month==6],
+  distance[Month==7],
+  distance[Month==8],
+  names=c("June","July","August"),
+  col=rgb(0.1,0.4,0.7,0.7), main="Month"))
+ndetects <- table(ETP_Dolphin$Month)
+for (i in 1:3) {
+  text(i, 5.15, paste("n =", ndetects[i]), cex=0.6)
+}
+
+with(ETP_Dolphin, vioplot(
+  distance[Beauf.class==1],
+  distance[Beauf.class==2],
+  names=c("0-2","3-5"),
+  col=rgb(0.1,0.4,0.7,0.7), main="Sea state"))
+ndetects <- table(ETP_Dolphin$Beauf.class)
+for (i in 1:2) {
+  text(i, 5.15, paste("n =", ndetects[i]), cex=0.6)
+}
+par(mfrow=c(1,1))
+```
+
+From Fig. \@ref(fig:EDA) there are several decisions to be made concerning the remaining analysis:
+
+- there is no discernible effect of month or sea state upon distribution of detection distances in this data set.  Those covariates will not feature in subsequent modelling.  
+- the distribution of detection distances by cue type appears to differ for splashes and floating objects.  However, the number of detections associated with splash (n=25) or float objects (n=22) cues is small, accounting for ~4\% of the total number of detections.  I choose to ignore variability in detection probability associated with cue type.
+- shape of the distribution of detections likely does change for the different search methods.  However, the method for which detection distances are most different is the helicopter.  The violin plot shows there to be roughly an equal number of pods detected between 4 and 5 nautical miles as were detected between 0 and 1 nautical miles.
+    - the proper way to handle this situation would be to remove helicopter sightings from the detection function modelling.  Detectability could be assumed perfect out to the truncation distance, hence treat the helicopter portion of the survey as a strip transect. The number of pods detected by helicopters could be added into the estimated number of pods within the covered area.  We will remove detections by helicopter from the remainder of our analysis.
+- the number of detections by radar is small and unlikely to exert much influence upon detection function modelling.
+
+## Evidence for size bias
+
+Size bias [@buckland_2001] can be examined by plotting distribution of group size as a function of detection distances.
+
+```{r boxplot, fig.dim=c(7,5), fig.cap="Box plot of observed group sizes by perpendicular distance band. Outliers are not shown; notches indicate discernable difference in mean group size at 2nm."}
+nochopper <- subset(ETP_Dolphin, ETP_Dolphin$Search.method != 3)
+with(nochopper, 
+     boxplot(size~cut(nochopper$distance, seq(0, 5, 1), right=FALSE, labels=FALSE),
+             outline=FALSE, notch=TRUE, ylab="Group size", xlab="Distance category",
+             names=c("0-1nm","1-2nm","2-3nm","3-4nm","4-5nm"))
+)
+```
+
+Fig. \@ref(fig:boxplot) indicates a difference in observed mean group size at 2nm; with average group size being distinctly larger at distances greater than 2nm. Hence, average group size in the sample is an overestimate of the average group size in the population.  Our modelling of the detection function will need to counteract this bias by including group size in the detection function.  
+
+# Stage one of detection function modelling
+
+Before creating a host of candidate models, we should address with the question of the appropriate key function for these data.  Recall we are not including sightings made from the helicopter platform in our analyses.
+
+Fitting models with half normal key function without adjustments and with and without `Search.method`
+
+```{r, message=FALSE, fig.dim=c(7,5), fig.cap="Q-Q goodness of fit plots for half normal key function without adjustments also including search method as a covariate.", echo=TRUE}
+hn <- ds(nochopper, key="hn", adjustment = NULL)
+hn.method <- ds(nochopper, key="hn", formula = ~factor(Search.method))
+par(mfrow=c(1,2))
+gof_ds(hn, main="HN key, no adj", cex=0.5)
+gof_ds(hn.method, main="HN key + method", cex=0.5)
+par(mfrow=c(1,2))
+```
+
+indicates a lack of fit of the half normal key function models.  After some rounding to the trackline, the detection function maintains a shoulder before falling away quite rapidly.  Even taking into consideration the idea that the sample size is very large (n=`r dim(nochopper)[1]`), making the goodness of fit test quite powerful, there is some doubt that the half normal key function is appropriate for these data.  We will remove the half normal from further modelling, as the hazard rate will serve our purposes, as the hazard rate without adjustments or covariates, adequately fit the data.
+
+```{r, echo=TRUE}
+hr <- ds(nochopper, key="hr")
+gof_ds(hr, plot=FALSE)
+```
+
+## Counteracting size bias
+
+Conducting our modeling using the hazard rate key function, we turn our attention to incorporating group size into the detection function. The way to counteract the effect of size bias is to include group size in the detection function.
+
+```{r, error=TRUE, echo=TRUE}
+hr.size <- ds(nochopper, key="hr", formula = ~size)
+```
+
+It is a disappointment to learn that a model including group size as a covariate fails to converge.  There are numerical difficulties associated with a covariate that spans three orders of magnitude.  For more about fitting issues with covariates, consult the [covariate example with amakihi](http://examples.distancesampling.org/Distance-covariates/covariates-distill.html).
+
+The distribution of group sizes is strongly skewed to the right, with a very long right tail.  A transformation by natural logs will both reduce the range of `log(size)` to one order of magnitude and shift the centre of the distribution of the covariate (Fig. \@ref(fig:transf)).
+
+```{r transf, fig.dim=c(7,5), fig.cap="Effect of log transformation upon distribution of observed group sizes."}
+par(mfrow=c(1,2))
+hist(nochopper$size, main="Observed group sizes.",
+     xlab="Group size")
+hist(log(nochopper$size), main="log(observed group sizes).",
+     xlab="Log transform of group size.")
+par(mfrow=c(1,1))
+```
+
+The convergence problems associated with using `size` as a covariate in the detection function are alleviated as a result of the transformation.
+
+
+```{r, echo=TRUE}
+hr.clus <- ds(nochopper, key="hr", formula = ~log(size))
+```
+
+Having successfully incorporated group size into the detection function, we proceed to examine the consequence of using `Search.method` as a covariate and a model incorporating both covariates.
+
+
+```{r, message=FALSE, echo=TRUE}
+hr.method <- ds(nochopper, key="hr", formula = ~factor(Search.method))
+hr.clus.method <- ds(nochopper, key="hr", formula = ~log(size) + factor(Search.method))
+```
+
+```{r}
+knitr::kable(summarize_ds_models(hr, hr.clus, hr.method, hr.clus.method),
+             caption="Models with hazard rate key function fitted to tuna fishing vessel sightings of dolphins.  Sightings from helicopter not included in modelling.", digits=3, row.names = FALSE) %>%
+      kable_styling(bootstrap_options = "condensed", full_width = F)
+```
+
+# Interpretation of findings
+
+All of the fitted models using the hazard rate as the key function fit the data.  In addition, note the estimates of $\widehat{P_a}$ for all four models.  Inclusion of covariates has a negligible effect upon estimated detection probability.  Despite a  $\Delta$AIC value > 15, the model without covariates produces a virtually identical estimate of detection probability.  This is another example of the remarkable property of pooling robustness of distance sampling estimators [@burnham_etal_2004]. 
+
+We discuss estimates of group and individual density from this data set.  However, this data set does not accurately reflect survey effort.  The `Effort` column is filled with `1` and there is only a single transect labelled in the data.  Hence, the density estimates do not reflect biological reality; nevertheless the comparisons between models are legitimate.  Variability between transects is also not properly incorporated into this analysis, so I won't present measures of precision associated with any of the following point estimates.
+
+This slight variation in $\widehat{P_a}$ among the hazard rate candidate models is reflected in the equally similar estimates of dolphin pod density among the competing models.  The model with the largest  $\widehat{P_a}$ produces the lowest estimate of $\widehat{D_s}$ (`r round(hr$dht$clusters$D[2],1)`); while the model with the smallest $\widehat{P_a}$ produces the largest estimate of $\widehat{D_s}$ (`r round(hr.clus.method$dht$clusters$D[2],1)`).
+
+However, the most important consideration in analysis of this data set is proper treatment of size bias.  The hazard rate models without group size in the detection function, estimate average group size in the population to be `r round(hr$dht$Expected.S[1,2],0)` whereas the model incorporating group size in the detection function estimates average group size in the population to be `r round(hr.clus$dht$Expected.S[1,2],0)`.  Based on the evidence presented in Fig. \@ref(fig:boxplot), there is reason to believe that estimates of average group size without incorporating group size in the detection function results in a positively biased estimate of group size in the population.  From the group size estimates under the two models, it appears the magnitude of that positive size bias in this data set is `r round((hr$dht$Expected.S[1,2]/ hr.clus$dht$Expected.S[1,2]-1)*100, 1)`.
+
+This difference in estimated average group size is magnified in the estimates of individual density $\widehat{D_I}$.  The model without covariates estimates $\widehat{D_I}$ = `r round(hr$dht$individuals$D[2],0)` while the model with group size as a covariate estimates $\widehat{D_I}$ to be `r round(hr.clus$dht$individuals$D[2],0)`.
+
+# Summary
+
+Take home points:
+
+- Before incorporating covariates into the detection function, do a thorough exploratory data analysis with lots of plots.
+- Make at least a preliminary decision regarding key functions to consider before building an extensive candidate model set.
+- For this data set, there is little difference in the fit of the detection functions through the inclusion of covariates (pooling robustness).  
+- However, exploratory data analysis suggested that small dolphin groups were missed at large distances, resulting in size bias in the estimate of average group size in the population.
+- Incorporating group size as a covariate in the detection function reduced the estimate group size in the population by `r round((hr$dht$Expected.S[1,2]/ hr.clus$dht$Expected.S[1,2]-1)*100, 1)`\%.  This reduction in estimated group size compensated for the size bias induced by the detection process.
+
+# References

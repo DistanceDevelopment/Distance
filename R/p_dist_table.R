@@ -9,7 +9,6 @@
 #' @note This function is located in the `mrds` package but the documentation
 #' is provided here for easy access.
 #' @examples
-#' \dontrun{
 #' # example using a model for the minke data
 #' data(minke)
 #' # fit a model
@@ -18,6 +17,5 @@
 #' p_dist_table(result)
 #' # with proportions
 #' p_dist_table(result, proportion=TRUE)
-#' }
 NULL
 
