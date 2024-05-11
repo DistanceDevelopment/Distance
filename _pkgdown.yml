@@ -106,12 +106,16 @@ navbar:
           href: articles/web-only/groupsize/Remedy-size-bias-for-dolphin-surveys.html
         - text: Stratification
           href: articles/web-only/strata/strata-distill.html
+        - text: Detecting difference in density between strata
+          href: articles/web-only/differences/differences.html
         - text: Variance estimation with bootstrap
           href: articles/web-only/variance/variance-distill.html
         - text: Cue count surveys
           href: articles/web-only/cues/cuecounts-distill.html
         - text: Indirect surveys
           href: articles/web-only/multipliers/multipliers-distill.html
+        - text: Take care when subsetting multispecies data sets
+          href: articles/web-only/multispecies/multispecies-multioccasion-analysis.html
         - text: Camera trap distance sampling
           href: articles/web-only/ctds/camera-distill.html
         - text: Alternative optimiser
