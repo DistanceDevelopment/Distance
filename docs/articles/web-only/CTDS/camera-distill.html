@@ -61,9 +61,11 @@
     <a class="dropdown-item" href="../../../articles/web-only/points/pointtransects-distill.html">Point transects</a>
     <a class="dropdown-item" href="../../../articles/web-only/groupsize/Remedy-size-bias-for-dolphin-surveys.html">Size bias remedy</a>
     <a class="dropdown-item" href="../../../articles/web-only/strata/strata-distill.html">Stratification</a>
+    <a class="dropdown-item" href="../../../articles/web-only/differences/differences.html">Detecting difference in density between strata</a>
     <a class="dropdown-item" href="../../../articles/web-only/variance/variance-distill.html">Variance estimation with bootstrap</a>
     <a class="dropdown-item" href="../../../articles/web-only/cues/cuecounts-distill.html">Cue count surveys</a>
     <a class="dropdown-item" href="../../../articles/web-only/multipliers/multipliers-distill.html">Indirect surveys</a>
+    <a class="dropdown-item" href="../../../articles/web-only/multispecies/multispecies-multioccasion-analysis.html">Take care when subsetting multispecies data sets</a>
     <a class="dropdown-item" href="../../../articles/web-only/ctds/camera-distill.html">Camera trap distance sampling</a>
     <a class="dropdown-item" href="../../../articles/web-only/alt-optimise/mcds-dot-exe.html">Alternative optimiser</a>
   </div>
@@ -639,7 +641,7 @@ Figure 4: Distribution of density estimates from bootstrap replicates.
 <h3 id="an-esoteric-note-on-starting-values-and-bootstrapping">An esoteric note on starting values and bootstrapping<a class="anchor" aria-label="anchor" href="#an-esoteric-note-on-starting-values-and-bootstrapping"></a>
 </h3>
 <p>Feel free to skip this unless you’re a fairly advanced user!</p>
-<p>In some cases, it may be necessary to set starting values for the detection function optimization, to help it converge. This can be achieved using the <code>initial_values</code> arguemnt of the <code>ds</code> function. As an example, say we want to use the fitted values from the uniform + 2 cosine function <code>uni2</code> as starting values for the first two parameters of the uniform + 3 cosine function fitting (and 0 for the third parameter). The following code does this:</p>
+<p>In some cases, it may be necessary to set starting values for the detection function optimization, to help it converge. This can be achieved using the <code>initial_values</code> argument of the <code>ds</code> function. As an example, say we want to use the fitted values from the uniform + 2 cosine function <code>uni2</code> as starting values for the first two parameters of the uniform + 3 cosine function fitting (and 0 for the third parameter). The following code does this:</p>
 <div class="sourceCode" id="cb45"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">uni3.with.startvals</span> <span class="op">&lt;-</span> <span class="fu"><a href="../../../reference/ds.html">ds</a></span><span class="op">(</span><span class="va">DuikerCameraTraps</span>, transect <span class="op">=</span> <span class="st">"point"</span>, key<span class="op">=</span><span class="st">"unif"</span>, adjustment <span class="op">=</span> <span class="st">"cos"</span>,</span>
 <span>           nadj<span class="op">=</span><span class="fl">3</span>,</span>

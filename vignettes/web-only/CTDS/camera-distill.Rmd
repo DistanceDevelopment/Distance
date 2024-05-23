@@ -369,7 +369,7 @@ The confidence interval derived from the bootstrap is considerably wider than th
 
 Feel free to skip this unless you're a fairly advanced user!
 
-In some cases, it may be necessary to set starting values for the detection function optimization, to help it converge.  This can be achieved using the `initial_values` arguemnt of the `ds` function.  As an example, say we want to use the fitted values from the uniform + 2 cosine function `uni2` as starting values for the first two parameters of the uniform + 3 cosine function fitting (and 0 for the third parameter).  The following code does this:
+In some cases, it may be necessary to set starting values for the detection function optimization, to help it converge.  This can be achieved using the `initial_values` argument of the `ds` function.  As an example, say we want to use the fitted values from the uniform + 2 cosine function `uni2` as starting values for the first two parameters of the uniform + 3 cosine function fitting (and 0 for the third parameter).  The following code does this:
 
 ```{r, startvals, eval = solution}
 uni3.with.startvals <- ds(DuikerCameraTraps, transect = "point", key="unif", adjustment = "cos",

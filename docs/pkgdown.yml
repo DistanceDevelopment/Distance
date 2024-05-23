@@ -5,13 +5,15 @@ articles:
   camera-distill: web-only/CTDS/camera-distill.html
   covariates-distill: covariates-distill.html
   cuecounts-distill: web-only/cues/cuecounts-distill.html
+  differences: web-only/differences/differences.html
   lines-distill: lines-distill.html
   mcds-dot-exe: web-only/alt-optimise/mcds-dot-exe.html
   multipliers-distill: web-only/multipliers/multipliers-distill.html
+  multispecies-multioccasion-analysis: web-only/multispecies/multispecies-multioccasion-analysis.html
   pointtransects-distill: web-only/points/pointtransects-distill.html
   Remedy-size-bias-for-dolphin-surveys: web-only/groupsize/Remedy-size-bias-for-dolphin-surveys.html
   species-covariate-distill: species-covariate-distill.html
   strata-distill: web-only/strata/strata-distill.html
   variance-distill: web-only/variance/variance-distill.html
-last_built: 2024-05-10T12:50Z
+last_built: 2024-05-23T14:31Z
 
