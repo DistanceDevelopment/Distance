@@ -378,7 +378,7 @@ uni3.with.startvals <- ds(DuikerCameraTraps, transect = "point", key="unif", adj
            initial_values = list(adjustment = c(as.numeric(uni2$ddf$par), 0)))
 ```
 
-What about when it comes to bootstrapping for variance esitmation.  You can pass this model in to `boot.dht` with no problems, so long as you don't set `ncores` to more than 1.  If you do set `ncores` to more than 1 it won't work, returning 0 successful bootstraps.  Why?  Because `uni2$ddf$par` is not passed along to all those parallel cores.  To fix this you have to hard-code the starting values.  So, in this example, we see that the values are
+What about when it comes to bootstrapping for variance estimation.  You can pass this model in to `boot.dht` with no problems, so long as you don't set `ncores` to more than 1.  If you do set `ncores` to more than 1 it won't work, returning 0 successful bootstraps.  Why?  Because `uni2$ddf$par` is not passed along to all those parallel cores.  To fix this you have to hard-code the starting values.  So, in this example, we see that the values are
 
 ```{r, startvals2, eval = solution}
 print(uni2$ddf$par)
