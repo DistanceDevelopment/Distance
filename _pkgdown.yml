@@ -117,7 +117,7 @@ navbar:
         - text: Take care when subsetting multispecies data sets
           href: articles/web-only/multispecies/multispecies-multioccasion-analysis.html
         - text: Camera trap distance sampling
-          href: articles/web-only/ctds/camera-distill.html
+          href: articles/web-only/CTDS/camera-distill.html
         - text: Alternative optimiser
           href: articles/web-only/alt-optimise/mcds-dot-exe.html
     - text: News
