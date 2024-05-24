@@ -329,7 +329,7 @@ detach("package:Distance", unload = TRUE)
 library(Distance)
 ```
 
-We make use of this engine here by re-fitting the selected detection function model, `uni3`, using this engine, setting the `ds` argument `optimizer="MCDS"`.  If you are not using a Windows machine or have not doanloaded the MCDS.exe engine, then you should not execute this line, and your bootstrap will take longer to execute.
+We make use of this engine here by re-fitting the selected detection function model, `uni3`, using this engine, setting the `ds` argument `optimizer="MCDS"`.  If you are not using a Windows machine or have not downloaded the MCDS.exe engine, then you should not execute this line, and your bootstrap will take longer to execute.
 
 ```{r, mcds.exe, eval = solution}
 uni3 <- ds(DuikerCameraTraps, transect = "point", key="unif", adjustment = "cos",
