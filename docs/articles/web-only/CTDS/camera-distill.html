@@ -50,7 +50,7 @@
 <li class="nav-item">
   <a class="nav-link" href="../../../reference/index.html">Function reference</a>
 </li>
-<li class="nav-item dropdown">
+<li class="active nav-item dropdown">
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
     <a class="dropdown-item" href="../../../articles/lines-distill.html">Line transects</a>
@@ -106,7 +106,7 @@
             <address class="author_afil">
       CREEM, Univ of St Andrews<br><h4 data-toc-skip class="date">May 2024</h4>
       
-      <small class="dont-index">Source: <a href="https://github.com/DistanceDevelopment/Distance/blob/HEAD/vignettes/web-only/CTDS/camera-distill.Rmd" class="external-link"><code>vignettes/web-only/CTDS/camera-distill.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/DistanceDevelopment/Distance/blob/HEAD/vignettes/web-only/ctds/camera-distill.Rmd" class="external-link"><code>vignettes/web-only/ctds/camera-distill.Rmd</code></a></small>
       <div class="d-none name"><code>camera-distill.Rmd</code></div>
     </address>
 </div>
@@ -591,7 +591,7 @@ Figure 3: Detection function and probability density function of the selected de
 <span><span class="co">#Detach and reload the Distance package to make use of it</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/detach.html" class="external-link">detach</a></span><span class="op">(</span><span class="st">"package:Distance"</span>, unload <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/DistanceDevelopment/Distance/" class="external-link">Distance</a></span><span class="op">)</span></span></code></pre></div>
-<p>We make use of this engine here by re-fitting the selected detection function model, <code>uni3</code>, using this engine, setting the <code>ds</code> argument <code>optimizer="MCDS"</code>. If you are not using a Windows machine or have not doanloaded the MCDS.exe engine, then you should not execute this line, and your bootstrap will take longer to execute.</p>
+<p>We make use of this engine here by re-fitting the selected detection function model, <code>uni3</code>, using this engine, setting the <code>ds</code> argument <code>optimizer="MCDS"</code>. If you are not using a Windows machine or have not downloaded the MCDS.exe engine, then you should not execute this line, and your bootstrap will take longer to execute.</p>
 <div class="sourceCode" id="cb39"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">uni3</span> <span class="op">&lt;-</span> <span class="fu"><a href="../../../reference/ds.html">ds</a></span><span class="op">(</span><span class="va">DuikerCameraTraps</span>, transect <span class="op">=</span> <span class="st">"point"</span>, key<span class="op">=</span><span class="st">"unif"</span>, adjustment <span class="op">=</span> <span class="st">"cos"</span>,</span>
 <span>           nadj<span class="op">=</span><span class="fl">3</span>, convert_units <span class="op">=</span> <span class="va">conversion</span>,</span>
@@ -649,7 +649,7 @@ Figure 4: Distribution of density estimates from bootstrap replicates.
 <span>           initial_values <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>adjustment <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/numeric.html" class="external-link">as.numeric</a></span><span class="op">(</span><span class="va">uni2</span><span class="op">$</span><span class="va">ddf</span><span class="op">$</span><span class="va">par</span><span class="op">)</span>, <span class="fl">0</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## Warning in create_bins(data, cutpoints): Some distances were outside bins and</span></span>
 <span><span class="co">## have been removed.</span></span></code></pre>
-<p>What about when it comes to bootstrapping for variance esitmation. You can pass this model in to <code>boot.dht</code> with no problems, so long as you don’t set <code>ncores</code> to more than 1. If you do set <code>ncores</code> to more than 1 it won’t work, returning 0 successful bootstraps. Why? Because <code>uni2$ddf$par</code> is not passed along to all those parallel cores. To fix this you have to hard-code the starting values. So, in this example, we see that the values are</p>
+<p>What about when it comes to bootstrapping for variance estimation. You can pass this model in to <code>boot.dht</code> with no problems, so long as you don’t set <code>ncores</code> to more than 1. If you do set <code>ncores</code> to more than 1 it won’t work, returning 0 successful bootstraps. Why? Because <code>uni2$ddf$par</code> is not passed along to all those parallel cores. To fix this you have to hard-code the starting values. So, in this example, we see that the values are</p>
 <div class="sourceCode" id="cb47"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">uni2</span><span class="op">$</span><span class="va">ddf</span><span class="op">$</span><span class="va">par</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## [1] 0.97178178 0.03541633</span></span></code></pre>
