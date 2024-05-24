@@ -1,0 +1,145 @@
+---
+title: "Perils of multispecies and multisession distance sampling analysis"
+description: |
+  Example using Montrave data employing `region_table` and `sample_table` construct
+author:
+  - name: Eric Rexstad 
+    url: http://distancesampling.org
+    affiliation: CREEM, Univ of St Andrews
+    affiliation_url: https://creem.st-andrews.ac.uk
+output: 
+  bookdown::html_document2:
+    number_sections: false
+    toc: true
+    toc_depth: 2
+    base_format: rmarkdown::html_vignette
+pkgdown:
+  as_is: true 
+bibliography: multi.bib
+csl: ../apa.csl
+vignette: >
+  %\VignetteIndexEntry{Perils of multispecies and multisession distance sampling analysis}
+  %\VignetteEngine{knitr::rmarkdown}
+  \usepackage[utf8]{inputenc}
+---
+
+```{r include=FALSE}
+knitr::opts_chunk$set(eval=TRUE, echo=TRUE, message=FALSE, warnings=FALSE)
+```
+```{r setup, include=FALSE}
+library(Distance)
+library(kableExtra)
+options(knitr.table.format = "html")
+```
+
+
+# A multispecies data set with multiple visits
+
+It is increasingly common for investigators to conduct surveys in which multiple species are detected and density estimates for several species are of interest. There are many ways of analysing such data sets, but care must be taken.  Not all approaches will produce correct density estimates. To demonstrate one of the ways to produce incorrect estimates, we will use the line transect survey data reported in @Buckland2006.  This survey (and data file) recorded detections of four species of songbirds.  We conduct an analysis of chaffinch *(Fringilla coelebs)* (coded `c` in the data file), but similar results would arise with the other species.
+
+Begin by reading the flat file in a comma delimited format. Note the URL for the data file is very long, double check that you can read the URL including the Github token.
+
+```{r dataread}
+URLpart1 <- "https://raw.githubusercontent.com/distanceexamples/Distance-multispecies/main/montrave-line.csv"
+URLpart2 <- "?token=GHSAT0AAAAAABP6QDHAQ677QTIJEKSK2WYEYWG4EYA"
+birds <- read.csv(file=paste0(URLpart1, URLpart2))
+```
+
+# Survey design
+
+Buckland's design consisted of visiting each of the 19 transects in his study twice. To examine some of the errors that can arise from improper analysis, I choose to treat the two visits as `strata` for the express purpose of generating stratum (visit) -specific density estimates. Density estimates reported in @Buckland2006 are in units of birds $\cdot hectare^{-1}$.
+
+```{r organise}
+birds$Region.Label <- birds$visit
+cu <- convert_units("meter", "kilometer", "hectare")
+```
+
+# Analysis of only one species (incorrectly)
+
+The direct approach to producing a density estimate for the chaffinch would be to subset the original data frame and use the species-specific data frame for analysis.  Begin by performing the subset operation.
+
+```{r subset}
+chaf <- birds[birds$species=="c", ]
+```
+
+When the data are subset, the integrity of the survey design is not preserved.  A simple frequency table of the species-specific data frame flags up a number of transect/visit combinations where no chaffinches were detected.  The result is that the subset data frame suggests 3 of the 19 transects lacked chaffinch detections on the first visit and one of the 19 transects lacked chaffinch detections on the second visit. This revelation, in itself, causes no problems for our estimate of density of chaffinches. 
+
+```{r missingrows}
+detects <- table(chaf$Sample.Label, chaf$visit)
+detects <- as.data.frame(detects)
+names(detects) <- c("Transect", "Visit", "Detections")
+detects$Detections <- cell_spec(detects$Detections, 
+                          background = ifelse(detects$Detections==0, "red", "white"))
+knitr::kable(detects, escape=FALSE) %>%
+  kable_paper(full_width=FALSE)
+  
+```
+
+However, there is a problem hidden within the table above.  Transect 12 does not appear in the table because there were no detections of chaffinches on *either* visit.  Consequently, there were 4 transects without chaffinches on the first visit and 2 transects without chaffinches on the second visit, rather than the 3 transects and 1 transect you might mistakenly conclude do not have chaffinch detections if you relied completely upon the table.
+
+Let's see what the `ds()` function thinks about the survey effort using information from the species-specific data frame.
+
+```{r incorrect-result}
+chaf.wrong <- ds(chaf, key="hn", convert_units = cu, truncation=95, formula = ~Region.Label)
+knitr::kable(chaf.wrong$dht$individuals$summary) %>%
+  kable_paper(full_width=FALSE) %>%
+  column_spec(6, background="salmon") %>%
+  column_spec(7, background="steelblue")
+```
+
+Examine the column labelled `k` (the number of transects) for each of the visits. Rather than the 19 transects that were surveyed on each visit, the `ds()` function erroneously believes there were only 15 transects surveyed on the first visit and 17 transects surveyed on the second visit.
+
+Note also the number of detections per kilometer; roughly 9 on the first visit and 7.7 on the second visit.  These encounter rates exclude kilometers of effort on transects where there were no detections.  We will return to this comparison later.
+
+# Use explicit data hierarchy
+
+Additional arguments can be passed to `ds()` to resolve this problem.  Consulting the `ds()` documentation
+
+:::{.callout-warning collapse=false appearance='default' icon=true}
+## Help file for `ds`
+- region_table	data.frame with two columns:
+  - Region.Label label for the region
+  - Area area of the region
+  - region_table has one row for each stratum. If there is no stratification then region_table has one entry with Area corresponding to the total survey area. If Area is omitted density estimates only are produced.
+- sample_table	data.frame mapping the regions to the samples (i.e. transects). There are three columns:
+  - Sample.Label label for the sample
+  - Region.Label label for the region that the sample belongs to.
+  - Effort the effort expended in that sample (e.g. transect length).
+:::
+
+This analysis that produces erroneous results can be remedied by explicitly letting the `ds()` function know about the study design; specifically, how many strata and the number of transects within each stratum (and associated transect lengths).
+
+Construct the `region table` and `sample table` showing the two strata with equal areas and each labelled transect (of given length) is repeated two times.
+
+```{r buildtables}
+birds.regiontable <- data.frame(Region.Label=as.factor(c(1,2)), Area=c(33.2,33.2))
+birds.sampletable <- data.frame(Region.Label=as.factor(rep(c(1,2), each=19)),
+                                Sample.Label=rep(1:19, times=2),
+                                Effort=c(0.208, 0.401, 0.401, 0.299, 0.350,
+                                         0.401, 0.393, 0.405, 0.385, 0.204,
+                                         0.039, 0.047, 0.204, 0.271, 0.236,
+                                         0.189, 0.177, 0.200, 0.020))
+```
+
+# Simple detection function model
+
+The chaffinch analysis is performed again, this time supplying the `region_table` and `sample_table` information to `ds()`.  The correct number of transects (19) sampled on both visits (even though chaffinch was not detected on 4 transects on visit 1 and 2 transects on visit 2) is now recognised.  Hence, the use of `region table` and `sample table` **solves the problem** of effort miscalculation if a species is not detected on all transects.
+
+```{r truncate}
+tr <- 95   # as per Buckland (2006)
+onlycf <- ds(data=birds[birds$species=="c", ], 
+             region_table = birds.regiontable,
+             sample_table = birds.sampletable,
+             trunc=tr, convert_units=cu, key="hn", formula = ~Region.Label)
+knitr::kable(onlycf$dht$individuals$summary) %>%
+  kable_paper(full_width=FALSE) %>%
+  column_spec(6, background="salmon") %>%
+  column_spec(7, background="steelblue")
+```
+
+# Consequence of incorrect analysis
+
+To drive home the consequence of failing to properly specify the survey effort, contrast the encounter rate for the two visits from the incorrect calculations above (9.0 and 7.7 respectively), with the correct calculation (8.1 and 7.0 respectively).  The number of transects is incorrect with the knock-on effect of effort being incorrect.  If effort is incorrect then so too is covered area.  
+The ripple effect from incomplete information about the survey design results in positively biased estimates of density.
+
+# References

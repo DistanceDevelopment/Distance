@@ -1,0 +1,147 @@
+---
+title: "Variance estimation"
+description: |
+  Variance estimation using bootstrap resampling.
+author:
+  - name: Eric Rexstad 
+    url: http://distancesampling.org
+    affiliation: CREEM, Univ of St Andrews
+    affiliation_url: https://creem.st-andrews.ac.uk
+date: "`r format(Sys.time(), '%B %Y')`"
+output: 
+  bookdown::html_document2:
+    number_sections: false
+    toc: true
+    toc_depth: 2
+    base_format: rmarkdown::html_vignette
+pkgdown:
+  as_is: true  
+bibliography: variance.bib
+csl: ../apa.csl
+vignette: >
+  %\VignetteIndexEntry{Variance estimation}
+  %\VignetteEngine{knitr::rmarkdown}
+  \usepackage[utf8]{inputenc}
+---
+
+```{r include=FALSE}
+knitr::opts_chunk$set(eval=TRUE, echo=TRUE, message=FALSE, warnings=FALSE, progress=FALSE)
+```
+
+Continuing with the Montrave winter wren line transect data from the line transect vignette, we focus upon producing robust estimates of precision in our point estimates of abundance and density.  The analysis in `R` [@r_core_team_r_2019] makes use of the `Distance` package [@miller_distance_2019].
+
+# Objectives
+
+- Estimate precision in the standard manner
+- Use the bootstrap to estimate precision
+- Incorporate model uncertainty in our estimates of precision
+
+# Survey data
+
+The R workspace `wren_lt` contains detections of winter wrens from the line transect surveys of @Buckland2006.
+
+```{r}
+library(Distance)
+data(wren_lt)
+```
+
+The function `names()` allows you to see the names of the columns of the data frame `wren_lt`.  Definitions of those fields were provided in the [line transect vignette](https://examples.distancesampling.org/Distance-lines/linetransects.html). 
+
+The effort, or transect length has been adjusted to recognise each transect is walked twice.
+
+```{r}
+conversion.factor <- convert_units("meter", "kilometer", "hectare")
+```
+
+# Fitting a suitable detection function
+
+Rather than refitting models used in the line transect vignette, we move directly to the model selected by @Buckland2006.
+
+```{r}
+wren.unif.cos <- ds(wren_lt, key="unif", adjustment="cos",
+                  convert_units=conversion.factor)
+```
+
+Based upon experience in the field, the uniform cosine model was used for inference.
+
+# Estimation of precision
+
+Looking at the density estimates from the uniform cosine model
+
+```{r}
+print(wren.unif.cos$dht$individuals$D)
+```
+
+The coefficient of variation (CV) is `r round(wren.unif.cos$dht$indiv$D$cv,3)`, and confidence interval bounds are (`r round(wren.unif.cos$dht$indiv$D$lcl,2)` - `r round(wren.unif.cos$dht$indiv$D$ucl,2)`) birds per hectare.  The coefficient of variation is based upon a delta-method approximation of the uncertainty in both the parameters of the detection function and the variability in encounter rates between transects.
+
+$$[CV(\hat{D})]^2 = [CV(\frac{n}{L})]^2 + [CV(P_a)]^2$$
+where
+
+- $n$ is number of detections
+- $L$ is total effort
+- $P_a$ is probability of detection given a bird is within the covered region.
+
+These confidence interval bounds assume the sampling distribution of $\hat{D}$ is log-normal [@buckland2015distance, Section 6.2.1]. 
+
+## Bootstrap estimates of precision
+
+Rather than relying upon the delta-method approximation that assumes independence between uncertainty in the detection function and variability in encounter rate, a bootstrap procedure can be employed.  Resampling with replacement of the transects produces replicate samples with which a sampling distribution of $\hat{D}$ is approximated.  From that sampling distribution, the percentile method is used to produce confidence interval bounds respecting the shape of the sampling distribution [@buckland2015distance, Section 6.3.1.2].
+
+The function `bootdht_Nhat_summarize` is included in the `Distance` package.  It is used to extract information from the object created by `bootdht`.  I will modify it slightly so as to extract the density estimates rather than the abundance estimates.
+
+```{r}
+bootdht_Dhat_summarize <- function(ests, fit) {
+  return(data.frame(D=ests$individuals$D$Estimate))
+}
+```
+
+After the summary function is defined, the bootstrap procedure can be performed.  Arguments here are the name of the fitted object, the object containing the data, conversion factor and number of bootstrap replicates.  Here, I use the `cores=` argument to use multiple cores to process the bootstraps in parallel.  If you do not have this many cores in your computer, you will need to reduce/remove the argument.
+
+```{r, message=FALSE, results='hide'}
+nboots <- 300
+est.boot <- bootdht(model=wren.unif.cos, flatfile=wren_lt,
+                    summary_fun=bootdht_Dhat_summarize,
+                    convert_units=conversion.factor, nboot=nboots, cores=10)
+```
+
+The object `est.boot` contains a data frame with two columns consisting of $\hat{D}$ as specified in `bootdht_Dhat_summarize`.  This data frame can be processed to produce a histogram (Fig. \@ref(fig:single)) representing the sampling distribution of the estimated parameters as well as the percentile confidence interval bounds.
+
+```{r, single, fig.dim=c(7,5), fig.cap="Sampling distribution of $\\hat{D}$ approximated from bootstrap."}
+alpha <- 0.05
+(bootci <- quantile(est.boot$D, probs = c(alpha/2, 1-alpha/2), na.rm=TRUE))
+hist(est.boot$D, nc=30,
+     main="Distribution of bootstrap estimates\nwithout model uncertainty",
+     xlab="Estimated density")
+abline(v=bootci, lwd=2, lty=2)
+```
+
+# Incorporating model uncertainty in precision estimates
+
+The argument `model` in `bootdht` can be a single model as shown above, or it can consist of a list of models.  In the later instance, all models in the list are fitted to each bootstrap replicate and model selection based on AIC is performed for each replicate.  The consequence is that model uncertainty is incorporated into the resulting estimate of precision (Fig. \@ref(fig:triple)).
+
+```{r, message=FALSE, results='hide'}
+wren.hn <- ds(wren_lt, key="hn", adjustment="cos",
+                  convert_units=conversion.factor)
+wren.hr.poly <- ds(wren_lt, key="hr", adjustment="poly",
+                  convert_units=conversion.factor)
+est.boot.uncert <- bootdht(model=list(wren.hn, wren.hr.poly, wren.unif.cos), 
+                           flatfile=wren_lt,
+                           summary_fun=bootdht_Dhat_summarize,
+                           convert_units=conversion.factor, nboot=nboots, cores=10)
+```
+
+```{r, triple, fig.dim=c(7,5), fig.cap="Sampling distribution of $\\hat{D}$ approximated from bootstrap including model uncertainty."}
+(modselci <- quantile(est.boot.uncert$D, probs = c(alpha/2, 1-alpha/2), na.rm=TRUE))
+hist(est.boot.uncert$D, nc=30, 
+     main="Distribution of bootstrap estimates\nincluding model uncertainty",
+     xlab="Estimated density")
+abline(v=modselci, lwd=2, lty=2)
+```
+
+# Comments
+
+Recognise that producing bootstrap estimates of precision is computer-intensive.  In this example we have created only `r nboots` bootstrap replicates in the interest of computation time.  For inference you wish to draw, you will likely increase the number of bootstrap replicates to 999.
+
+For this data set, the bootstrap estimate of precision is greater than the delta-method approximation precision (based on confidence interval width).  In addition, incorporating model uncertainty into the estimate of precision for density changes the precision estimate very little.  The confidence interval width without incorporating model uncertainty is `r (a<-round(unname(bootci)[2]-unname(bootci)[1],3))` while the confidence interval including model uncertainty is `r (b<-round(unname(modselci)[2]-unname(modselci)[1],3))`.  This represents a change of `r round((b-a)/a*100)`\% due to uncertainty regarding the best model for these data.
+
+# References

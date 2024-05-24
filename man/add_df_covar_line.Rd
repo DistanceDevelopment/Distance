@@ -49,7 +49,7 @@ This function is located in the \code{mrds} package but the
 documentation is provided here for easy access.
 }
 \examples{
-\dontrun{
+
 # example using a model for the minke data
 data(minke)
 # fit a model
@@ -71,7 +71,7 @@ result <- ds(amakihi, truncation=150, transect="point", formula=~OBs)
 plot(result, showpoints=FALSE, pdf=TRUE)
 add_df_covar_line(result,
                   data.frame(OBs=na.omit(unique(amakihi$OBs))), pdf=TRUE)
-}
+
 }
 \author{
 David L Miller

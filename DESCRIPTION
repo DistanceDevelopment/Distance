@@ -1,9 +1,18 @@
 Package: Distance
-Maintainer: Laura Marshall <lhm@st-andrews.ac.uk>
 License: GPL (>= 2)
 Title: Distance Sampling Detection Function and Abundance Estimation
 LazyLoad: yes
-Author: David Lawrence Miller, T.J. Clark-Wolf
+Authors@R: 
+  c(person(given="David Laurence",
+           family="Miller",
+           role="aut"),
+    person(given="T.J.",
+           family="Clark-Wolf",
+           role="aut"),
+    person(given="Laura",
+           family="Marshall",
+           role="cre",
+           email="lhm@st-andrews.ac.uk"))
 Description: A simple way of fitting detection functions to distance sampling
     data for both line and point transects. Adjustment term selection, left and
     right truncation as well as monotonicity constraints and binning are

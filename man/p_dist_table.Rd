@@ -38,7 +38,6 @@ This function is located in the \code{mrds} package but the documentation
 is provided here for easy access.
 }
 \examples{
-\dontrun{
 # example using a model for the minke data
 data(minke)
 # fit a model
@@ -47,7 +46,6 @@ result <- ds(minke, formula=~Region.Label)
 p_dist_table(result)
 # with proportions
 p_dist_table(result, proportion=TRUE)
-}
 }
 \references{
 Marques, F.F.C. and S.T. Buckland. 2004. Covariate models for
