@@ -100,6 +100,8 @@
 #' @param method optimization method to use (any method usable by
 #' [`optim`][stats::optim] or [`optimx`][optimx::optimx]). Defaults to
 #' `"nlminb"`.
+#' @param mono_method optimization method to use when monotonicity is enforced. 
+#' Can be either `slsqp` or `solnp`. Defaults to `slsqp`.
 #' @param debug_level print debugging output. `0`=none, `1-3` increasing levels
 #' of debugging output.
 #' @param quiet suppress non-essential messages (useful for bootstraps etc).
