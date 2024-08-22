@@ -334,7 +334,9 @@ ds <- function(data, truncation=ifelse(is.null(cutpoints),
              monotonicity=ifelse(formula==~1, "strict", "none"),
              region_table=NULL, sample_table=NULL, obs_table=NULL,
              convert_units=1, er_var=ifelse(transect=="line", "R2", "P2"),
-             method="nlminb", quiet=FALSE, debug_level=0,
+             method="nlminb", 
+             mono_method = "slsqp", # FTP: new slot to specify the constraint R solver
+             quiet=FALSE, debug_level=0,
              initial_values=NULL, max_adjustments=5, er_method=2, dht_se=TRUE,
              optimizer = "both",
              winebin = NULL,
@@ -521,6 +523,7 @@ ds <- function(data, truncation=ifelse(is.null(cutpoints),
 
   # set up the control options
   control <- list(optimx.method=method, showit=debug_level,
+                  mono.method = mono_method, ## FTP: again, this is needed
                   optimizer = optimizer, winebin = winebin)
 
   # if initial values were supplied, pass them on
@@ -719,8 +722,8 @@ ds <- function(data, truncation=ifelse(is.null(cutpoints),
   }
 
   # check to see if resulting function is monotonic
-  mono.chk <- mrds::check.mono(model, n.pts=20)
-
+  mono.chk <- mrds::check.mono(model, n.pts=10) # FTP: n.pts was 20, now 10 to match the solver in mrds.
+  
   ## Now calculate abundance/density using dht()
   if(!is.null(region_table) & !is.null(sample_table)){
     # if obs_table is not supplied, then data must have the Region.Label and
