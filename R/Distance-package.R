@@ -16,9 +16,9 @@
 #' @name Distance-package
 #' @import mrds
 #' @aliases Distance-package Distance
-#' @docType package
 #' @author David L. Miller <dave@@ninepointeightone.net>
 #' @references
+#' "_PACKAGE"
 #'
 #' Key References:
 #'
