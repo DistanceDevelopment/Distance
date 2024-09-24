@@ -39,6 +39,14 @@ function. In: Advanced Distance Sampling, eds. S.T. Buckland,
 D.R.Anderson, K.P. Burnham, J.L. Laake, D.L. Borchers, and L. Thomas.
 Oxford University Press.
 }
+\seealso{
+Useful links:
+\itemize{
+  \item \url{https://github.com/DistanceDevelopment/Distance/}
+  \item Report bugs at \url{https://github.com/DistanceDevelopment/Distance/issues}
+}
+
+}
 \author{
 David L. Miller \href{mailto:dave@ninepointeightone.net}{dave@ninepointeightone.net}
 }
