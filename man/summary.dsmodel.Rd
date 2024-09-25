@@ -20,7 +20,7 @@ parameters, model selection criterion, and optionally abundance in the
 covered (sampled) region and its standard error.
 }
 \note{
-This function just calls \code{\link{summary.ds}} and \code{\link{dht}},
+This function just calls \code{\link[mrds]{summary.ds}} and \code{\link[mrds]{dht}},
 collates and prints the results in a nice way.
 }
 \author{

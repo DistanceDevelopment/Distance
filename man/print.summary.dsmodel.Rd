@@ -20,7 +20,7 @@ detection function parameters, model selection criterion, and optionally
 abundance in the covered (sampled) region and its standard error.
 }
 \seealso{
-\code{\link{summary.ds}}
+\code{\link[mrds]{summary.ds}}
 }
 \author{
 David L. Miller and Jeff Laake
