@@ -257,9 +257,9 @@
 #' density estimates made with the `Area` column present.
 #'
 #' @author David L. Miller
-#' @seealso [`flatfile`][flatfile], [`AIC.ds`][AIC.ds], [`ds.gof`][ds.gof],
-#' [`p_dist_table`][p_dist_table], [`plot.ds`][plot.ds],
-#' [`add_df_covar_line`][add_df_covar_line]
+#' @seealso \code{\link{flatfile}}, \code{\link[mrds]{AIC.ds}}, 
+#' \code{\link{ds.gof}}, \code{\link{p_dist_table}}, 
+#' \code{\link[mrds]{plot.ds}}, \code{\link{add_df_covar_line}}
 #' @export
 #'
 #' @importFrom stats quantile as.formula

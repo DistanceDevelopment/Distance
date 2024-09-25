@@ -9,7 +9,7 @@
 #' @param \dots unspecified and unused arguments for S3 consistency
 #' @return Nothing, just prints the summary.
 #' @author David L. Miller and Jeff Laake
-#' @seealso [`summary.ds`][summary.ds]
+#' @seealso \code{\link[mrds]{summary.ds}}
 #' @keywords utility
 #' @export
 print.summary.dsmodel <- function (x,...){

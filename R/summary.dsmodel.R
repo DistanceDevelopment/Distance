@@ -8,7 +8,7 @@
 #' @param object a distance analysis
 #' @param \dots unspecified and unused arguments for S3 consistency
 #' @return list of extracted and summarized objects
-#' @note This function just calls [`summary.ds`][summary.ds] and [`dht`][dht],
+#' @note This function just calls \code{\link[mrds]{summary.ds}} and \code{\link[mrds]{dht}},
 #' collates and prints the results in a nice way.
 #' @author David L. Miller
 #' @keywords utility
