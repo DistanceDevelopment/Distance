@@ -18,6 +18,8 @@ Examples of distance sampling analyses are available at
 
 For help with distance sampling and this package, there is a Google Group
 \url{https://groups.google.com/forum/#!forum/distance-sampling}.
+
+Bugs can be reported at \url{https://github.com/DistanceDevelopment/Distance/issues}.
 }
 \references{
 "_PACKAGE"
