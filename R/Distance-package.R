@@ -12,6 +12,8 @@
 #'
 #' For help with distance sampling and this package, there is a Google Group
 #' <https://groups.google.com/forum/#!forum/distance-sampling>.
+#' 
+#' Bugs can be reported at <https://github.com/DistanceDevelopment/Distance/issues>.
 #'
 #' @name Distance-package
 #' @import mrds
