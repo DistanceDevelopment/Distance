@@ -24,7 +24,7 @@ BugReports: https://github.com/DistanceDevelopment/Distance/issues
 Language: en-GB
 Depends:
     R (>= 3.5.0),
-    mrds (>= 2.3.0)
+    mrds (>= 3.0.0)
 Imports:
     dplyr,
     methods,
