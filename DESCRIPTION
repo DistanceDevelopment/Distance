@@ -3,7 +3,6 @@ Maintainer: Laura Marshall <lhm@st-andrews.ac.uk>
 License: GPL (>= 2)
 Title: Distance Sampling Detection Function and Abundance Estimation
 LazyLoad: yes
-Author: David Lawrence Miller, T.J. Clark-Wolf
 Authors@R: c(
   person("Laura", "Marshall", email = "lhm@st-andrews.ac.uk" , role = "cre"),
   person("David", "Miller", email = "dave@ninepointeightone.net", role = "aut"),
