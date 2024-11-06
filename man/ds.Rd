@@ -25,6 +25,7 @@ ds(
   convert_units = 1,
   er_var = ifelse(transect == "line", "R2", "P2"),
   method = "nlminb",
+  mono_method = "slsqp",
   quiet = FALSE,
   debug_level = 0,
   initial_values = NULL,
@@ -162,6 +163,9 @@ complex options are required.}
 \item{method}{optimization method to use (any method usable by
 \code{\link[stats:optim]{optim}} or \code{\link[optimx:optimx]{optimx}}). Defaults to
 \code{"nlminb"}.}
+
+\item{mono_method}{optimization method to use when monotonicity is enforced.
+Can be either \code{slsqp} or \code{solnp}. Defaults to \code{slsqp}.}
 
 \item{quiet}{suppress non-essential messages (useful for bootstraps etc).
 Default value \code{FALSE}.}
@@ -416,9 +420,9 @@ and Thomas, L. (2004). Advanced Distance Sampling. Oxford University Press.
 Oxford, UK.
 }
 \seealso{
-\code{\link{flatfile}}, \code{\link{AIC.ds}}, \code{\link{ds.gof}},
-\code{\link{p_dist_table}}, \code{\link{plot.ds}},
-\code{\link{add_df_covar_line}}
+\code{\link{flatfile}}, \code{\link[mrds]{AIC.ds}},
+\code{\link{ds.gof}}, \code{\link{p_dist_table}},
+\code{\link[mrds]{plot.ds}}, \code{\link{add_df_covar_line}}
 }
 \author{
 David L. Miller

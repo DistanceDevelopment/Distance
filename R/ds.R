@@ -100,6 +100,8 @@
 #' @param method optimization method to use (any method usable by
 #' [`optim`][stats::optim] or [`optimx`][optimx::optimx]). Defaults to
 #' `"nlminb"`.
+#' @param mono_method optimization method to use when monotonicity is enforced. 
+#' Can be either `slsqp` or `solnp`. Defaults to `slsqp`.
 #' @param debug_level print debugging output. `0`=none, `1-3` increasing levels
 #' of debugging output.
 #' @param quiet suppress non-essential messages (useful for bootstraps etc).
@@ -255,9 +257,9 @@
 #' density estimates made with the `Area` column present.
 #'
 #' @author David L. Miller
-#' @seealso [`flatfile`][flatfile], [`AIC.ds`][AIC.ds], [`ds.gof`][ds.gof],
-#' [`p_dist_table`][p_dist_table], [`plot.ds`][plot.ds],
-#' [`add_df_covar_line`][add_df_covar_line]
+#' @seealso \code{\link{flatfile}}, \code{\link[mrds]{AIC.ds}}, 
+#' \code{\link{ds.gof}}, \code{\link{p_dist_table}}, 
+#' \code{\link[mrds]{plot.ds}}, \code{\link{add_df_covar_line}}
 #' @export
 #'
 #' @importFrom stats quantile as.formula
@@ -334,7 +336,9 @@ ds <- function(data, truncation=ifelse(is.null(cutpoints),
              monotonicity=ifelse(formula==~1, "strict", "none"),
              region_table=NULL, sample_table=NULL, obs_table=NULL,
              convert_units=1, er_var=ifelse(transect=="line", "R2", "P2"),
-             method="nlminb", quiet=FALSE, debug_level=0,
+             method="nlminb", 
+             mono_method = "slsqp", # FTP: new slot to specify the constraint R solver
+             quiet=FALSE, debug_level=0,
              initial_values=NULL, max_adjustments=5, er_method=2, dht_se=TRUE,
              optimizer = "both",
              winebin = NULL,
@@ -521,6 +525,7 @@ ds <- function(data, truncation=ifelse(is.null(cutpoints),
 
   # set up the control options
   control <- list(optimx.method=method, showit=debug_level,
+                  mono.method = mono_method, ## FTP: again, this is needed
                   optimizer = optimizer, winebin = winebin)
 
   # if initial values were supplied, pass them on
@@ -719,8 +724,8 @@ ds <- function(data, truncation=ifelse(is.null(cutpoints),
   }
 
   # check to see if resulting function is monotonic
-  mono.chk <- mrds::check.mono(model, n.pts=20)
-
+  mono.chk <- mrds::check.mono(model, n.pts=10) # FTP: n.pts was 20, now 10 to match the solver in mrds.
+  
   ## Now calculate abundance/density using dht()
   if(!is.null(region_table) & !is.null(sample_table)){
     # if obs_table is not supplied, then data must have the Region.Label and

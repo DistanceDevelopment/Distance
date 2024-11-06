@@ -24,12 +24,12 @@ test_that("Error on different truncation distance", {
   out <- read.table(text="
 \\texttt{t4}                                              Half-normal      ~1    0.7789695         0.5842744       0.04637627         0.000000
 \\texttt{t42}                                             Half-normal      ~1    0.7789695         0.5842744       0.04637627         0.000000
-\\texttt{t4hr} \"Hazard-rate with cosine adjustment term of order 2\"      ~1    0.8170780         0.5556728       0.07197555         2.501712
+\\texttt{t4hr} \"Hazard-rate with cosine adjustment term of order 2\"      ~1    0.8162846         0.5543305       0.07156778         2.454826
 ", header=FALSE)
   names(out) <- c("Model", "Key function", "Formula", "C-vM p-value",
                 "$\\hat{P_a}$", "se($\\hat{P_a}$)", "$\\Delta$AIC")
   expect_equal(summarize_ds_models(t4, t42, t4hr), out, fixed=TRUE, tol=par.tol)
-
+  
   # right truncation different
   expect_error(summarize_ds_models(t3, t4))
   # left
