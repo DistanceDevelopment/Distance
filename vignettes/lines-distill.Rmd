@@ -32,7 +32,6 @@ In this exercise, we use `R` [@r_core_team_r_2019] and the `Distance` package [@
 
 # Objectives
 
-- Import a data file
 - Fit a basic detection function using the `ds` function
 - Plot and examine a detection function 
 - Fit different detection function forms.
