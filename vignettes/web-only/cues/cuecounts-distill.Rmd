@@ -40,7 +40,7 @@ In this exercise, we use `R` [@r_core_team_r_2019] and the `Distance` package [@
 Each of the 32 point count stations were visited twice.  During each visit, the observer recorded distances to all songs detected during a 5-minute sampling period (Figure \@ref(fig:fig)). 
 
 ```{r fig, echo=FALSE, fig.cap="Montrave study area; white circles are point count stations."}
-knitr::include_graphics("montrave.jpg")
+knitr::include_graphics("montrave.JPG")
 ```
 
 In addition, 43 male winter wrens were observed and their rate of song production was measured.  The mean cue rate, along with its standard error (between individuals) was calculated and included in the data set to serve as a multiplier.

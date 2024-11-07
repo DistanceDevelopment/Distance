@@ -42,7 +42,7 @@ In this exercise, we use `R` [@r_core_team_r_2019] and the `Distance` package [@
 Nineteen line transects were walked twice (Figure \@ref(fig:fig)). 
 
 ```{r fig, echo=FALSE, fig.cap="Montrave study area; diagonal lines indicate line transects walked to generate these data.", outwidth='100%', eval=TRUE}
-knitr::include_graphics("montrave.jpg")
+knitr::include_graphics("montrave.JPG")
 ```
 
 The fields of the `wren_lt` data set are:
