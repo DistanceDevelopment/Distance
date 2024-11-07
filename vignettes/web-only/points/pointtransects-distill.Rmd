@@ -30,11 +30,10 @@ knitr::opts_chunk$set(eval=TRUE, echo=TRUE, message=FALSE, warnings=FALSE)
 
 In this exercise, we use `R` [@r_core_team_r_2019] and the `Distance` package [@miller_distance_2019] to fit different detection function models to point transect survey data of savanna sparrows *(Passerculus sandwichensis)* density and abundance.  These data were part of a study examining the effect of livestock grazing upon vegetation structure and consequently upon the avian community described by Knopf et al. [-@knopf_guild_1988].
 
-Steps in this analysis are similar to the steps taken in the [line transect analysis of winter wren data](https://examples.distancesampling.org/Distance-lines/lines-distill.html).
+Steps in this analysis are similar to the steps taken in the [line transect analysis of winter wren data](https://distancedevelopment.github.io/docs/articles/lines-distill.html).
 
 # Objectives
 
-- Import a data file
 - Fit a basic detection function using the `ds` function
 - Plot and examine a detection function 
 - Fit different detection function forms.
@@ -44,7 +43,7 @@ Steps in this analysis are similar to the steps taken in the [line transect anal
 A total of 373 point transects were placed in three pastures in the Arapaho National Wildlife Refuge in Colorado (Figure \@ref(fig:fig)).  Elevation of these pastures was ~2500m.  We will not deal with pasture-level analysis of these data in this vignette and will alter the data to remove the strata designations.
 
 ```{r fig, echo=FALSE, fig.dim=c(7,5), fig.cap="Summer grazed pastures along Illinois River Arapaho National Wildlife Refuge, Colorado.  Figure from [@knopf_guild_1988]."}
-knitr::include_graphics("arapaho.jpg")
+knitr::include_graphics("arapaho.JPG")
 ```
 
 
