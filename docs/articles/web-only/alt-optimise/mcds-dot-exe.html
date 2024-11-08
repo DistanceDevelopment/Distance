@@ -5,24 +5,25 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<meta name="description" content="Examples demonstrating the use of the mcds.exe alternative optimization engine for fitting single platform detection functions in the Distance and mrds packages.
-">
 <title>Alternative optimization engine for fitting detection functions • Distance</title>
 <script src="../../../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="../../../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
 <script src="../../../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../../../deps/Roboto-0.4.9/font.css" rel="stylesheet">
-<!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
-<!-- bootstrap-toc --><script src="https://cdn.jsdelivr.net/gh/afeld/bootstrap-toc@v1.0.1/dist/bootstrap-toc.min.js" integrity="sha256-4veVQbu7//Lk5TSmc7YV48MxtMy98e26cf5MrgZYnwo=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.11/clipboard.min.js" integrity="sha512-7O5pXpc0oCRrxk8RUfDYFgn0nO1t+jLuIOQdOMRp4APB7uZ4vSjspzp5y6YDtDs4VzUSTbWzBFZ/LKJhnyFOKw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script><!-- search --><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- pkgdown --><script src="../../../pkgdown.js"></script><meta property="og:title" content="Alternative optimization engine for fitting detection functions">
+<link href="../../../deps/font-awesome-6.4.2/css/all.min.css" rel="stylesheet">
+<link href="../../../deps/font-awesome-6.4.2/css/v4-shims.min.css" rel="stylesheet">
+<script src="../../../deps/headroom-0.11.0/headroom.min.js"></script><script src="../../../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../../../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../../../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../../../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../../../deps/search-1.0.0/fuse.min.js"></script><script src="../../../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../../../pkgdown.js"></script><meta property="og:title" content="Alternative optimization engine for fitting detection functions">
+<meta name="description" content="Examples demonstrating the use of the mcds.exe alternative optimization engine for fitting single platform detection functions in the Distance and mrds packages.
+">
 <meta property="og:description" content="Examples demonstrating the use of the mcds.exe alternative optimization engine for fitting single platform detection functions in the Distance and mrds packages.
 ">
-<!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
-<script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
-<script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
-<![endif]-->
 </head>
 <body>
 <p>
+
+
+
+
+
 
 
 
@@ -32,79 +33,62 @@
 
   </p>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
-    
 
-    <nav class="navbar fixed-top navbar-dark navbar-expand-lg bg-primary" data-bs-theme="dark"><div class="container">
-    
+
+    <nav class="navbar navbar-expand-lg fixed-top bg-primary" data-bs-theme="dark" aria-label="Site navigation"><div class="container">
+
     <a class="navbar-brand me-2" href="../../../index.html">Distance</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0.9</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.0.0</small>
 
-    
+
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
 
     <div id="navbar" class="collapse navbar-collapse ms-3">
       <ul class="navbar-nav me-auto">
-<li class="nav-item">
-  <a class="nav-link" href="../../../reference/index.html">Function reference</a>
-</li>
+<li class="nav-item"><a class="nav-link" href="../../../reference/index.html">Function reference</a></li>
 <li class="active nav-item dropdown">
-  <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
-  <div class="dropdown-menu" aria-labelledby="dropdown-articles">
-    <a class="dropdown-item" href="../../../articles/lines-distill.html">Line transects</a>
-    <a class="dropdown-item" href="../../../articles/covariates-distill.html">Covariates in detection</a>
-    <a class="dropdown-item" href="../../../articles/species-covariate-distill.html">Species as a covariate</a>
-    <div class="dropdown-divider"></div>
-    <h6 class="dropdown-header" data-toc-skip>Only for the website</h6>
-    <a class="dropdown-item" href="../../../articles/web-only/points/pointtransects-distill.html">Point transects</a>
-    <a class="dropdown-item" href="../../../articles/web-only/groupsize/Remedy-size-bias-for-dolphin-surveys.html">Size bias remedy</a>
-    <a class="dropdown-item" href="../../../articles/web-only/strata/strata-distill.html">Stratification</a>
-    <a class="dropdown-item" href="../../../articles/web-only/differences/differences.html">Detecting difference in density between strata</a>
-    <a class="dropdown-item" href="../../../articles/web-only/variance/variance-distill.html">Variance estimation with bootstrap</a>
-    <a class="dropdown-item" href="../../../articles/web-only/cues/cuecounts-distill.html">Cue count surveys</a>
-    <a class="dropdown-item" href="../../../articles/web-only/multipliers/multipliers-distill.html">Indirect surveys</a>
-    <a class="dropdown-item" href="../../../articles/web-only/multispecies/multispecies-multioccasion-analysis.html">Take care when subsetting multispecies data sets</a>
-    <a class="dropdown-item" href="../../../articles/web-only/CTDS/camera-distill.html">Camera trap distance sampling</a>
-    <a class="dropdown-item" href="../../../articles/web-only/alt-optimise/mcds-dot-exe.html">Alternative optimiser</a>
-  </div>
+  <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
+  <ul class="dropdown-menu" aria-labelledby="dropdown-articles">
+<li><a class="dropdown-item" href="../../../articles/lines-distill.html">Line transects</a></li>
+    <li><a class="dropdown-item" href="../../../articles/covariates-distill.html">Covariates in detection</a></li>
+    <li><a class="dropdown-item" href="../../../articles/species-covariate-distill.html">Species as a covariate</a></li>
+    <li><hr class="dropdown-divider"></li>
+    <li><h6 class="dropdown-header" data-toc-skip>Only for the website</h6></li>
+    <li><a class="dropdown-item" href="../../../articles/web-only/points/pointtransects-distill.html">Point transects</a></li>
+    <li><a class="dropdown-item" href="../../../articles/web-only/groupsize/Remedy-size-bias-for-dolphin-surveys.html">Size bias remedy</a></li>
+    <li><a class="dropdown-item" href="../../../articles/web-only/strata/strata-distill.html">Stratification</a></li>
+    <li><a class="dropdown-item" href="../../../articles/web-only/differences/differences.html">Detecting difference in density between strata</a></li>
+    <li><a class="dropdown-item" href="../../../articles/web-only/variance/variance-distill.html">Variance estimation with bootstrap</a></li>
+    <li><a class="dropdown-item" href="../../../articles/web-only/cues/cuecounts-distill.html">Cue count surveys</a></li>
+    <li><a class="dropdown-item" href="../../../articles/web-only/multipliers/multipliers-distill.html">Indirect surveys</a></li>
+    <li><a class="dropdown-item" href="../../../articles/web-only/multispecies/multispecies-multioccasion-analysis.html">Take care when subsetting multispecies data sets</a></li>
+    <li><a class="dropdown-item" href="../../../articles/web-only/CTDS/camera-distill.html">Camera trap distance sampling</a></li>
+    <li><a class="dropdown-item" href="../../../articles/web-only/alt-optimise/mcds-dot-exe.html">Alternative optimiser</a></li>
+  </ul>
 </li>
-<li class="nav-item">
-  <a class="nav-link" href="../../../news/index.html">News</a>
-</li>
+<li class="nav-item"><a class="nav-link" href="../../../news/index.html">News</a></li>
       </ul>
-<form class="form-inline my-2 my-lg-0" role="search">
-        <input type="search" class="form-control me-sm-2" aria-label="Toggle navigation" name="search-input" data-search-index="../../../search.json" id="search-input" placeholder="Search for" autocomplete="off">
-</form>
-
-      <ul class="navbar-nav">
-<li class="nav-item">
-  <a class="external-link nav-link" href="https://twitter.com/distancesamp" aria-label="Twitter">
-    <span class="fa fa-twitter"></span>
-     
-  </a>
-</li>
-<li class="nav-item">
-  <a class="external-link nav-link" href="https://github.com/DistanceDevelopment/Distance/" aria-label="github">
-    <span class="fab fa fab fa-github fa-lg"></span>
-     
-  </a>
-</li>
+<ul class="navbar-nav">
+<li class="nav-item"><a class="external-link nav-link" href="https://twitter.com/distancesamp" aria-label="Twitter"><span class="fa fa-twitter"></span></a></li>
+<li class="nav-item"><a class="external-link nav-link" href="https://github.com/DistanceDevelopment/Distance/" aria-label="GitHub"><span class="fa fab fa-github fa-lg"></span></a></li>
       </ul>
 </div>
 
-    
+
   </div>
 </nav><div class="container template-article">
 
 
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
-      <img src="" class="logo" alt=""><h1>Alternative optimization engine for fitting detection functions</h1>
+
+      <h1>Alternative optimization engine for fitting detection functions</h1>
                         <h4 data-toc-skip class="author">Len Thomas</h4>
             <address class="author_afil">
-      CREEM, Univ of St Andrews<br><h4 data-toc-skip class="date">May 2024</h4>
+      CREEM, Univ of St Andrews<br><h4 data-toc-skip class="date">November 2024</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/DistanceDevelopment/Distance/blob/HEAD/vignettes/web-only/alt-optimise/mcds-dot-exe.Rmd" class="external-link"><code>vignettes/web-only/alt-optimise/mcds-dot-exe.Rmd</code></a></small>
       <div class="d-none name"><code>mcds-dot-exe.Rmd</code></div>
@@ -113,8 +97,8 @@
 
     
     
-<p>Here we demonstrate the use of the alternative optimization engine <code>mcds.exe</code> in the <code>Distance</code> and <code>mrds</code> packages.</p>
-<p>This vignette requires the packages <code>Distance</code> version 1.0.8 or later and <code>mrds</code> version 2.2.9 or later. It is designed for use in the Microsoft Windows operating system – the <code>mcds.exe</code> engine currently only has experimental support for MacOS or Linux.</p>
+<p>Here we demonstrate the use of the alternative optimization engine <code>mcds.exe</code> in the <code>Distance</code> and <code>mrds</code> packages. This engine was introduced with <code>Distance</code> version 1.0.8 and <code>mrds</code> version 2.2.9 to provide an alternative to the built-in optimizer in our <code>R</code> packages – but subsequent improvements in the built-in optimizer implemented in <code>Distance</code> 2.0.0 and <code>mrds</code> 3.0.0 mean that we no longer recommend use of <code>mcds.exe</code>. Nevertheless, the option to use <code>mcds.exe</code> remains open, and may be useful for some users, so we have retained this vignette. We may deprecate the option in future releases.</p>
+<p>Note also that this vignette is designed for use within the Microsoft Windows operating system – the <code>mcds.exe</code> engine only has experimental support for MacOS or Linux (see the <code>MCDS.exe</code> help page within the <code>mrds</code> package.for more information).</p>
 <div class="section level2">
 <h2 id="objectives">Objectives<a class="anchor" aria-label="anchor" href="#objectives"></a>
 </h2>
@@ -132,25 +116,28 @@
 </h2>
 <p>The <code>Distance</code> package is designed to provide a simple way to fit detection functions and estimate abundance using conventional distance sampling methodology (i.e., single observer distance sampling, possibly with covariates, as described by Buckland et al. <span class="citation">(2015)</span>). The main function is <code>ds</code>. Underlying <code>Distance</code> is the package <code>mrds</code> – when the function <code>ds</code> is called it does some pre-processing and then calls the function <code>ddf</code> in the <code>mrds</code> package to do the work of detection function fitting. <code>mrds</code> uses maximum likelihood to fit the specified detection function model to the distance data using a built-in algorithm written in <code>R</code>.</p>
 <p>An alternative method for analyzing distance sampling data is using the Distance for Windows software <span class="citation">(Thomas et al., 2010)</span>. This software also uses maximum liklihood to fit the detection function models, and relies on software written in the programming language FORTRAN to do the fitting. The filename of this software is <code>MCDS.exe</code>.</p>
-<p>In a perfect world, both methods would produce identical results given the same data and model specification, since the likelihood has only one maximum. However, the likelihood surface is sometimes complex, especially when monotonicity constraints are used (which ensures the estimated detection probability is flat or decreasing with increasing distance when adjustment terms are used) or with “overdispersed” or “spiked” data (see Figure 2 in Thomas et al. <span class="citation">(2010)</span>), and so in some (rare) cases one or other piece of software fails to find the maximum. To counteract this, it is possible to run both the <code>R</code>-based optimizer and <code>MCDS.exe</code> from the <code>ds</code> function within the <code>Distance</code> package or the <code>ddf</code> function within <code>mrds</code> package.</p>
-<p>Another motivation for using the <code>MCDS.exe</code> software from within <code>R</code> is that the <code>R</code>-based optimizer is sometimes slow to converge and so using <code>MCDS.exe</code> in place of the <code>R</code>-based optimizer can save significant time, particularly when doing a nonparametric bootstrap for large datasets.</p>
+<p>In a perfect world, both methods would produce identical results given the same data and model specification, since the likelihood has only one maximum. However, the likelihood surface is sometimes complex, especially when monotonicity constraints are used (which ensures the estimated detection probability is flat or decreasing with increasing distance when adjustment terms are used) or with “overdispersed” or “spiked” data (see Figure 2 in Thomas et al. <span class="citation">(2010)</span>), and so in some (rare) cases one or other piece of software fails to find the maximum. Note that in our tests, we have found this to be extremely rare from <code>Distance</code> version 2.0.0 and <code>mrds</code> version 3.0.0 onwards. Nevertheless, to counteract this, it is possible to run both the <code>R</code>-based optimizer and <code>MCDS.exe</code> from the <code>ds</code> function within the <code>Distance</code> package or the <code>ddf</code> function within <code>mrds</code> package.</p>
+<p>Another historical motivation for using the <code>MCDS.exe</code> software from within <code>R</code> was that the <code>R</code>-based optimizer was sometimes slow to converge and so using <code>MCDS.exe</code> in place of the <code>R</code>-based optimizer can then save significant time, particularly when doing a nonparametric bootstrap for large datasets. However, from <code>Distance</code> 2.0.0 and <code>mrds</code> 3.0.0 the <code>R</code>-based optimizer is no longer generally slower.</p>
 <p>This vignette demonstrates how to download and then use the MCDS.exe sofware from within the <code>Distance</code> and <code>mrds</code> packages. For more information, see the <code>MCDS.exe</code> help page within the <code>mrds</code> package.</p>
 </div>
 <div class="section level2">
 <h2 id="downloading-and-verifying-mcds-exe">Downloading and verifying MCDS.exe<a class="anchor" aria-label="anchor" href="#downloading-and-verifying-mcds-exe"></a>
 </h2>
-<p>The program <code>MCDS.exe</code> does not come automatically with the <code>Distance</code> or <code>mrds</code> packages, to avoid violating CRAN rules, so you must first download it from the distance sampling website. You can check whether <code>MCDS.exe</code> is installed already or not by loading the <code>Distance</code> library:</p>
+<p>The program <code>MCDS.exe</code> does not come automatically with the <code>Distance</code> or <code>mrds</code> packages, to avoid violating CRAN rules, so you must first download it from the distance sampling website.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/DistanceDevelopment/Distance/" class="external-link">Distance</a></span><span class="op">)</span></span></code></pre></div>
-<p>If <code>MCDS.exe</code> is not installed, then you will receive the message
-<code>MCDS.exe not detected, single observer analyses will only be run using optimiser in mrds R library. See ?MCDS for details.</code></p>
-<p>In this case, you need to download it from the Distancesampling.org web site:</p>
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/download.file.html" class="external-link">download.file</a></span><span class="op">(</span><span class="st">"http://distancesampling.org/R/MCDS.exe"</span>, <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span>package<span class="op">=</span><span class="st">"mrds"</span><span class="op">)</span>,<span class="st">"/MCDS.exe"</span><span class="op">)</span>, mode <span class="op">=</span> <span class="st">"wb"</span><span class="op">)</span></span></code></pre></div>
-<p>Now if you reload the Distance package, the <code>MCDS.exe not detected</code> message should not be shown:</p>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/detach.html" class="external-link">detach</a></span><span class="op">(</span><span class="st">"package:Distance"</span>, unload <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="co">#Unload Distance package if it's already loaded in R</span></span>
+<span><span class="kw">if</span><span class="op">(</span><span class="st">"Distance"</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/zpackages.html" class="external-link">.packages</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span><span class="op">)</span><span class="op">{</span></span>
+<span>  <span class="kw"><a href="https://rdrr.io/r/base/detach.html" class="external-link">detach</a></span><span class="op">(</span><span class="st">"package:Distance"</span>, unload<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span> </span>
+<span><span class="op">}</span></span>
+<span></span>
+<span><span class="co">#Download MCDS.exe</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/download.file.html" class="external-link">download.file</a></span><span class="op">(</span><span class="st">"http://distancesampling.org/R/MCDS.exe"</span>, <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span>package<span class="op">=</span><span class="st">"mrds"</span><span class="op">)</span>,<span class="st">"/MCDS.exe"</span><span class="op">)</span>, mode <span class="op">=</span> <span class="st">"wb"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co">#Load the Distance package - now it will be able to use MCDS.exe</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/DistanceDevelopment/Distance/" class="external-link">Distance</a></span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">## Loading required package: mrds</span></span></code></pre>
+<pre><code><span><span class="co">## This is mrds 3.0.0</span></span>
+<span><span class="co">## Built: R 4.4.1; ; 2024-10-23 19:10:34 UTC; windows</span></span></code></pre>
 <pre><code><span><span class="co">## </span></span>
 <span><span class="co">## Attaching package: 'Distance'</span></span></code></pre>
 <pre><code><span><span class="co">## The following object is masked from 'package:mrds':</span></span>
@@ -208,8 +195,8 @@
 <pre><code><span><span class="co">## Fitting half-normal key function</span></span></code></pre>
 <pre><code><span><span class="co">## DEBUG: initial values = -0.1031529</span></span></code></pre>
 <pre><code><span><span class="co">## Running MCDS.exe...</span></span></code></pre>
-<pre><code><span><span class="co">## Command file written to C:\Users\erexs\AppData\Local\Temp\Rtmpa0CFjT\cmdtmp3500288c6ec7.txt</span></span></code></pre>
-<pre><code><span><span class="co">## Stats file written to C:\Users\erexs\AppData\Local\Temp\Rtmpa0CFjT\stat3500a4c28ca.txt</span></span></code></pre>
+<pre><code><span><span class="co">## Command file written to C:\Users\erexs\AppData\Local\Temp\RtmpispW6W\cmdtmp4c8061c1589.txt</span></span></code></pre>
+<pre><code><span><span class="co">## Stats file written to C:\Users\erexs\AppData\Local\Temp\RtmpispW6W\stat4c801b775508.txt</span></span></code></pre>
 <pre><code><span><span class="co">## DEBUG: initial values = 0.6632378 </span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## DEBUG: Convergence! </span></span>
@@ -231,8 +218,8 @@
 <pre><code><span><span class="co">## Fitting half-normal key function with cosine(2) adjustments</span></span></code></pre>
 <pre><code><span><span class="co">## DEBUG: initial values = -0.1031529 0</span></span></code></pre>
 <pre><code><span><span class="co">## Running MCDS.exe...</span></span></code></pre>
-<pre><code><span><span class="co">## Command file written to C:\Users\erexs\AppData\Local\Temp\Rtmpa0CFjT\cmdtmp350011864b0f.txt</span></span></code></pre>
-<pre><code><span><span class="co">## Stats file written to C:\Users\erexs\AppData\Local\Temp\Rtmpa0CFjT\stat35001a9f5e79.txt</span></span></code></pre>
+<pre><code><span><span class="co">## Command file written to C:\Users\erexs\AppData\Local\Temp\RtmpispW6W\cmdtmp4c8063711ebf.txt</span></span></code></pre>
+<pre><code><span><span class="co">## Stats file written to C:\Users\erexs\AppData\Local\Temp\RtmpispW6W\stat4c807de518af.txt</span></span></code></pre>
 <pre><code><span><span class="co">## DEBUG: initial values = 0.6606793 -0.0159333 </span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## DEBUG: Convergence! </span></span>
@@ -244,21 +231,36 @@
 <pre><code><span><span class="co">## MCDS.exe pars: 1.936107, -0.0159333</span></span></code></pre>
 <pre><code><span><span class="co">## mrds refitted log likehood: -154.5619307</span></span></code></pre>
 <pre><code><span><span class="co">## mrds refitted pars: 0.6606793, -0.0159333</span></span></code></pre>
-<pre><code><span><span class="co">## </span></span>
-<span><span class="co">## Iter: 1 fn: 154.5619  Pars:   0.66068 -0.01591</span></span>
-<span><span class="co">## Iter: 2 fn: 154.5619  Pars:   0.66069 -0.01592</span></span>
-<span><span class="co">## solnp--&gt; Completed in 2 iterations</span></span>
+<pre><code><span><span class="co">## iteration: 1</span></span>
+<span><span class="co">##  f(x) = 243.539291</span></span>
+<span><span class="co">## iteration: 2</span></span>
+<span><span class="co">##  f(x) = 164.079444</span></span>
+<span><span class="co">## iteration: 3</span></span>
+<span><span class="co">##  f(x) = 156.273060</span></span>
+<span><span class="co">## iteration: 4</span></span>
+<span><span class="co">##  f(x) = 155.340034</span></span>
+<span><span class="co">## iteration: 5</span></span>
+<span><span class="co">##  f(x) = 154.684098</span></span>
+<span><span class="co">## iteration: 6</span></span>
+<span><span class="co">##  f(x) = 154.571590</span></span>
+<span><span class="co">## iteration: 7</span></span>
+<span><span class="co">##  f(x) = 154.562292</span></span>
+<span><span class="co">## iteration: 8</span></span>
+<span><span class="co">##  f(x) = 154.561975</span></span>
+<span><span class="co">## iteration: 9</span></span>
+<span><span class="co">##  f(x) = 154.561931</span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## DEBUG: Convergence! </span></span>
 <span><span class="co">##        Iteration  0.0 </span></span>
 <span><span class="co">##        Converge   = 0 </span></span>
 <span><span class="co">##        nll        = 154.5619 </span></span>
-<span><span class="co">##        parameters = 0.6606853, -0.0159233</span></span></code></pre>
+<span><span class="co">##        parameters = 0.6606883, -0.0159336 </span></span>
+<span><span class="co">## DEBUG: MCDS lnl = -154.5619        mrds lnl = 154.5619</span></span></code></pre>
 <pre><code><span><span class="co">## AIC= 313.124</span></span></code></pre>
 <pre><code><span><span class="co">## </span></span>
 <span><span class="co">## Half-normal key function selected.</span></span></code></pre>
 <pre><code><span><span class="co">## No survey area information supplied, only estimating detection function.</span></span></code></pre>
-<p>First the half-normal with no adjustments is run; for this model the <code>MCDS.exe</code> sofware is run first, followed by the <code>R</code>-based (<code>mrds</code>) optimizer. Both converge and both give the same <code>nll</code> (negative log-likelihood) or 154.5692, giving an AIC of 311.138. The model with half-normal and a cosine adjustment of order 2 is then fitted to the data, with first the <code>MCDS.exe</code> optimizer and then the <code>R</code>-based optimizer. Again both give the same result of nll 154.5619 and an AIC of 313.124. This is higher than the AIC with no adjustments so half-normal with no adjustments is chosen.</p>
+<p>First the half-normal with no adjustments is run; for this model the <code>MCDS.exe</code> software is run first, followed by the <code>R</code>-based (<code>mrds</code>) optimizer. Both converge and both give the same <code>nll</code> (negative log-likelihood) or 154.5692, giving an AIC of 311.138. The model with half-normal and a cosine adjustment of order 2 is then fitted to the data, with first the <code>MCDS.exe</code> optimizer and then the <code>R</code>-based optimizer. Again both give the same result of nll 154.5619 and an AIC of 313.124. This is higher than the AIC with no adjustments so half-normal with no adjustments is chosen.</p>
 <p>In this case, both optimizers produced the same result, so there is no benefit to run <code>MCDS.exe</code>.</p>
 </div>
 <div class="section level3">
@@ -275,12 +277,32 @@
 <pre><code><span><span class="co">## </span></span>
 <span><span class="co">## Half-normal key function selected.</span></span></code></pre>
 <pre><code><span><span class="co">## No survey area information supplied, only estimating detection function.</span></span></code></pre>
+<div class="sourceCode" id="cb52"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">ds.model</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">## </span></span>
+<span><span class="co">## Summary for distance analysis </span></span>
+<span><span class="co">## Number of observations :  124 </span></span>
+<span><span class="co">## Distance range         :  0  -  4 </span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## Model       : Half-normal key function </span></span>
+<span><span class="co">## AIC         :  311.1385 </span></span>
+<span><span class="co">## Optimisation:  MCDS.exe </span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## Detection function parameters</span></span>
+<span><span class="co">## Scale coefficient(s):  </span></span>
+<span><span class="co">##              estimate         se</span></span>
+<span><span class="co">## (Intercept) 0.6632378 0.09981136</span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">##                        Estimate          SE         CV</span></span>
+<span><span class="co">## Average p             0.5842718  0.04637577 0.07937362</span></span>
+<span><span class="co">## N in covered region 212.2300013 20.85133459 0.09824876</span></span></code></pre>
+<p>The summary output now says <code>Optimisation:  MCDS.exe</code>.</p>
 </div>
 <div class="section level3">
 <h3 id="demonstration-using-ddf-in-mrds-package">Demonstration using <code>ddf</code> in <code>mrds</code> package<a class="anchor" aria-label="anchor" href="#demonstration-using-ddf-in-mrds-package"></a>
 </h3>
 <p>Here we demonstrate using both optimizers in the <code>ddf</code> function, rather than via <code>ds</code>.</p>
-<div class="sourceCode" id="cb52"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb54"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">#Half normal detection function</span></span>
 <span><span class="va">ddf.model</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/mrds/man/ddf.html" class="external-link">ddf</a></span><span class="op">(</span>dsmodel <span class="op">=</span> <span class="op">~</span><span class="fu">mcds</span><span class="op">(</span>key <span class="op">=</span> <span class="st">"hn"</span>, formula <span class="op">=</span> <span class="op">~</span><span class="fl">1</span><span class="op">)</span>, data <span class="op">=</span> <span class="va">tee.data</span>, method <span class="op">=</span> <span class="st">"ds"</span>,</span>
 <span>                 meta.data <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>width <span class="op">=</span> <span class="fl">4</span><span class="op">)</span><span class="op">)</span></span>
@@ -292,7 +314,7 @@
 <pre><code><span><span class="co">##                df      AIC</span></span>
 <span><span class="co">## ddf.model       1 311.1385</span></span>
 <span><span class="co">## ddf.model.cos2  2 313.1239</span></span></code></pre>
-<div class="sourceCode" id="cb54"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb56"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">#Model with no adjustment term has lower AIC; show summary of this model</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">ddf.model</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## </span></span>
@@ -314,7 +336,7 @@
 <span><span class="co">## Average p             0.5842744  0.04637627 0.07937412</span></span>
 <span><span class="co">## N in covered region 212.2290462 20.85130344 0.09824906</span></span></code></pre>
 <p>As an exercise, fit using just the <code>MCDS.exe</code> optimizer:</p>
-<div class="sourceCode" id="cb56"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb58"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">ddf.model</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/mrds/man/ddf.html" class="external-link">ddf</a></span><span class="op">(</span>dsmodel <span class="op">=</span> <span class="op">~</span><span class="fu">mcds</span><span class="op">(</span>key <span class="op">=</span> <span class="st">"hn"</span>, adj.series <span class="op">=</span> <span class="st">"cos"</span>, adj.order <span class="op">=</span> <span class="fl">2</span>, </span>
 <span>                               formula <span class="op">=</span> <span class="op">~</span><span class="fl">1</span><span class="op">)</span>, data <span class="op">=</span> <span class="va">tee.data</span>, method <span class="op">=</span> <span class="st">"ds"</span>,</span>
 <span>                 meta.data <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>width <span class="op">=</span> <span class="fl">4</span><span class="op">)</span>,</span>
@@ -349,13 +371,13 @@
 </h2>
 <p>This is an example of point transect data for a bird (wren), from Buckland <span class="citation">(2006)</span>. In this case one of the optimizers fails correctly to constrain the detection function so the probability of detection is more than zero at all distances, and so we use the other optimizer for inference.</p>
 <p>We load the wren 5 minute example dataset and define cutpoints for the distances (they were collected in intervals).</p>
-<div class="sourceCode" id="cb58"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb60"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"wren_5min"</span><span class="op">)</span></span>
 <span><span class="va">bin.cutpoints.100m</span> <span class="op">&lt;-</span> <span class="va">bin.cutpoints</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">10</span>, <span class="fl">20</span>, <span class="fl">30</span>, <span class="fl">40</span>, <span class="fl">60</span>, <span class="fl">80</span>, <span class="fl">100</span><span class="op">)</span></span></code></pre></div>
 <p>The following call to <code>ds</code> gives several warnings. Some warnings are about the detection function being less than zero at some distances. There is also a warning about the Hessian (which is used for variance estimation), but this relates to the Hermite(4, 6) model (i.e., two Hermite adjustment terms of order 4 and 6) which is not chosen using AIC and so this warning can be ignored.</p>
-<div class="sourceCode" id="cb59"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">wren5min.hn.herm.t100</span> <span class="op">&lt;-</span> <span class="fu"><a href="../../../reference/ds.html">ds</a></span><span class="op">(</span>data<span class="op">=</span><span class="va">wren_5min</span>, key<span class="op">=</span><span class="st">"hn"</span>, adjustment<span class="op">=</span><span class="st">"herm"</span>, </span>
-<span>                            transect<span class="op">=</span><span class="st">"point"</span>, cutpoints<span class="op">=</span><span class="va">bin.cutpoints.100m</span><span class="op">)</span></span></code></pre></div>
+<div class="sourceCode" id="cb61"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">wren5min.hn.herm.t100</span> <span class="op">&lt;-</span> <span class="fu"><a href="../../../reference/ds.html">ds</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">wren_5min</span>, key <span class="op">=</span> <span class="st">"hn"</span>, adjustment <span class="op">=</span> <span class="st">"herm"</span>, </span>
+<span>                            transect <span class="op">=</span> <span class="st">"point"</span>, cutpoints <span class="op">=</span> <span class="va">bin.cutpoints.100m</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## Warning in create_bins(data, cutpoints): Some distances were outside bins and</span></span>
 <span><span class="co">## have been removed.</span></span></code></pre>
 <pre><code><span><span class="co">## Starting AIC adjustment term selection.</span></span></code></pre>
@@ -374,9 +396,9 @@
 <pre><code><span><span class="co">## AIC= 423.255</span></span></code></pre>
 <pre><code><span><span class="co">## </span></span>
 <span><span class="co">## Half-normal key function with Hermite(4) adjustments selected.</span></span></code></pre>
-<pre><code><span><span class="co">## Warning in mrds::check.mono(model, n.pts = 20): Detection function is less than</span></span>
+<pre><code><span><span class="co">## Warning in mrds::check.mono(model, n.pts = 10): Detection function is less than</span></span>
 <span><span class="co">## 0 at some distances</span></span></code></pre>
-<div class="sourceCode" id="cb73"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb75"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">wren5min.hn.herm.t100</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## </span></span>
 <span><span class="co">## Summary for distance analysis </span></span>
@@ -396,28 +418,28 @@
 <span><span class="co">## </span></span>
 <span><span class="co">## Adjustment term coefficient(s):  </span></span>
 <span><span class="co">##                estimate         se</span></span>
-<span><span class="co">## herm, order 4 0.5723854 0.07889437</span></span>
+<span><span class="co">## herm, order 4 0.5723854 0.07888508</span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">##                        Estimate         SE         CV</span></span>
-<span><span class="co">## Average p             0.4399177  0.0253497 0.05762374</span></span>
-<span><span class="co">## N in covered region 300.0561563 26.0954740 0.08696863</span></span>
+<span><span class="co">## Average p             0.4399177  0.0253475 0.05761875</span></span>
+<span><span class="co">## N in covered region 300.0561563 26.0944820 0.08696533</span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## Summary statistics:</span></span>
 <span><span class="co">##     Region Area CoveredArea Effort   n  k     ER     se.ER      cv.ER</span></span>
 <span><span class="co">## 1 Montrave 33.2     2010619     64 132 32 2.0625 0.1901692 0.09220324</span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## Abundance:</span></span>
-<span><span class="co">##   Label    Estimate         se        cv         lcl         ucl       df</span></span>
-<span><span class="co">## 1 Total 0.004954625 0.00053871 0.1087287 0.003988055 0.006155458 57.84101</span></span>
+<span><span class="co">##   Label    Estimate           se        cv         lcl         ucl       df</span></span>
+<span><span class="co">## 1 Total 0.004954625 0.0005386969 0.1087261 0.003988075 0.006155428 57.83608</span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## Density:</span></span>
-<span><span class="co">##   Label     Estimate          se        cv          lcl          ucl       df</span></span>
-<span><span class="co">## 1 Total 0.0001492357 1.62262e-05 0.1087287 0.0001201222 0.0001854054 57.84101</span></span></code></pre>
+<span><span class="co">##   Label     Estimate           se        cv          lcl          ucl       df</span></span>
+<span><span class="co">## 1 Total 0.0001492357 1.622581e-05 0.1087261 0.0001201227 0.0001854045 57.83608</span></span></code></pre>
 <p>The <code>MCDS.exe</code> optimizer is the chosen one (see the `Optimisation’ line of output).</p>
 <p>The warnings persist if only the <code>MCDS.exe</code> optimizer is used:</p>
-<div class="sourceCode" id="cb75"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">wren5min.hn.herm.t100.mcds</span> <span class="op">&lt;-</span> <span class="fu"><a href="../../../reference/ds.html">ds</a></span><span class="op">(</span>data<span class="op">=</span><span class="va">wren_5min</span>, key<span class="op">=</span><span class="st">"hn"</span>, adjustment<span class="op">=</span><span class="st">"herm"</span>, </span>
-<span>                            transect<span class="op">=</span><span class="st">"point"</span>, cutpoints<span class="op">=</span><span class="va">bin.cutpoints.100m</span>,</span>
+<div class="sourceCode" id="cb77"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">wren5min.hn.herm.t100.mcds</span> <span class="op">&lt;-</span> <span class="fu"><a href="../../../reference/ds.html">ds</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">wren_5min</span>, key <span class="op">=</span> <span class="st">"hn"</span>, adjustment <span class="op">=</span> <span class="st">"herm"</span>, </span>
+<span>                            transect <span class="op">=</span> <span class="st">"point"</span>, cutpoints <span class="op">=</span> <span class="va">bin.cutpoints.100m</span>,</span>
 <span>                            optimizer <span class="op">=</span> <span class="st">"MCDS"</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## Warning in create_bins(data, cutpoints): Some distances were outside bins and</span></span>
 <span><span class="co">## have been removed.</span></span></code></pre>
@@ -437,10 +459,10 @@
 <pre><code><span><span class="co">## AIC= 423.255</span></span></code></pre>
 <pre><code><span><span class="co">## </span></span>
 <span><span class="co">## Half-normal key function with Hermite(4) adjustments selected.</span></span></code></pre>
-<pre><code><span><span class="co">## Warning in mrds::check.mono(model, n.pts = 20): Detection function is less than</span></span>
+<pre><code><span><span class="co">## Warning in mrds::check.mono(model, n.pts = 10): Detection function is less than</span></span>
 <span><span class="co">## 0 at some distances</span></span></code></pre>
 <p>Looking at a plot of the fitted object (Figure <a href="#fig:mcds">1</a>), it seems that the evaluated pdf is less than 0 at distances close to the truncation point (approx. 95m and greater):</p>
-<div class="sourceCode" id="cb89"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb91"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">wren5min.hn.herm.t100.mcds</span>, pdf <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
 <div class="figure">
 <span style="display:block;" id="fig:mcds"></span>
@@ -449,7 +471,7 @@ Figure 1: PDF of fitted model with MCDS optimizer.
 </p>
 </div>
 <p>What appears to be happening here is a failure of the optimization routine to appropriately constrain the model parameters so that the detection function is valid. This happens on occasion (the routines aren’t perfect!) and where it does we recommend trying the other optimization routine. Here we use the <code>R</code>-based optimizer:</p>
-<div class="sourceCode" id="cb90"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb92"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">wren5min.hn.herm.t100.r</span> <span class="op">&lt;-</span> <span class="fu"><a href="../../../reference/ds.html">ds</a></span><span class="op">(</span>data<span class="op">=</span><span class="va">wren_5min</span>, key<span class="op">=</span><span class="st">"hn"</span>, adjustment<span class="op">=</span><span class="st">"herm"</span>, </span>
 <span>                            transect<span class="op">=</span><span class="st">"point"</span>, cutpoints<span class="op">=</span><span class="va">bin.cutpoints.100m</span>,</span>
 <span>                            optimizer <span class="op">=</span> <span class="st">"R"</span><span class="op">)</span></span></code></pre></div>
@@ -459,13 +481,13 @@ Figure 1: PDF of fitted model with MCDS optimizer.
 <pre><code><span><span class="co">## Fitting half-normal key function</span></span></code></pre>
 <pre><code><span><span class="co">## AIC= 427.471</span></span></code></pre>
 <pre><code><span><span class="co">## Fitting half-normal key function with Hermite(4) adjustments</span></span></code></pre>
-<pre><code><span><span class="co">## AIC= 422.743</span></span></code></pre>
+<pre><code><span><span class="co">## AIC= 422.73</span></span></code></pre>
 <pre><code><span><span class="co">## Fitting half-normal key function with Hermite(4,6) adjustments</span></span></code></pre>
-<pre><code><span><span class="co">## AIC= 424.52</span></span></code></pre>
+<pre><code><span><span class="co">## AIC= 424.717</span></span></code></pre>
 <pre><code><span><span class="co">## </span></span>
 <span><span class="co">## Half-normal key function with Hermite(4) adjustments selected.</span></span></code></pre>
-<p>Here the fitted AIC for the chosen model (half normal with one Hermite adjustment of order 4) is 422.74, higher than that with the <code>MCDS.exe</code> optimizer (which was 422.23), which explains why the <code>MCDS.exe</code> optimizer fit was chosen when we allowed <code>ds</code> to choose freely. However, the detection function fit from <code>MCDS.exe</code> was invalid, because it went lower than 0 at about 95m, while the fit with the <code>R</code>-based optimizer looks valid (Figure <a href="#fig:usingr">2</a>):</p>
-<div class="sourceCode" id="cb100"><pre class="downlit sourceCode r">
+<p>Here the fitted AIC for the chosen model (half normal with one Hermite adjustment of order 4) is 422.73, higher than that with the <code>MCDS.exe</code> optimizer (which was 422.23), which explains why the <code>MCDS.exe</code> optimizer fit was chosen when we allowed <code>ds</code> to choose freely. However, the detection function fit from <code>MCDS.exe</code> was invalid, because it went lower than 0 at about 95m, while the fit with the <code>R</code>-based optimizer looks valid (Figure <a href="#fig:usingr">2</a>):</p>
+<div class="sourceCode" id="cb102"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">wren5min.hn.herm.t100.r</span>, pdf <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
 <div class="figure">
 <span style="display:block;" id="fig:usingr"></span>
@@ -478,29 +500,28 @@ Figure 2: PDF of fitted model with R-based optimizer.
 <div class="section level2">
 <h2 id="camera-trap-example">Camera trap example<a class="anchor" aria-label="anchor" href="#camera-trap-example"></a>
 </h2>
-<p>For this example, it helps if you are familiar with the <a href="https://examples.distancesampling.org/Distance-cameratraps/camera-distill.html" class="external-link">Analysis of camera trapping data</a> vignette on the distanceexamples web site.</p>
-<p>We first read in the Duiker data.</p>
-<div class="sourceCode" id="cb101"><pre class="downlit sourceCode r">
+<p>For this example, it helps if you are familiar with the <a href="https://distancedevelopment.github.io/Distance/articles/web-only/CTDS/camera-distill.html" class="external-link">Analysis of camera trapping data</a> vignette on the distance sampling web site.</p>
+<p>You also need to <a href="https://datadryad.org/stash/downloads/file_stream/73221" class="external-link">Download from the Dryad data repository</a> the detection distances for the full daytime data set and then read it in with the code below:</p>
+<div class="sourceCode" id="cb103"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">#Read in data and set up data for analysis</span></span>
-<span><span class="va">DuikerCameraTraps</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/utils/read.table.html" class="external-link">read.csv</a></span><span class="op">(</span>file<span class="op">=</span><span class="st">"https://datadryad.org/stash/downloads/file_stream/73221"</span>, </span>
-<span>                              header<span class="op">=</span><span class="cn">TRUE</span>, sep<span class="op">=</span><span class="st">"\t"</span><span class="op">)</span></span>
+<span><span class="va">DuikerCameraTraps</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/utils/read.table.html" class="external-link">read.csv</a></span><span class="op">(</span>file<span class="op">=</span><span class="st">"DaytimeDistances.txt"</span>, header<span class="op">=</span><span class="cn">TRUE</span>, sep<span class="op">=</span><span class="st">"\t"</span><span class="op">)</span></span>
 <span><span class="va">DuikerCameraTraps</span><span class="op">$</span><span class="va">Area</span> <span class="op">&lt;-</span> <span class="va">DuikerCameraTraps</span><span class="op">$</span><span class="va">Area</span> <span class="op">/</span> <span class="op">(</span><span class="fl">1000</span><span class="op">*</span><span class="fl">1000</span><span class="op">)</span></span>
 <span><span class="va">DuikerCameraTraps</span><span class="op">$</span><span class="va">object</span> <span class="op">&lt;-</span> <span class="cn">NA</span></span>
 <span><span class="va">DuikerCameraTraps</span><span class="op">$</span><span class="va">object</span><span class="op">[</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na</a></span><span class="op">(</span><span class="va">DuikerCameraTraps</span><span class="op">$</span><span class="va">distance</span><span class="op">)</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fl">1</span><span class="op">:</span><span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na</a></span><span class="op">(</span><span class="va">DuikerCameraTraps</span><span class="op">$</span><span class="va">distance</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co">#Specify breakpoints and truncation</span></span>
 <span><span class="va">trunc.list</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>left<span class="op">=</span><span class="fl">2</span>, right<span class="op">=</span><span class="fl">15</span><span class="op">)</span></span>
-<span><span class="va">mybreaks</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">2</span>,<span class="fl">8</span>,<span class="fl">1</span><span class="op">)</span>, <span class="fl">10</span>, <span class="fl">12</span>, <span class="fl">15</span><span class="op">)</span></span></code></pre></div>
+<span><span class="va">mybreaks</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">2</span>, <span class="fl">8</span>, <span class="fl">1</span><span class="op">)</span>, <span class="fl">10</span>, <span class="fl">12</span>, <span class="fl">15</span><span class="op">)</span></span></code></pre></div>
 <p>Then we fit the detection function selected in the camera trap vignette, uniform plus 3 cosine adjustment terms, and time how long the fitting takes:</p>
-<div class="sourceCode" id="cb102"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb104"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">start.time</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/Sys.time.html" class="external-link">Sys.time</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="va">uni3.r</span> <span class="op">&lt;-</span> <span class="fu"><a href="../../../reference/ds.html">ds</a></span><span class="op">(</span><span class="va">DuikerCameraTraps</span>, transect <span class="op">=</span> <span class="st">"point"</span>, key<span class="op">=</span><span class="st">"unif"</span>, adjustment <span class="op">=</span> <span class="st">"cos"</span>,</span>
 <span>           nadj<span class="op">=</span><span class="fl">3</span>, cutpoints <span class="op">=</span> <span class="va">mybreaks</span>, truncation <span class="op">=</span> <span class="va">trunc.list</span>, optimizer <span class="op">=</span> <span class="st">"R"</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## Warning in create_bins(data, cutpoints): Some distances were outside bins and</span></span>
 <span><span class="co">## have been removed.</span></span></code></pre>
 <pre><code><span><span class="co">## Fitting uniform key function with cosine(1,2,3) adjustments</span></span></code></pre>
-<pre><code><span><span class="co">## AIC= 44012.394</span></span></code></pre>
-<div class="sourceCode" id="cb106"><pre class="downlit sourceCode r">
+<pre><code><span><span class="co">## AIC= 44012.238</span></span></code></pre>
+<div class="sourceCode" id="cb108"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">R.opt.time</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/Sys.time.html" class="external-link">Sys.time</a></span><span class="op">(</span><span class="op">)</span> <span class="op">-</span> <span class="va">start.time</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">uni3.r</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## </span></span>
@@ -511,36 +532,36 @@ Figure 2: PDF of fitted model with R-based optimizer.
 <span><span class="co">## Model       : Uniform key function with cosine adjustment terms of order 1,2,3 </span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## Strict monotonicity constraints were enforced.</span></span>
-<span><span class="co">## AIC         :  44012.39 </span></span>
-<span><span class="co">## Optimisation:  mrds (nlminb) </span></span>
+<span><span class="co">## AIC         :  44012.24 </span></span>
+<span><span class="co">## Optimisation:  mrds (slsqp) </span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## Detection function parameters</span></span>
 <span><span class="co">## Scale coefficient(s):  </span></span>
 <span><span class="co">## NULL</span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## Adjustment term coefficient(s):  </span></span>
-<span><span class="co">##                estimate         se</span></span>
-<span><span class="co">## cos, order 1  0.9354124 0.01504250</span></span>
-<span><span class="co">## cos, order 2 -0.0530414 0.02437441</span></span>
-<span><span class="co">## cos, order 3 -0.0804323 0.01557445</span></span>
+<span><span class="co">##                 estimate         se</span></span>
+<span><span class="co">## cos, order 1  0.93529846 0.01504415</span></span>
+<span><span class="co">## cos, order 2 -0.05342058 0.02438026</span></span>
+<span><span class="co">## cos, order 3 -0.08069257 0.01557680</span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">##                         Estimate           SE         CV</span></span>
-<span><span class="co">## Average p           3.288267e-01 1.348161e-02 0.04099915</span></span>
-<span><span class="co">## N in covered region 3.127483e+04 1.306897e+03 0.04178749</span></span>
+<span><span class="co">## Average p           3.290022e-01 1.349494e-02 0.04101777</span></span>
+<span><span class="co">## N in covered region 3.125815e+04 1.306764e+03 0.04180555</span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## Summary statistics:</span></span>
 <span><span class="co">##   Region  Area CoveredArea   Effort     n  k           ER        se.ER    cv.ER</span></span>
 <span><span class="co">## 1    Tai 40.37 21858518573 31483179 10284 21 0.0003266506 8.763252e-05 0.268276</span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## Abundance:</span></span>
-<span><span class="co">##   Label     Estimate           se        cv          lcl          ucl      df</span></span>
-<span><span class="co">## 1 Total 5.776078e-05 1.567574e-05 0.2713908 3.317613e-05 0.0001005635 20.9451</span></span>
+<span><span class="co">##   Label     Estimate           se        cv          lcl          ucl       df</span></span>
+<span><span class="co">## 1 Total 5.772996e-05 1.566754e-05 0.2713936 3.315829e-05 0.0001005103 20.94597</span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## Density:</span></span>
-<span><span class="co">##   Label     Estimate           se        cv          lcl          ucl      df</span></span>
-<span><span class="co">## 1 Total 1.430785e-06 3.883017e-07 0.2713908 8.218016e-07 2.491045e-06 20.9451</span></span></code></pre>
-<p>Fitting takes quite a while! - 52 secs. Here we try the <code>MCDS.exe</code> optimizer:</p>
-<div class="sourceCode" id="cb108"><pre class="downlit sourceCode r">
+<span><span class="co">##   Label     Estimate           se        cv          lcl          ucl       df</span></span>
+<span><span class="co">## 1 Total 1.430021e-06 3.880986e-07 0.2713936 8.213597e-07 2.489727e-06 20.94597</span></span></code></pre>
+<p>Fitting takes 9.7 secs. (Note, in versions of <code>Distance</code> before 2.0.0 this was a much higher number!) Here we try the <code>MCDS.exe</code> optimizer:</p>
+<div class="sourceCode" id="cb110"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">start.time</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/Sys.time.html" class="external-link">Sys.time</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="va">uni3.mcds</span> <span class="op">&lt;-</span> <span class="fu"><a href="../../../reference/ds.html">ds</a></span><span class="op">(</span><span class="va">DuikerCameraTraps</span>, transect <span class="op">=</span> <span class="st">"point"</span>, key<span class="op">=</span><span class="st">"unif"</span>, adjustment <span class="op">=</span> <span class="st">"cos"</span>,</span>
 <span>                nadj<span class="op">=</span><span class="fl">3</span>, cutpoints <span class="op">=</span> <span class="va">mybreaks</span>, truncation <span class="op">=</span> <span class="va">trunc.list</span>, optimizer <span class="op">=</span> <span class="st">"MCDS"</span><span class="op">)</span></span></code></pre></div>
@@ -548,7 +569,7 @@ Figure 2: PDF of fitted model with R-based optimizer.
 <span><span class="co">## have been removed.</span></span></code></pre>
 <pre><code><span><span class="co">## Fitting uniform key function with cosine(1,2,3) adjustments</span></span></code></pre>
 <pre><code><span><span class="co">## AIC= 44012.211</span></span></code></pre>
-<div class="sourceCode" id="cb112"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb114"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">MCDS.opt.time</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/Sys.time.html" class="external-link">Sys.time</a></span><span class="op">(</span><span class="op">)</span> <span class="op">-</span> <span class="va">start.time</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">uni3.mcds</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## </span></span>
@@ -587,23 +608,29 @@ Figure 2: PDF of fitted model with R-based optimizer.
 <span><span class="co">## Density:</span></span>
 <span><span class="co">##   Label     Estimate           se        cv         lcl          ucl       df</span></span>
 <span><span class="co">## 1 Total 1.429736e-06 3.880222e-07 0.2713943 8.21195e-07 2.489232e-06 20.94619</span></span></code></pre>
-<p>This took only 9 secs. Hence, for some datasets, it may be quicker to use the <code>MCDS.exe</code> optimizer. This makes a particularly big difference if using the nonparametric bootstrap to estimate variance.</p>
+<p>This took a little less time: 8 secs. Hence, for some datasets, it may be quicker to use the <code>MCDS.exe</code> optimizer. This could make a significant difference if using the nonparametric bootstrap to estimate variance. However, after making improvemts to the optimizer in <code>mrds</code> 3.0.0 and <code>Distance</code> 2.0.0 the difference is generally small, and in many cases the <code>R</code> optimizer is faster than <code>MCDS.exe</code> so this is likely not a productive avenue to pursue in general.</p>
 </div>
 <div class="section level2">
 <h2 id="discussion">Discussion<a class="anchor" aria-label="anchor" href="#discussion"></a>
 </h2>
 <p>We have shown how to fit distance sampling detection functions (for single platform data) using either the <code>R</code>-based optimizer built into the <code>ddf</code> function (via calling <code>ddf</code> or, more likely, calling the <code>ds</code> function in the <code>Distance</code> package) or the <code>MCDS.exe</code> analysis engine used by Distance for Windows. In the vast majority of cases both fitting methods give the same result, and so there is no need to use both. However, the only downside is that fitting takes longer, as each is called in turn. If you have downloaded the <code>MCDS.exe</code> file and want to speed things up, you can use just the <code>R</code>-based optimizer by specifying <code>optimizer = "R"</code> in the call to <code>ds</code> or <code>ddf</code>, or just the <code>MCDS.exe</code> optimizer with <code>optimizer = "MCDS"</code>.</p>
-<p>Some situations where the two may produce different results are given below.</p>
+<p>Some situations where the two may produce different results are given below. Note that in each case we give an update related to new algorithms developed and used in <code>mrds</code> 3.0.0.</p>
 <ul>
-<li><p>Detection functions that are close to non-monotonic or close to zero at some distances. When adjustment terms are used in the detection function, then constraints are required to prevent the fitted function from having “bumps” where detection probability increases with increasing distance and also to prevent detection probability from becoming less than zero. The former are called monotonicity constraints and are set using the <code>monotonicity</code> argument in <code>ds</code> or in the <code>meta.data</code> argument in <code>ddf</code>; monotonicity is set on by default. In practice, monotonicity and values less than zero are monitored at a finite set of distances between the 0 and the right truncation point, and (for historical reasons) this set of distances is different for the <code>R</code>-based and <code>MCDS.exe</code> optimizers. This typically makes no difference to the optimization, but particularly in borderline cases it can result in different fitted functions. Plotting the fitted functions (as we did in the wren example above) can reveal when there is an issue with a fitted function, and if this occurs the associated optimizer should not be used. In the future we plan to bring the two into line so they use the same distances for checking.</p></li>
+<li>
+<p>Detection functions that are close to non-monotonic or close to zero at some distances. When adjustment terms are used in the detection function, then constraints are required to prevent the fitted function from having “bumps” where detection probability increases with increasing distance and also to prevent detection probability from becoming less than zero. The former are called monotonicity constraints and are set using the <code>monotonicity</code> argument in <code>ds</code> or in the <code>meta.data</code> argument in <code>ddf</code>; monotonicity is set on by default. In practice, monotonicity and values less than zero are monitored at a finite set of distances between the 0 and the right truncation point, and (for historical reasons) this set of distances is different for the <code>R</code>-based and <code>MCDS.exe</code> optimizers. This typically makes no difference to the optimization, but particularly in borderline cases it can result in different fitted functions. Plotting the fitted functions (as we did in the wren example above) can reveal when there is an issue with a fitted function, and if this occurs the associated optimizer should not be used. In the future we plan to bring the two into line so they use the same distances for checking.</p>
+<ul>
+<li>Update: As of <code>mrds</code> 3.0.0 and <code>Distance</code> 2.0.0 these are now aligned, so this difference should have gone away.</li>
+</ul>
+</li>
 <li><p>Detection functions with many adjustment terms. The two optimizers use different algorithms for optimization: the <code>R</code>-based optimizer uses a routine called <code>nlminb</code> while <code>MCDS.exe</code> uses a nonlinear constrained optimizer routine produced by the IMSL group. In cases where there are multiple adjustment terms, and hence several parameters to estimate (that are often correlated) the likelihood maximization is harder, and one or other routine can sometimes fail to find the maximum. In this case, choosing the routine with the higher likelihood (i.e., lower negative log-likelihod, or equivalently lower AIC) is the right thing to do, and this is the default behaviour of the software.</p></li>
+<li><p>Update: in <code>mrds</code> 3.0.0 we now use a Sequential Least Squares Programming (SLSQP) algorithm from the ‘nloptr’ package via <code>nlminb</code> in the <code>R</code>-based optimizer (rather than the old solnp algorithm). The old algorithm can be accessed from the <code>ds</code>() function in <code>Distance</code> using the argument <code>mono_method = "solnp"</code> or with the <code>ddf</code>() function in <code>mrds</code> using the argument <code>control(mono.method = "solnp")</code>. However, the new one shows improved performance in our testing, and so we do not recommend using the old algorithm except for reasons of backwards compatibility.</p></li>
 <li><p>Detection functions that are “overdispersed” or with a “spike” in the detection function close to zero distance. Similarly to the above, the detection function can then be hard to maximize and hence on or other optimizer can fail to find the maximum. Solution is as above. Overdispersed data is common in camera trap distance sampling because many detections can be generated by the same individual crossing in front of the camera.</p></li>
+<li><p>Update is as above.</p></li>
 </ul>
 <p>If you are interested in seeing more comparisons of the optimizers on various datasets, we maintain a test suite of both straightforward and challenging datasets together with test code to run and compare the two optimizers – this is available at the <a href="https://github.com/DistanceDevelopment/MCDS_mrds_compare" class="external-link">MCDS_mrds_compare repository</a>.</p>
 <p>If you encounter difficulties when using both optimizers, one possible troubleshooting step is to run the analysis first choosing one optimizer (e.g., specifing the argument <code>optimizer = "MCDS"</code>) and then choosing the other (<code>optimizer = "R"</code>). This allows you clearly to see what the output of each optimizer is (including any error messages) and facilitates their comparison.</p>
-<p>One other criterion to favour one optimizer over the other is speed, and we have found that for large datasets the <code>MCDS.exe</code> optimizer is quicker.</p>
+<p>One other criterion to favour one optimizer over the other is speed. We found that for large datasets the <code>MCDS.exe</code> optimizer was quicker, but as of <code>Distance</code> 2.0.0 and <code>mrds</code> 3.0.0 this is no longer necessarily the case.</p>
 <p>One thing to note is that the <code>MCDS.exe</code> file will get deleted each time you update the <code>mrds</code> package, so you’ll need to re-download the file if you want to continue using the <code>MCDS.exe</code> optimizer. As shown above, this only requires running one line of code.</p>
-<p>Going forward, we plan to work on making further improvements to the <code>R</code>-based optimizer and it is possible that at some point in the future we are confident this optimizer is uniformly better (in terms of better fit and speed) than the <code>MCDS.exe</code> one. If this happens, we will update this vignette and also make announcements on the distance sampling list.</p>
 </div>
 <div class="section level2">
 <h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a>
@@ -620,7 +647,7 @@ Thomas, L., Buckland, S. T., Rexstad, E. A., Laake, J. L., Strindberg, S., Hedle
 </div>
 </div>
 </div>
-  </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
+  </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside>
 </div>
 
@@ -637,9 +664,9 @@ Thomas, L., Buckland, S. T., Rexstad, E. A., Laake, J. L., Strindberg, S., Hedle
     </footer>
 </div>
 
-  
 
-  
+
+
 
   
 </body>
