@@ -230,7 +230,7 @@ MCDS.opt.time <- Sys.time() - start.time
 summary(uni3.mcds)
 ```
 
-This took a little less time: `r format(MCDS.opt.time, digits = 1)`.  Hence, for some datasets, it may be quicker to use the `MCDS.exe` optimizer.  This could make a significant difference if using the nonparametric bootstrap to estimate variance.  However, after making improvemts to the optimizer in `mrds` 3.0.0 and `Distance` 2.0.0 the difference is generally small, and in many cases the `R` optimizer is faster than `MCDS.exe` so this is likely not a productive avenue to pursue in general. 
+This took a little less time: `r format(MCDS.opt.time, digits = 1)`.  Hence, for some datasets, it may be quicker to use the `MCDS.exe` optimizer.  This could make a significant difference if using the nonparametric bootstrap to estimate variance.  However, after making improvements to the optimizer in `mrds` 3.0.0 and `Distance` 2.0.0 the difference is generally small, and in many cases the `R` optimizer is faster than `MCDS.exe` so this is likely not a productive avenue to pursue in general. 
 
 # Discussion
 
