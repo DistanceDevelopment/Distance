@@ -25,12 +25,12 @@ vignette: >
 ---
 
 ```{r include=FALSE}
-knitr::opts_chunk$set(eval=TRUE, message=TRUE, warnings=FALSE, cache = TRUE)
+knitr::opts_chunk$set(eval=TRUE, message=TRUE, warnings=FALSE, cache = FALSE)
 ```
 
-Here we demonstrate the use of the alternative optimization engine `mcds.exe` in the `Distance` and `mrds` packages.
+Here we demonstrate the use of the alternative optimization engine `mcds.exe` in the `Distance` and `mrds` packages.  This engine was introduced with `Distance` version 1.0.8 and `mrds` version 2.2.9 to provide an alternative to the built-in optimizer in our `R` packages -- but subsequent improvements in the built-in optimizer implemented in `Distance` 2.0.0 and `mrds` 3.0.0 mean that we no longer recommend use of `mcds.exe`.  Nevertheless, the option to use `mcds.exe` remains open, and may be useful for some users, so we have retained this vignette.  We may deprecate the option in future releases.
 
-This vignette requires the packages `Distance` version 1.0.8 or later and `mrds` version 2.2.9 or later.  It is designed for use in the Microsoft Windows operating system -- the `mcds.exe` engine currently only has experimental support for MacOS or Linux.
+Note also that this vignette is designed for use within the Microsoft Windows operating system -- the `mcds.exe` engine only has experimental support for MacOS or Linux (see the `MCDS.exe` help page within the `mrds` package.for more information).
 
 # Objectives
 
@@ -47,41 +47,26 @@ The `Distance` package is designed to provide a simple way to fit detection func
 
 An alternative method for analyzing distance sampling data is using the Distance for Windows software [@Thomas2010]. This software also uses maximum liklihood to fit the detection function models, and relies on software written in the programming language FORTRAN to do the fitting.  The filename of this software is `MCDS.exe`.
 
-In a perfect world, both methods would produce identical results given the same data and model specification, since the likelihood has only one maximum.  However, the likelihood surface is sometimes complex, especially when monotonicity constraints are used (which ensures the estimated detection probability is flat or decreasing with increasing distance when adjustment terms are used) or with "overdispersed" or "spiked" data (see Figure 2 in Thomas et al. [-@Thomas2010]), and so in some (rare) cases one or other piece of software fails to find the maximum.  To counteract this, it is possible to run both the `R`-based optimizer and `MCDS.exe` from the `ds` function within the `Distance` package or the `ddf` function within `mrds` package.
+In a perfect world, both methods would produce identical results given the same data and model specification, since the likelihood has only one maximum.  However, the likelihood surface is sometimes complex, especially when monotonicity constraints are used (which ensures the estimated detection probability is flat or decreasing with increasing distance when adjustment terms are used) or with "overdispersed" or "spiked" data (see Figure 2 in Thomas et al. [-@Thomas2010]), and so in some (rare) cases one or other piece of software fails to find the maximum.  Note that in our tests, we have found this to be extremely rare from `Distance` version 2.0.0 and `mrds` version 3.0.0 onwards.  Nevertheless, to counteract this, it is possible to run both the `R`-based optimizer and `MCDS.exe` from the `ds` function within the `Distance` package or the `ddf` function within `mrds` package.
 
-Another motivation for using the `MCDS.exe` software from within `R` is that the `R`-based optimizer is sometimes slow to converge and so using `MCDS.exe` in place of the `R`-based optimizer can save significant time, particularly when doing a nonparametric bootstrap for large datasets.
+Another historical motivation for using the `MCDS.exe` software from within `R` was that the `R`-based optimizer was sometimes slow to converge and so using `MCDS.exe` in place of the `R`-based optimizer can then save significant time, particularly when doing a nonparametric bootstrap for large datasets.  However, from `Distance` 2.0.0 and `mrds` 3.0.0 the `R`-based optimizer is no longer generally slower.
 
 This vignette demonstrates how to download and then use the MCDS.exe sofware from within the `Distance` and `mrds` packages.  For more information, see the `MCDS.exe` help page within the `mrds` package.
 
 # Downloading and verifying MCDS.exe
 
-The program `MCDS.exe` does not come automatically with the `Distance` or `mrds` packages, to avoid violating CRAN rules, so you must first download it from the distance sampling website.  You can check whether `MCDS.exe` is installed already or not by loading the `Distance` library:
-```{r  include=FALSE}
-#Remove MCDS.exe file, so that the next part shows the correct message (which is that
-# MCDS.exe is not there)
-if(file.exists(paste0(system.file(package="mrds"),"/MCDS.exe")))
-  file.remove(paste0(system.file(package="mrds"),"/MCDS.exe"))
+The program `MCDS.exe` does not come automatically with the `Distance` or `mrds` packages, to avoid violating CRAN rules, so you must first download it from the distance sampling website.
+
+```{r}
+#Unload Distance package if it's already loaded in R
 if("Distance" %in% (.packages())){
   detach("package:Distance", unload=TRUE) 
 }
-```
 
-```{r}
-library(Distance)
-```
-If `MCDS.exe` is not installed, then you will receive the message
-`MCDS.exe not detected, single observer analyses will only be run using optimiser in mrds R library. See ?MCDS for details.`
-
-In this case, you need to download it from the Distancesampling.org web site:
-
-```{r}
+#Download MCDS.exe
 download.file("http://distancesampling.org/R/MCDS.exe", paste0(system.file(package="mrds"),"/MCDS.exe"), mode = "wb")
-```
 
-Now if you reload the Distance package, the `MCDS.exe not detected` message should not be shown:
-
-```{r}
-detach("package:Distance", unload = TRUE)
+#Load the Distance package - now it will be able to use MCDS.exe
 library(Distance)
 ```
 
@@ -114,7 +99,7 @@ You can see the process of both optimizers being used by setting the `debug_leve
 ds.model <- ds(tee.data, truncation = 4, debug_level = 1)
 ```
 
-First the half-normal with no adjustments is run; for this model the `MCDS.exe` sofware is run first, followed by the `R`-based (`mrds`) optimizer.  Both converge and both give the same `nll` (negative log-likelihood) or 154.5692, giving an AIC of 311.138.  The model with half-normal and a cosine adjustment of order 2 is then fitted to the data, with first the `MCDS.exe` optimizer and then the `R`-based optimizer.  Again  both give the same result of nll 154.5619 and an AIC of 313.124.  This is higher than the AIC with no adjustments so half-normal with no adjustments is chosen.
+First the half-normal with no adjustments is run; for this model the `MCDS.exe` software is run first, followed by the `R`-based (`mrds`) optimizer.  Both converge and both give the same `nll` (negative log-likelihood) or 154.5692, giving an AIC of 311.138.  The model with half-normal and a cosine adjustment of order 2 is then fitted to the data, with first the `MCDS.exe` optimizer and then the `R`-based optimizer.  Again  both give the same result of nll 154.5619 and an AIC of 313.124.  This is higher than the AIC with no adjustments so half-normal with no adjustments is chosen.
 
 In this case, both optimizers produced the same result, so there is no benefit to run `MCDS.exe`.
 
@@ -124,7 +109,10 @@ As we said earlier, the default behaviour when `MCDS.exe` has been downloaded is
 
 ```{r}
 ds.model <- ds(tee.data, truncation = 4, optimizer = "MCDS")
+summary(ds.model)
 ```
+
+The summary output now says `Optimisation:  MCDS.exe`.
 
 ## Demonstration using `ddf` in `mrds` package
 
@@ -167,8 +155,8 @@ bin.cutpoints.100m <- bin.cutpoints <- c(0, 10, 20, 30, 40, 60, 80, 100)
 The following call to `ds` gives several warnings.  Some warnings are about the detection function being less than zero at some distances.  There is also a warning about the Hessian (which is used for variance estimation), but this relates to the Hermite(4, 6) model (i.e., two Hermite adjustment terms of order 4 and 6) which is not chosen using AIC and so this warning can be ignored.
 
 ```{r, warning = TRUE}
-wren5min.hn.herm.t100 <- ds(data=wren_5min, key="hn", adjustment="herm", 
-                            transect="point", cutpoints=bin.cutpoints.100m)
+wren5min.hn.herm.t100 <- ds(data = wren_5min, key = "hn", adjustment = "herm", 
+                            transect = "point", cutpoints = bin.cutpoints.100m)
 summary(wren5min.hn.herm.t100)
 ```
 
@@ -177,8 +165,8 @@ The `MCDS.exe` optimizer is the chosen one (see the `Optimisation' line of outpu
 The warnings persist if only the `MCDS.exe` optimizer is used:
 
 ```{r, warning = TRUE}
-wren5min.hn.herm.t100.mcds <- ds(data=wren_5min, key="hn", adjustment="herm", 
-                            transect="point", cutpoints=bin.cutpoints.100m,
+wren5min.hn.herm.t100.mcds <- ds(data = wren_5min, key = "hn", adjustment = "herm", 
+                            transect = "point", cutpoints = bin.cutpoints.100m,
                             optimizer = "MCDS")
 ```
 
@@ -206,21 +194,20 @@ Hence in this case, we would use the `R`-based optimizer's fit.
 
 # Camera trap example
 
-For this example, it helps if you are familiar with the [Analysis of camera trapping data](https://examples.distancesampling.org/Distance-cameratraps/camera-distill.html) vignette on the distanceexamples web site.
+For this example, it helps if you are familiar with the [Analysis of camera trapping data](https://distancedevelopment.github.io/Distance/articles/web-only/CTDS/camera-distill.html) vignette on the distance sampling web site.
 
-We first read in the Duiker data.
+You also need to [Download from the Dryad data repository](https://datadryad.org/stash/downloads/file_stream/73221) the detection distances for the full daytime data set and then read it in with the code below: 
 
 ```{r}
 #Read in data and set up data for analysis
-DuikerCameraTraps <- read.csv(file="https://datadryad.org/stash/downloads/file_stream/73221", 
-                              header=TRUE, sep="\t")
+DuikerCameraTraps <- read.csv(file="DaytimeDistances.txt", header=TRUE, sep="\t")
 DuikerCameraTraps$Area <- DuikerCameraTraps$Area / (1000*1000)
 DuikerCameraTraps$object <- NA
 DuikerCameraTraps$object[!is.na(DuikerCameraTraps$distance)] <- 1:sum(!is.na(DuikerCameraTraps$distance))
 
 #Specify breakpoints and truncation
 trunc.list <- list(left=2, right=15)
-mybreaks <- c(seq(2,8,1), 10, 12, 15)
+mybreaks <- c(seq(2, 8, 1), 10, 12, 15)
 ```
 
 Then we fit the detection function selected in the camera trap vignette, uniform plus 3 cosine adjustment terms, and time how long the fitting takes:
@@ -233,7 +220,7 @@ R.opt.time <- Sys.time() - start.time
 summary(uni3.r)
 ```
 
-Fitting takes quite a while! - `r format(R.opt.time, digits = 1)`.  Here we try the `MCDS.exe` optimizer:
+Fitting takes `r format(R.opt.time, digits = 2)`.  (Note, in versions of `Distance` before 2.0.0 this was a much higher number!) Here we try the `MCDS.exe` optimizer:
 
 ```{r}
 start.time <- Sys.time()
@@ -243,28 +230,29 @@ MCDS.opt.time <- Sys.time() - start.time
 summary(uni3.mcds)
 ```
 
-This took only `r format(MCDS.opt.time, digits = 1)`.  Hence, for some datasets, it may be quicker to use the `MCDS.exe` optimizer.  This makes a particularly big difference if using the nonparametric bootstrap to estimate variance.
+This took a little less time: `r format(MCDS.opt.time, digits = 1)`.  Hence, for some datasets, it may be quicker to use the `MCDS.exe` optimizer.  This could make a significant difference if using the nonparametric bootstrap to estimate variance.  However, after making improvemts to the optimizer in `mrds` 3.0.0 and `Distance` 2.0.0 the difference is generally small, and in many cases the `R` optimizer is faster than `MCDS.exe` so this is likely not a productive avenue to pursue in general. 
 
 # Discussion
 
 We have shown how to fit distance sampling detection functions (for single platform data) using either the `R`-based optimizer built into the `ddf` function (via calling `ddf` or, more likely, calling the `ds` function in the `Distance` package) or the `MCDS.exe` analysis engine used by Distance for Windows.  In the vast majority of cases both fitting methods give the same result, and so there is no need to use both.  However, the only downside is that fitting takes longer, as each is called in turn.  If you have downloaded the `MCDS.exe` file and want to speed things up, you can use just the `R`-based optimizer by specifying `optimizer = "R"` in the call to `ds` or `ddf`, or just the `MCDS.exe` optimizer with `optimizer = "MCDS"`.  
 
-Some situations where the two may produce different results are given below.
+Some situations where the two may produce different results are given below.  Note that in each case we give an update related to new algorithms developed and used in `mrds` 3.0.0.
 
 - Detection functions that are close to non-monotonic or close to zero at some distances.   When adjustment terms are used in the detection function, then constraints are required to prevent the fitted function from having "bumps" where detection probability increases with increasing distance and also to prevent detection probability from becoming less than zero.  The former are called monotonicity constraints and are set using the `monotonicity` argument in `ds` or in the `meta.data` argument in `ddf`; monotonicity is set on by default.  In practice, monotonicity and values less than zero are monitored at a finite set of distances between the 0 and the right truncation point, and (for historical reasons) this set of distances is different for the `R`-based and `MCDS.exe` optimizers.   This typically makes no difference to the optimization, but particularly in borderline cases it can result in different fitted functions.  Plotting the fitted functions (as we did in the wren example above) can reveal when there is an issue with a fitted function, and if this occurs the associated optimizer should not be used.  In the future we plan to bring the two into line so they use the same distances for checking.
+  - Update: As of `mrds` 3.0.0 and `Distance` 2.0.0 these are now aligned, so this difference should have gone away.
 
 - Detection functions with many adjustment terms. The two optimizers use different algorithms for optimization: the `R`-based optimizer uses a routine called `nlminb` while `MCDS.exe` uses a nonlinear constrained optimizer routine produced by the IMSL group.  In cases where there are multiple adjustment terms, and hence several parameters to estimate (that are often correlated) the likelihood maximization is harder, and one or other routine can sometimes fail to find the maximum.  In this case, choosing the routine with the higher likelihood (i.e., lower negative log-likelihod, or equivalently lower AIC) is the right thing to do, and this is the default behaviour of the software.
+ - Update: in `mrds` 3.0.0 we now use a Sequential Least Squares Programming (SLSQP) algorithm from the 'nloptr' package via `nlminb` in the `R`-based optimizer (rather than the old solnp algorithm).  The old algorithm can be accessed from the `ds`() function in `Distance` using the argument `mono_method = "solnp"` or with the `ddf`() function in `mrds` using the argument `control(mono.method = "solnp") `.  However, the new one shows improved performance in our testing, and so we do not recommend using the old algorithm except for reasons of backwards compatibility.
 
 - Detection functions that are "overdispersed" or with a "spike" in the detection function close to zero distance.  Similarly to the above, the detection function can then be hard to maximize and hence on or other optimizer can fail to find the maximum.  Solution is as above.  Overdispersed data is common in camera trap distance sampling because many detections can be generated by the same individual crossing in front of the camera.
+ - Update is as above.
 
 If you are interested in seeing more comparisons of the optimizers on various datasets, we maintain a test suite of both straightforward and challenging datasets together with test code to run and compare the two optimizers -- this is available at the [MCDS_mrds_compare repository](https://github.com/DistanceDevelopment/MCDS_mrds_compare).
 
 If you encounter difficulties when using both optimizers, one possible troubleshooting step is to run the analysis first choosing one optimizer (e.g., specifing the argument `optimizer = "MCDS"`) and then choosing the other (`optimizer = "R"`).  This allows you clearly to see what the output of each optimizer is (including any error messages) and facilitates their comparison.
 
-One other criterion to favour one optimizer over the other is speed, and we have found that for large datasets the `MCDS.exe` optimizer is quicker.
+One other criterion to favour one optimizer over the other is speed.  We found that for large datasets the `MCDS.exe` optimizer was quicker, but as of `Distance` 2.0.0 and `mrds` 3.0.0 this is no longer necessarily the case.
 
 One thing to note is that the `MCDS.exe` file will get deleted each time you update the `mrds` package, so you'll need to re-download the file if you want to continue using the `MCDS.exe` optimizer.  As shown above, this only requires running one line of code.
-
-Going forward, we plan to work on making further improvements to the `R`-based optimizer and it is possible that at some point in the future we are confident this optimizer is uniformly better (in terms of better fit and speed) than the `MCDS.exe` one.  If this happens, we will update this vignette and also make announcements on the distance sampling list.
 
 # References

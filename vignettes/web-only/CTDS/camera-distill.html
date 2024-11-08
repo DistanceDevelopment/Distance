@@ -1,0 +1,1166 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+
+
+<title>Analysis of camera trapping data</title>
+
+<script>$(document).ready(function(){
+    if (typeof $('[data-toggle="tooltip"]').tooltip === 'function') {
+        $('[data-toggle="tooltip"]').tooltip();
+    }
+    if ($('[data-toggle="popover"]').popover === 'function') {
+        $('[data-toggle="popover"]').popover();
+    }
+});
+</script>
+<style type="text/css">
+.lightable-minimal {
+border-collapse: separate;
+border-spacing: 16px 1px;
+width: 100%;
+margin-bottom: 10px;
+}
+.lightable-minimal td {
+margin-left: 5px;
+margin-right: 5px;
+}
+.lightable-minimal th {
+margin-left: 5px;
+margin-right: 5px;
+}
+.lightable-minimal thead tr:last-child th {
+border-bottom: 2px solid #00000050;
+empty-cells: hide;
+}
+.lightable-minimal tbody tr:first-child td {
+padding-top: 0.5em;
+}
+.lightable-minimal.lightable-hover tbody tr:hover {
+background-color: #f5f5f5;
+}
+.lightable-minimal.lightable-striped tbody tr:nth-child(even) {
+background-color: #f5f5f5;
+}
+.lightable-classic {
+border-top: 0.16em solid #111111;
+border-bottom: 0.16em solid #111111;
+width: 100%;
+margin-bottom: 10px;
+margin: 10px 5px;
+}
+.lightable-classic tfoot tr td {
+border: 0;
+}
+.lightable-classic tfoot tr:first-child td {
+border-top: 0.14em solid #111111;
+}
+.lightable-classic caption {
+color: #222222;
+}
+.lightable-classic td {
+padding-left: 5px;
+padding-right: 5px;
+color: #222222;
+}
+.lightable-classic th {
+padding-left: 5px;
+padding-right: 5px;
+font-weight: normal;
+color: #222222;
+}
+.lightable-classic thead tr:last-child th {
+border-bottom: 0.10em solid #111111;
+}
+.lightable-classic.lightable-hover tbody tr:hover {
+background-color: #F9EEC1;
+}
+.lightable-classic.lightable-striped tbody tr:nth-child(even) {
+background-color: #f5f5f5;
+}
+.lightable-classic-2 {
+border-top: 3px double #111111;
+border-bottom: 3px double #111111;
+width: 100%;
+margin-bottom: 10px;
+}
+.lightable-classic-2 tfoot tr td {
+border: 0;
+}
+.lightable-classic-2 tfoot tr:first-child td {
+border-top: 3px double #111111;
+}
+.lightable-classic-2 caption {
+color: #222222;
+}
+.lightable-classic-2 td {
+padding-left: 5px;
+padding-right: 5px;
+color: #222222;
+}
+.lightable-classic-2 th {
+padding-left: 5px;
+padding-right: 5px;
+font-weight: normal;
+color: #222222;
+}
+.lightable-classic-2 tbody tr:last-child td {
+border-bottom: 3px double #111111;
+}
+.lightable-classic-2 thead tr:last-child th {
+border-bottom: 1px solid #111111;
+}
+.lightable-classic-2.lightable-hover tbody tr:hover {
+background-color: #F9EEC1;
+}
+.lightable-classic-2.lightable-striped tbody tr:nth-child(even) {
+background-color: #f5f5f5;
+}
+.lightable-material {
+min-width: 100%;
+white-space: nowrap;
+table-layout: fixed;
+font-family: Roboto, sans-serif;
+border: 1px solid #EEE;
+border-collapse: collapse;
+margin-bottom: 10px;
+}
+.lightable-material tfoot tr td {
+border: 0;
+}
+.lightable-material tfoot tr:first-child td {
+border-top: 1px solid #EEE;
+}
+.lightable-material th {
+height: 56px;
+padding-left: 16px;
+padding-right: 16px;
+}
+.lightable-material td {
+height: 52px;
+padding-left: 16px;
+padding-right: 16px;
+border-top: 1px solid #eeeeee;
+}
+.lightable-material.lightable-hover tbody tr:hover {
+background-color: #f5f5f5;
+}
+.lightable-material.lightable-striped tbody tr:nth-child(even) {
+background-color: #f5f5f5;
+}
+.lightable-material.lightable-striped tbody td {
+border: 0;
+}
+.lightable-material.lightable-striped thead tr:last-child th {
+border-bottom: 1px solid #ddd;
+}
+.lightable-material-dark {
+min-width: 100%;
+white-space: nowrap;
+table-layout: fixed;
+font-family: Roboto, sans-serif;
+border: 1px solid #FFFFFF12;
+border-collapse: collapse;
+margin-bottom: 10px;
+background-color: #363640;
+}
+.lightable-material-dark tfoot tr td {
+border: 0;
+}
+.lightable-material-dark tfoot tr:first-child td {
+border-top: 1px solid #FFFFFF12;
+}
+.lightable-material-dark th {
+height: 56px;
+padding-left: 16px;
+padding-right: 16px;
+color: #FFFFFF60;
+}
+.lightable-material-dark td {
+height: 52px;
+padding-left: 16px;
+padding-right: 16px;
+color: #FFFFFF;
+border-top: 1px solid #FFFFFF12;
+}
+.lightable-material-dark.lightable-hover tbody tr:hover {
+background-color: #FFFFFF12;
+}
+.lightable-material-dark.lightable-striped tbody tr:nth-child(even) {
+background-color: #FFFFFF12;
+}
+.lightable-material-dark.lightable-striped tbody td {
+border: 0;
+}
+.lightable-material-dark.lightable-striped thead tr:last-child th {
+border-bottom: 1px solid #FFFFFF12;
+}
+.lightable-paper {
+width: 100%;
+margin-bottom: 10px;
+color: #444;
+}
+.lightable-paper tfoot tr td {
+border: 0;
+}
+.lightable-paper tfoot tr:first-child td {
+border-top: 1px solid #00000020;
+}
+.lightable-paper thead tr:last-child th {
+color: #666;
+vertical-align: bottom;
+border-bottom: 1px solid #00000020;
+line-height: 1.15em;
+padding: 10px 5px;
+}
+.lightable-paper td {
+vertical-align: middle;
+border-bottom: 1px solid #00000010;
+line-height: 1.15em;
+padding: 7px 5px;
+}
+.lightable-paper.lightable-hover tbody tr:hover {
+background-color: #F9EEC1;
+}
+.lightable-paper.lightable-striped tbody tr:nth-child(even) {
+background-color: #00000008;
+}
+.lightable-paper.lightable-striped tbody td {
+border: 0;
+}
+</style>
+
+<style type="text/css">
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+</style>
+
+
+
+<style type="text/css">
+code {
+white-space: pre;
+}
+.sourceCode {
+overflow: visible;
+}
+</style>
+<style type="text/css" data-origin="pandoc">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+{ counter-reset: source-line 0; }
+pre.numberSource code > span
+{ position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+{ content: counter(source-line);
+position: relative; left: -1em; text-align: right; vertical-align: baseline;
+border: none; display: inline-block;
+-webkit-touch-callout: none; -webkit-user-select: none;
+-khtml-user-select: none; -moz-user-select: none;
+-ms-user-select: none; user-select: none;
+padding: 0 4px; width: 4em;
+color: #aaaaaa;
+}
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa; padding-left: 4px; }
+div.sourceCode
+{ }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } 
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.at { color: #7d9029; } 
+code span.bn { color: #40a070; } 
+code span.bu { color: #008000; } 
+code span.cf { color: #007020; font-weight: bold; } 
+code span.ch { color: #4070a0; } 
+code span.cn { color: #880000; } 
+code span.co { color: #60a0b0; font-style: italic; } 
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.do { color: #ba2121; font-style: italic; } 
+code span.dt { color: #902000; } 
+code span.dv { color: #40a070; } 
+code span.er { color: #ff0000; font-weight: bold; } 
+code span.ex { } 
+code span.fl { color: #40a070; } 
+code span.fu { color: #06287e; } 
+code span.im { color: #008000; font-weight: bold; } 
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.kw { color: #007020; font-weight: bold; } 
+code span.op { color: #666666; } 
+code span.ot { color: #007020; } 
+code span.pp { color: #bc7a00; } 
+code span.sc { color: #4070a0; } 
+code span.ss { color: #bb6688; } 
+code span.st { color: #4070a0; } 
+code span.va { color: #19177c; } 
+code span.vs { color: #4070a0; } 
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } 
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    var j = 0;
+    while (j < rules.length) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") {
+        j++;
+        continue;
+      }
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') {
+        j++;
+        continue;
+      }
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+
+
+
+<style type="text/css">
+
+div.csl-bib-body { }
+div.csl-entry {
+clear: both;
+}
+.hanging div.csl-entry {
+margin-left:2em;
+text-indent:-2em;
+}
+div.csl-left-margin {
+min-width:2em;
+float:left;
+}
+div.csl-right-inline {
+margin-left:2em;
+padding-left:1em;
+}
+div.csl-indent {
+margin-left: 2em;
+}
+</style>
+
+<style type="text/css">body {
+background-color: #fff;
+margin: 1em auto;
+max-width: 700px;
+overflow: visible;
+padding-left: 2em;
+padding-right: 2em;
+font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+font-size: 14px;
+line-height: 1.35;
+}
+#TOC {
+clear: both;
+margin: 0 0 10px 10px;
+padding: 4px;
+width: 400px;
+border: 1px solid #CCCCCC;
+border-radius: 5px;
+background-color: #f6f6f6;
+font-size: 13px;
+line-height: 1.3;
+}
+#TOC .toctitle {
+font-weight: bold;
+font-size: 15px;
+margin-left: 5px;
+}
+#TOC ul {
+padding-left: 40px;
+margin-left: -1.5em;
+margin-top: 5px;
+margin-bottom: 5px;
+}
+#TOC ul ul {
+margin-left: -2em;
+}
+#TOC li {
+line-height: 16px;
+}
+table {
+margin: 1em auto;
+border-width: 1px;
+border-color: #DDDDDD;
+border-style: outset;
+border-collapse: collapse;
+}
+table th {
+border-width: 2px;
+padding: 5px;
+border-style: inset;
+}
+table td {
+border-width: 1px;
+border-style: inset;
+line-height: 18px;
+padding: 5px 5px;
+}
+table, table th, table td {
+border-left-style: none;
+border-right-style: none;
+}
+table thead, table tr.even {
+background-color: #f7f7f7;
+}
+p {
+margin: 0.5em 0;
+}
+blockquote {
+background-color: #f6f6f6;
+padding: 0.25em 0.75em;
+}
+hr {
+border-style: solid;
+border: none;
+border-top: 1px solid #777;
+margin: 28px 0;
+}
+dl {
+margin-left: 0;
+}
+dl dd {
+margin-bottom: 13px;
+margin-left: 13px;
+}
+dl dt {
+font-weight: bold;
+}
+ul {
+margin-top: 0;
+}
+ul li {
+list-style: circle outside;
+}
+ul ul {
+margin-bottom: 0;
+}
+pre, code {
+background-color: #f7f7f7;
+border-radius: 3px;
+color: #333;
+white-space: pre-wrap; 
+}
+pre {
+border-radius: 3px;
+margin: 5px 0px 10px 0px;
+padding: 10px;
+}
+pre:not([class]) {
+background-color: #f7f7f7;
+}
+code {
+font-family: Consolas, Monaco, 'Courier New', monospace;
+font-size: 85%;
+}
+p > code, li > code {
+padding: 2px 0px;
+}
+div.figure {
+text-align: center;
+}
+img {
+background-color: #FFFFFF;
+padding: 2px;
+border: 1px solid #DDDDDD;
+border-radius: 3px;
+border: 1px solid #CCCCCC;
+margin: 0 5px;
+}
+h1 {
+margin-top: 0;
+font-size: 35px;
+line-height: 40px;
+}
+h2 {
+border-bottom: 4px solid #f7f7f7;
+padding-top: 10px;
+padding-bottom: 2px;
+font-size: 145%;
+}
+h3 {
+border-bottom: 2px solid #f7f7f7;
+padding-top: 10px;
+font-size: 120%;
+}
+h4 {
+border-bottom: 1px solid #f7f7f7;
+margin-left: 8px;
+font-size: 105%;
+}
+h5, h6 {
+border-bottom: 1px solid #ccc;
+font-size: 105%;
+}
+a {
+color: #0033dd;
+text-decoration: none;
+}
+a:hover {
+color: #6666ff; }
+a:visited {
+color: #800080; }
+a:visited:hover {
+color: #BB00BB; }
+a[href^="http:"] {
+text-decoration: underline; }
+a[href^="https:"] {
+text-decoration: underline; }
+
+code > span.kw { color: #555; font-weight: bold; } 
+code > span.dt { color: #902000; } 
+code > span.dv { color: #40a070; } 
+code > span.bn { color: #d14; } 
+code > span.fl { color: #d14; } 
+code > span.ch { color: #d14; } 
+code > span.st { color: #d14; } 
+code > span.co { color: #888888; font-style: italic; } 
+code > span.ot { color: #007020; } 
+code > span.al { color: #ff0000; font-weight: bold; } 
+code > span.fu { color: #900; font-weight: bold; } 
+code > span.er { color: #a61717; background-color: #e3d2d2; } 
+</style>
+
+
+
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">Analysis of camera trapping data</h1>
+<h4 class="author">Eric Howe, Eric Rexstad and Len Thomas</h4>
+<address class="author_afil">
+CREEM, Univ of St Andrews<br><h4 class="date">November 2024</h4>
+
+
+<div id="TOC">
+<ul>
+<li><a href="#analysis-of-camera-trapping-data-using-distance-sampling" id="toc-analysis-of-camera-trapping-data-using-distance-sampling">Analysis of camera trapping data using distance sampling</a>
+<ul>
+<li><a href="#estimating-temporal-availability-for-detection" id="toc-estimating-temporal-availability-for-detection">Estimating temporal availability for detection</a></li>
+<li><a href="#data-input" id="toc-data-input">Data input</a></li>
+<li><a href="#functions-in-the-activity-package" id="toc-functions-in-the-activity-package">Functions in the <code>activity</code> package</a></li>
+<li><a href="#adjustment-for-temporal-availability" id="toc-adjustment-for-temporal-availability">Adjustment for temporal availability</a></li>
+</ul></li>
+<li><a href="#detection-data-analysis" id="toc-detection-data-analysis">Detection data analysis</a>
+<ul>
+<li><a href="#exploratory-data-analysis" id="toc-exploratory-data-analysis">Exploratory Data Analysis</a></li>
+<li><a href="#distance-recording" id="toc-distance-recording">Distance recording</a></li>
+<li><a href="#truncation-decisions" id="toc-truncation-decisions">Truncation decisions</a></li>
+<li><a href="#detection-function-fits" id="toc-detection-function-fits">Detection function fits</a></li>
+<li><a href="#model-selection-adjustments-from-overdispersion" id="toc-model-selection-adjustments-from-overdispersion">Model selection adjustments from overdispersion</a></li>
+<li><a href="#sense-check-for-detection-parameter-estimates" id="toc-sense-check-for-detection-parameter-estimates">Sense check for detection parameter estimates</a></li>
+<li><a href="#selected-detection-function" id="toc-selected-detection-function">Selected detection function</a></li>
+<li><a href="#density-estimates" id="toc-density-estimates">Density estimates</a></li>
+</ul></li>
+<li><a href="#bootstrap-for-variance-estimation" id="toc-bootstrap-for-variance-estimation">Bootstrap for variance estimation</a>
+<ul>
+<li><a href="#summary-function" id="toc-summary-function">Summary function</a></li>
+<li><a href="#multiplier-function" id="toc-multiplier-function">Multiplier function</a></li>
+<li><a href="#speeding-up-the-bootstrap" id="toc-speeding-up-the-bootstrap">Speeding up the bootstrap</a></li>
+<li><a href="#remaining-arguments-to-bootdht" id="toc-remaining-arguments-to-bootdht">Remaining arguments to <code>bootdht</code></a></li>
+<li><a href="#confidence-limits-computed-via-the-percentile-method-of-the-bootstrap." id="toc-confidence-limits-computed-via-the-percentile-method-of-the-bootstrap.">Confidence limits computed via the percentile method of the bootstrap.</a></li>
+<li><a href="#an-esoteric-note-on-starting-values-and-bootstrapping" id="toc-an-esoteric-note-on-starting-values-and-bootstrapping">An esoteric note on starting values and bootstrapping</a></li>
+</ul></li>
+<li><a href="#references" id="toc-references">References</a></li>
+</ul>
+</div>
+
+<div id="analysis-of-camera-trapping-data-using-distance-sampling" class="section level1">
+<h1>Analysis of camera trapping data using distance sampling</h1>
+<p>A distance sampling approach to the analysis of camera trapping data offers the potential advantage that individual animal identification is not required. However, accurate animal-to-camera detection distances are required. This requires calibration prior to the survey with images of objects taken at known distances from the camera. See details in <span class="citation">Howe, Buckland, Després-Einspenner, &amp; Kühl (2017)</span> for description of the field work and data analysis. Here we present analysis of data from <span class="citation">Howe et al. (2017)</span> using the R package <code>Distance</code> <span class="citation">(Miller, Rexstad, Thomas, Marshall, &amp; Laake, 2019)</span>.</p>
+<div id="estimating-temporal-availability-for-detection" class="section level2">
+<h2>Estimating temporal availability for detection</h2>
+<p>Heat- and motion-sensitive camera traps detect only moving animals within the range of the sensor and the field of view of the camera. Animals are therefore unavailable for detection by camera traps when they are stationary, and when they are above (e.g., semi-arboreal species) or below (e.g., semi-fossorial species) the range of the sensor or the camera, regardless of their distance from the camera in two dimensions. This temporally limited availability for detection must be accounted for to avoid negative bias in estimated densities. When data are abundant, researchers may choose to include only data from times when 100% of the population can be assumed to be active within the vertical range of camera traps <span class="citation">(Howe et al., 2017)</span>. However, for rarely-detected species or surveys with lower effort, it might be necessary to include most or all observations of distance. In these situations, survey duration (<span class="math inline">\(T_k\)</span>) might be 12- or 24-hours per day, and it becomes necessary to estimate the proportion of time included in <span class="math inline">\(T_k\)</span> when animals were available for detection. Methods for estimating this proportion directly from CT data have been described <span class="citation">(Rowcliffe, Kays, Kranstauber, Carbone, &amp; Jansen, 2014)</span>, and it can be included in analyses to estimate density <span class="citation">(Bessone et al., 2020)</span>, for example as another multiplier, potentially with an associated standard errors.</p>
+</div>
+<div id="data-input" class="section level2">
+<h2>Data input</h2>
+<p>Times of independent camera triggering events for the period 28 June 21 September 2014 at 23 cameras are recorded in a file described in the data repository <span class="citation">Howe, Buckland, Després-Einspenner, Kühl, &amp; Buckland (2018)</span>. <a href="https://datadryad.org/stash/downloads/file_stream/73223">Download the file from Dryad</a> and save to your local drive, then read with the following code:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a>trigger.events <span class="ot">&lt;-</span> <span class="fu">read.table</span>(<span class="at">file=</span><span class="st">&quot;VideoStartTimes_FullDays.txt&quot;</span>, <span class="at">header=</span><span class="cn">TRUE</span>)</span></code></pre></div>
+<p>The format of the <code>trigger.events</code> data frame is adjusted to create a <code>datetime</code> field for use in the <code>activity</code> package <span class="citation">Rowcliffe (2021)</span></p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a>trigger.events<span class="sc">$</span>date <span class="ot">&lt;-</span> <span class="fu">paste</span>(<span class="st">&quot;2014&quot;</span>,</span>
+<span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a>                       <span class="fu">sprintf</span>(<span class="st">&quot;%02i&quot;</span>, trigger.events<span class="sc">$</span>month), </span>
+<span id="cb2-3"><a href="#cb2-3" tabindex="-1"></a>                       <span class="fu">sprintf</span>(<span class="st">&quot;%02i&quot;</span>, trigger.events<span class="sc">$</span>day),</span>
+<span id="cb2-4"><a href="#cb2-4" tabindex="-1"></a>                       <span class="at">sep=</span><span class="st">&quot;/&quot;</span>)</span>
+<span id="cb2-5"><a href="#cb2-5" tabindex="-1"></a>trigger.events<span class="sc">$</span>time <span class="ot">&lt;-</span> <span class="fu">paste</span>(<span class="fu">sprintf</span>(<span class="st">&quot;%02i&quot;</span>, trigger.events<span class="sc">$</span>hour),</span>
+<span id="cb2-6"><a href="#cb2-6" tabindex="-1"></a>                       <span class="fu">sprintf</span>(<span class="st">&quot;%02i&quot;</span>, trigger.events<span class="sc">$</span>minute),</span>
+<span id="cb2-7"><a href="#cb2-7" tabindex="-1"></a>                       <span class="at">sep=</span><span class="st">&quot;:&quot;</span>)</span>
+<span id="cb2-8"><a href="#cb2-8" tabindex="-1"></a>trigger.events<span class="sc">$</span>datetime <span class="ot">&lt;-</span> <span class="fu">paste</span>(trigger.events<span class="sc">$</span>date, trigger.events<span class="sc">$</span>time)</span></code></pre></div>
+</div>
+<div id="functions-in-the-activity-package" class="section level2">
+<h2>Functions in the <code>activity</code> package</h2>
+<p>We will employ two functions from the <code>activity</code> package. First, convert the time of day of a camera triggering event into the fraction of the 24hr cycle when the event took place, measured in radians. In other words, an event occurring at midday is recorded as <span class="math inline">\(\pi\)</span> and an event occurring at midnight is recorded as 2<span class="math inline">\(\pi\)</span>.</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a><span class="fu">library</span>(activity)</span>
+<span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a>trigger.events<span class="sc">$</span>rtime <span class="ot">&lt;-</span> <span class="fu">gettime</span>(trigger.events<span class="sc">$</span>datetime, </span>
+<span id="cb3-3"><a href="#cb3-3" tabindex="-1"></a>                                <span class="at">tryFormats =</span> <span class="st">&quot;%Y/%m/%d %H:%M&quot;</span>,</span>
+<span id="cb3-4"><a href="#cb3-4" tabindex="-1"></a>                                <span class="at">scale =</span> <span class="st">&quot;radian&quot;</span>)</span></code></pre></div>
+<p>With the radian conversion of the camera triggering times, the distribution of the triggering events times is smoothed, using a kernel smoother by the function <code>fitact</code>. The function estimates the proportion of time (in a 24hr day) animals were active. In addition, the triggering time data can be resampled to provide a measure of uncertainty in the point estimate of activity proportion.</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a>act_result <span class="ot">&lt;-</span> <span class="fu">fitact</span>(trigger.events<span class="sc">$</span>rtime, <span class="at">sample=</span><span class="st">&quot;data&quot;</span>, <span class="at">reps=</span><span class="dv">100</span>)</span></code></pre></div>
+<p>A plot of the histogram of triggering times (Figure <a href="#fig:actplot">1</a>), along with the fitted smooth is provided by a plot function applied to the object returned by <code>fitact</code>.</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a><span class="fu">plot</span>(act_result)</span></code></pre></div>
+<div class="figure"><span style="display:block;" id="fig:actplot"></span>
+<img src="data:image/png;base64,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" alt="Fitted smooth to histogram of camera triggering times for Maxwell&#39;s duiker data." />
+<p class="caption">
+Figure 1: Fitted smooth to histogram of camera triggering times for Maxwell’s duiker data.
+</p>
+</div>
+<p>The value computed by the smooth through the activity histogram can be extracted from the object created by <code>fitact</code>. The extraction reaches into the object to look at the <code>slot</code> called <code>act</code>. The uncertainty around the point estimate is derived from resampling that takes place within <code>fitact</code>. The slot will display the point estimates, standard error and confidence interval bounds.</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a><span class="fu">print</span>(act_result<span class="sc">@</span>act)</span></code></pre></div>
+<pre><code>##       act        se  lcl.2.5% ucl.97.5% 
+## 0.3346383 0.0215452 0.2948407 0.3733814</code></pre>
+<p>The output above would be used to adjust density estimates for temporal activity <strong>if</strong> the cameras were in operation 24hrs per day. However, in this study, cameras were only active for 11.5 hours per day (0630-1800).</p>
+</div>
+<div id="adjustment-for-temporal-availability" class="section level2">
+<h2>Adjustment for temporal availability</h2>
+<p>We use the temporal availability information to create a <em>multiplier</em>. Our multiplier must be defined as
+&gt; proportion of the <em>camera operation time</em> animals were available to be detected</p>
+<p>This is not equivalent to the value produced by the <code>fitact</code> function; that value is the proportion of <em>24hr</em> animals were available to be detected. The availability multiplier must be adjusted based on the daily camera operation period. Uncertainty in this proportion is also included in our computations.</p>
+<p>The point estimate and standard error are pulled from the <code>fitact</code> object, adjusted for daily camera operation time and placed into a data frame named <code>creation</code> in a named list, specifically in the fashion shown.</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" tabindex="-1"></a>camera.operation.per.day <span class="ot">&lt;-</span> <span class="fl">11.5</span></span>
+<span id="cb8-2"><a href="#cb8-2" tabindex="-1"></a>prop.camera.time <span class="ot">&lt;-</span> camera.operation.per.day <span class="sc">/</span> <span class="dv">24</span></span>
+<span id="cb8-3"><a href="#cb8-3" tabindex="-1"></a>avail <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="at">creation=</span><span class="fu">data.frame</span>(<span class="at">rate =</span> act_result<span class="sc">@</span>act[<span class="dv">1</span>]<span class="sc">/</span>prop.camera.time,</span>
+<span id="cb8-4"><a href="#cb8-4" tabindex="-1"></a>                                  <span class="at">SE   =</span> act_result<span class="sc">@</span>act[<span class="dv">2</span>]<span class="sc">/</span>prop.camera.time))</span></code></pre></div>
+<p>A more robust way of incorporating uncertainty in the temporal availability estimate will be described later.</p>
+</div>
+</div>
+<div id="detection-data-analysis" class="section level1">
+<h1>Detection data analysis</h1>
+<p>Detection distances for the full daytime data set is also available on <span class="citation">Howe et al. (2018)</span>. <a href="https://datadryad.org/stash/downloads/file_stream/73221">Download from Dryad</a> and is read in the code chunk below:</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" tabindex="-1"></a>DuikerCameraTraps <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="at">file=</span><span class="st">&quot;DaytimeDistances.txt&quot;</span>, <span class="at">header=</span><span class="cn">TRUE</span>, <span class="at">sep=</span><span class="st">&quot;</span><span class="sc">\t</span><span class="st">&quot;</span>)</span>
+<span id="cb9-2"><a href="#cb9-2" tabindex="-1"></a>DuikerCameraTraps<span class="sc">$</span>Area <span class="ot">&lt;-</span> DuikerCameraTraps<span class="sc">$</span>Area <span class="sc">/</span> (<span class="dv">1000</span><span class="sc">*</span><span class="dv">1000</span>)</span>
+<span id="cb9-3"><a href="#cb9-3" tabindex="-1"></a>DuikerCameraTraps<span class="sc">$</span>object <span class="ot">&lt;-</span> <span class="cn">NA</span></span>
+<span id="cb9-4"><a href="#cb9-4" tabindex="-1"></a>DuikerCameraTraps<span class="sc">$</span>object[<span class="sc">!</span><span class="fu">is.na</span>(DuikerCameraTraps<span class="sc">$</span>distance)] <span class="ot">&lt;-</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">sum</span>(<span class="sc">!</span><span class="fu">is.na</span>(DuikerCameraTraps<span class="sc">$</span>distance))</span></code></pre></div>
+<p>Data file recorded study area size in square meters; second line above converts this to area in square kilometers; the remaining lines create an <code>object</code> field, which uniquely identify each observation.</p>
+<div id="exploratory-data-analysis" class="section level2">
+<h2>Exploratory Data Analysis</h2>
+<p>A quick summary of the data set including: How many camera stations and how many detections in total.</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" tabindex="-1"></a><span class="fu">sum</span>(<span class="sc">!</span><span class="fu">is.na</span>(DuikerCameraTraps<span class="sc">$</span>distance))</span></code></pre></div>
+<pre><code>## [1] 11180</code></pre>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" tabindex="-1"></a><span class="fu">table</span>(DuikerCameraTraps<span class="sc">$</span>Sample.Label)</span></code></pre></div>
+<pre><code>## 
+##   A1   A2   A3   A4   B1   B2   B3   B4   C1   C2   C3   C4   C5   C6   D3   D4 
+##  388   66  988  420    3 1951   73  208   52  195  767  153   41 2682  342  193 
+##   D5   E3   E4   E5   E6 
+##  524  518    1  375 1241</code></pre>
+<p>Note, three sampling stations (B1, C5, E4) had no detections. The one record for each of those stations has distance recorded as <code>NA</code>, but the record is important because it contains effort information.</p>
+</div>
+<div id="distance-recording" class="section level2">
+<h2>Distance recording</h2>
+<p>An examination of the distribution of detection distances; note the bespoke cutpoints causing distance bins to be narrow out to 8m, then increasing in width to the maximum detection distance of 21m (Figure <a href="#fig:distances">2</a>).</p>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" tabindex="-1"></a>breakpoints <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fu">seq</span>(<span class="dv">0</span>, <span class="dv">8</span>, <span class="dv">1</span>), <span class="dv">10</span>, <span class="dv">12</span>, <span class="dv">15</span>, <span class="dv">21</span>)</span>
+<span id="cb14-2"><a href="#cb14-2" tabindex="-1"></a><span class="fu">hist</span>(DuikerCameraTraps<span class="sc">$</span>distance, <span class="at">breaks=</span>breakpoints, <span class="at">main=</span><span class="st">&quot;Peak activity data set&quot;</span>,</span>
+<span id="cb14-3"><a href="#cb14-3" tabindex="-1"></a>     <span class="at">xlab=</span><span class="st">&quot;Radial distance (m)&quot;</span>)</span></code></pre></div>
+<div class="figure"><span style="display:block;" id="fig:distances"></span>
+<img src="data:image/png;base64,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" alt="Distribution of detection distances during peak activity period." />
+<p class="caption">
+Figure 2: Distribution of detection distances during peak activity period.
+</p>
+</div>
+</div>
+<div id="truncation-decisions" class="section level2">
+<h2>Truncation decisions</h2>
+<p>As described by <span class="citation">Howe et al. (2017)</span>:</p>
+<blockquote>
+<p>a paucity of observations between 1 and 2 m but not between 2 and 3 m, so we left-truncated at 2 m. Fitted detection functions and probability density functions were heavy-tailed when distances &gt;15 m were included, so we right truncated at 15 m.</p>
+</blockquote>
+</div>
+<div id="detection-function-fits" class="section level2">
+<h2>Detection function fits</h2>
+<p>The conversion factor must be included <strong>both</strong> in the call to <code>ds()</code> and the call to <code>bootdht()</code>.</p>
+<p>Candidate models considered here differ from the candidate set presented in <span class="citation">Howe et al. (2017)</span>. This set includes</p>
+<ul>
+<li>uniform key with 1, 2 and 3 cosine adjustments,</li>
+<li>half normal key with 0, 1 and 2 cosine adjustment and</li>
+<li>hazard rate key with 0, 1 simple polynomial adjustments.</li>
+</ul>
+<p>The maximum number of parameters in models within the candidate model set is no more than 3.</p>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" tabindex="-1"></a><span class="fu">library</span>(Distance)</span>
+<span id="cb15-2"><a href="#cb15-2" tabindex="-1"></a>trunc.list <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="at">left =</span> <span class="dv">2</span>, <span class="at">right =</span> <span class="dv">15</span>)</span>
+<span id="cb15-3"><a href="#cb15-3" tabindex="-1"></a>mybreaks <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fu">seq</span>(<span class="dv">2</span>, <span class="dv">8</span>, <span class="dv">1</span>), <span class="dv">10</span>, <span class="dv">12</span>, <span class="dv">15</span>)</span>
+<span id="cb15-4"><a href="#cb15-4" tabindex="-1"></a>conversion <span class="ot">&lt;-</span> <span class="fu">convert_units</span>(<span class="st">&quot;meter&quot;</span>, <span class="cn">NULL</span>, <span class="st">&quot;square kilometer&quot;</span>)</span>
+<span id="cb15-5"><a href="#cb15-5" tabindex="-1"></a>uni1 <span class="ot">&lt;-</span> <span class="fu">ds</span>(DuikerCameraTraps, <span class="at">transect =</span> <span class="st">&quot;point&quot;</span>, <span class="at">key =</span> <span class="st">&quot;unif&quot;</span>, <span class="at">adjustment =</span> <span class="st">&quot;cos&quot;</span>,</span>
+<span id="cb15-6"><a href="#cb15-6" tabindex="-1"></a>           <span class="at">nadj =</span> <span class="dv">1</span>, <span class="at">convert_units =</span> conversion,</span>
+<span id="cb15-7"><a href="#cb15-7" tabindex="-1"></a>           <span class="at">cutpoints =</span> mybreaks, <span class="at">truncation =</span> trunc.list)</span></code></pre></div>
+<pre><code>## Warning in create_bins(data, cutpoints): Some distances were outside bins and
+## have been removed.</code></pre>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" tabindex="-1"></a>uni2 <span class="ot">&lt;-</span> <span class="fu">ds</span>(DuikerCameraTraps, <span class="at">transect =</span> <span class="st">&quot;point&quot;</span>, <span class="at">key =</span> <span class="st">&quot;unif&quot;</span>, <span class="at">adjustment =</span> <span class="st">&quot;cos&quot;</span>,</span>
+<span id="cb17-2"><a href="#cb17-2" tabindex="-1"></a>           <span class="at">nadj =</span> <span class="dv">2</span>, <span class="at">convert_units =</span> conversion,</span>
+<span id="cb17-3"><a href="#cb17-3" tabindex="-1"></a>           <span class="at">cutpoints =</span> mybreaks, <span class="at">truncation =</span> trunc.list)</span></code></pre></div>
+<pre><code>## Warning in create_bins(data, cutpoints): Some distances were outside bins and
+## have been removed.</code></pre>
+<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" tabindex="-1"></a>uni3 <span class="ot">&lt;-</span> <span class="fu">ds</span>(DuikerCameraTraps, <span class="at">transect =</span> <span class="st">&quot;point&quot;</span>, <span class="at">key =</span> <span class="st">&quot;unif&quot;</span>, <span class="at">adjustment =</span> <span class="st">&quot;cos&quot;</span>,</span>
+<span id="cb19-2"><a href="#cb19-2" tabindex="-1"></a>           <span class="at">nadj =</span> <span class="dv">3</span>, <span class="at">convert_units =</span> conversion,</span>
+<span id="cb19-3"><a href="#cb19-3" tabindex="-1"></a>           <span class="at">cutpoints =</span> mybreaks, <span class="at">truncation =</span> trunc.list)</span></code></pre></div>
+<pre><code>## Warning in create_bins(data, cutpoints): Some distances were outside bins and
+## have been removed.</code></pre>
+<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" tabindex="-1"></a>hn0 <span class="ot">&lt;-</span> <span class="fu">ds</span>(DuikerCameraTraps, <span class="at">transect =</span> <span class="st">&quot;point&quot;</span>, <span class="at">key =</span> <span class="st">&quot;hn&quot;</span>, <span class="at">adjustment =</span> <span class="cn">NULL</span>,</span>
+<span id="cb21-2"><a href="#cb21-2" tabindex="-1"></a>          <span class="at">convert_units =</span> conversion, <span class="at">cutpoints =</span> mybreaks, <span class="at">truncation =</span> trunc.list)</span></code></pre></div>
+<pre><code>## Warning in create_bins(data, cutpoints): Some distances were outside bins and
+## have been removed.</code></pre>
+<div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" tabindex="-1"></a>hn1 <span class="ot">&lt;-</span> <span class="fu">ds</span>(DuikerCameraTraps, <span class="at">transect =</span> <span class="st">&quot;point&quot;</span>, <span class="at">key =</span> <span class="st">&quot;hn&quot;</span>, <span class="at">adjustment =</span> <span class="st">&quot;cos&quot;</span>,</span>
+<span id="cb23-2"><a href="#cb23-2" tabindex="-1"></a>          <span class="at">nadj =</span> <span class="dv">1</span>, <span class="at">convert_units =</span> conversion,</span>
+<span id="cb23-3"><a href="#cb23-3" tabindex="-1"></a>          <span class="at">cutpoints =</span> mybreaks, <span class="at">truncation =</span> trunc.list)</span></code></pre></div>
+<pre><code>## Warning in create_bins(data, cutpoints): Some distances were outside bins and
+## have been removed.</code></pre>
+<div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" tabindex="-1"></a>hn2 <span class="ot">&lt;-</span> <span class="fu">ds</span>(DuikerCameraTraps, <span class="at">transect =</span> <span class="st">&quot;point&quot;</span>, <span class="at">key =</span> <span class="st">&quot;hn&quot;</span>, <span class="at">adjustment =</span> <span class="st">&quot;cos&quot;</span>,</span>
+<span id="cb25-2"><a href="#cb25-2" tabindex="-1"></a>          <span class="at">nadj =</span> <span class="dv">2</span>, <span class="at">convert_units =</span> conversion,</span>
+<span id="cb25-3"><a href="#cb25-3" tabindex="-1"></a>          <span class="at">cutpoints =</span> mybreaks, <span class="at">truncation =</span> trunc.list)</span></code></pre></div>
+<pre><code>## Warning in create_bins(data, cutpoints): Some distances were outside bins and
+## have been removed.</code></pre>
+<pre><code>## Warning in check.mono(result, n.pts = control$mono.points): Detection function
+## is greater than 1 at some distances
+## Warning in check.mono(result, n.pts = control$mono.points): Detection function
+## is greater than 1 at some distances</code></pre>
+<pre><code>## Warning in mrds::check.mono(model, n.pts = 10): Detection function is greater
+## than 1 at some distances</code></pre>
+<div class="sourceCode" id="cb29"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" tabindex="-1"></a>hr0 <span class="ot">&lt;-</span> <span class="fu">ds</span>(DuikerCameraTraps, <span class="at">transect =</span> <span class="st">&quot;point&quot;</span>, <span class="at">key =</span> <span class="st">&quot;hr&quot;</span>, <span class="at">adjustment =</span> <span class="cn">NULL</span>,</span>
+<span id="cb29-2"><a href="#cb29-2" tabindex="-1"></a>          <span class="at">convert_units =</span> conversion, <span class="at">cutpoints =</span> mybreaks, <span class="at">truncation =</span> trunc.list)</span></code></pre></div>
+<pre><code>## Warning in create_bins(data, cutpoints): Some distances were outside bins and
+## have been removed.</code></pre>
+<div class="sourceCode" id="cb31"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" tabindex="-1"></a>hr1 <span class="ot">&lt;-</span> <span class="fu">ds</span>(DuikerCameraTraps, <span class="at">transect =</span> <span class="st">&quot;point&quot;</span>, <span class="at">key =</span> <span class="st">&quot;hr&quot;</span>, <span class="at">adjustment =</span> <span class="st">&quot;poly&quot;</span>,</span>
+<span id="cb31-2"><a href="#cb31-2" tabindex="-1"></a>          <span class="at">nadj =</span> <span class="dv">1</span>, <span class="at">convert_units =</span> conversion,</span>
+<span id="cb31-3"><a href="#cb31-3" tabindex="-1"></a>          <span class="at">cutpoints =</span> mybreaks, <span class="at">truncation =</span> trunc.list)</span></code></pre></div>
+<pre><code>## Warning in create_bins(data, cutpoints): Some distances were outside bins and
+## have been removed.</code></pre>
+<p>We do not present the density estimates produced from the fitted detection function models because a) we have not chosen a preferred model and b) the density estimates have not been adjusted for viewing angle and temporal availability.</p>
+</div>
+<div id="model-selection-adjustments-from-overdispersion" class="section level2">
+<h2>Model selection adjustments from overdispersion</h2>
+<p>Overdispersion causes AIC to select overly-complex models, so analysts should specify the number/order of adjustment terms manually when fitting distance sampling models to data from camera traps, rather than allowing automated selection using AIC. <span class="citation">Howe, Buckland, Després-Einspenner, &amp; Kühl (2019)</span> describe two methods for performing model selection of distance sampling models in the face of overdispersion. Here we provide R functions to perform the first of these methods. The first method of <span class="citation">Howe et al. (2019)</span> employs a two-step process. First, an overdisersion factor <span class="math inline">\((\hat{c})\)</span> is computed for each key function family from the most complex model in each family. The <span class="math inline">\(\hat{c}\)</span> is derived from the <span class="math inline">\(\chi^2\)</span> goodness of fit test statistic divided by its degrees of freedom. This results in an adjusted AIC score for each model in the key function family:</p>
+<p><span class="math display">\[QAIC = -2 \left \{ \frac{log(\mathcal{L}(\hat{\theta}))}{\hat{c}} \right \} + 2K\]</span></p>
+<p>Code to perform this QAIC computation is found in the function <code>QAIC</code> in the <code>Distance</code> package, and produces the following results:</p>
+<p>Tables of QAIC values for each key function family are shown below (code for <code>kable()</code> calls suppressed for easier readability of results).</p>
+<table class=" lightable-paper" style="font-family: &quot;Arial Narrow&quot;, arial, helvetica, sans-serif; width: auto !important; margin-left: auto; margin-right: auto;">
+<caption>
+<span id="tab:pass1a">Table 1: </span><span id="tab:pass1a">Table 2: </span>QAIC values for uniform key models.
+</caption>
+<thead>
+<tr>
+<th style="text-align:left;">
+</th>
+<th style="text-align:right;">
+df
+</th>
+<th style="text-align:right;">
+QAIC
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+uni1
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+2825.316
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+uni2
+</td>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:right;">
+2826.822
+</td>
+</tr>
+<tr>
+<td style="text-align:left;font-weight: bold;background-color: rgba(255, 140, 26, 255) !important;">
+uni3
+</td>
+<td style="text-align:right;font-weight: bold;background-color: rgba(255, 140, 26, 255) !important;">
+3
+</td>
+<td style="text-align:right;font-weight: bold;background-color: rgba(255, 140, 26, 255) !important;">
+2823.921
+</td>
+</tr>
+</tbody>
+</table>
+<table class=" lightable-paper" style="font-family: &quot;Arial Narrow&quot;, arial, helvetica, sans-serif; width: auto !important; margin-left: auto; margin-right: auto;">
+<caption>
+<span id="tab:pass1b">Table 3: </span><span id="tab:pass1b">Table 4: </span>QAIC values for half normal key models.
+</caption>
+<thead>
+<tr>
+<th style="text-align:left;">
+</th>
+<th style="text-align:right;">
+df
+</th>
+<th style="text-align:right;">
+QAIC
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+hn0
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+2296.204
+</td>
+</tr>
+<tr>
+<td style="text-align:left;font-weight: bold;background-color: rgba(255, 140, 26, 255) !important;">
+hn1
+</td>
+<td style="text-align:right;font-weight: bold;background-color: rgba(255, 140, 26, 255) !important;">
+2
+</td>
+<td style="text-align:right;font-weight: bold;background-color: rgba(255, 140, 26, 255) !important;">
+2292.252
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+hn2
+</td>
+<td style="text-align:right;">
+3
+</td>
+<td style="text-align:right;">
+2294.096
+</td>
+</tr>
+</tbody>
+</table>
+<table class=" lightable-paper" style="font-family: &quot;Arial Narrow&quot;, arial, helvetica, sans-serif; width: auto !important; margin-left: auto; margin-right: auto;">
+<caption>
+<span id="tab:pass1c">Table 5: </span><span id="tab:pass1c">Table 6: </span>QAIC values for hazard rate key models.
+</caption>
+<thead>
+<tr>
+<th style="text-align:left;">
+</th>
+<th style="text-align:right;">
+df
+</th>
+<th style="text-align:right;">
+QAIC
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;font-weight: bold;background-color: rgba(255, 140, 26, 255) !important;">
+hr0
+</td>
+<td style="text-align:right;font-weight: bold;background-color: rgba(255, 140, 26, 255) !important;">
+2
+</td>
+<td style="text-align:right;font-weight: bold;background-color: rgba(255, 140, 26, 255) !important;">
+2465.086
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+hr1
+</td>
+<td style="text-align:right;">
+3
+</td>
+<td style="text-align:right;">
+2466.362
+</td>
+</tr>
+</tbody>
+</table>
+<p>From this first pass of model selection based on QAIC values, we find the model with the uniform key function preferred by QAIC has three cosine adjustment terms. The preferred model from the half normal key function family has one cosine adjustment term. Finally, the preferable model from the hazard rate key function family has no adjustment terms.</p>
+<p>The second step of model selection ranks the models by their <span class="math inline">\(\hat{c}\)</span> values.</p>
+<div class="sourceCode" id="cb33"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" tabindex="-1"></a>chats <span class="ot">&lt;-</span> <span class="fu">chi2_select</span>(uni3, hn1, hr0)<span class="sc">$</span>criteria</span>
+<span id="cb33-2"><a href="#cb33-2" tabindex="-1"></a>modnames <span class="ot">&lt;-</span> <span class="fu">unlist</span>(<span class="fu">lapply</span>(<span class="fu">list</span>(uni3, hn1, hr0), <span class="cf">function</span>(x) x<span class="sc">$</span>ddf<span class="sc">$</span>name.message))</span>
+<span id="cb33-3"><a href="#cb33-3" tabindex="-1"></a>results <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(modnames, chats)</span>
+<span id="cb33-4"><a href="#cb33-4" tabindex="-1"></a>results.sort <span class="ot">&lt;-</span> results[<span class="fu">order</span>(results<span class="sc">$</span>chats),]</span>
+<span id="cb33-5"><a href="#cb33-5" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">kable</span>(results.sort, <span class="at">digits=</span><span class="dv">2</span>, <span class="at">row.names =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb33-6"><a href="#cb33-6" tabindex="-1"></a>             <span class="at">caption=</span><span class="st">&quot;Compare with Table S5 of Howe et al. (2018)&quot;</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb33-7"><a href="#cb33-7" tabindex="-1"></a>  <span class="fu">kable_paper</span>(<span class="at">full_width =</span> <span class="cn">FALSE</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb33-8"><a href="#cb33-8" tabindex="-1"></a>  <span class="fu">row_spec</span>(<span class="dv">1</span>, <span class="at">bold=</span><span class="cn">TRUE</span>,  <span class="at">background =</span> <span class="st">&quot;#4da6ff&quot;</span>)</span></code></pre></div>
+<table class=" lightable-paper" style="font-family: &quot;Arial Narrow&quot;, arial, helvetica, sans-serif; width: auto !important; margin-left: auto; margin-right: auto;">
+<caption>
+<span id="tab:pass2">Table 7: </span><span id="tab:pass2">Table 8: </span>Compare with Table S5 of Howe et al. (2018)
+</caption>
+<thead>
+<tr>
+<th style="text-align:left;">
+modnames
+</th>
+<th style="text-align:right;">
+chats
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;font-weight: bold;background-color: rgba(77, 166, 255, 255) !important;">
+uniform key function with cosine(1,2,3) adjustments
+</td>
+<td style="text-align:right;font-weight: bold;background-color: rgba(77, 166, 255, 255) !important;">
+15.63
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+half-normal key function with cosine(2) adjustments
+</td>
+<td style="text-align:right;">
+16.54
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+hazard-rate key function
+</td>
+<td style="text-align:right;">
+17.21
+</td>
+</tr>
+</tbody>
+</table>
+<p>For this data set, the model chosen by this algorithm that adjusts for overdispersion is the same model (uniform key with three cosine adjustments) as would have been chosen by conventional model selection; but again, not the model selected by <span class="citation">Howe et al. (2017)</span> because of the differing candidate model sets.</p>
+</div>
+<div id="sense-check-for-detection-parameter-estimates" class="section level2">
+<h2>Sense check for detection parameter estimates</h2>
+<p>As a check of the detection function vis-a-vis <span class="citation">Howe et al. (2017)</span>, the paper reports the effective detection radius (<span class="math inline">\(\rho\)</span>) to be 9.4m for the peak activity data set. <span class="citation">Howe et al. (2017)</span> employed a different candidate model set, resulting in the unadjusted hazard rate model as the preferred model. Here we present the estimated effective detection radius from the selected uniform key function with three cosine adjustment terms.</p>
+<p>The effective detection radius can be derived from <span class="math inline">\(\hat{P_a}\)</span> as reported by the function <code>ds</code> as</p>
+<p><span class="math display">\[\hat{\rho} = \sqrt{\hat{P_a} \cdot w^2}\]</span></p>
+<div class="sourceCode" id="cb34"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" tabindex="-1"></a>p_a <span class="ot">&lt;-</span> uni3<span class="sc">$</span>ddf<span class="sc">$</span>fitted[<span class="dv">1</span>]</span>
+<span id="cb34-2"><a href="#cb34-2" tabindex="-1"></a>w <span class="ot">&lt;-</span> <span class="fu">range</span>(mybreaks)[<span class="dv">2</span>] <span class="sc">-</span> <span class="fu">range</span>(mybreaks)[<span class="dv">1</span>]</span>
+<span id="cb34-3"><a href="#cb34-3" tabindex="-1"></a>rho <span class="ot">&lt;-</span> <span class="fu">sqrt</span>(p_a <span class="sc">*</span> w<span class="sc">^</span><span class="dv">2</span>)</span></code></pre></div>
+<p><span class="math inline">\(\hat{P_a}\)</span> is estimated to be 0.329, resulting in an estimate of <span class="math inline">\(\hat{\rho}\)</span> of 7.457.</p>
+</div>
+<div id="selected-detection-function" class="section level2">
+<h2>Selected detection function</h2>
+<p>Figure <a href="#fig:selected">3</a> shows the detection function probability density function of selected model.</p>
+<div class="sourceCode" id="cb35"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" tabindex="-1"></a><span class="fu">plot</span>(uni3, <span class="at">main=</span><span class="st">&quot;Daytime activity&quot;</span>, <span class="at">xlab=</span><span class="st">&quot;Distance (m)&quot;</span>,</span>
+<span id="cb35-2"><a href="#cb35-2" tabindex="-1"></a>     <span class="at">showpoints=</span><span class="cn">FALSE</span>, <span class="at">lwd=</span><span class="dv">3</span>, <span class="at">xlim=</span><span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">15</span>))</span>
+<span id="cb35-3"><a href="#cb35-3" tabindex="-1"></a><span class="fu">plot</span>(uni3, <span class="at">main=</span><span class="st">&quot;Daytime activity&quot;</span>, <span class="at">xlab=</span><span class="st">&quot;Distance (m)&quot;</span>, <span class="at">pdf=</span><span class="cn">TRUE</span>,</span>
+<span id="cb35-4"><a href="#cb35-4" tabindex="-1"></a>     <span class="at">showpoints=</span><span class="cn">FALSE</span>, <span class="at">lwd=</span><span class="dv">3</span>, <span class="at">xlim=</span><span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">15</span>))</span></code></pre></div>
+<div class="figure"><span style="display:block;" id="fig:selected"></span>
+<img src="data:image/png;base64,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" alt="Detection function and probability density function of the selected detection function model." /><img src="data:image/png;base64,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" alt="Detection function and probability density function of the selected detection function model." />
+<p class="caption">
+Figure 3: Detection function and probability density function of the selected detection function model.
+</p>
+</div>
+</div>
+<div id="density-estimates" class="section level2">
+<h2>Density estimates</h2>
+<p>The camera traps do not view the entire area around them, as would be the case with simple point transect sampling. The portion of the area sampled needs to be incorporated in the estimation of abundance. The data file contains a column <code>multiplier</code> that represents the proportion of the circle sampled. <span class="citation">Howe et al. (2017)</span> notes the camera angle of view (AOV) of 42<span class="math inline">\(^{\circ}\)</span>. The proportion of the circle viewed is this value over 360<span class="math inline">\(^{\circ}\)</span>.</p>
+<p>An argument to <code>dht2</code> is <code>sample_fraction</code>, an obvious place to include this quantity. We also add the multiplier for temporal availability described in <a href="#adjustment-for-temporal-availability">the section on temporal availability</a> The <code>dht2</code> function will produce analytical measures of precision with this call.</p>
+<div class="sourceCode" id="cb36"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" tabindex="-1"></a>viewangle <span class="ot">&lt;-</span> <span class="dv">42</span> <span class="co"># degrees</span></span>
+<span id="cb36-2"><a href="#cb36-2" tabindex="-1"></a>samfrac <span class="ot">&lt;-</span> viewangle <span class="sc">/</span> <span class="dv">360</span></span>
+<span id="cb36-3"><a href="#cb36-3" tabindex="-1"></a>peak.uni.dens <span class="ot">&lt;-</span> <span class="fu">dht2</span>(uni3, <span class="at">flatfile=</span>DuikerCameraTraps, <span class="at">strat_formula =</span> <span class="sc">~</span><span class="dv">1</span>,</span>
+<span id="cb36-4"><a href="#cb36-4" tabindex="-1"></a>                     <span class="at">sample_fraction =</span> samfrac, <span class="at">er_est =</span> <span class="st">&quot;P2&quot;</span>, <span class="at">multipliers =</span> avail,</span>
+<span id="cb36-5"><a href="#cb36-5" tabindex="-1"></a>                     <span class="at">convert_units =</span> conversion)</span>
+<span id="cb36-6"><a href="#cb36-6" tabindex="-1"></a><span class="fu">print</span>(peak.uni.dens, <span class="at">report=</span><span class="st">&quot;density&quot;</span>)</span></code></pre></div>
+<pre><code>## Density estimates from distance sampling
+## Stratification : geographical 
+## Variance       : P2, n/L 
+## Multipliers    : creation 
+## Sample fraction : 0.1166667 
+## 
+## 
+## Summary statistics:
+##  .Label  Area CoveredArea   Effort     n  k ER se.ER cv.ER
+##   Total 40.37    2596.317 31483179 10284 21  0     0 0.268
+## 
+## Density estimates:
+##  .Label Estimate    se    cv    LCI     UCI    df
+##   Total  17.2357 4.808 0.279 9.7889 30.3477 23.37
+## 
+## Component percentages of variance:
+##  .Label Detection    ER Multipliers
+##   Total      2.16 92.51        5.33</code></pre>
+</div>
+</div>
+<div id="bootstrap-for-variance-estimation" class="section level1">
+<h1>Bootstrap for variance estimation</h1>
+<p>To produce a more reliable estimate of the precision of the point estimate, produce bootstrap estimates using <code>bootdht</code>. The user needs to create a function and another named list to facilitate use of the bootstrap: a summary function to extract information from each replicate and a multiplier list describing how temporal availability is being derived.</p>
+<div id="summary-function" class="section level2">
+<h2>Summary function</h2>
+<p>As constructed, <code>mysummary</code> will keep the density estimate produced by each bootstrap replicate and the stratum (if any) to which the estimate pertains.</p>
+<div class="sourceCode" id="cb38"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" tabindex="-1"></a>mysummary <span class="ot">&lt;-</span> <span class="cf">function</span>(ests, fit){</span>
+<span id="cb38-2"><a href="#cb38-2" tabindex="-1"></a>  <span class="fu">return</span>(<span class="fu">data.frame</span>(<span class="at">Label =</span> ests<span class="sc">$</span>individuals<span class="sc">$</span>D<span class="sc">$</span>Label,</span>
+<span id="cb38-3"><a href="#cb38-3" tabindex="-1"></a>                    <span class="at">Dhat =</span> ests<span class="sc">$</span>individuals<span class="sc">$</span>D<span class="sc">$</span>Estimate))</span>
+<span id="cb38-4"><a href="#cb38-4" tabindex="-1"></a>}</span></code></pre></div>
+</div>
+<div id="multiplier-function" class="section level2">
+<h2>Multiplier function</h2>
+<p>This rather complex list makes use of <code>make_activity_fn</code> that exists in the <code>Distance</code> package used to call the <code>fitact</code> function from the <code>activity</code> package. For the user, your responsibility is to provide three arguments to this function:</p>
+<ul>
+<li>vector containing the detection times in radians (computed in <a href="#functions-in-the-activity-package">earlier section</a>),</li>
+<li>the manner in which precision of the temporal availability estimate is produced and</li>
+<li>the number of hours per day the cameras are in operation</li>
+</ul>
+<div class="sourceCode" id="cb39"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" tabindex="-1"></a>mult <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="at">availability=</span> <span class="fu">make_activity_fn</span>(trigger.events<span class="sc">$</span>rtime, <span class="at">sample=</span><span class="st">&quot;data&quot;</span>,</span>
+<span id="cb39-2"><a href="#cb39-2" tabindex="-1"></a>                                            <span class="at">detector_daily_duration=</span>camera.operation.per.day))</span></code></pre></div>
+</div>
+<div id="speeding-up-the-bootstrap" class="section level2">
+<h2>Speeding up the bootstrap</h2>
+<p>Bootstrap analyses of camera trap data can be quite slow. In general, camera traps produce a large amount of distance sampling data, and in addition these data tend to be “overdispersed” meaning (in this case) that there are lots of observations with the same distances. Together, this can cause analyses to run slowly, and this can be especially true for bootstrap analyses for variance estimation.</p>
+<p>One way to speed up the bootstrap is to run multiple analyses in parallel, using multiple cores of your computer. You can achieve this using the <code>cores</code> argument to <code>bootdht</code> - for fastest results set this to the number of cores on your machine minus 1 (best to leave 1 free for other things). You can find the number of cores by calling <code>parallel::detectCores()</code> and we do this in the code below.</p>
+<p>Another possible speed-up is to set starting values - but this is quite an advanced technique and so we come back to this later in this document.</p>
+</div>
+<div id="remaining-arguments-to-bootdht" class="section level2">
+<h2>Remaining arguments to <code>bootdht</code></h2>
+<p>Just as with <code>dht2</code> there are arguments for the <code>model</code>, <code>flatfile</code>, <code>sample_fraction</code>, <code>convert.units</code> and <code>multipliers</code> (although for <code>bootdht</code> <code>multipliers</code> uses a function rather than a single value). The only novel arguments to <code>dht2</code> are <code>resample_transects</code> indicating camera stations are to be resampled with replacement, and <code>nboot</code> for the number of bootstrap replicates.</p>
+<div class="sourceCode" id="cb40"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" tabindex="-1"></a>n.cores <span class="ot">&lt;-</span> parallel<span class="sc">::</span><span class="fu">detectCores</span>()</span>
+<span id="cb40-2"><a href="#cb40-2" tabindex="-1"></a>daytime.boot.uni <span class="ot">&lt;-</span> <span class="fu">bootdht</span>(<span class="at">model=</span>uni3, <span class="at">flatfile=</span>DuikerCameraTraps,</span>
+<span id="cb40-3"><a href="#cb40-3" tabindex="-1"></a>                          <span class="at">resample_transects =</span> <span class="cn">TRUE</span>, <span class="at">nboot =</span> <span class="dv">500</span>, </span>
+<span id="cb40-4"><a href="#cb40-4" tabindex="-1"></a>                          <span class="at">cores =</span> n.cores <span class="sc">-</span> <span class="dv">1</span>,</span>
+<span id="cb40-5"><a href="#cb40-5" tabindex="-1"></a>                          <span class="at">summary_fun=</span>mysummary, <span class="at">sample_fraction =</span> samfrac,</span>
+<span id="cb40-6"><a href="#cb40-6" tabindex="-1"></a>                          <span class="at">convert_units =</span> conversion, <span class="at">multipliers=</span>mult)</span></code></pre></div>
+</div>
+<div id="confidence-limits-computed-via-the-percentile-method-of-the-bootstrap." class="section level2">
+<h2>Confidence limits computed via the percentile method of the bootstrap.</h2>
+<div class="sourceCode" id="cb41"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">summary</span>(daytime.boot.uni))</span></code></pre></div>
+<pre><code>## Bootstrap results
+## 
+## Boostraps          : 500 
+## Successes          : 500 
+## Failures           : 0 
+## 
+##      median  mean   se  lcl  ucl   cv
+## Dhat  18.06 19.34 7.66 8.02 37.4 0.42</code></pre>
+<div class="sourceCode" id="cb43"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1" tabindex="-1"></a><span class="fu">hist</span>(daytime.boot.uni<span class="sc">$</span>Dhat, <span class="at">breaks =</span> <span class="dv">20</span>, </span>
+<span id="cb43-2"><a href="#cb43-2" tabindex="-1"></a>     <span class="at">xlab =</span> <span class="st">&quot;Estimated density&quot;</span>, <span class="at">main =</span> <span class="st">&quot;D-hat estimates bootstraps&quot;</span>)</span>
+<span id="cb43-3"><a href="#cb43-3" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">v =</span> <span class="fu">quantile</span>(daytime.boot.uni<span class="sc">$</span>Dhat, <span class="at">probs =</span> <span class="fu">c</span>(<span class="fl">0.025</span>,<span class="fl">0.975</span>), <span class="at">na.rm =</span> <span class="cn">TRUE</span>), <span class="at">lwd =</span> <span class="dv">2</span>, <span class="at">lty =</span> <span class="dv">2</span>, <span class="at">col =</span> <span class="st">&quot;red&quot;</span>)</span>
+<span id="cb43-4"><a href="#cb43-4" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">v =</span> <span class="fu">c</span>(peak.uni.dens<span class="sc">$</span>LCI<span class="sc">/</span>peak.uni.dens<span class="sc">$</span>Area, peak.uni.dens<span class="sc">$</span>UCI<span class="sc">/</span>peak.uni.dens<span class="sc">$</span>Area), <span class="at">lwd =</span> <span class="dv">2</span>, <span class="at">lty =</span> <span class="dv">2</span>, <span class="at">col =</span> <span class="st">&quot;grey&quot;</span>)</span></code></pre></div>
+<div class="figure"><span style="display:block;" id="fig:sampdist"></span>
+<img src="data:image/png;base64,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" alt="Distribution of density estimates from bootstrap replicates.  Red dashed lines indicate bootstrap 95% confidence intervals (obtained using the quantile method); grey dashed lines indicate the analytical 95% confidence intervals obtained earlier." />
+<p class="caption">
+Figure 4: Distribution of density estimates from bootstrap replicates. Red dashed lines indicate bootstrap 95% confidence intervals (obtained using the quantile method); grey dashed lines indicate the analytical 95% confidence intervals obtained earlier.
+</p>
+</div>
+<p>The confidence interval derived from the bootstrap is wider than the confidence interval derived from analytical methods (Figure <a href="#fig:sampdist">4</a>).</p>
+</div>
+<div id="an-esoteric-note-on-starting-values-and-bootstrapping" class="section level2">
+<h2>An esoteric note on starting values and bootstrapping</h2>
+<p>Feel free to skip this unless you’re a fairly advanced user!</p>
+<p>In some cases, it may be necessary to set starting values for the detection function optimization, to help it converge. This can be achieved using the <code>initial_values</code> argument of the <code>ds</code> function. As an example, say we want to use the fitted values from the uniform + 2 cosine function <code>uni2</code> as starting values for the first two parameters of the uniform + 3 cosine function fitting (and 0 for the third parameter). The following code does this:</p>
+<div class="sourceCode" id="cb44"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb44-1"><a href="#cb44-1" tabindex="-1"></a>uni3.with.startvals <span class="ot">&lt;-</span> <span class="fu">ds</span>(DuikerCameraTraps, <span class="at">transect =</span> <span class="st">&quot;point&quot;</span>, <span class="at">key=</span><span class="st">&quot;unif&quot;</span>, <span class="at">adjustment =</span> <span class="st">&quot;cos&quot;</span>,</span>
+<span id="cb44-2"><a href="#cb44-2" tabindex="-1"></a>           <span class="at">nadj=</span><span class="dv">3</span>,</span>
+<span id="cb44-3"><a href="#cb44-3" tabindex="-1"></a>           <span class="at">cutpoints =</span> mybreaks, <span class="at">truncation =</span> trunc.list, </span>
+<span id="cb44-4"><a href="#cb44-4" tabindex="-1"></a>           <span class="at">initial_values =</span> <span class="fu">list</span>(<span class="at">adjustment =</span> <span class="fu">c</span>(<span class="fu">as.numeric</span>(uni2<span class="sc">$</span>ddf<span class="sc">$</span>par), <span class="dv">0</span>)))</span></code></pre></div>
+<pre><code>## Warning in create_bins(data, cutpoints): Some distances were outside bins and
+## have been removed.</code></pre>
+<p>What about when it comes to bootstrapping for variance estimation. You can pass this model in to <code>boot.dht</code> with no problems, so long as you don’t set <code>ncores</code> to more than 1. If you do set <code>ncores</code> to more than 1 it won’t work, returning 0 successful bootstraps. Why? Because <code>uni2$ddf$par</code> is not passed along to all those parallel cores. To fix this you have to hard-code the starting values. So, in this example, we see that the values are</p>
+<div class="sourceCode" id="cb46"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb46-1"><a href="#cb46-1" tabindex="-1"></a><span class="fu">print</span>(uni2<span class="sc">$</span>ddf<span class="sc">$</span>par)</span></code></pre></div>
+<pre><code>## [1] 0.97177303 0.03540654</code></pre>
+<p>and so we use</p>
+<div class="sourceCode" id="cb48"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb48-1"><a href="#cb48-1" tabindex="-1"></a>uni3.with.startvals <span class="ot">&lt;-</span> <span class="fu">ds</span>(DuikerCameraTraps, <span class="at">transect =</span> <span class="st">&quot;point&quot;</span>, <span class="at">key=</span><span class="st">&quot;unif&quot;</span>, <span class="at">adjustment =</span> <span class="st">&quot;cos&quot;</span>,</span>
+<span id="cb48-2"><a href="#cb48-2" tabindex="-1"></a>           <span class="at">nadj=</span><span class="dv">3</span>,</span>
+<span id="cb48-3"><a href="#cb48-3" tabindex="-1"></a>           <span class="at">cutpoints =</span> mybreaks, <span class="at">truncation =</span> trunc.list, </span>
+<span id="cb48-4"><a href="#cb48-4" tabindex="-1"></a>           <span class="at">initial_values =</span> <span class="fu">list</span>(<span class="at">adjustment =</span> <span class="fu">c</span>(<span class="fl">0.97177303</span>, <span class="fl">0.03540654</span>, <span class="dv">0</span>)))</span></code></pre></div>
+<pre><code>## Warning in create_bins(data, cutpoints): Some distances were outside bins and
+## have been removed.</code></pre>
+<p>and this will work fine in <code>bootdht</code>.</p>
+<p>A final tip is that setting starting values can sometimes speed up the bootstrap (as optimization is faster if it starts from a good initial spot), so you might want to pass in the starting values from <code>uni3</code> to your bootstrap routine - something like the following, which we found nearly halved the run time on our test machine. Note, this code is set not to run in this examples file - just here to show what you might use.</p>
+<div class="sourceCode" id="cb50"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb50-1"><a href="#cb50-1" tabindex="-1"></a><span class="fu">print</span>(uni3<span class="sc">$</span>ddf<span class="sc">$</span>par)</span>
+<span id="cb50-2"><a href="#cb50-2" tabindex="-1"></a>uni3.with.startvals <span class="ot">&lt;-</span> <span class="fu">ds</span>(DuikerCameraTraps, <span class="at">transect =</span> <span class="st">&quot;point&quot;</span>, <span class="at">key=</span><span class="st">&quot;unif&quot;</span>, <span class="at">adjustment =</span> <span class="st">&quot;cos&quot;</span>,</span>
+<span id="cb50-3"><a href="#cb50-3" tabindex="-1"></a>           <span class="at">nadj=</span><span class="dv">3</span>,</span>
+<span id="cb50-4"><a href="#cb50-4" tabindex="-1"></a>           <span class="at">cutpoints =</span> mybreaks, <span class="at">truncation =</span> trunc.list, </span>
+<span id="cb50-5"><a href="#cb50-5" tabindex="-1"></a>           <span class="at">optimizer =</span> <span class="st">&quot;MCDS&quot;</span>,</span>
+<span id="cb50-6"><a href="#cb50-6" tabindex="-1"></a>           <span class="at">initial_values =</span> <span class="fu">list</span>(<span class="at">adjustment =</span> <span class="fu">c</span>(<span class="fl">0.93518220</span>, <span class="sc">-</span><span class="fl">0.05345965</span>, <span class="sc">-</span><span class="fl">0.08073799</span>)))</span>
+<span id="cb50-7"><a href="#cb50-7" tabindex="-1"></a>daytime.boot.uni <span class="ot">&lt;-</span> <span class="fu">bootdht</span>(<span class="at">model=</span>uni3.with.startvals, <span class="at">flatfile=</span>DuikerCameraTraps,</span>
+<span id="cb50-8"><a href="#cb50-8" tabindex="-1"></a>                          <span class="at">resample_transects =</span> <span class="cn">TRUE</span>, <span class="at">nboot =</span> <span class="dv">500</span>, </span>
+<span id="cb50-9"><a href="#cb50-9" tabindex="-1"></a>                          <span class="at">cores =</span> n.cores <span class="sc">-</span> <span class="dv">1</span>,</span>
+<span id="cb50-10"><a href="#cb50-10" tabindex="-1"></a>                          <span class="at">summary_fun=</span>mysummary, <span class="at">sample_fraction =</span> samfrac,</span>
+<span id="cb50-11"><a href="#cb50-11" tabindex="-1"></a>                          <span class="at">convert_units =</span> conversion, <span class="at">multipliers=</span>mult)</span></code></pre></div>
+</div>
+</div>
+<div id="references" class="section level1 unnumbered">
+<h1>References</h1>
+<div id="refs" class="references csl-bib-body hanging-indent" line-spacing="2">
+<div id="ref-bessone_2020" class="csl-entry">
+Bessone, M., Kühl, H. S., Hohmann, G., Herbinger, I., N’Goran, K. P., Asanzi, P., … Fruth, B. (2020). Drawn out of the shadows: Surveying secretive forest species with camera trap distance sampling. <em>Journal of Applied Ecology</em>, <em>57</em>(5), 963–974. <a href="https://doi.org/10.1111/1365-2664.13602">https://doi.org/10.1111/1365-2664.13602</a>
+</div>
+<div id="ref-howeetal" class="csl-entry">
+Howe, E. J., Buckland, S. T., Després-Einspenner, M.-L., &amp; Kühl, H. S. (2017). Distance sampling with camera traps. <em>Methods in Ecology and Evolution</em>, <em>8</em>(11), 1558–1565. <a href="https://doi.org/10.1111/2041-210X.12790">https://doi.org/10.1111/2041-210X.12790</a>
+</div>
+<div id="ref-howe_model_2019" class="csl-entry">
+Howe, E. J., Buckland, S. T., Després-Einspenner, M.-L., &amp; Kühl, H. S. (2019). Model selection with overdispersed distance sampling data. <em>Methods in Ecology and Evolution</em>, <em>10</em>(1), 38–47. <a href="https://doi.org/10.1111/2041-210X.13082">https://doi.org/10.1111/2041-210X.13082</a>
+</div>
+<div id="ref-dryad" class="csl-entry">
+Howe, E. J., Buckland, S. T., Després-Einspenner, M.-L., Kühl, H. S., &amp; Buckland, S. T. (2018). <em>Data from: Distance sampling with camera traps</em>. https://doi.org/<a href="https://doi.org/10.5061/dryad.b4c70 ">https://doi.org/10.5061/dryad.b4c70 </a>
+</div>
+<div id="ref-miller" class="csl-entry">
+Miller, D., Rexstad, E., Thomas, L., Marshall, L., &amp; Laake, J. (2019). Distance sampling in r. <em>Journal of Statistical Software, Articles</em>, <em>89</em>(1), 1–28. <a href="https://doi.org/10.18637/jss.v089.i01">https://doi.org/10.18637/jss.v089.i01</a>
+</div>
+<div id="ref-activity_pkg" class="csl-entry">
+Rowcliffe, J. M. (2021). <em>Activity: Animal activity statistics</em>. Retrieved from <a href="https://CRAN.R-project.org/package=activity">https://CRAN.R-project.org/package=activity</a>
+</div>
+<div id="ref-rowcliffe_2014" class="csl-entry">
+Rowcliffe, J. M., Kays, R., Kranstauber, B., Carbone, C., &amp; Jansen, P. A. (2014). Quantifying levels of animal activity using camera trap data. <em>Methods in Ecology and Evolution</em>, <em>5</em>(11), 1170–1179. <a href="https://doi.org/10.1111/2041-210X.12278">https://doi.org/10.1111/2041-210X.12278</a>
+</div>
+</div>
+</div>
+
+
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

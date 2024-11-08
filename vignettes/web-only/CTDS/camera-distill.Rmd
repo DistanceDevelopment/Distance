@@ -136,8 +136,8 @@ Note, three sampling stations (B1, C5, E4) had no detections. The one record for
 
 An examination of the distribution of detection distances; note the bespoke cutpoints causing distance bins to be narrow out to 8m, then increasing in width to the maximum detection distance of 21m (Figure \@ref(fig:distances)).
 
-```{r, distances, fig.dim=c(7,5), fig.cap="Distribution of detection distances during peak activity period."}
-breakpoints <- c(seq(0,8,1), 10, 12, 15, 21)
+```{r, distances, fig.dim = c(7, 5), fig.cap = "Distribution of detection distances during peak activity period."}
+breakpoints <- c(seq(0, 8, 1), 10, 12, 15, 21)
 hist(DuikerCameraTraps$distance, breaks=breakpoints, main="Peak activity data set",
      xlab="Radial distance (m)")
 ```
@@ -162,32 +162,32 @@ The maximum number of parameters in models within the candidate model set is no 
 
 ```{r fit}
 library(Distance)
-trunc.list <- list(left=2, right=15)
-mybreaks <- c(seq(2,8,1), 10, 12, 15)
+trunc.list <- list(left = 2, right = 15)
+mybreaks <- c(seq(2, 8, 1), 10, 12, 15)
 conversion <- convert_units("meter", NULL, "square kilometer")
-uni1 <- ds(DuikerCameraTraps, transect = "point", key="unif", adjustment = "cos",
-           nadj=1, convert_units = conversion,
+uni1 <- ds(DuikerCameraTraps, transect = "point", key = "unif", adjustment = "cos",
+           nadj = 1, convert_units = conversion,
            cutpoints = mybreaks, truncation = trunc.list)
-uni2 <- ds(DuikerCameraTraps, transect = "point", key="unif", adjustment = "cos",
-           nadj=2, convert_units = conversion,
+uni2 <- ds(DuikerCameraTraps, transect = "point", key = "unif", adjustment = "cos",
+           nadj = 2, convert_units = conversion,
            cutpoints = mybreaks, truncation = trunc.list)
-uni3 <- ds(DuikerCameraTraps, transect = "point", key="unif", adjustment = "cos",
-           nadj=3, convert_units = conversion,
+uni3 <- ds(DuikerCameraTraps, transect = "point", key = "unif", adjustment = "cos",
+           nadj = 3, convert_units = conversion,
            cutpoints = mybreaks, truncation = trunc.list)
 
-hn0 <- ds(DuikerCameraTraps, transect = "point", key="hn", adjustment = NULL,
+hn0 <- ds(DuikerCameraTraps, transect = "point", key = "hn", adjustment = NULL,
           convert_units = conversion, cutpoints = mybreaks, truncation = trunc.list)
-hn1 <- ds(DuikerCameraTraps, transect = "point", key="hn", adjustment = "cos",
-          nadj=1, convert_units = conversion,
+hn1 <- ds(DuikerCameraTraps, transect = "point", key = "hn", adjustment = "cos",
+          nadj = 1, convert_units = conversion,
           cutpoints = mybreaks, truncation = trunc.list)
-hn2 <- ds(DuikerCameraTraps, transect = "point", key="hn", adjustment = "cos",
-          nadj=2, convert_units = conversion,
+hn2 <- ds(DuikerCameraTraps, transect = "point", key = "hn", adjustment = "cos",
+          nadj = 2, convert_units = conversion,
           cutpoints = mybreaks, truncation = trunc.list)
 
-hr0 <- ds(DuikerCameraTraps, transect = "point", key="hr", adjustment = NULL,
+hr0 <- ds(DuikerCameraTraps, transect = "point", key = "hr", adjustment = NULL,
           convert_units = conversion, cutpoints = mybreaks, truncation = trunc.list)
-hr1 <- ds(DuikerCameraTraps, transect = "point", key="hr", adjustment = "poly",
-          nadj=1, convert_units = conversion,
+hr1 <- ds(DuikerCameraTraps, transect = "point", key = "hr", adjustment = "poly",
+          nadj = 1, convert_units = conversion,
           cutpoints = mybreaks, truncation = trunc.list)
 ```
 
@@ -243,7 +243,7 @@ knitr::kable(results.sort, digits=2, row.names = FALSE,
 
 For this data set, the model chosen by this algorithm that adjusts for overdispersion is the same model (uniform key with three cosine adjustments) as would have been chosen by conventional model selection; but again, not the model selected by @howeetal because of the differing candidate model sets.
 
-## Sensibility check for detection parameter estimates
+## Sense check for detection parameter estimates
 
 As a check of the detection function vis-a-vis @howeetal, the paper reports the effective detection radius ($\rho$) to be 9.4m for the peak activity data set.  @howeetal employed a different candidate model set, resulting in the unadjusted hazard rate model as the preferred model.  Here we present the estimated effective detection radius from the selected uniform key function with three cosine adjustment terms.
 
@@ -315,28 +315,11 @@ mult <- list(availability= make_activity_fn(trigger.events$rtime, sample="data",
 
 ## Speeding up the bootstrap
 
-If you've tried running this example code in `R` you might have noticed that detection function fitting is quite slow.  In general, camera traps produce a large amount of distance sampling data, and in addition these data tend to be "overdispersed" meaning (in this case) that there are lots of observations with the same distances.  Together, this can cause analyses to run slowly, and this can be especially true for bootstrap analyses for variance estimation.
+Bootstrap analyses of camera trap data can be quite slow.  In general, camera traps produce a large amount of distance sampling data, and in addition these data tend to be "overdispersed" meaning (in this case) that there are lots of observations with the same distances.  Together, this can cause analyses to run slowly, and this can be especially true for bootstrap analyses for variance estimation.
 
 One way to speed up the bootstrap is to run multiple analyses in parallel, using multiple cores of your computer.  You can achieve this using the `cores` argument to `bootdht` - for fastest results set this to the number of cores on your machine minus 1 (best to leave 1 free for other things).  You can find the number of cores by calling `parallel::detectCores()` and we do this in the code below.
 
-The second, which is only available to `Microsoft Windows` users, is to use the alternative optimization engine `MCDS.exe` to fit detection functions.  To find out more about this, see our online example on the [Alternative optimization engine](https://examples.distancesampling.org/mcds-dot-exe/mcds-dot-exe.html).  If you are using a `Windows` machine, you can download MCDS.exe into the required directory by executing the following lines (note, you only need to do this once, although if in future you update the `Distance` package you'll need to re-download it):
-
-```{r, eval = FALSE}
-download.file("http://distancesampling.org/R/MCDS.exe", 
-              paste0(system.file(package="mrds"),"/MCDS.exe"), mode = "wb")
-#Detach and reload the Distance package to make use of it
-detach("package:Distance", unload = TRUE)
-library(Distance)
-```
-
-We make use of this engine here by re-fitting the selected detection function model, `uni3`, using this engine, setting the `ds` argument `optimizer="MCDS"`.  If you are not using a Windows machine or have not downloaded the MCDS.exe engine, then you should not execute this line, and your bootstrap will take longer to execute.
-
-```{r, mcds.exe, eval = solution}
-uni3 <- ds(DuikerCameraTraps, transect = "point", key="unif", adjustment = "cos",
-           nadj=3, convert_units = conversion,
-           cutpoints = mybreaks, truncation = trunc.list,
-           optimizer = "MCDS")
-```
+Another possible speed-up is to set starting values - but this is quite an advanced technique and so we come back to this later in this document.
 
 ## Remaining arguments to `bootdht`
 
@@ -345,7 +328,7 @@ Just as with `dht2` there are arguments for the `model`, `flatfile`,  `sample_fr
 ```{r, bootstrap, results='hide', eval=solution}
 n.cores <- parallel::detectCores()
 daytime.boot.uni <- bootdht(model=uni3, flatfile=DuikerCameraTraps,
-                          resample_transects = TRUE, nboot=500, 
+                          resample_transects = TRUE, nboot = 500, 
                           cores = n.cores - 1,
                           summary_fun=mysummary, sample_fraction = samfrac,
                           convert_units = conversion, multipliers=mult)
@@ -357,13 +340,14 @@ daytime.boot.uni <- bootdht(model=uni3, flatfile=DuikerCameraTraps,
 print(summary(daytime.boot.uni))
 ```
 
-```{r, sampdist, fig.dim=c(8,6), fig.cap="Distribution of density estimates from bootstrap replicates.", eval=solution}
+```{r, sampdist, fig.dim=c(8,6), fig.cap="Distribution of density estimates from bootstrap replicates.  Red dashed lines indicate bootstrap 95% confidence intervals (obtained using the quantile method); grey dashed lines indicate the analytical 95% confidence intervals obtained earlier.", eval=solution}
 hist(daytime.boot.uni$Dhat, breaks = 20, 
-     xlab="Estimated density", main="D-hat estimates bootstraps")
-abline(v=quantile(daytime.boot.uni$Dhat, probs = c(0.025,0.975), na.rm=TRUE), lwd=2, lty=3)
+     xlab = "Estimated density", main = "D-hat estimates bootstraps")
+abline(v = quantile(daytime.boot.uni$Dhat, probs = c(0.025,0.975), na.rm = TRUE), lwd = 2, lty = 2, col = "red")
+abline(v = c(peak.uni.dens$LCI/peak.uni.dens$Area, peak.uni.dens$UCI/peak.uni.dens$Area), lwd = 2, lty = 2, col = "grey")
 ```
 
-The confidence interval derived from the bootstrap is considerably wider than the confidence interval derived from analytical methods (Figure \@ref(fig:sampdist)).
+The confidence interval derived from the bootstrap is wider than the confidence interval derived from analytical methods (Figure \@ref(fig:sampdist)).
 
 ## An esoteric note on starting values and bootstrapping
 
@@ -390,12 +374,12 @@ and so we use
 uni3.with.startvals <- ds(DuikerCameraTraps, transect = "point", key="unif", adjustment = "cos",
            nadj=3,
            cutpoints = mybreaks, truncation = trunc.list, 
-           initial_values = list(adjustment = c(0.97178178, 0.03541633, 0)))
+           initial_values = list(adjustment = c(0.97177303, 0.03540654, 0)))
 ```
 
 and this will work fine in `bootdht`.
 
-A final tip is that setting starting values can sometimes speed up the bootstrap (as optimization is faster if it starts from a good initial spot), so you might want to pass in the starting values from `uni3` to your bootstrap routine - something like the following, using the MCDS optimizer: (Note - this code is set not to run in this examples file - just here to show what you might use).
+A final tip is that setting starting values can sometimes speed up the bootstrap (as optimization is faster if it starts from a good initial spot), so you might want to pass in the starting values from `uni3` to your bootstrap routine - something like the following, which we found nearly halved the run time on our test machine. Note, this code is set not to run in this examples file - just here to show what you might use.
 
 ```{r, startvals4, eval = FALSE}
 print(uni3$ddf$par)
@@ -405,7 +389,7 @@ uni3.with.startvals <- ds(DuikerCameraTraps, transect = "point", key="unif", adj
            optimizer = "MCDS",
            initial_values = list(adjustment = c(0.93518220, -0.05345965, -0.08073799)))
 daytime.boot.uni <- bootdht(model=uni3.with.startvals, flatfile=DuikerCameraTraps,
-                          resample_transects = TRUE, nboot=500, 
+                          resample_transects = TRUE, nboot = 500, 
                           cores = n.cores - 1,
                           summary_fun=mysummary, sample_fraction = samfrac,
                           convert_units = conversion, multipliers=mult)
