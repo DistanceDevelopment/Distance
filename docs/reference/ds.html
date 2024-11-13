@@ -653,20 +653,20 @@ Oxford, UK.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Strict monotonicity constraints were enforced.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> AIC         :  313.1239 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Optimisation:  mrds (slsqp) </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Optimisation:  MCDS.exe </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Detection function parameters</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Scale coefficient(s):  </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>              estimate        se</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> (Intercept) 0.6606883 0.1043348</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> (Intercept) 0.6606793 0.1043329</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Adjustment term coefficient(s):  </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                estimate        se</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> cos, order 2 -0.0159336 0.1351281</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                 estimate        se</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> cos, order 2 -0.01593329 0.1351281</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                        Estimate          SE        CV</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Average p             0.5925909  0.08165248 0.1377890</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> N in covered region 209.2505992 31.22770085 0.1492359</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Average p             0.5925864  0.08165162 0.1377885</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> N in covered region 209.2521718 31.22787931 0.1492356</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># specify order 2 and 3 cosine adjustments, turning monotonicity</span></span></span>
 <span class="r-in"><span><span class="co"># constraints off</span></span></span>
@@ -684,6 +684,9 @@ Oxford, UK.</p>
 <span class="r-in"><span><span class="va">ds.model.cos2.sex</span> <span class="op">&lt;-</span> <span class="fu">ds</span><span class="op">(</span><span class="va">tee.data</span>, <span class="fl">4</span>, adjustment<span class="op">=</span><span class="st">"cos"</span>, order<span class="op">=</span><span class="fl">2</span>,</span></span>
 <span class="r-in"><span>                        monotonicity<span class="op">=</span><span class="cn">FALSE</span>, formula<span class="op">=</span><span class="op">~</span><span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">as.factor</a></span><span class="op">(</span><span class="va">sex</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Fitting half-normal key function with cosine(2) adjustments</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Detection function is not weakly monotonic!</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Detection function is not strictly monotonic!</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Detection function is greater than 1 at some distances</span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Detection function is not weakly monotonic!</span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Detection function is not strictly monotonic!</span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Detection function is greater than 1 at some distances</span>
@@ -705,6 +708,7 @@ Oxford, UK.</p>
 <span class="r-in"><span><span class="va">ds.model.hr.trunc</span> <span class="op">&lt;-</span> <span class="fu">ds</span><span class="op">(</span><span class="va">tee.data</span>, truncation<span class="op">=</span><span class="st">"10%"</span>, key<span class="op">=</span><span class="st">"hr"</span>,</span></span>
 <span class="r-in"><span>                        adjustment<span class="op">=</span><span class="cn">NULL</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Fitting hazard-rate key function</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Estimated hazard-rate scale parameter close to 0 (on log scale). Possible problem in data (e.g., spike near zero distance).</span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Estimated hazard-rate scale parameter close to 0 (on log scale). Possible problem in data (e.g., spike near zero distance).</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> AIC= 260.267</span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Estimated hazard-rate scale parameter close to 0 (on log scale). Possible problem in data (e.g., spike near zero distance).</span>
@@ -754,7 +758,7 @@ Oxford, UK.</p>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>If you wish to donate to development and maintenance</p>
+  <p>If you wish to donate to development and maintenance, please <a href="mailto:distance@st-andrews.ac.uk">email us</a>.</p>
 </div>
 
     </footer></div>

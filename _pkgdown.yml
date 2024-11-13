@@ -128,7 +128,7 @@ footer:
     right: donate
     left: clarity
   components:
-    donate: "If you wish to donate to development and maintenance"
+    donate: "If you wish to donate to development and maintenance, please <a href='mailto:distance@st-andrews.ac.uk'>email us</a>."
     clarity:  "We improve our site and software support by using Microsoft Clarity to see <br>
       how you use our website. By using our site, you agree that we and Microsoft <br>
       can collect and use this data. Clarity is GDPR compliant."

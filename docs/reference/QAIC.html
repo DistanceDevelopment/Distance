@@ -183,6 +183,12 @@ Eric Howe.</p>
 <span class="r-in"><span><span class="va">w3.u2</span> <span class="op">&lt;-</span> <span class="fu"><a href="ds.html">ds</a></span><span class="op">(</span><span class="va">wren_cuecount</span>, transect<span class="op">=</span><span class="st">"point"</span>, key<span class="op">=</span><span class="st">"unif"</span>, adjustment<span class="op">=</span><span class="st">"cos"</span>,</span></span>
 <span class="r-in"><span>            order<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">2</span><span class="op">)</span>, monotonicity<span class="op">=</span><span class="st">"none"</span>,  truncation<span class="op">=</span><span class="fl">92.5</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Fitting uniform key function with cosine(1,2) adjustments</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> ** Warning: Maximum probability of detection is greater than one: invalid model fitted **</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> ** Warning: Maximum probability of detection is greater than one: invalid model fitted **</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> ** Warning: Maximum probability of detection is greater than one: invalid model fitted **</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Detection function is not weakly monotonic!</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Detection function is not strictly monotonic!</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Detection function is greater than 1 at some distances</span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Detection function is not weakly monotonic!</span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Detection function is not strictly monotonic!</span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Detection function is greater than 1 at some distances</span>
@@ -194,6 +200,12 @@ Eric Howe.</p>
 <span class="r-in"><span><span class="va">w3.u3</span> <span class="op">&lt;-</span> <span class="fu"><a href="ds.html">ds</a></span><span class="op">(</span><span class="va">wren_cuecount</span>, transect<span class="op">=</span><span class="st">"point"</span>, key<span class="op">=</span><span class="st">"unif"</span>, adjustment<span class="op">=</span><span class="st">"cos"</span>,</span></span>
 <span class="r-in"><span>            order<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">2</span>,<span class="fl">3</span><span class="op">)</span>, monotonicity<span class="op">=</span><span class="st">"none"</span>, truncation<span class="op">=</span><span class="fl">92.5</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Fitting uniform key function with cosine(1,2,3) adjustments</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> ** Warning: Maximum probability of detection is greater than one: invalid model fitted **</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> ** Warning: Maximum probability of detection is greater than one: invalid model fitted **</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> ** Warning: Maximum probability of detection is greater than one: invalid model fitted **</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Detection function is not weakly monotonic!</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Detection function is not strictly monotonic!</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Detection function is greater than 1 at some distances</span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Detection function is not weakly monotonic!</span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Detection function is not strictly monotonic!</span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Detection function is greater than 1 at some distances</span>
@@ -222,9 +234,9 @@ Eric Howe.</p>
 <span class="r-in"><span><span class="co"># stage 1: calculate QAIC per model set</span></span></span>
 <span class="r-in"><span><span class="fu">QAIC</span><span class="op">(</span><span class="va">w3.hr0</span>, <span class="va">w3.hr1</span>, <span class="va">w3.hr2</span><span class="op">)</span>  <span class="co"># no adjustments smallest</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>        df     QAIC</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> w3.hr0  2 241.6917</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> w3.hr1  3 243.6917</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> w3.hr2  4 245.6867</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> w3.hr0  2 241.6884</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> w3.hr1  3 243.6884</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> w3.hr2  4 245.6834</span>
 <span class="r-in"><span><span class="fu">QAIC</span><span class="op">(</span><span class="va">w3.u1</span>, <span class="va">w3.u2</span>, <span class="va">w3.u3</span><span class="op">)</span>     <span class="co"># 2 adjustment terms (by 0.07)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>       df     QAIC</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> w3.u1  1 274.4930</span>
@@ -244,7 +256,7 @@ Eric Howe.</p>
 <span class="r-in"><span><span class="va">chat</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/attr.html" class="external-link">attr</a></span><span class="op">(</span><span class="fu">QAIC</span><span class="op">(</span><span class="va">w3.hr0</span>, <span class="va">w3.hr1</span>, <span class="va">w3.hr2</span><span class="op">)</span>, <span class="st">"chat"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu">QAIC</span><span class="op">(</span><span class="va">w3.hr0</span>, chat<span class="op">=</span><span class="va">chat</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>        df     QAIC</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> w3.hr0  2 241.6917</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> w3.hr0  2 241.6884</span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
@@ -257,7 +269,7 @@ Eric Howe.</p>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>If you wish to donate to development and maintenance</p>
+  <p>If you wish to donate to development and maintenance, please <a href="mailto:distance@st-andrews.ac.uk">email us</a>.</p>
 </div>
 
     </footer></div>
