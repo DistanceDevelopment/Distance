@@ -12,7 +12,7 @@ Distance: analysis of distance sampling data
 ### Distance **R** package preferred citation
 - Miller, D. L., Rexstad, E., Thomas, L., Marshall, L., & Laake, J. L. (2019). Distance Sampling in R. Journal of Statistical Software, 89(1), 1–28. DOI: [10.18637/jss.v089.i01](https://doi.org/10.18637/jss.v089.i01)
 
-Consult the [Articles](https://distancedevelopment.github.io/Distance/articles/) section of this site for case studies of distance sampling analyses.
+Consult the [Articles](https://distancesampling.org/resources/vignettes.html) for case studies of distance sampling analyses.
 
 # Getting `Distance`
 

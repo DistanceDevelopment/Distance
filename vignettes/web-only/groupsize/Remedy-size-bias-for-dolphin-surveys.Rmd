@@ -179,7 +179,7 @@ Conducting our modeling using the hazard rate key function, we turn our attentio
 hr.size <- ds(nochopper, key="hr", formula = ~size)
 ```
 
-It is a disappointment to learn that a model including group size as a covariate fails to converge.  There are numerical difficulties associated with a covariate that spans three orders of magnitude.  For more about fitting issues with covariates, consult the [covariate example with amakihi](http://examples.distancesampling.org/Distance-covariates/covariates-distill.html).
+It is a disappointment to learn that a model including group size as a covariate fails to converge.  There are numerical difficulties associated with a covariate that spans three orders of magnitude.  For more about fitting issues with covariates, consult the [covariate example with amakihi](../../covariates-distill.Rmd).
 
 The distribution of group sizes is strongly skewed to the right, with a very long right tail.  A transformation by natural logs will both reduce the range of `log(size)` to one order of magnitude and shift the centre of the distribution of the covariate (Fig. \@ref(fig:transf)).
 
@@ -215,7 +215,7 @@ knitr::kable(summarize_ds_models(hr, hr.clus, hr.method, hr.clus.method),
 
 # Interpretation of findings
 
-All of the fitted models using the hazard rate as the key function fit the data.  In addition, note the estimates of $\widehat{P_a}$ for all four models.  Inclusion of covariates has a negligible effect upon estimated detection probability.  Despite a  $\Delta$AIC value > 15, the model without covariates produces a virtually identical estimate of detection probability.  This is another example of the remarkable property of pooling robustness of distance sampling estimators [@burnham_etal_2004]. 
+All of the fitted models using the hazard rate as the key function fit the data.  In addition, note the estimates of $\widehat{P_a}$ for all four models.  Inclusion of covariates has a negligible effect upon estimated detection probability.  Despite a  $\Delta$AIC value > 15, the model without covariates produces a virtually identical estimate of detection probability.  This is another example of the remarkable property of pooling robustness of distance sampling estimators [@rexstad2023]. 
 
 We discuss estimates of group and individual density from this data set.  However, this data set does not accurately reflect survey effort.  The `Effort` column is filled with `1` and there is only a single transect labelled in the data.  Hence, the density estimates do not reflect biological reality; nevertheless the comparisons between models are legitimate.  Variability between transects is also not properly incorporated into this analysis, so I won't present measures of precision associated with any of the following point estimates.
 
