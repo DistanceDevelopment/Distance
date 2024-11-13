@@ -335,7 +335,7 @@ Figure 3: Q-Q goodness of fit plots for half normal key function without adjustm
 <pre><code><span><span class="co">## Model contains covariate term(s): no adjustment terms will be included.</span></span></code></pre>
 <pre><code><span><span class="co">## Fitting hazard-rate key function</span></span></code></pre>
 <pre><code><span><span class="co">## AIC= 2919.357</span></span></code></pre>
-<p>It is a disappointment to learn that a model including group size as a covariate fails to converge. There are numerical difficulties associated with a covariate that spans three orders of magnitude. For more about fitting issues with covariates, consult the <a href="http://examples.distancesampling.org/Distance-covariates/covariates-distill.html" class="external-link">covariate example with amakihi</a>.</p>
+<p>It is a disappointment to learn that a model including group size as a covariate fails to converge. There are numerical difficulties associated with a covariate that spans three orders of magnitude. For more about fitting issues with covariates, consult the <a href="../../covariates-distill.Rmd">covariate example with amakihi</a>.</p>
 <p>The distribution of group sizes is strongly skewed to the right, with a very long right tail. A transformation by natural logs will both reduce the range of <code>log(size)</code> to one order of magnitude and shift the centre of the distribution of the covariate (Fig. <a href="#fig:transf">4</a>).</p>
 <div class="figure">
 <span style="display:block;" id="fig:transf"></span>
@@ -480,7 +480,7 @@ Hazard-rate
 <div class="section level2">
 <h2 id="interpretation-of-findings">Interpretation of findings<a class="anchor" aria-label="anchor" href="#interpretation-of-findings"></a>
 </h2>
-<p>All of the fitted models using the hazard rate as the key function fit the data. In addition, note the estimates of <span class="math inline">\(\widehat{P_a}\)</span> for all four models. Inclusion of covariates has a negligible effect upon estimated detection probability. Despite a <span class="math inline">\(\Delta\)</span>AIC value &gt; 15, the model without covariates produces a virtually identical estimate of detection probability. This is another example of the remarkable property of pooling robustness of distance sampling estimators <span class="citation">(Burnham et al., 2004)</span>.</p>
+<p>All of the fitted models using the hazard rate as the key function fit the data. In addition, note the estimates of <span class="math inline">\(\widehat{P_a}\)</span> for all four models. Inclusion of covariates has a negligible effect upon estimated detection probability. Despite a <span class="math inline">\(\Delta\)</span>AIC value &gt; 15, the model without covariates produces a virtually identical estimate of detection probability. This is another example of the remarkable property of pooling robustness of distance sampling estimators <span class="citation">(Rexstad, Buckland, Marshall, &amp; Borchers, 2023)</span>.</p>
 <p>We discuss estimates of group and individual density from this data set. However, this data set does not accurately reflect survey effort. The <code>Effort</code> column is filled with <code>1</code> and there is only a single transect labelled in the data. Hence, the density estimates do not reflect biological reality; nevertheless the comparisons between models are legitimate. Variability between transects is also not properly incorporated into this analysis, so I won’t present measures of precision associated with any of the following point estimates.</p>
 <p>This slight variation in <span class="math inline">\(\widehat{P_a}\)</span> among the hazard rate candidate models is reflected in the equally similar estimates of dolphin pod density among the competing models. The model with the largest <span class="math inline">\(\widehat{P_a}\)</span> produces the lowest estimate of <span class="math inline">\(\widehat{D_s}\)</span> (170.5); while the model with the smallest <span class="math inline">\(\widehat{P_a}\)</span> produces the largest estimate of <span class="math inline">\(\widehat{D_s}\)</span> (175.8).</p>
 <p>However, the most important consideration in analysis of this data set is proper treatment of size bias. The hazard rate models without group size in the detection function, estimate average group size in the population to be 515 whereas the model incorporating group size in the detection function estimates average group size in the population to be 408. Based on the evidence presented in Fig. <a href="#fig:boxplot">2</a>, there is reason to believe that estimates of average group size without incorporating group size in the detection function results in a positively biased estimate of group size in the population. From the group size estimates under the two models, it appears the magnitude of that positive size bias in this data set is 26.2.</p>
@@ -506,14 +506,14 @@ Hazard-rate
 <div id="ref-buckland_2001" class="csl-entry">
 Buckland, S. T., Anderson, D. R., Burnham, K. P., Laake, J. L., Borchers, D. L., &amp; Thomas, L. (2001). <em>Introduction to distance sampling: Estimating abundance of biological populations</em>. <span>Oxford, New York</span>: Oxford University Press.
 </div>
-<div id="ref-burnham_etal_2004" class="csl-entry">
-Burnham, K. P., Buckland, S. T., Laake, J. L., Borchers, D. L., Marques, T. A. M., Bishop, J. R. B., &amp; Thomas, L. (2004). Further topics in distance sampling. In S. Buckland, D. Anderson, K. Burnham, J. Laake, D. Borchers, &amp; L. Thomas (Eds.), <em>Advanced distance sampling</em> (pp. 307–392). United Kingdom: Oxford University Press.
-</div>
 <div id="ref-swfc_2008" class="csl-entry">
 Gerrodette, Tim. (2008). Estimates of 2006 dolphin abundance in the eastern tropical pacific, with revised estimates from 1986-2003. <em>NOAA-TM-NMFS-SWFSC;422</em>.
 </div>
 <div id="ref-gerrodette_2005" class="csl-entry">
 Gerrodette, T., &amp; Forcada, J. (2005). Non-recovery of two spotted and spinner dolphin populations in the eastern tropical pacific ocean. <em>Marine Ecology Progress Series</em>, <em>291</em>, 1–21. <a href="https://doi.org/10.3354/meps291001" class="external-link">https://doi.org/10.3354/meps291001</a>
+</div>
+<div id="ref-rexstad2023" class="csl-entry">
+Rexstad, E., Buckland, S., Marshall, L., &amp; Borchers, D. (2023). Pooling robustness in distance sampling: <span>Avoiding</span> bias when there is unmodelled heterogeneity. <em>Ecology and Evolution</em>, <em>13</em>(1), e9684. <a href="https://doi.org/10.1002/ece3.9684" class="external-link">https://doi.org/10.1002/ece3.9684</a>
 </div>
 </div>
 </div>
@@ -528,7 +528,7 @@ Gerrodette, T., &amp; Forcada, J. (2005). Non-recovery of two spotted and spinne
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>If you wish to donate to development and maintenance</p>
+  <p>If you wish to donate to development and maintenance, please <a href="mailto:distance@st-andrews.ac.uk">email us</a>.</p>
 </div>
 
     </footer>
