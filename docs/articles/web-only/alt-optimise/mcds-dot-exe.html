@@ -195,8 +195,8 @@
 <pre><code><span><span class="co">## Fitting half-normal key function</span></span></code></pre>
 <pre><code><span><span class="co">## DEBUG: initial values = -0.1031529</span></span></code></pre>
 <pre><code><span><span class="co">## Running MCDS.exe...</span></span></code></pre>
-<pre><code><span><span class="co">## Command file written to C:\Users\erexs\AppData\Local\Temp\RtmpispW6W\cmdtmp4c8061c1589.txt</span></span></code></pre>
-<pre><code><span><span class="co">## Stats file written to C:\Users\erexs\AppData\Local\Temp\RtmpispW6W\stat4c801b775508.txt</span></span></code></pre>
+<pre><code><span><span class="co">## Command file written to C:\Users\erexs\AppData\Local\Temp\RtmpgXd7lC\cmdtmp32482bf0763f.txt</span></span></code></pre>
+<pre><code><span><span class="co">## Stats file written to C:\Users\erexs\AppData\Local\Temp\RtmpgXd7lC\stat324831b973fe.txt</span></span></code></pre>
 <pre><code><span><span class="co">## DEBUG: initial values = 0.6632378 </span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## DEBUG: Convergence! </span></span>
@@ -218,8 +218,8 @@
 <pre><code><span><span class="co">## Fitting half-normal key function with cosine(2) adjustments</span></span></code></pre>
 <pre><code><span><span class="co">## DEBUG: initial values = -0.1031529 0</span></span></code></pre>
 <pre><code><span><span class="co">## Running MCDS.exe...</span></span></code></pre>
-<pre><code><span><span class="co">## Command file written to C:\Users\erexs\AppData\Local\Temp\RtmpispW6W\cmdtmp4c8063711ebf.txt</span></span></code></pre>
-<pre><code><span><span class="co">## Stats file written to C:\Users\erexs\AppData\Local\Temp\RtmpispW6W\stat4c807de518af.txt</span></span></code></pre>
+<pre><code><span><span class="co">## Command file written to C:\Users\erexs\AppData\Local\Temp\RtmpgXd7lC\cmdtmp32481eb93ea4.txt</span></span></code></pre>
+<pre><code><span><span class="co">## Stats file written to C:\Users\erexs\AppData\Local\Temp\RtmpgXd7lC\stat32487c4fc0d.txt</span></span></code></pre>
 <pre><code><span><span class="co">## DEBUG: initial values = 0.6606793 -0.0159333 </span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## DEBUG: Convergence! </span></span>
@@ -560,7 +560,7 @@ Figure 2: PDF of fitted model with R-based optimizer.
 <span><span class="co">## Density:</span></span>
 <span><span class="co">##   Label     Estimate           se        cv          lcl          ucl       df</span></span>
 <span><span class="co">## 1 Total 1.430021e-06 3.880986e-07 0.2713936 8.213597e-07 2.489727e-06 20.94597</span></span></code></pre>
-<p>Fitting takes 9.7 secs. (Note, in versions of <code>Distance</code> before 2.0.0 this was a much higher number!) Here we try the <code>MCDS.exe</code> optimizer:</p>
+<p>Fitting takes 9.5 secs. (Note, in versions of <code>Distance</code> before 2.0.0 this was a much higher number!) Here we try the <code>MCDS.exe</code> optimizer:</p>
 <div class="sourceCode" id="cb110"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">start.time</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/Sys.time.html" class="external-link">Sys.time</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="va">uni3.mcds</span> <span class="op">&lt;-</span> <span class="fu"><a href="../../../reference/ds.html">ds</a></span><span class="op">(</span><span class="va">DuikerCameraTraps</span>, transect <span class="op">=</span> <span class="st">"point"</span>, key<span class="op">=</span><span class="st">"unif"</span>, adjustment <span class="op">=</span> <span class="st">"cos"</span>,</span>
@@ -608,7 +608,7 @@ Figure 2: PDF of fitted model with R-based optimizer.
 <span><span class="co">## Density:</span></span>
 <span><span class="co">##   Label     Estimate           se        cv         lcl          ucl       df</span></span>
 <span><span class="co">## 1 Total 1.429736e-06 3.880222e-07 0.2713943 8.21195e-07 2.489232e-06 20.94619</span></span></code></pre>
-<p>This took a little less time: 8 secs. Hence, for some datasets, it may be quicker to use the <code>MCDS.exe</code> optimizer. This could make a significant difference if using the nonparametric bootstrap to estimate variance. However, after making improvemts to the optimizer in <code>mrds</code> 3.0.0 and <code>Distance</code> 2.0.0 the difference is generally small, and in many cases the <code>R</code> optimizer is faster than <code>MCDS.exe</code> so this is likely not a productive avenue to pursue in general.</p>
+<p>This took a little less time: 8 secs. Hence, for some datasets, it may be quicker to use the <code>MCDS.exe</code> optimizer. This could make a significant difference if using the nonparametric bootstrap to estimate variance. However, after making improvements to the optimizer in <code>mrds</code> 3.0.0 and <code>Distance</code> 2.0.0 the difference is generally small, and in many cases the <code>R</code> optimizer is faster than <code>MCDS.exe</code> so this is likely not a productive avenue to pursue in general.</p>
 </div>
 <div class="section level2">
 <h2 id="discussion">Discussion<a class="anchor" aria-label="anchor" href="#discussion"></a>
@@ -658,7 +658,7 @@ Thomas, L., Buckland, S. T., Rexstad, E. A., Laake, J. L., Strindberg, S., Hedle
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>If you wish to donate to development and maintenance</p>
+  <p>If you wish to donate to development and maintenance, please <a href="mailto:distance@st-andrews.ac.uk">email us</a>.</p>
 </div>
 
     </footer>
