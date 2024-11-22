@@ -371,6 +371,7 @@ ds.model <- ds(tee.data, 4)
 summary(ds.model)
 plot(ds.model)
 
+\dontrun{
 # same model, but calculating abundance
 # need to supply the region, sample and observation tables
 region <- book.tee.data$book.tee.region
@@ -408,7 +409,7 @@ summary(ds.model.hr.trunc)
 AIC(ds.model)
 AIC(ds.model.cos2)
 AIC(ds.model.cos23)
-
+}
 }
 \references{
 Buckland, S.T., Anderson, D.R., Burnham, K.P., Laake, J.L., Borchers, D.L.,

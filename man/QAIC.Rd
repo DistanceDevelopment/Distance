@@ -59,6 +59,7 @@ each of those models. The model with the lowest value is recommended for
 estimation.
 }
 \examples{
+\dontrun{
 library(Distance)
 data("wren_cuecount")
 
@@ -95,7 +96,7 @@ chi2_select(w3.hr0, w3.u2, w3.hn0)
 # example using a pre-calculated chat
 chat <- attr(QAIC(w3.hr0, w3.hr1, w3.hr2), "chat")
 QAIC(w3.hr0, chat=chat)
-
+}
 }
 \references{
 Howe, E. J., Buckland, S. T., Després-Einspenner, M.-L., & Kühl, H. S. (2019). Model selection with overdispersed distance sampling data. Methods in Ecology and Evolution, 10(1), 38–47. \doi{10.1111/2041-210X.13082}
