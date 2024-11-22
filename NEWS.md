@@ -1,3 +1,7 @@
+# Distance 2.0.1
+
+* Fixes issue with print dht2 when multipliers are a data.frame (Issue #179)
+
 # Distance 2.0.0
 
 * Requires mrds 3.0.0. mrds is called by ds for fitting detection functions. In mrds there has been a change of optimizer used for CDS detection functions - a constraint solver slsqp now used. This removes the need for external optimizer MCDS.exe in most cases. Other minor changes to optimization have been implemented to improve reliability (see NEWS file of mrds for more info).
