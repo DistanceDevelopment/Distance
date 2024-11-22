@@ -26,8 +26,7 @@
 #' model_hr <- ds(tee.data,4, key="hr")
 #' summarize_ds_models(model_hr, model_hn, output="plain")
 #'}
-summarize_ds_models <- function(..., sort="AIC", output="latex",
-                                delta_only=TRUE){
+summarize_ds_models <- function(..., sort="AIC", output="latex", delta_only=TRUE){
 
   # get the models
   models <- list(...)
@@ -71,9 +70,11 @@ summarize_ds_models <- function(..., sort="AIC", output="latex",
   extract_model_data <- function(model){
     summ <- summary(model)
 
-    # handle (uniform) no formula case
+    # handle (uniform) no formula / no average.p.se case
     formula <- model$ddf$ds$aux$ddfobj$scale$formula
     if(is.null(formula)) formula <- NA
+    average.p.se <- summ$ds$average.p.se
+    if(is.null(average.p.se)) average.p.se <- NA
 
     desc <- gsub(" key function","",model.description(model$ddf))
     # only get CvM if not binned
@@ -86,7 +87,7 @@ summarize_ds_models <- function(..., sort="AIC", output="latex",
              formula,
              gof,
              summ$ds$average.p,
-             summ$ds$average.p.se,
+             average.p.se,
              model$ddf$criterion
             )
     return(ret)
