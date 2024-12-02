@@ -1,0 +1,188 @@
+---
+title: "Incorporating covariates in the detection function"
+description: |
+  Hawaiian amakihi point transect data.
+author:
+  - name: Eric Rexstad 
+    url: http://distancesampling.org
+    affiliation: CREEM, Univ of St Andrews
+    affiliation_url: https://creem.st-andrews.ac.uk
+date: "`r format(Sys.time(), '%B %Y')`"
+output: 
+  bookdown::html_document2:
+    number_sections: false
+    toc: true
+    toc_depth: 2
+    base_format: rmarkdown::html_vignette
+pkgdown:
+  as_is: true    
+bibliography: covar.bib
+csl: apa.csl
+vignette: >
+  %\VignetteIndexEntry{Incorporating covariates in the detection function}
+  %\VignetteEngine{knitr::rmarkdown}
+  \usepackage[utf8]{inputenc}
+---
+
+```{r include=FALSE}
+knitr::opts_chunk$set(eval=TRUE, echo=TRUE, message=FALSE, warnings=FALSE)
+```
+
+In this problem, we illustrate fitting multiple covariate distance sampling (MCDS) models to point transect data using a bird survey from Hawaii: data on an abundant species, the Hawaii amakihi *(Hemignathus virens)* is used. This practical is makes use of the `Distance` R package described by Miller et al. [-@miller_distance_2019]  duplicating the analysis in Marques et al. [-@Maretal07]. For basic information regarding analysis of point transect data, consult the [point transect example](https://examples.distancesampling.org/Distance-points/pointtransects-distill.html)
+
+```{r layout="l-page"}
+library(Distance)
+data(amakihi)
+head(amakihi, n=3)
+```
+ 
+These data include:
+
+- `Region.Label` - survey dates (month and year, e.g. 792 is July 1992) which are used as 'strata'
+- `Area` - study area size (not used, set to 0) will only produce density estimates, not abundance
+- `Sample.Label` - point transect identifier (41 transects)
+- `Effort` - survey effort (1 for all points because each point was visited once)
+- `distance` - radial distance of detection from observer (meters)
+- `month` - 
+- `OBs` - initials of the observer
+- `Sp` - species code (COAM)
+- `MAS` - minutes after sunrise
+- `HAS` - hour after sunrise
+- `Study.Area` - name of the study area (Kana)
+
+Note that the `Area` column is always zero, hence, detection functions can be fitted to the data, but bird abundance cannot be estimated. The covariates to be considered for possible inclusion into the detection function are `OBs`, `MAS` and `HAS`. 
+
+# Exploratory data analysis
+
+It is important to gain an understanding of the data prior to fitting detection functions. With this in mind, preliminary analysis of distance sampling data involves:
+
+* assessing the shape of the collected data,
+* considering the level of truncation of distances, and
+* exploring patterns in potential covariates. 
+
+We begin by assessing the distribution of distances to decide on a truncation distance (Figure \@ref(fig:basic)). 
+
+```{r basic, fig.cap="Distribution of radial distances of amakihi", fig.dim=c(8,6)}
+hist(amakihi$distance, main="Radial distances", xlab="Distance (m)")
+```
+
+To see if there are differences in the distribution of distances recorded by the different observers and in each hour after sunrise, boxplots can be used. Note how the `~` symbol is used to define the discrete groupings (i.e. observer and hour) (Figure \@ref(fig:box)).
+
+```{r box, fig.show='hold', fig.cap="Visual assessment of effect of observer and hour since sunrise upon detection.", fig.dim=c(7,5)}
+boxplot(amakihi$distance~amakihi$OBs, xlab="Observer", ylab="Distance (m)")
+boxplot(amakihi$distance~amakihi$HAS, xlab="Hour", ylab="Distance (m)")
+```
+
+The components of the boxplot are:
+
++ the thick black line indicates the median
++ the lower limit of the box is the first quartile (25th percentile) and the upper limit is the third quartile (75th percentile)
++ the height of the box is the interquartile range (75th - 25th quartiles)
++ the whiskers extend to the most extreme points which are no more than 1.5 times the interquartile range.
++ dots indicate 'outliers' if there are any, i.e. points beyond the range of the whiskers.
+
+For minutes after sunrise (a continuous variable), we create a scatterplot of MAS (on the $x$-axis) against distances (on the $y$-axis). The plotting symbol (or character) is selected with the argument `pch` (Figure \@ref(fig:scatter))
+
+```{r, scatter, fig.cap="Visualisation of detectability as function of minutes since sunrise.", fig.dim=c(7,5)}
+scatter.smooth(amakihi$MAS, amakihi$distance, family = "gaussian", pch=20, cex=.9, lpars=list(lwd=3),
+               xlab="Minutes after sunrise",ylab="Distance (m)")
+```
+
+Clearly room for right truncation from this figure of the radial distance distribution.  Subsequent detection function fitting will use the `truncation` argument in `ds()` to exclude the largest 15\% of the detection distances.
+
+You may also want to think about potential collinearity (linear relationship) between the covariates - if collinear variables are included in the detection function, they will be explaining some of the same variation in the distances and this will reduce their importance as a potential covariate. How might you investigate the relationship between `HAS` and `MAS`?
+
+From these plots, infer whether any of the covariates will be useful in explaining the distribution of detection distances.
+
+# Adjusting the raw covariates
+
+We would like to treat `OBs` and `HAS` as factor variables as in the original analysis; `OBs` is, by default, treated as a factor variable because it consists of characters rather than numbers. `HAS`, on the other hand, consists of numbers and so by default would be treated as a continuous variable (i.e. non-factor). That is fine if we want the effect of `HAS` to be monotonic (i.e. detectability either increases or decreases as a function of `HAS`). If we want `HAS` to have a non-linear effect on detectability, then we need to indicate to `R` to treat it as a factor as shown below.  
+
+```{r}
+amakihi$HAS <- factor(amakihi$HAS)
+```
+
+One other, more subtle adjustment, is a transformation of the continuous covariate `MAS`. We are considering three possible covariates in our detection function: `OBs`, `HAS` and `MAS`. The first two variables, `OBs` and `HAS`, are both factor variables, and so, essentially, we can think of them as taking on values between 1 and 3 in the case of `OBS`, and 1 to 6 in the case of `HAS`.  However, `MAS` can take on values from -18 (detections before sunrise) to >300 and the disparity in scales of measure between `MAS` and the other candidate covariates can lead to difficulties in the performance of the optimizer fitting the detection functions in R. The solution to the difficulty is to scale `MAS` such that it is on a scale (approx. 1 to 5) comparable with the other covariates.
+
+# Candidate models
+
+With three potential covariates, there are 8 possible models for the detection function:
+
++ No covariates
++ OBs
++ HAS
++ MAS
++ OBs + HAS
++ OBs + MAS
++ HAS + MAS
++ OBs + HAS + MAS
+
+Even without considering covariates there are also several possible key function/adjustment term combinations available: if all key function/covariate combinations are considered the number of potential models is large. Note that covariates are not allowed if a uniform key function is chosen and if covariate terms are included, adjustment terms are not allowed. Even with these restrictions, it is not best practice to take a scatter gun approach to detection function model fitting. Buckland et al. [-@buckland2015distance] considered 13 combinations of key function/covariates. Here, we look at a subset of these.
+
+Fit a hazard rate model with no covariates or adjustment terms and make a note of the AIC. Note, that 15\% of the largest distances are truncated - you may have decided on a different truncation distance. 
+
+```{r}
+conversion.factor <- convert_units("meter", NULL, "hectare")
+amak.hr <- ds(amakihi, transect="point", key="hr", truncation="15%",
+              adjustment=NULL, convert_units = conversion.factor)
+```
+
+Now fit a hazard rate model with `OBs` as a covariate in the detection function and make a note of the AIC. Has the AIC reduced by including a covariate? 
+
+```{r}
+amak.hr.obs <- ds(amakihi, transect="point", key="hr", formula=~OBs,
+                  truncation="15%", convert_units = conversion.factor)
+```
+
+Fit a hazard rate model with `OBs` and `MAS` in the detection function:
+
+```{r}
+amak.hr.obs.mas <- ds(amakihi, transect="point", key="hr", formula=~OBs+MAS,
+                      truncation="15%", convert_units = conversion.factor)
+```
+
+Try fitting other possible formula and decide which model is best in terms of AIC. To quickly compare AIC values from different models, use the `AIC` command as follows (note only models with the same truncation distance can be compared):
+
+```{r}
+AIC(amak.hr, amak.hr.obs, amak.hr.obs.mas)
+```
+
+Another useful function is `summarize_ds_models` - this has the advantage of ordering the models by AIC (smallest to largest).
+
+```{r}
+knitr::kable(summarize_ds_models(amak.hr, amak.hr.obs, amak.hr.obs.mas), digits=3,
+             caption="Model selection table for Hawaiian amakihi.")
+```
+
+Examine the shape of the preferred detection function (including covariates observer and minutes after sunrise) (Figure \@ref(fig:bestmod)).
+
+```{r bestmod, fig.cap="PDF of best fitting model, including effects of observer and minutes after sunrise.", fig.dim=c(8,6)}
+plot(amak.hr.obs.mas, pdf=TRUE, main="Hazard rate with observer and minutes after sunrise.", showpoints=FALSE)
+sfzero <- data.frame(OBs="SGF", MAS=0)
+sf180 <- data.frame(OBs="SGF", MAS=180)
+t1zero <- data.frame(OBs="TJS", MAS=0)
+t1180 <- data.frame(OBs="TJS", MAS=180)
+t2zero <- data.frame(OBs="TKP", MAS=0)
+t2180 <- data.frame(OBs="TKP", MAS=180)
+add_df_covar_line(amak.hr.obs.mas, data=sfzero, lty=1, lwd=2,col="blue", pdf=TRUE)
+add_df_covar_line(amak.hr.obs.mas, data=sf180, lty=2, lwd=2,col="blue", pdf=TRUE)
+add_df_covar_line(amak.hr.obs.mas, data=t1zero, lty=1,lwd=2,col="darkorange", pdf=TRUE)
+add_df_covar_line(amak.hr.obs.mas, data=t1180, lty=2, lwd=2,col="darkorange", pdf=TRUE)
+add_df_covar_line(amak.hr.obs.mas, data=t2zero, lty=1,lwd=2,col="violet", pdf=TRUE)
+add_df_covar_line(amak.hr.obs.mas, data=t2180, lty=2, lwd=2,col="violet", pdf=TRUE)
+legend("topright", legend=c("SF, minutes=0",
+                            "SF, minutes=180",
+                            "TS, minutes=0",
+                            "TS, minutes=180",
+                            "TP, minutes=0",
+                            "TP, minutes=180"),
+       title="Covariate combination: observer and minutes",
+       lty=rep(c(1,2),times=3), lwd=2, col=rep(c("blue","darkorange","violet"), each=2))
+```
+
+
+# Comments about the chosen model
+
+There were three observers involved in the survey.  One observer made ~80\% of the detections, with a second observer responsible for a further 15\% and the third observer 5\%. 
+
+# References

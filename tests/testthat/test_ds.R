@@ -151,6 +151,15 @@ test_that("Uniform does work after all",{
   dd <- suppressMessages(ds(egdata,4,key="unif",order=c(1,2)))
   expect_equal(unname(dd$ddf$par), c(0.7050144, -0.1056291), tol=par.tol)
 
+  # Used to generate an error issue #180
+  data(ducknest)
+  x1 <- ds(ducknest, key="unif", adjustment = NULL)
+  x2 <- ds(ducknest, key="unif", nadj = 1)
+  x3 <- ds(ducknest, key="hn", adjustment = NULL)
+  tmp <- summarize_ds_models(x1, x2, x3, 
+                             delta_only = FALSE)
+  expect_is(tmp, "data.frame")
+  expect_equal(nrow(tmp), 3)
 })
 
 

@@ -1,5 +1,4 @@
-`Distance`
-==========
+Distance: analysis of distance sampling data
 
 [![R-CMD-check](https://github.com/DistanceDevelopment/Distance/actions/workflows/check-standard.yaml/badge.svg)](https://github.com/DistanceDevelopment/Distance/actions/workflows/check-standard.yaml)
 [![CRAN (RStudio Mirror) Downloads](http://cranlogs.r-pkg.org/badges/Distance)](https://www.r-pkg.org/pkg/Distance)
@@ -10,19 +9,22 @@
 
 # Using `Distance`
 
-For more information and examples of use [take a look at this paper](https://www.jstatsoft.org/article/view/v089i01) published in Journal of Statistical Software in May 2019.
+### Distance **R** package preferred citation
+- Miller, D. L., Rexstad, E., Thomas, L., Marshall, L., & Laake, J. L. (2019). Distance Sampling in R. Journal of Statistical Software, 89(1), 1–28. DOI: [10.18637/jss.v089.i01](https://doi.org/10.18637/jss.v089.i01)
 
-We also maintain a set of example analyses at [examples.distancesampling.org](http://examples.distancesampling.org).
+Consult the [Articles](https://distancesampling.org/resources/vignettes.html) for case studies of distance sampling analyses.
 
 # Getting `Distance`
 
-The easiest way to ensure you have the latest version of `Distance`, is to install Hadley Wickham's `devtools` package:
+The easiest way to ensure you have the latest version of `Distance`, is to install `devtools`:
 
-      install.packages("devtools")
+```{r}
+install.packages("devtools")
+```
 
-then install `Distance` from github:
+then install `Distance` from Github:
 
-      library(devtools)
-      install_github("DistanceDevelopment/Distance")
-
-
+```{r}
+library(devtools)
+install_github("DistanceDevelopment/Distance")
+```

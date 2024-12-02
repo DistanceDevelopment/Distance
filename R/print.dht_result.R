@@ -21,7 +21,7 @@ print.dht_result <- function(x, report="abundance", groups=FALSE, ...){
                                  "none",
                                  paste(attr(x, "multipliers"), collapse=", ")),
       "\n")
-  cat("Sample fraction :" , ifelse(attr(x, "sample_fraction")>1,
+  cat("Sample fraction :" , ifelse(is.data.frame(attr(x, "sample_fraction")),
                                   "multiple", attr(x, "sample_fraction")), "\n")
 
   cat("\n\n")

@@ -1,0 +1,18 @@
+pandoc: '3.5'
+pkgdown: 2.1.1
+pkgdown_sha: ~
+articles:
+  web-only/CTDS/camera-distill: web-only/CTDS/camera-distill.html
+  covariates-distill: covariates-distill.html
+  web-only/cues/cuecounts-distill: web-only/cues/cuecounts-distill.html
+  web-only/differences/differences: web-only/differences/differences.html
+  lines-distill: lines-distill.html
+  web-only/alt-optimise/mcds-dot-exe: web-only/alt-optimise/mcds-dot-exe.html
+  web-only/multipliers/multipliers-distill: web-only/multipliers/multipliers-distill.html
+  web-only/multispecies/multispecies-multioccasion-analysis: web-only/multispecies/multispecies-multioccasion-analysis.html
+  web-only/points/pointtransects-distill: web-only/points/pointtransects-distill.html
+  web-only/groupsize/Remedy-size-bias-for-dolphin-surveys: web-only/groupsize/Remedy-size-bias-for-dolphin-surveys.html
+  species-covariate-distill: species-covariate-distill.html
+  web-only/strata/strata-distill: web-only/strata/strata-distill.html
+  web-only/variance/variance-distill: web-only/variance/variance-distill.html
+last_built: 2024-11-18T15:07Z

@@ -1,0 +1,211 @@
+---
+title: "Point transect density estimation"
+description: |
+  Example analysis of point transect songbird data.
+author:
+  - name: Eric Rexstad 
+    url: http://distancesampling.org
+    affiliation: CREEM, Univ of St Andrews
+    affiliation_url: https://creem.st-andrews.ac.uk
+date: "`r format(Sys.time(), '%B %Y')`"
+output: 
+  bookdown::html_document2:
+    number_sections: false
+    toc: true
+    toc_depth: 2
+    base_format: rmarkdown::html_vignette
+pkgdown:
+  as_is: true    
+bibliography: points.bib
+csl: ../apa.csl
+vignette: >
+  %\VignetteIndexEntry{Point transect density estimation}
+  %\VignetteEngine{knitr::rmarkdown}
+  \usepackage[utf8]{inputenc}
+---
+
+```{r include=FALSE}
+knitr::opts_chunk$set(eval=TRUE, echo=TRUE, message=FALSE, warnings=FALSE)
+```
+
+In this exercise, we use `R` [@r_core_team_r_2019] and the `Distance` package [@miller_distance_2019] to fit different detection function models to point transect survey data of savanna sparrows *(Passerculus sandwichensis)* density and abundance.  These data were part of a study examining the effect of livestock grazing upon vegetation structure and consequently upon the avian community described by Knopf et al. [-@knopf_guild_1988].
+
+Steps in this analysis are similar to the steps taken in the [line transect analysis of winter wren data](https://distancedevelopment.github.io/docs/articles/lines-distill.html).
+
+# Objectives
+
+- Fit a basic detection function using the `ds` function
+- Plot and examine a detection function 
+- Fit different detection function forms.
+
+# Survey design
+
+A total of 373 point transects were placed in three pastures in the Arapaho National Wildlife Refuge in Colorado (Figure \@ref(fig:fig)).  Elevation of these pastures was ~2500m.  We will not deal with pasture-level analysis of these data in this vignette and will alter the data to remove the strata designations.
+
+```{r fig, echo=FALSE, fig.dim=c(7,5), fig.cap="Summer grazed pastures along Illinois River Arapaho National Wildlife Refuge, Colorado.  Figure from [@knopf_guild_1988]."}
+knitr::include_graphics("arapaho.JPG")
+```
+
+
+The fields of the `Savannah_sparrow_1980` data set are:
+
++ Region.Label - three pastures that constituted sections of the study area.  However, for this vignette we are going to make all labels identical.  This will treat the data as if they were all detected in the same pasture.  The matter of stratification will be taken up in another vignette.
++ Area - size of the study region. A place holder, because pasture sizes are not known.  Estimates of density and abundance will be equivalent. 
++ Sample.Label - point transect identifier (total of 373 points)
++ Effort - number of visits to each point
++ object - unique identifier for each detected savanna sparrow
++ distance - radial distance (metres) to each detection
++ Study.Area - only data for savanna sparrow (SASP) are included in this data set
+
+# Make the data available for R session
+
+This command assumes that the `dsdata` package has been installed on your computer. The R workspace `Savannah_sparrow_1980` contains detections of savanna sparrows from point transect surveys of Knopf et al. [-@knopf_guild_1988].
+
+```{r}
+library(Distance)
+data(Savannah_sparrow_1980)
+#  remove pasture-level identifier in Region.Label
+Savannah_sparrow_1980$Region.Label <- "Single_stratum"
+```
+
+The code above overwrites the strata designations in the original data to make it appear that all data were derived from a single stratum.  This makes the analysis simpler to perform.  There are examples of analysis of [stratified data in another vignette](https://examples.distancesampling.org/Distance-strata/strata.html).
+
+Examine the first few rows of `Savannah_sparrow_1980` using the function `head()`
+
+```{r}
+head(Savannah_sparrow_1980)
+```
+
+The object `Savannah_sparrow_1980` is a dataframe object made up of rows and columns. In contrast to the [Montrave winter wren line transect data used in the previous vignette](https://examples.distancesampling.org/Distance-strata/linetransects-distill.html), savannah sparrows were not detected at all point transects.  Radial distances receive the value `NA` for transects where there were no detections.  To determine the number of detections in this data set, we total the number of values in the `distance` field that are not `NA`
+
+```{r}
+sum(!is.na(Savannah_sparrow_1980$distance))
+```
+
+# Examine the distribution of detection distances
+
+Gain familiarity with the radial distance data using the `hist()` function (Figure \@ref(fig:basichist)).
+
+```{r, basichist, fig.dim=c(7,5), fig.cap="Histogram of radial distances of savannah sparrows across all pastures."}
+hist(Savannah_sparrow_1980$distance, xlab="Distance (m)", 
+     main="Savannah sparrow point transects")
+```
+
+Note the shape of the radial distance histogram does not resemble the shape of perpendicular distances gathered from line transect sampling [@buckland2015distance, Section 1.3].
+
+# Specify unit conversions
+
+With point transects, there are only units of measure associated with the size of the study area and the radial distance measures, because effort is measured in number of visits, rather than distance.
+
+- distance_units	
+  - units of measure for radial distances
+- effort_units	
+  - units of measure for effort (`NULL` for point transects)
+- area_units	
+  - units of measure for the study area.  Recall this data set has set the size of the study area to be `1`, resulting in abundance and density to be equal.
+
+```{r}
+conversion.factor <- convert_units("meter", NULL, "hectare")
+```
+
+# Fitting a simple detection function model with `ds`
+
+Detection functions are fitted using the `ds` function and this function requires a data frame to have a column called `distance`. We have this in our `nests` data, therefore, we can simply supply the name of the data frame to the function along with additional arguments.
+
+Details about the arguments for this function:
+
++ `key="hn"`
+  - fit a half-normal key detection function
++ `adjustment=NULL` 
+  - do not include adjustment terms
++ `transect="point"`
+  - necessary to indicate this is point transect data
++ `convert_units=conversion.factor` 
+  - required because, for this example, the radial distances are in metres .  Our density estimates will be reported in number of birds per hectare.
++ `truncation="5%"`
+  - right truncation (described below)
+
+As is customary, right truncation is employed to remove 5\% of the observations most distant from the transects, as detections at these distances contain little information about the shape of the fitted probability density function near the point.
+
+```{r}
+sasp.hn <- ds(data=Savannah_sparrow_1980, key="hn", adjustment=NULL,
+              transect="point", convert_units=conversion.factor, truncation="5%")
+```
+
+On calling the `ds` function, information is provided to the screen reminding the user what model has been fitted and the associated AIC value. More information is supplied by applying the `summary()` function to the object created by `ds()`.
+
+```{r}
+summary(sasp.hn)
+```
+
+Visually inspect the fitted detection function with the `plot()` function, specifying the cutpoints histogram with argument `breaks`.  Add the argument `pdf` so the plot shows the probability densiy function rather than the detection function.  The probability density function is preferred for assessing model fit because the PDF incorporates information about the availability of animals to be detected.  There are few animals available to be detected at small distances, therefore lack of fit at small distances is not as consequential for points as it is for lines (Figure \@ref(fig:modelfit)).
+
+```{r, modelfit, fig.dim=c(7,5), fig.cap="Fit of half normal detection function to savannah sparrow data."}
+cutpoints <- c(0,5,10,15,20,30,40,max(Savannah_sparrow_1980$distance, na.rm=TRUE))
+plot(sasp.hn, breaks=cutpoints, pdf=TRUE, main="Savannah sparrow point transect data.")
+```
+
+# Specifying different detection functions
+
+Detection function forms and shapes, are specified by changing the `key` and `adjustment` arguments. 
+
+The  options available for `key` and `adjustment` elements detection functions are:
+
++ half normal (`key="hn"`) - default
++ hazard rate (`key="hr"`)
++ uniform (`key="unif"`)
++ no adjustment terms (`adjustment=NULL`)
++ cosine (`adjustment="cos"`) - default
++ Hermite polynomial (`adjustment="herm"`)
++ Simple polynomial (`adjustment="poly"`)
+
+To fit a uniform key function with cosine adjustment terms, use the command:
+
+```{r}
+sasp.unif.cos <- ds(Savannah_sparrow_1980, key="unif", adjustment="cos",
+                    transect="point", convert_units=conversion.factor, truncation="5%")
+```
+
+To fit a hazard rate key function with simple polynomial adjustment terms, then use the command:
+
+```{r}
+sasp.hr.poly <- ds(Savannah_sparrow_1980, key="hr", adjustment="poly", 
+                   transect="point", convert_units=conversion.factor, truncation="5%")
+```
+
+# Model comparison
+
+Each fitted detection function produces a different estimate of Savannah sparrow abundance and density.  The estimate depends upon the model chosen.  The model selection tool for distance sampling data is AIC.  
+
+```{r}
+AIC(sasp.hn, sasp.hr.poly, sasp.unif.cos)
+```
+
+## Absolute goodness of fit
+
+In addition to the relative ranking of models provided by AIC, it is also important to know whether selected model(s) actually fit the data.  The model is the basis of inference, so it is dangerous to make inference from a model that does not fit the data.  Goodness of fit is assessed using the function `gof_ds` (Figure \@ref(fig:gof)).  
+
+```{r, gof, fig.dim=c(7,5), fig.cap="Q-Q plot of half normal detection function to savannah sparrow data."}
+gof_ds(sasp.hn)
+```
+
+# Model comparison tables
+
+The function `summarise_ds_models` combines the work of `AIC` and `gof_ds` to produce a table of fitted models and summary statistics.
+
+```{r}
+knitr::kable(summarize_ds_models(sasp.hn, sasp.hr.poly, sasp.unif.cos),digits=3,
+             caption="Model selection summary of savannah sparrow point transect data.")
+```
+
+
+# Conclusions
+
+Key differences between analysis of line transect data and point transect data
+
+- argument `transect` in `ds()` must be set to `"point"`,
+- histogram of radial detection distances is characteristically "humped" because few individuals are available to be detected near the points,
+- because of the hump shape (Figure \@ref(fig:basichist)), plotting to assess fit of data to detection distribution usually assessed via `pdf=TRUE` argument added to `plot()` function,
+- for the Arapaho National Refuge Savannah sparrow data, the three candidate models all provide adequeate fit to the data and produce comparable estimates of $P_a$.
+
+# References

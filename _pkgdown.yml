@@ -1,0 +1,134 @@
+url: ~
+template:
+  bootstrap: 5
+  bslib:
+    bg: "#fcfaf2"
+    fg: "#14059e"
+    primary: "#0542a3"
+    base_font: {google: "Roboto"}
+  includes:
+    in_header: |
+      <script type="text/javascript">(function(c,l,a,r,i,t,y){c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)}; t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;   y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);})(window, document, "clarity", "script", "m9rbql4acz");</script>
+
+reference:
+- title: "Data preparation"
+  contents: 
+  - create_bins
+  - create.bins
+  - checkdata
+  - flatfile
+- title: "Fitting"
+  contents:
+  - ds
+- title: "Diagnostics"
+  contents:
+  - checkdata
+  - p_dist_table
+  - gof_ds
+  - ds.gof
+- title: "Model selection"
+  contents:
+  - AIC.dsmodel
+  - logLik.dsmodel
+  - QAIC
+  - chi2_select
+  - summarize_ds_models
+- title: "Printing and plotting"
+  contents:
+  - plot.dsmodel
+  - add_df_covar_line
+  - print.dht_result
+  - print.dsmodel
+  - summary.dsmodel
+  - print.summary.dsmodel
+- title: "Bootstrap variance estimation"
+  contents:
+  - starts_with("bootdht")
+  - make_activity_fn
+  - summary.dht_bootstrap
+- title: "Advanced"
+  contents:
+  - dht2
+- title: "Data sets"
+  contents:
+  - starts_with("amakihi")
+  - starts_with("capercaillie")
+  - starts_with("ClusterExercise")
+  - starts_with("CueCountingExample")
+  - starts_with("ducknest")
+  - starts_with("DuikerCameraTraps")
+  - starts_with("ETP_Dolphin")
+  - starts_with("golftees")
+  - starts_with("LTExercise")
+  - starts_with("minke")
+  - starts_with("PTExercise")
+  - starts_with("Savannah")
+  - starts_with("sikadeer")
+  - starts_with("Stratify_example")
+  - starts_with("Systematic")
+  - starts_with("unimak")
+  - starts_with("wren")
+- title: "Miscellaneous"
+  contents:
+  - convert_units
+  - units_table
+  - dummy_ddf
+  - predict.dsmodel
+  - predict.fake_ddf
+  - unflatten
+  - Distance-package
+
+navbar:
+  bg: primary
+  structure:
+    right: [twitter, github]
+  components:
+    twitter:
+      icon: fa-twitter
+      href: https://twitter.com/distancesamp
+      aria-label: Twitter
+  left:
+    - text: Function reference
+      href: reference/index.html
+    - text: Articles
+      menu:
+        - text: Line transects
+          href: articles/lines-distill.html
+        - text: Covariates in detection
+          href: articles/covariates-distill.html
+        - text: Species as a covariate
+          href: articles/species-covariate-distill.html
+        - text: "------"
+        - text: Only for the website
+        - text: Point transects
+          href: articles/web-only/points/pointtransects-distill.html
+        - text: Size bias remedy
+          href: articles/web-only/groupsize/Remedy-size-bias-for-dolphin-surveys.html
+        - text: Stratification
+          href: articles/web-only/strata/strata-distill.html
+        - text: Detecting difference in density between strata
+          href: articles/web-only/differences/differences.html
+        - text: Variance estimation with bootstrap
+          href: articles/web-only/variance/variance-distill.html
+        - text: Cue count surveys
+          href: articles/web-only/cues/cuecounts-distill.html
+        - text: Indirect surveys
+          href: articles/web-only/multipliers/multipliers-distill.html
+        - text: Take care when subsetting multispecies data sets
+          href: articles/web-only/multispecies/multispecies-multioccasion-analysis.html
+        - text: Camera trap distance sampling
+          href: articles/web-only/CTDS/camera-distill.html
+        - text: Alternative optimiser
+          href: articles/web-only/alt-optimise/mcds-dot-exe.html
+    - text: News
+      href: news/index.html
+
+footer:
+  structure:
+    right: donate
+    left: clarity
+  components:
+    donate: "If you wish to donate to development and maintenance, please <a href='mailto:distance@st-andrews.ac.uk'>email us</a>."
+    clarity:  "We improve our site and software support by using Microsoft Clarity to see <br>
+      how you use our website. By using our site, you agree that we and Microsoft <br>
+      can collect and use this data. Clarity is GDPR compliant."
