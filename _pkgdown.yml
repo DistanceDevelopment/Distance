@@ -120,6 +120,8 @@ navbar:
           href: articles/web-only/CTDS/camera-distill.html
         - text: Alternative optimiser
           href: articles/web-only/alt-optimise/mcds-dot-exe.html
+        - text: Predict detection probabilities
+          href: articles/web-only/predict_detprob/predicting_detection_probabilities.html
     - text: News
       href: news/index.html
 

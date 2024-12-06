@@ -1,5 +1,7 @@
 ---
 title: "Predict detection probability at given distance"
+description: |
+  Estimated detection probabilites from fitted model. Particularly useful when fitted model contains covariates.
 author:
   - name: Eric Rexstad 
     affiliation: CREEM, Univ of St Andrews
