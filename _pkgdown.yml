@@ -1,6 +1,7 @@
 url: ~
 template:
   bootstrap: 5
+  math-rendering: mathjax
   bslib:
     bg: "#fcfaf2"
     fg: "#14059e"
