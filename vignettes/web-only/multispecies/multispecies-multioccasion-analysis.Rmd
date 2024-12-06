@@ -40,9 +40,8 @@ It is increasingly common for investigators to conduct surveys in which multiple
 Begin by reading the flat file in a comma delimited format. Note the URL for the data file is very long, double check that you can read the URL including the Github token.
 
 ```{r dataread}
-URLpart1 <- "https://raw.githubusercontent.com/distanceexamples/Distance-multispecies/main/montrave-line.csv"
-URLpart2 <- "?token=GHSAT0AAAAAABP6QDHAQ677QTIJEKSK2WYEYWG4EYA"
-birds <- read.csv(file=paste0(URLpart1, URLpart2))
+urlfile <- "https://raw.githubusercontent.com/DistanceDevelopment/Distance/refs/heads/distance-new-vignette/vignettes/montrave-line.csv"
+birds <- read.csv(file=urlfile)
 ```
 
 # Survey design
