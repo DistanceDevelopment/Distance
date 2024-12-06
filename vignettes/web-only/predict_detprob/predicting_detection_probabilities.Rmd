@@ -34,7 +34,7 @@ The main focus of this case study is interrogating the fitted model to a) visual
 
 The simulation of a data set is accomplished using the `dsims` package @dsimspkg. Details of the [`dsims`](https://distancesampling.org/dsims/index.html) package will not be described here, interested readers should follow the previous link.
 
-```{r}
+```{r, fig.width=7, fig.asp=.75, fig.cap="Simulated detection functions for four age x sex classes."}
 library(dsims)
 set.seed(19511)
 study.region <- make.region()
@@ -124,7 +124,7 @@ g_x_af <- mrds::detfct(prediction_distances, ddfobj, index = af.indx)
 
 The vectors of predicted detection probabilities are plotted in the following chunk. The last section of the chunk adds the calculated probabilities at the 35m distance to the plot.
 
-```{r}
+```{r, fig.width=7, fig.asp=.75, fig.cap="Predicted detection probabilities for four age x sex classes; with those at 35m highlighted."}
 plot(ds_model, pl.col="white", cex=0.7)
 lines(prediction_distances, g_x_ym, col="darkgreen", lwd=2)
 lines(prediction_distances, g_x_yf, col = "green", lwd=2)
