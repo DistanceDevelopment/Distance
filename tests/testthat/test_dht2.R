@@ -260,3 +260,40 @@ test_that("can accept data.frame and scalar sampling fractions", {
   minke_dht2
   
 })
+
+
+test_that("Deal with strata with no detections", {
+  
+  # Add a third Region with two samples but no observations.
+  # Adding two samples instead of just one to prevent a warning unstable ER var
+  new.row1 <- minke[1, ] %>%
+    mutate(
+      Region.Label = "East",
+      Area = 10000,
+      Sample.Label = max(minke$Sample.Label) + 1,
+      Effort = 10,
+      distance = NA,
+      object = NA
+    )
+  
+  new.row2 <- minke[1, ] %>%
+    mutate(
+      Region.Label = "East",
+      Area = 10000,
+      Sample.Label = max(minke$Sample.Label) + 2,
+      Effort = 10,
+      distance = NA,
+      object = NA
+    )
+  
+  minke <- rbind(minke, new.row1, new.row2)
+  # Fit a detection function
+  detfn <- ds(data=minke, truncation=1.5, key="hr", adjustment=NULL)
+  
+  result <- dht2(ddf = detfn,
+                 flatfile = minke,
+                 strat_formula =  ~ Region.Label,
+                 stratification = "geographical")
+  
+  expect_true(is(result, "dht_result"))
+})
