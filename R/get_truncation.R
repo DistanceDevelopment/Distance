@@ -54,5 +54,15 @@ get_truncation <- function(truncation, cutpoints, data){
       stop("Truncation must be supplied as a single number/string or a list with elements \"left\" and \"right\".")
     }
   }
+  
+  # Final check that truncation is not greater than largest cutpoint
+  if(!is.null(cutpoints)){
+    if(width > cutpoints[length(cutpoints)]){
+      warning(paste("Truncation width is greater than the largest bin distance, re-setting truncation to be largest cutpoint value: ", cutpoints[length(cutpoints)], sep = ""), immediate. = TRUE, call. = FALSE)
+      # Make truncation largest cutpoint
+      width <- cutpoints[length(cutpoints)]
+    }
+  }
+  
   list(left=left, width=width)
 }

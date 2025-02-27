@@ -3,6 +3,7 @@
 * Fixes issue with print dht2 when multipliers are a data.frame (Issue #179)
 * Fixes bug when including a uniform with no adjustment terms in the summarize_ds_models function (Issue #180)
 * Users to pass a list of models to summarize_ds_models rather than passing them individually. (Issue #149)
+* Truncation distances greater than the largest cutpoint value for binned data are no longer permitted as these cause fitting issues. (Issue #175)
 
 # Distance 2.0.0
 
