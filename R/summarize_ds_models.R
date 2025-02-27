@@ -9,7 +9,9 @@
 #' the resulting `data.frame` in R, you may wish to rename the columns for
 #' ease of access.
 #'
-#' @param ... models to be summarised
+#' @param ... models to be summarised (to be deprecated)
+#' @param models a named list of models to be summarised. If the list is not
+#' named then default names of 'model 1', 'model 2' etc. are used.  
 #' @param sort column to sort by (default `"AIC"`)
 #' @param output should the output be given in `"latex"` compatible format
 #' or as `"plain"` text?

@@ -85,4 +85,8 @@ test_that("Passing in models via a list",{
   test3 <- summarize_ds_models(list(ds.model, ds.model.cos, ds.model.hr))
   
   expect_identical(test1[,2:7], test3[,2:7])
+  expect_identical(test3[,1], c("\\texttt{model 1}", "\\texttt{model 2}", "\\texttt{model 3}"))
+  
+  test4 <- summarize_ds_models(list(m1 = ds.model, m2 = ds.model.cos, m3 = ds.model.hr))
+  expect_identical(test4[,1], c("\\texttt{m1}", "\\texttt{m2}", "\\texttt{m3}"))
 })
