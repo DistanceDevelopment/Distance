@@ -4,7 +4,13 @@
 \alias{summarize_ds_models}
 \title{Make a table of summary statistics for detection function models}
 \usage{
-summarize_ds_models(..., sort = "AIC", output = "latex", delta_only = TRUE)
+summarize_ds_models(
+  ...,
+  models = list(),
+  sort = "AIC",
+  output = "latex",
+  delta_only = TRUE
+)
 }
 \arguments{
 \item{...}{models to be summarised}
