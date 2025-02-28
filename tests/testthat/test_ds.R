@@ -56,6 +56,12 @@ test_that("binning works", {
   # first cutpoint not zero when no left truncation
   expect_error(ds(egdata,4,cutpoints=c(2,3,4)),
                "The first cutpoint must be 0 or the left truncation distance!")
+  
+  expect_warning(ds.obj <- ds(egdata,list(left = 2, right = 5),cutpoints=c(2,3,4)),
+               "Truncation width is greater than the largest bin distance, re-setting truncation to be largest cutpoint value: 4")
+  
+  # Check that the width has been modified correctly
+  expect_equal(ds.obj$ddf$meta.data$width, 4)
 
   tst_distances <- data.frame(distance = c(0, 0, 0, 10, 50, 70, 110))
   expect_equal(as.vector(table(create_bins(tst_distances,
