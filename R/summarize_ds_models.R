@@ -26,15 +26,31 @@
 #' model_hr <- ds(tee.data,4, key="hr")
 #' summarize_ds_models(model_hr, model_hn, output="plain")
 #'}
-summarize_ds_models <- function(..., sort="AIC", output="latex", delta_only=TRUE){
-
-  # get the models
-  models <- list(...)
-
-  # get the model names
-  model_names <- setdiff(as.character(match.call(expand.dots=TRUE)),
-                         as.character(match.call(expand.dots=FALSE)))
-
+summarize_ds_models <- function(..., models=list(), sort="AIC", output="latex", delta_only=TRUE){
+  # Check to see if the user supplied the model list via the ...
+  tmp <- list(...)
+  if(length(tmp) > 0){
+    # Check if its a list of models - incase the user has passed in via ... instead of models argument
+    if(is(tmp[[1]], "list")){
+      models <- tmp[[1]]
+    }
+  }
+  # Check if user is supplying via new models argument or not
+  if(length(models) == 0){
+    warning("Passing models via ... will be depricated in the next release, please pass models in a list using the models argument.", immediate. = TRUE, call. = FALSE)
+    # get the models from ...
+    models <- tmp
+    # get the model names
+    model_names <- setdiff(as.character(match.call(expand.dots=TRUE)),
+                           as.character(match.call(expand.dots=FALSE)))
+  }else{
+    # get the model names
+    model_names <- names(models)
+    # if it's an unnamed list, give generic names to them
+    if(is.null(model_names)){
+      model_names <- paste("model ", 1:length(models), sep = "")
+    }
+  }
 
   ## checking
   # can't compare models with different truncations

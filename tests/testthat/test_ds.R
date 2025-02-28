@@ -156,8 +156,8 @@ test_that("Uniform does work after all",{
   x1 <- ds(ducknest, key="unif", adjustment = NULL)
   x2 <- ds(ducknest, key="unif", nadj = 1)
   x3 <- ds(ducknest, key="hn", adjustment = NULL)
-  tmp <- summarize_ds_models(x1, x2, x3, 
-                             delta_only = FALSE)
+  tmp <- suppressWarnings(summarize_ds_models(x1, x2, x3, 
+                                              delta_only = FALSE))
   expect_is(tmp, "data.frame")
   expect_equal(nrow(tmp), 3)
 })

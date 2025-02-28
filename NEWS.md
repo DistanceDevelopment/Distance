@@ -3,6 +3,8 @@
 * Fixes issue with print dht2 when multipliers are a data.frame (Issue #179)
 * Fixes bug when including a uniform with no adjustment terms in the summarize_ds_models function (Issue #180)
 * dht2 can now deal with strata where there are no observations (Issue #194)
+* Users to pass a list of models to summarize_ds_models rather than passing them individually. (Issue #149)
+
 
 # Distance 2.0.0
 
