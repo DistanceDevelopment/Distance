@@ -26,7 +26,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">Distance</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.0.0.9001</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.0.0.9004</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -76,7 +76,7 @@
       <h1>Incorporating covariates in the detection function</h1>
                         <h4 data-toc-skip class="author">Eric Rexstad</h4>
             <address class="author_afil">
-      CREEM, Univ of St Andrews<br><h4 data-toc-skip class="date">December 2024</h4>
+      CREEM, Univ of St Andrews<br><h4 data-toc-skip class="date">March 2025</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/DistanceDevelopment/Distance/blob/HEAD/vignettes/covariates-distill.Rmd" class="external-link"><code>vignettes/covariates-distill.Rmd</code></a></small>
       <div class="d-none name"><code>covariates-distill.Rmd</code></div>
@@ -221,6 +221,8 @@ Figure 3: Visualisation of detectability as function of minutes since sunrise.
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html" class="external-link">kable</a></span><span class="op">(</span><span class="fu"><a href="../reference/summarize_ds_models.html">summarize_ds_models</a></span><span class="op">(</span><span class="va">amak.hr</span>, <span class="va">amak.hr.obs</span>, <span class="va">amak.hr.obs.mas</span><span class="op">)</span>, digits<span class="op">=</span><span class="fl">3</span>,</span>
 <span>             caption<span class="op">=</span><span class="st">"Model selection table for Hawaiian amakihi."</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">## Warning: Passing models via ... will be depricated in the next release, please</span></span>
+<span><span class="co">## pass models in a list using the models argument.</span></span></code></pre>
 <table class="table">
 <caption>
 <span id="tab:unnamed-chunk-8">Table 1: </span>Model selection table for Hawaiian amakihi.</caption>
@@ -279,7 +281,7 @@ Figure 3: Visualisation of detectability as function of minutes since sunrise.
 </tbody>
 </table>
 <p>Examine the shape of the preferred detection function (including covariates observer and minutes after sunrise) (Figure <a href="#fig:bestmod">4</a>).</p>
-<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">amak.hr.obs.mas</span>, pdf<span class="op">=</span><span class="cn">TRUE</span>, main<span class="op">=</span><span class="st">"Hazard rate with observer and minutes after sunrise."</span>, showpoints<span class="op">=</span><span class="cn">FALSE</span><span class="op">)</span></span>
 <span><span class="va">sfzero</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>OBs<span class="op">=</span><span class="st">"SGF"</span>, MAS<span class="op">=</span><span class="fl">0</span><span class="op">)</span></span>
 <span><span class="va">sf180</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>OBs<span class="op">=</span><span class="st">"SGF"</span>, MAS<span class="op">=</span><span class="fl">180</span><span class="op">)</span></span>

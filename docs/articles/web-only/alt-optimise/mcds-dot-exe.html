@@ -26,7 +26,7 @@
 
     <a class="navbar-brand me-2" href="../../../index.html">Distance</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.0.0.9001</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.0.0.9004</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -76,7 +76,7 @@
       <h1>Alternative optimization engine for fitting detection functions</h1>
                         <h4 data-toc-skip class="author">Len Thomas</h4>
             <address class="author_afil">
-      CREEM, Univ of St Andrews<br><h4 data-toc-skip class="date">December 2024</h4>
+      CREEM, Univ of St Andrews<br><h4 data-toc-skip class="date">March 2025</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/DistanceDevelopment/Distance/blob/HEAD/vignettes/web-only/alt-optimise/mcds-dot-exe.Rmd" class="external-link"><code>vignettes/web-only/alt-optimise/mcds-dot-exe.Rmd</code></a></small>
       <div class="d-none name"><code>mcds-dot-exe.Rmd</code></div>
@@ -183,8 +183,8 @@
 <pre><code><span><span class="co">## Fitting half-normal key function</span></span></code></pre>
 <pre><code><span><span class="co">## DEBUG: initial values = -0.1031529</span></span></code></pre>
 <pre><code><span><span class="co">## Running MCDS.exe...</span></span></code></pre>
-<pre><code><span><span class="co">## Command file written to C:\Users\erexs\AppData\Local\Temp\Rtmp2DYsEq\cmdtmp4e1436807d48.txt</span></span></code></pre>
-<pre><code><span><span class="co">## Stats file written to C:\Users\erexs\AppData\Local\Temp\Rtmp2DYsEq\stat4e141f5a2482.txt</span></span></code></pre>
+<pre><code><span><span class="co">## Command file written to C:\Users\erexs\AppData\Local\Temp\Rtmp0oUXnd\cmdtmp3ef81de12202.txt</span></span></code></pre>
+<pre><code><span><span class="co">## Stats file written to C:\Users\erexs\AppData\Local\Temp\Rtmp0oUXnd\stat3ef813d43122.txt</span></span></code></pre>
 <pre><code><span><span class="co">## DEBUG: initial values = 0.6632378 </span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## DEBUG: Convergence! </span></span>
@@ -206,8 +206,8 @@
 <pre><code><span><span class="co">## Fitting half-normal key function with cosine(2) adjustments</span></span></code></pre>
 <pre><code><span><span class="co">## DEBUG: initial values = -0.1031529 0</span></span></code></pre>
 <pre><code><span><span class="co">## Running MCDS.exe...</span></span></code></pre>
-<pre><code><span><span class="co">## Command file written to C:\Users\erexs\AppData\Local\Temp\Rtmp2DYsEq\cmdtmp4e147168478a.txt</span></span></code></pre>
-<pre><code><span><span class="co">## Stats file written to C:\Users\erexs\AppData\Local\Temp\Rtmp2DYsEq\stat4e14723f7f7b.txt</span></span></code></pre>
+<pre><code><span><span class="co">## Command file written to C:\Users\erexs\AppData\Local\Temp\Rtmp0oUXnd\cmdtmp3ef820113e81.txt</span></span></code></pre>
+<pre><code><span><span class="co">## Stats file written to C:\Users\erexs\AppData\Local\Temp\Rtmp0oUXnd\stat3ef82b4155ea.txt</span></span></code></pre>
 <pre><code><span><span class="co">## DEBUG: initial values = 0.6606793 -0.0159333 </span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## DEBUG: Convergence! </span></span>
@@ -548,7 +548,7 @@ Figure 2: PDF of fitted model with R-based optimizer.
 <span><span class="co">## Density:</span></span>
 <span><span class="co">##   Label     Estimate           se        cv          lcl          ucl       df</span></span>
 <span><span class="co">## 1 Total 1.430021e-06 3.880986e-07 0.2713936 8.213597e-07 2.489727e-06 20.94597</span></span></code></pre>
-<p>Fitting takes 10 secs. (Note, in versions of <code>Distance</code> before 2.0.0 this was a much higher number!) Here we try the <code>MCDS.exe</code> optimizer:</p>
+<p>Fitting takes 9.6 secs. (Note, in versions of <code>Distance</code> before 2.0.0 this was a much higher number!) Here we try the <code>MCDS.exe</code> optimizer:</p>
 <div class="sourceCode" id="cb110"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">start.time</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/Sys.time.html" class="external-link">Sys.time</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="va">uni3.mcds</span> <span class="op">&lt;-</span> <span class="fu"><a href="../../../reference/ds.html">ds</a></span><span class="op">(</span><span class="va">DuikerCameraTraps</span>, transect <span class="op">=</span> <span class="st">"point"</span>, key<span class="op">=</span><span class="st">"unif"</span>, adjustment <span class="op">=</span> <span class="st">"cos"</span>,</span>
