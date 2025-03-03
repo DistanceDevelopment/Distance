@@ -26,7 +26,7 @@
 
     <a class="navbar-brand me-2" href="../../../index.html">Distance</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.0.0.9001</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.0.0.9004</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -76,7 +76,7 @@
       <h1>Point transect density estimation</h1>
                         <h4 data-toc-skip class="author">Eric Rexstad</h4>
             <address class="author_afil">
-      CREEM, Univ of St Andrews<br><h4 data-toc-skip class="date">December 2024</h4>
+      CREEM, Univ of St Andrews<br><h4 data-toc-skip class="date">March 2025</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/DistanceDevelopment/Distance/blob/HEAD/vignettes/web-only/points/pointtransects-distill.Rmd" class="external-link"><code>vignettes/web-only/points/pointtransects-distill.Rmd</code></a></small>
       <div class="d-none name"><code>pointtransects-distill.Rmd</code></div>
@@ -86,7 +86,7 @@
     
     
 <p>In this exercise, we use <code>R</code> <span class="citation">(R Core Team, 2019)</span> and the <code>Distance</code> package <span class="citation">(Miller, Rexstad, Thomas, Marshall, &amp; Laake, 2019)</span> to fit different detection function models to point transect survey data of savanna sparrows <em>(Passerculus sandwichensis)</em> density and abundance. These data were part of a study examining the effect of livestock grazing upon vegetation structure and consequently upon the avian community described by Knopf et al. <span class="citation">(1988)</span>.</p>
-<p>Steps in this analysis are similar to the steps taken in the <a href="https://distancedevelopment.github.io/docs/articles/lines-distill.html" class="external-link">line transect analysis of winter wren data</a>.</p>
+<p>Steps in this analysis are similar to the steps taken in the <a href="https://distancedevelopment.github.io/Distance/docs/articles/lines-distill.html" class="external-link">line transect analysis of winter wren data</a>.</p>
 <div class="section level2">
 <h2 id="objectives">Objectives<a class="anchor" aria-label="anchor" href="#objectives"></a>
 </h2>
@@ -126,7 +126,7 @@ Figure 1: Summer grazed pastures along Illinois River Arapaho National Wildlife 
 <span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">Savannah_sparrow_1980</span><span class="op">)</span></span>
 <span><span class="co">#  remove pasture-level identifier in Region.Label</span></span>
 <span><span class="va">Savannah_sparrow_1980</span><span class="op">$</span><span class="va">Region.Label</span> <span class="op">&lt;-</span> <span class="st">"Single_stratum"</span></span></code></pre></div>
-<p>The code above overwrites the strata designations in the original data to make it appear that all data were derived from a single stratum. This makes the analysis simpler to perform. There are examples of analysis of <a href="https://examples.distancesampling.org/Distance-strata/strata.html" class="external-link">stratified data in another vignette</a>.</p>
+<p>The code above overwrites the strata designations in the original data to make it appear that all data were derived from a single stratum. This makes the analysis simpler to perform. There are examples of analysis of <a href="https://distancedevelopment.github.io/Distance/docs/articles/web-only/strata/strata-distill.html" class="external-link">stratified data in another vignette</a>.</p>
 <p>Examine the first few rows of <code>Savannah_sparrow_1980</code> using the function <code><a href="https://rdrr.io/r/utils/head.html" class="external-link">head()</a></code></p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">Savannah_sparrow_1980</span><span class="op">)</span></span></code></pre></div>
@@ -137,7 +137,7 @@ Figure 1: Summer grazed pastures along Illinois River Arapaho National Wildlife 
 <span><span class="co">## 4 Single_stratum    1    POINT   4      1     NA       NA  SASP 1980</span></span>
 <span><span class="co">## 5 Single_stratum    1    POINT   5      1     NA       NA  SASP 1980</span></span>
 <span><span class="co">## 6 Single_stratum    1    POINT   6      1     NA       NA  SASP 1980</span></span></code></pre>
-<p>The object <code>Savannah_sparrow_1980</code> is a dataframe object made up of rows and columns. In contrast to the <a href="https://examples.distancesampling.org/Distance-strata/linetransects-distill.html" class="external-link">Montrave winter wren line transect data used in the previous vignette</a>, savannah sparrows were not detected at all point transects. Radial distances receive the value <code>NA</code> for transects where there were no detections. To determine the number of detections in this data set, we total the number of values in the <code>distance</code> field that are not <code>NA</code></p>
+<p>The object <code>Savannah_sparrow_1980</code> is a dataframe object made up of rows and columns. In contrast to the <a href="https://distancedevelopment.github.io/Distance/docs/articles/lines-distill.html" class="external-link">Montrave winter wren line transect data used in the previous vignette</a>, Savannah sparrows were not detected at all point transects. Radial distances receive the value <code>NA</code> for transects where there were no detections. To determine the number of detections in this data set, we total the number of values in the <code>distance</code> field that are not <code>NA</code></p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na</a></span><span class="op">(</span><span class="va">Savannah_sparrow_1980</span><span class="op">$</span><span class="va">distance</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## [1] 276</span></span></code></pre>
