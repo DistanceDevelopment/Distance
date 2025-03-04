@@ -179,7 +179,7 @@ Conducting our modeling using the hazard rate key function, we turn our attentio
 hr.size <- ds(nochopper, key="hr", formula = ~size)
 ```
 
-It is a disappointment to learn that a model including group size as a covariate fails to converge.  There are numerical difficulties associated with a covariate that spans three orders of magnitude.  For more about fitting issues with covariates, consult the [covariate example with amakihi](../../covariates-distill.Rmd).
+It is a disappointment to learn that a model including group size as a covariate fails to converge.  There are numerical difficulties associated with a covariate that spans three orders of magnitude.  For more about fitting issues with covariates, consult the [covariate example with amakihi](https://distancesampling.org/Distance/articles/covariates-distill.html).
 
 The distribution of group sizes is strongly skewed to the right, with a very long right tail.  A transformation by natural logs will both reduce the range of `log(size)` to one order of magnitude and shift the centre of the distribution of the covariate (Fig. \@ref(fig:transf)).
 

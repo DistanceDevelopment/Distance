@@ -28,7 +28,7 @@ vignette: >
 knitr::opts_chunk$set(eval=TRUE, echo=TRUE, message=FALSE, warnings=FALSE)
 ```
 
-In this problem, we illustrate fitting multiple covariate distance sampling (MCDS) models to point transect data using a bird survey from Hawaii: data on an abundant species, the Hawaii amakihi *(Hemignathus virens)* is used. This practical is makes use of the `Distance` R package described by Miller et al. [-@miller_distance_2019]  duplicating the analysis in Marques et al. [-@Maretal07]. For basic information regarding analysis of point transect data, consult the [point transect example](https://examples.distancesampling.org/Distance-points/pointtransects-distill.html)
+In this problem, we illustrate fitting multiple covariate distance sampling (MCDS) models to point transect data using a bird survey from Hawaii: data on an abundant species, the Hawaii amakihi *(Hemignathus virens)* is used. This practical is makes use of the `Distance` R package described by Miller et al. [-@miller_distance_2019]  duplicating the analysis in Marques et al. [-@Maretal07]. For basic information regarding analysis of point transect data, consult the [point transect example](https://distancesampling.org/Distance/docs/articles/web-only/points/pointtransects-distill.html)
 
 ```{r layout="l-page"}
 library(Distance)
