@@ -577,7 +577,7 @@ Figure 3: Detection function and probability density function of the selected de
 <div class="sourceCode" id="cb40"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">n.cores</span> <span class="op">&lt;-</span> <span class="fu">parallel</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/parallel/detectCores.html" class="external-link">detectCores</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="va">daytime.boot.uni</span> <span class="op">&lt;-</span> <span class="fu"><a href="../../../reference/bootdht.html">bootdht</a></span><span class="op">(</span>model<span class="op">=</span><span class="va">uni3</span>, flatfile<span class="op">=</span><span class="va">DuikerCameraTraps</span>,</span>
-<span>                          resample_transects <span class="op">=</span> <span class="cn">TRUE</span>, nboot <span class="op">=</span> <span class="fl">5</span>, </span>
+<span>                          resample_transects <span class="op">=</span> <span class="cn">TRUE</span>, nboot <span class="op">=</span> <span class="fl">500</span>, </span>
 <span>                          cores <span class="op">=</span> <span class="va">n.cores</span> <span class="op">-</span> <span class="fl">1</span>,</span>
 <span>                          summary_fun<span class="op">=</span><span class="va">mysummary</span>, sample_fraction <span class="op">=</span> <span class="va">samfrac</span>,</span>
 <span>                          convert_units <span class="op">=</span> <span class="va">conversion</span>, multipliers<span class="op">=</span><span class="va">mult</span><span class="op">)</span></span></code></pre></div>
@@ -589,12 +589,12 @@ Figure 3: Detection function and probability density function of the selected de
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">daytime.boot.uni</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## Bootstrap results</span></span>
 <span><span class="co">## </span></span>
-<span><span class="co">## Boostraps          : 5 </span></span>
-<span><span class="co">## Successes          : 5 </span></span>
-<span><span class="co">## Failures           : 0 </span></span>
+<span><span class="co">## Boostraps          : 500 </span></span>
+<span><span class="co">## Successes          : 498 </span></span>
+<span><span class="co">## Failures           : 2 </span></span>
 <span><span class="co">## </span></span>
-<span><span class="co">##      median mean   se   lcl   ucl   cv</span></span>
-<span><span class="co">## Dhat   16.5 18.2 6.47 12.31 27.96 0.39</span></span></code></pre>
+<span><span class="co">##      median  mean   se  lcl   ucl   cv</span></span>
+<span><span class="co">## Dhat  18.01 19.13 7.85 7.62 37.79 0.44</span></span></code></pre>
 <div class="sourceCode" id="cb43"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/hist.html" class="external-link">hist</a></span><span class="op">(</span><span class="va">daytime.boot.uni</span><span class="op">$</span><span class="va">Dhat</span>, breaks <span class="op">=</span> <span class="fl">20</span>, </span>
 <span>     xlab <span class="op">=</span> <span class="st">"Estimated density"</span>, main <span class="op">=</span> <span class="st">"D-hat estimates bootstraps"</span><span class="op">)</span></span>
