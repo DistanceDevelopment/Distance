@@ -7,6 +7,7 @@ author:
     url: http://distancesampling.org
     affiliation: CREEM, Univ of St Andrews
     affiliation_url: https://creem.st-andrews.ac.uk
+date: "`r format(Sys.time(), '%B %Y')`"
 output: 
   bookdown::html_document2:
     number_sections: false
@@ -40,7 +41,7 @@ It is increasingly common for investigators to conduct surveys in which multiple
 Begin by reading the flat file in a comma delimited format. Note the URL for the data file is very long, double check that you can read the URL including the Github token.
 
 ```{r dataread}
-urlfile <- "https://raw.githubusercontent.com/DistanceDevelopment/Distance/refs/heads/distance-new-vignette/vignettes/montrave-line.csv"
+urlfile <- "https://raw.githubusercontent.com/DistanceDevelopment/Distance/refs/heads/master/vignettes/montrave-line.csv"
 birds <- read.csv(file=urlfile)
 ```
 
