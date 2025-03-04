@@ -7,6 +7,7 @@ author:
     url: http://distancesampling.org
     affiliation: CREEM, Univ of St Andrews
     affiliation_url: https://creem.st-andrews.ac.uk
+date: "`r format(Sys.time(), '%B %Y')`"
 output: 
   bookdown::html_document2:
     number_sections: false
