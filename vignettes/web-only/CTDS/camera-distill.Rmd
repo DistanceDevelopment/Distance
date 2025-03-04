@@ -328,7 +328,7 @@ Just as with `dht2` there are arguments for the `model`, `flatfile`,  `sample_fr
 ```{r, bootstrap, results='hide', eval=solution}
 n.cores <- parallel::detectCores()
 daytime.boot.uni <- bootdht(model=uni3, flatfile=DuikerCameraTraps,
-                          resample_transects = TRUE, nboot = 500, 
+                          resample_transects = TRUE, nboot = 5, 
                           cores = n.cores - 1,
                           summary_fun=mysummary, sample_fraction = samfrac,
                           convert_units = conversion, multipliers=mult)
