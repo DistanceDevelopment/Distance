@@ -43,7 +43,7 @@ Steps in this analysis are similar to the steps taken in the [line transect anal
 A total of 373 point transects were placed in three pastures in the Arapaho National Wildlife Refuge in Colorado (Figure \@ref(fig:fig)).  Elevation of these pastures was ~2500m.  We will not deal with pasture-level analysis of these data in this vignette and will alter the data to remove the strata designations.
 
 ```{r fig, echo=FALSE, fig.dim=c(7,5), fig.cap="Summer grazed pastures along Illinois River Arapaho National Wildlife Refuge, Colorado.  Figure from [@knopf_guild_1988]."}
-knitr::include_graphics("arapaho.JPG")
+knitr::include_graphics("arapaho.jpg")
 ```
 
 
