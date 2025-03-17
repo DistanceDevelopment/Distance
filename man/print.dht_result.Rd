@@ -4,14 +4,15 @@
 \alias{print.dht_result}
 \title{Print abundance estimates}
 \usage{
-\method{print}{dht_result}(x, report = "abundance", groups = FALSE, ...)
+\method{print}{dht_result}(x, report = "abundance", groups = TRUE, ...)
 }
 \arguments{
 \item{x}{object of class \code{dht_result}}
 
 \item{report}{should \code{"abundance"}, \code{"density"} or \code{"both"} be reported?}
 
-\item{groups}{should abundance/density of groups be produced?}
+\item{groups}{should abundance/density of groups be produced? TRUE
+by default.}
 
 \item{\dots}{unused}
 }
