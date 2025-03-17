@@ -4,30 +4,41 @@
 #'
 #' @export
 #' @param x object of class `dht_result`
-#' @param groups should abundance/density of groups be produced?
+#' @param groups should abundance/density of groups be produced? TRUE
+#' by default.
 #' @param report should `"abundance"`, `"density"` or `"both"` be reported?
 #' @param \dots unused
-print.dht_result <- function(x, report="abundance", groups=FALSE, ...){
+print.dht_result <- function(x, report="abundance", groups=TRUE, ...){
 
+  args <- list(...)
+  # Stop the general info being printed twice if there are groups
+  if(!is.null(args$skip.info)){
+    skip.info <- args$skip.info
+  }else{
+    skip.info <- FALSE
+  }
+  
   # general information
-  resulttype <- ifelse(report=="both", "abundance and density", report)
-  substr(resulttype, 1, 1) <- toupper(substr(resulttype, 1, 1))
-  cat(resulttype, "estimates from distance sampling\n")
-  cat("Stratification :", attr(x, "stratification"), "\n")
-  cat("Variance       :", paste0(attr(x, "ER_var")[[1]], ","),
-      ifelse(attr(x, "ER_var")[[3]], "binomial",
-             ifelse(attr(x, "ER_var")[[2]], "N/L", "n/L")), "\n")
-  cat("Multipliers    :", ifelse(is.null(attr(x, "multipliers")),
-                                 "none",
-                                 paste(attr(x, "multipliers"), collapse=", ")),
-      "\n")
-  cat("Sample fraction :" , ifelse(is.data.frame(attr(x, "sample_fraction")),
-                                  "multiple", attr(x, "sample_fraction")), "\n")
+  if(!skip.info){
+    resulttype <- ifelse(report=="both", "abundance and density", report)
+    substr(resulttype, 1, 1) <- toupper(substr(resulttype, 1, 1))
+    cat(resulttype, "estimates from distance sampling\n")
+    cat("Stratification :", attr(x, "stratification"), "\n")
+    cat("Variance       :", paste0(attr(x, "ER_var")[[1]], ","),
+        ifelse(attr(x, "ER_var")[[3]], "binomial",
+               ifelse(attr(x, "ER_var")[[2]], "N/L", "n/L")), "\n")
+    cat("Multipliers    :", ifelse(is.null(attr(x, "multipliers")),
+                                   "none",
+                                   paste(attr(x, "multipliers"), collapse=", ")),
+        "\n")
+    cat("Sample fraction :" , ifelse(is.data.frame(attr(x, "sample_fraction")),
+                                     "multiple", attr(x, "sample_fraction")), "\n")
+  }
 
   cat("\n\n")
-  if(groups & !is.null(attr(x, "grouped"))){
-    cat("Groups:\n\n")
-    print(attr(x, "grouped"), report=report)
+  if(groups && !is.null(attr(x, "grouped"))){
+    cat("Groups:")
+    print(attr(x, "grouped"), report=report, skip.info = TRUE)
     cat("\n\n")
     cat("Individuals:\n\n")
   }
