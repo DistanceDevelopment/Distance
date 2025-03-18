@@ -45,7 +45,7 @@ library(Distance)
 data(wren_lt)
 ```
 
-The function `names()` allows you to see the names of the columns of the data frame `wren_lt`.  Definitions of those fields were provided in the [line transect vignette](https://examples.distancesampling.org/Distance-lines/linetransects.html). 
+The function `names()` allows you to see the names of the columns of the data frame `wren_lt`.  Definitions of those fields were provided in the [line transect vignette](https://distancesampling.org/Distance/articles/lines-distill.html). 
 
 The effort, or transect length has been adjusted to recognise each transect is walked twice.
 

@@ -30,7 +30,7 @@ knitr::opts_chunk$set(eval=TRUE, echo=TRUE, message=FALSE, warnings=FALSE)
 
 In this exercise, we use `R` [@r_core_team_r_2019] and the `Distance` package [@miller_distance_2019] to fit different detection function models to point transect survey data of savanna sparrows *(Passerculus sandwichensis)* density and abundance.  These data were part of a study examining the effect of livestock grazing upon vegetation structure and consequently upon the avian community described by Knopf et al. [-@knopf_guild_1988].
 
-Steps in this analysis are similar to the steps taken in the [line transect analysis of winter wren data](https://distancedevelopment.github.io/docs/articles/lines-distill.html).
+Steps in this analysis are similar to the steps taken in the [line transect analysis of winter wren data](https://distancesampling.org/Distance/articles/lines-distill.html).
 
 # Objectives
 
@@ -43,7 +43,7 @@ Steps in this analysis are similar to the steps taken in the [line transect anal
 A total of 373 point transects were placed in three pastures in the Arapaho National Wildlife Refuge in Colorado (Figure \@ref(fig:fig)).  Elevation of these pastures was ~2500m.  We will not deal with pasture-level analysis of these data in this vignette and will alter the data to remove the strata designations.
 
 ```{r fig, echo=FALSE, fig.dim=c(7,5), fig.cap="Summer grazed pastures along Illinois River Arapaho National Wildlife Refuge, Colorado.  Figure from [@knopf_guild_1988]."}
-knitr::include_graphics("arapaho.JPG")
+knitr::include_graphics("arapaho.jpg")
 ```
 
 
@@ -68,7 +68,7 @@ data(Savannah_sparrow_1980)
 Savannah_sparrow_1980$Region.Label <- "Single_stratum"
 ```
 
-The code above overwrites the strata designations in the original data to make it appear that all data were derived from a single stratum.  This makes the analysis simpler to perform.  There are examples of analysis of [stratified data in another vignette](https://examples.distancesampling.org/Distance-strata/strata.html).
+The code above overwrites the strata designations in the original data to make it appear that all data were derived from a single stratum.  This makes the analysis simpler to perform.  There are examples of analysis of [stratified data in another vignette](https://distancesampling.org/Distance/articles/web-only/strata/strata-distill.html).
 
 Examine the first few rows of `Savannah_sparrow_1980` using the function `head()`
 
@@ -76,7 +76,7 @@ Examine the first few rows of `Savannah_sparrow_1980` using the function `head()
 head(Savannah_sparrow_1980)
 ```
 
-The object `Savannah_sparrow_1980` is a dataframe object made up of rows and columns. In contrast to the [Montrave winter wren line transect data used in the previous vignette](https://examples.distancesampling.org/Distance-strata/linetransects-distill.html), savannah sparrows were not detected at all point transects.  Radial distances receive the value `NA` for transects where there were no detections.  To determine the number of detections in this data set, we total the number of values in the `distance` field that are not `NA`
+The object `Savannah_sparrow_1980` is a dataframe object made up of rows and columns. In contrast to the [Montrave winter wren line transect data used in the previous vignette](https://distancesampling.org/Distance/articles/lines-distill.html), Savannah sparrows were not detected at all point transects.  Radial distances receive the value `NA` for transects where there were no detections.  To determine the number of detections in this data set, we total the number of values in the `distance` field that are not `NA`
 
 ```{r}
 sum(!is.na(Savannah_sparrow_1980$distance))

@@ -11,7 +11,7 @@
 <script src="../../../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../../../deps/Roboto-0.4.9/font.css" rel="stylesheet">
 <link href="../../../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="../../../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
-<script src="../../../deps/headroom-0.11.0/headroom.min.js"></script><script src="../../../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../../../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../../../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../../../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../../../deps/search-1.0.0/fuse.min.js"></script><script src="../../../deps/search-1.0.0/mark.min.js"></script><script src="../../../deps/MathJax-3.2.2/tex-chtml.min.js"></script><!-- pkgdown --><script src="../../../pkgdown.js"></script><meta property="og:title" content="Variance estimation">
+<script src="../../../deps/headroom-0.11.0/headroom.min.js"></script><script src="../../../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../../../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../../../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../../../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../../../deps/search-1.0.0/fuse.min.js"></script><script src="../../../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../../../pkgdown.js"></script><meta property="og:title" content="Variance estimation">
 <meta name="description" content="Variance estimation using bootstrap resampling.
 ">
 <meta property="og:description" content="Variance estimation using bootstrap resampling.
@@ -26,7 +26,7 @@
 
     <a class="navbar-brand me-2" href="../../../index.html">Distance</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.0.0.9001</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.0.0.9005</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -76,7 +76,7 @@
       <h1>Variance estimation</h1>
                         <h4 data-toc-skip class="author">Eric Rexstad</h4>
             <address class="author_afil">
-      CREEM, Univ of St Andrews<br><h4 data-toc-skip class="date">December 2024</h4>
+      CREEM, Univ of St Andrews<br><h4 data-toc-skip class="date">March 2025</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/DistanceDevelopment/Distance/blob/HEAD/vignettes/web-only/variance/variance-distill.Rmd" class="external-link"><code>vignettes/web-only/variance/variance-distill.Rmd</code></a></small>
       <div class="d-none name"><code>variance-distill.Rmd</code></div>
@@ -102,7 +102,7 @@
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/DistanceDevelopment/Distance/" class="external-link">Distance</a></span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">wren_lt</span><span class="op">)</span></span></code></pre></div>
-<p>The function <code><a href="https://rdrr.io/r/base/names.html" class="external-link">names()</a></code> allows you to see the names of the columns of the data frame <code>wren_lt</code>. Definitions of those fields were provided in the <a href="https://examples.distancesampling.org/Distance-lines/linetransects.html" class="external-link">line transect vignette</a>.</p>
+<p>The function <code><a href="https://rdrr.io/r/base/names.html" class="external-link">names()</a></code> allows you to see the names of the columns of the data frame <code>wren_lt</code>. Definitions of those fields were provided in the <a href="https://distancesampling.org/Distance/articles/lines-distill.html" class="external-link">line transect vignette</a>.</p>
 <p>The effort, or transect length has been adjusted to recognise each transect is walked twice.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">conversion.factor</span> <span class="op">&lt;-</span> <span class="fu"><a href="../../../reference/convert_units.html">convert_units</a></span><span class="op">(</span><span class="st">"meter"</span>, <span class="st">"kilometer"</span>, <span class="st">"hectare"</span><span class="op">)</span></span></code></pre></div>
@@ -122,8 +122,8 @@
 <p>Looking at the density estimates from the uniform cosine model</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">wren.unif.cos</span><span class="op">$</span><span class="va">dht</span><span class="op">$</span><span class="va">individuals</span><span class="op">$</span><span class="va">D</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">##   Label Estimate        se        cv       lcl      ucl      df</span></span>
-<span><span class="co">## 1 Total 1.066101 0.2126892 0.1995019 0.7218009 1.574632 168.204</span></span></code></pre>
+<pre><code><span><span class="co">##   Label Estimate        se        cv       lcl      ucl       df</span></span>
+<span><span class="co">## 1 Total 1.066106 0.2126919 0.1995035 0.7218026 1.574645 168.2043</span></span></code></pre>
 <p>The coefficient of variation (CV) is 0.2, and confidence interval bounds are (0.72 - 1.57) birds per hectare. The coefficient of variation is based upon a delta-method approximation of the uncertainty in both the parameters of the detection function and the variability in encounter rates between transects.</p>
 <p><span class="math display">\[[CV(\hat{D})]^2 = [CV(\frac{n}{L})]^2 + [CV(P_a)]^2\]</span>
 where</p>
@@ -156,7 +156,7 @@ where</p>
 <code class="sourceCode R"><span><span class="va">alpha</span> <span class="op">&lt;-</span> <span class="fl">0.05</span></span>
 <span><span class="op">(</span><span class="va">bootci</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/quantile.html" class="external-link">quantile</a></span><span class="op">(</span><span class="va">est.boot</span><span class="op">$</span><span class="va">D</span>, probs <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">alpha</span><span class="op">/</span><span class="fl">2</span>, <span class="fl">1</span><span class="op">-</span><span class="va">alpha</span><span class="op">/</span><span class="fl">2</span><span class="op">)</span>, na.rm<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">##      2.5%     97.5% </span></span>
-<span><span class="co">## 0.7940937 1.4088653</span></span></code></pre>
+<span><span class="co">## 0.7976603 1.4088407</span></span></code></pre>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/hist.html" class="external-link">hist</a></span><span class="op">(</span><span class="va">est.boot</span><span class="op">$</span><span class="va">D</span>, nc<span class="op">=</span><span class="fl">30</span>,</span>
 <span>     main<span class="op">=</span><span class="st">"Distribution of bootstrap estimates\nwithout model uncertainty"</span>,</span>
@@ -176,23 +176,18 @@ Figure 1: Sampling distribution of <span class="math inline">\(\hat{D}\)</span> 
 <p>The argument <code>model</code> in <code>bootdht</code> can be a single model as shown above, or it can consist of a list of models. In the later instance, all models in the list are fitted to each bootstrap replicate and model selection based on AIC is performed for each replicate. The consequence is that model uncertainty is incorporated into the resulting estimate of precision (Fig. <a href="#fig:triple">2</a>).</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">wren.hn</span> <span class="op">&lt;-</span> <span class="fu"><a href="../../../reference/ds.html">ds</a></span><span class="op">(</span><span class="va">wren_lt</span>, key<span class="op">=</span><span class="st">"hn"</span>, adjustment<span class="op">=</span><span class="st">"cos"</span>,</span>
-<span>                  convert_units<span class="op">=</span><span class="va">conversion.factor</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## Warning in check.mono(result, n.pts = control$mono.points): Detection function</span></span>
-<span><span class="co">## is not strictly monotonic!</span></span>
-<span><span class="co">## Warning in check.mono(result, n.pts = control$mono.points): Detection function</span></span>
-<span><span class="co">## is not strictly monotonic!</span></span></code></pre>
-<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">wren.hr.poly</span> <span class="op">&lt;-</span> <span class="fu"><a href="../../../reference/ds.html">ds</a></span><span class="op">(</span><span class="va">wren_lt</span>, key<span class="op">=</span><span class="st">"hr"</span>, adjustment<span class="op">=</span><span class="st">"poly"</span>,</span>
+<span>                  convert_units<span class="op">=</span><span class="va">conversion.factor</span><span class="op">)</span></span>
+<span><span class="va">wren.hr.poly</span> <span class="op">&lt;-</span> <span class="fu"><a href="../../../reference/ds.html">ds</a></span><span class="op">(</span><span class="va">wren_lt</span>, key<span class="op">=</span><span class="st">"hr"</span>, adjustment<span class="op">=</span><span class="st">"poly"</span>,</span>
 <span>                  convert_units<span class="op">=</span><span class="va">conversion.factor</span><span class="op">)</span></span>
 <span><span class="va">est.boot.uncert</span> <span class="op">&lt;-</span> <span class="fu"><a href="../../../reference/bootdht.html">bootdht</a></span><span class="op">(</span>model<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">wren.hn</span>, <span class="va">wren.hr.poly</span>, <span class="va">wren.unif.cos</span><span class="op">)</span>, </span>
 <span>                           flatfile<span class="op">=</span><span class="va">wren_lt</span>,</span>
 <span>                           summary_fun<span class="op">=</span><span class="va">bootdht_Dhat_summarize</span>,</span>
 <span>                           convert_units<span class="op">=</span><span class="va">conversion.factor</span>, nboot<span class="op">=</span><span class="va">nboots</span>, cores<span class="op">=</span><span class="fl">10</span><span class="op">)</span></span></code></pre></div>
-<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="op">(</span><span class="va">modselci</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/quantile.html" class="external-link">quantile</a></span><span class="op">(</span><span class="va">est.boot.uncert</span><span class="op">$</span><span class="va">D</span>, probs <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">alpha</span><span class="op">/</span><span class="fl">2</span>, <span class="fl">1</span><span class="op">-</span><span class="va">alpha</span><span class="op">/</span><span class="fl">2</span><span class="op">)</span>, na.rm<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">##      2.5%     97.5% </span></span>
-<span><span class="co">## 0.8080775 1.3620822</span></span></code></pre>
-<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
+<span><span class="co">## 0.8080775 1.3619579</span></span></code></pre>
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/hist.html" class="external-link">hist</a></span><span class="op">(</span><span class="va">est.boot.uncert</span><span class="op">$</span><span class="va">D</span>, nc<span class="op">=</span><span class="fl">30</span>, </span>
 <span>     main<span class="op">=</span><span class="st">"Distribution of bootstrap estimates\nincluding model uncertainty"</span>,</span>
 <span>     xlab<span class="op">=</span><span class="st">"Estimated density"</span><span class="op">)</span></span>
@@ -208,7 +203,7 @@ Figure 2: Sampling distribution of <span class="math inline">\(\hat{D}\)</span> 
 <h2 id="comments">Comments<a class="anchor" aria-label="anchor" href="#comments"></a>
 </h2>
 <p>Recognise that producing bootstrap estimates of precision is computer-intensive. In this example we have created only 300 bootstrap replicates in the interest of computation time. For inference you wish to draw, you will likely increase the number of bootstrap replicates to 999.</p>
-<p>For this data set, the bootstrap estimate of precision is greater than the delta-method approximation precision (based on confidence interval width). In addition, incorporating model uncertainty into the estimate of precision for density changes the precision estimate very little. The confidence interval width without incorporating model uncertainty is 0.615 while the confidence interval including model uncertainty is 0.554. This represents a change of -10% due to uncertainty regarding the best model for these data.</p>
+<p>For this data set, the bootstrap estimate of precision is greater than the delta-method approximation precision (based on confidence interval width). In addition, incorporating model uncertainty into the estimate of precision for density changes the precision estimate very little. The confidence interval width without incorporating model uncertainty is 0.611 while the confidence interval including model uncertainty is 0.554. This represents a change of -9% due to uncertainty regarding the best model for these data.</p>
 </div>
 <div class="section level2">
 <h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a>

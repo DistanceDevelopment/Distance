@@ -39,7 +39,6 @@ summarize_ds_models <- function(..., models=list(), sort="AIC", output="latex", 
   }
   # Check if user is supplying via new models argument or not
   if(length(models) == 0){
-    warning("Passing models via ... will be depricated in the next release, please pass models in a list using the models argument.", immediate. = TRUE, call. = FALSE)
     # get the models from ...
     models <- tmp
     # get the model names
