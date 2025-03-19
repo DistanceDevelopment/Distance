@@ -29,8 +29,10 @@ ER_var_f <- function(erdat, innes, binomial_var=FALSE){
       if(!is.numeric(erdat$Sample.Label)){
         warning("Additionally, Sample.Label is not numeric, this may cause additional issues", immediate. = TRUE, call. = FALSE)
       }
+      # Add in a column indexing the original order
+      erdat$.orig.order <- 1:nrow(erdat)
       erdat <- erdat %>%
-        mutate(.originalorder = 1:nrow(erdat)) %>%
+        # Sort by sample label
         arrange(.data$Sample.Label)
     }
 
