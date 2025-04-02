@@ -154,11 +154,13 @@ produced.
 "Units", below. (Defaults to 1, implying all of the units are "correct"
 already.)}
 
-\item{er_var}{encounter rate variance estimator to use when abundance
-estimates are required. Defaults to "R2" for line transects and "P2" for
-point transects (>= 1.0.9, earlier versions <= 1.0.8 used the "P3" estimator
-by default for points). See \code{\link{dht2}} for more information and if more
-complex options are required.}
+\item{er_var}{specifies which encounter rate estimator to use in the case
+that dht_se is TRUE, er_method is either 1 or 2 and there are two or more
+samplers. Defaults to "R2" for line transects and "P2" for point transects
+(>= 1.0.9, earlier versions <= 1.0.8 used the "P3" estimator by default
+for points), both of which assume random placement of transects. For
+systematic designs, alternative estimators may be more appropriate,
+see \code{\link{dht2}} for more information.}
 
 \item{method}{optimization method to use (any method usable by
 \code{\link[stats:optim]{optim}} or \code{\link[optimx:optimx]{optimx}}). Defaults to
@@ -183,8 +185,11 @@ used when \code{order=NULL}.}
 \item{er_method}{encounter rate variance calculation: default = 2 gives the
 method of Innes et al, using expected counts in the encounter rate. Setting
 to 1 gives observed counts (which matches Distance for Windows) and 0 uses
-binomial variance (only useful in the rare situation where study area =
-surveyed area). See \code{\link[mrds:dht.se]{dht.se}} for more details.}
+negative binomial variance (only useful in the rare situation where study area =
+surveyed area).
+See \code{\link[mrds:dht.se]{dht.se}} for more details, noting this \code{er_method}
+argument corresponds to the \code{varflag} element of the \code{options}
+argument in \code{dht.se}.}
 
 \item{dht_se}{should uncertainty be calculated when using \code{dht}? Safe to
 leave as \code{TRUE}, used in \code{bootdht}.}

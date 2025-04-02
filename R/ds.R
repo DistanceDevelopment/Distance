@@ -92,11 +92,13 @@
 #' @param convert_units conversion between units for abundance estimation, see
 #' "Units", below. (Defaults to 1, implying all of the units are "correct"
 #' already.)
-#' @param er_var encounter rate variance estimator to use when abundance
-#' estimates are required. Defaults to "R2" for line transects and "P2" for
-#' point transects (>= 1.0.9, earlier versions <= 1.0.8 used the "P3" estimator 
-#' by default for points). See [`dht2`][dht2] for more information and if more
-#' complex options are required.
+#' @param er_var specifies which encounter rate estimator to use in the case
+#' that dht_se is TRUE, er_method is either 1 or 2 and there are two or more 
+#' samplers. Defaults to "R2" for line transects and "P2" for point transects 
+#' (>= 1.0.9, earlier versions <= 1.0.8 used the "P3" estimator by default 
+#' for points), both of which assume random placement of transects. For 
+#' systematic designs, alternative estimators may be more appropriate, 
+#' see [`dht2`][dht2] for more information.
 #' @param method optimization method to use (any method usable by
 #' [`optim`][stats::optim] or [`optimx`][optimx::optimx]). Defaults to
 #' `"nlminb"`.
@@ -114,8 +116,11 @@
 #' @param er_method encounter rate variance calculation: default = 2 gives the
 #' method of Innes et al, using expected counts in the encounter rate. Setting
 #' to 1 gives observed counts (which matches Distance for Windows) and 0 uses
-#' binomial variance (only useful in the rare situation where study area =
-#' surveyed area). See [`dht.se`][mrds::dht.se] for more details.
+#' negative binomial variance (only useful in the rare situation where study area =
+#' surveyed area).
+#' See [`dht.se`][mrds::dht.se] for more details, noting this \code{er_method}
+#' argument corresponds to the \code{varflag} element of the \code{options} 
+#' argument in \code{dht.se}.
 #' @param dht_se should uncertainty be calculated when using `dht`? Safe to
 #' leave as `TRUE`, used in `bootdht`.
 #' @param optimizer By default this is set to 'both'. In this case 

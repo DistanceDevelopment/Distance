@@ -75,7 +75,7 @@ weighted final estimates.}
 
 \item{binomial_var}{if we wish to estimate abundance for the covered area
 only (i.e., study area = surveyed area) then this must be set to be
-\code{TRUE} and use the binomial variance estimator of Borchers et al.
+\code{TRUE} and use the negative binomial variance estimator of Borchers et al.
 (1998). This is only valid when objects are not clustered. (This situation
 is rare.)}
 }
