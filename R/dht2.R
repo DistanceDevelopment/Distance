@@ -33,17 +33,17 @@
 #' @param ci_width for use with confidence interval calculation (defined as
 #' 1-alpha, so the default 95 will give a 95% confidence interval).
 #' @param innes logical flag for computing encounter rate variance using either
-#' the method of Innes et al (2002) where estimated abundance per transect
+#' the method of \insertCite{innes2002;textual}{mrds} where estimated abundance per transect
 #' divided by effort is used as the encounter rate, vs. (when `innes=FALSE`)
-#' using the number of observations divided by the effort (as in Buckland et
-#' al., 2001)
+#' using the number of observations divided by the effort (as in \insertCite{buckland2001;nobrackets}{mrds})
 #' @param total_area for options `stratification="effort_sum"` and
 #' `stratification="replicate"` the area to use as the total for combined,
 #' weighted final estimates.
 #' @param binomial_var if we wish to estimate abundance for the covered area
 #' only (i.e., study area = surveyed area) then this must be set to be
-#' `TRUE` and use the negative binomial variance estimator of Borchers et al.
-#' (1998). This is only valid when objects are not clustered. (This situation
+#' `TRUE` and use the negative binomial variance estimator of
+#'  \insertCite{borchers1998;textual}{mrds}. This is only valid when 
+#'  objects are not clustered. (This situation
 #' is rare.)
 #' @return a `data.frame` (of class `dht_result` for pretty printing) with
 #' estimates and attributes containing additional information, see "Outputs"
@@ -144,12 +144,12 @@
 #' calculated is given here, though see references for more details.
 #'   * *detection function*: variance from the detection function parameters is
 #'   transformed to variance about the abundance via a sandwich estimator (see
-#'   e.g., Appendix C of Borchers et al (2002)).
+#'   e.g., Appendix C of \insertCite{borchers2002;textual}{Distance}).
 #'   * *encounter rate*: for strata with >1 transect in them, the encounter
-#'   rate estimators given in Fewster et al (2009) can be specified via the
+#'   rate estimators given in \insertCite{fewster2009;textual}{mrds} can be specified via the
 #'   `er_est` argument. If the argument `innes=TRUE` then calculations use the
 #'   estimated number of individuals in the transect (rather than the
-#'   observed), which was give by Innes et al (2002) as a superior estimator.
+#'   observed), which was give by \insertCite{innes2002;textual}{mrds} as a superior estimator.
 #'   When there is only one transect in a stratum, Poisson variance is assumed.
 #'   Information on the Fewster encounter rate variance estimators are given in
 #'   [`varn`][mrds::varn]
@@ -209,27 +209,7 @@
 #'   uncertainty in multipliers
 #'
 #' @references
-#'
-#' Borchers, D.L., S.T. Buckland, P.W. Goedhart, E.D. Clarke, and S.L. Hedley.
-#' 1998. Horvitz-Thompson estimators for double-platform line transect surveys.
-#' *Biometrics* 54: 1221-1237.
-#'
-#' Borchers, D.L., S.T. Buckland, and W. Zucchini. 2002 *Estimating Animal
-#' Abundance: Closed Populations*. Statistics for Biology and Health. Springer
-#' London.
-#'
-#' Buckland, S.T., E.A. Rexstad, T.A. Marques, and C.S. Oedekoven. 2015
-#' *Distance Sampling: Methods and Applications*. Methods in Statistical
-#' Ecology. Springer International Publishing.
-#'
-#' Buckland, S.T., D.R. Anderson, K. Burnham, J.L. Laake, D.L. Borchers, and L.
-#' Thomas. 2001 *Introduction to Distance Sampling: Estimating Abundance of
-#' Biological Populations*. Oxford University Press.
-#'
-#' Innes, S., M. P. Heide-Jorgensen, J.L. Laake, K.L. Laidre, H.J. Cleator, P.
-#' Richard, and R.E.A. Stewart. 2002 Surveys of belugas and narwhals in the
-#' Canadian high arctic in 1996. *NAMMCO Scientific Publications* 4, 169-190.
-#'
+#' \insertAllCited{}
 #' @name dht2
 #' @examples
 #' \dontrun{
