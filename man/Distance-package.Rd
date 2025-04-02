@@ -14,7 +14,7 @@ analyses (such as those involving double observer surveys) one may find it
 necessary to use \code{mrds}.
 
 Examples of distance sampling analyses are available at
-\url{http://examples.distancesampling.org/}.
+\url{https://distancesampling.org/resources/vignettes.html}.
 
 For help with distance sampling and this package, there is a Google Group
 \url{https://groups.google.com/forum/#!forum/distance-sampling}.

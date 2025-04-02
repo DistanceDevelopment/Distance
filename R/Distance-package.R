@@ -8,7 +8,7 @@
 #' necessary to use `mrds`.
 #'
 #' Examples of distance sampling analyses are available at
-#' <http://examples.distancesampling.org/>.
+#' <https://distancesampling.org/resources/vignettes.html>.
 #'
 #' For help with distance sampling and this package, there is a Google Group
 #' <https://groups.google.com/forum/#!forum/distance-sampling>.
