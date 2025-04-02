@@ -41,7 +41,7 @@
 #' 1, 2, 3, ... are fitted when `adjustment = "cos"` and order 2, 4, 6, ... 
 #' otherwise. For `key="hn"` or `"hr"` adjustments of order 2, 3, 4, ... are 
 #' fitted when `adjustment = "cos"` and order 4, 6, 8, ... otherwise. See 
-#' Buckland et al. (2001, p. 47) for details.
+#' \insertCite{buckland2001;textual}{mrds} p. 47 for details.
 #' @param order order of adjustment terms to fit. The default value (`NULL`)
 #' results in `ds` choosing the orders to use - see `nadj`. Otherwise a scalar
 #' positive integer value can be used to fit a single adjustment term of the
@@ -152,7 +152,7 @@
 #' also be supplied. Note that stratification only applies to abundance
 #' estimates and not at the detection function level. Density and abundance
 #' estimates, and corresponding estimates of variance and confidence intervals,
-#' are calculated using the methods described in Buckland et al. (2001)
+#' are calculated using the methods described in \insertCite{buckland2001;textual}{mrds}
 #' sections 3.6.1 and 3.7.1 (further details can be found in the documentation
 #' for [`dht`][mrds::dht]).
 #'
@@ -177,7 +177,7 @@
 #' can often be the cause of model convergence failures. It is recommended that
 #' one plots a histogram of the observed distances prior to model fitting so as
 #' to get a feel for an appropriate truncation distance. (Similar arguments go
-#' for left truncation, if appropriate). Buckland et al (2001) provide
+#' for left truncation, if appropriate). \insertCite{buckland2001;textual}{mrds} provide
 #' guidelines on truncation.
 #'
 #' When specified as a percentage, the largest `right` and smallest `left`
@@ -211,7 +211,8 @@
 #' monotonicity (and is by default for detection functions without covariates).
 #'
 #' Monotonicity constraints are supported in a similar way to that described
-#' in Buckland et al (2001). 20 equally spaced points over the range of the
+#' in \insertCite{buckland2001;textual}{mrds}. 20 equally spaced points over 
+#' the range of the
 #' detection function (left to right truncation) are evaluated at each round
 #' of the optimisation and the function is constrained to be either always
 #' less than it's value at zero (`"weak"`) or such that each value is
@@ -270,14 +271,7 @@
 #' @importFrom stats quantile as.formula
 #' @importFrom methods is
 #' @references
-#' Buckland, S.T., Anderson, D.R., Burnham, K.P., Laake, J.L., Borchers, D.L.,
-#' and Thomas, L. (2001). Distance Sampling. Oxford University Press. Oxford,
-#' UK.
-#'
-#' Buckland, S.T., Anderson, D.R., Burnham, K.P., Laake, J.L., Borchers, D.L.,
-#' and Thomas, L. (2004). Advanced Distance Sampling. Oxford University Press.
-#' Oxford, UK.
-#'
+#' \insertAllCited{}
 #' @examples
 #'
 #' # An example from mrds, the golf tee data.
