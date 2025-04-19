@@ -114,7 +114,7 @@
 #' @param max_adjustments maximum number of adjustments to try (default 5) only
 #' used when `order=NULL`.
 #' @param er_method encounter rate variance calculation: default = 2 gives the
-#' method of Innes et al, using expected counts in the encounter rate. Setting
+#' method of \insertCite{innes2002;textual}{mrds}, using expected counts in the encounter rate. Setting
 #' to 1 gives observed counts (which matches Distance for Windows) and 0 uses
 #' negative binomial variance (only useful in the rare situation where study area =
 #' surveyed area).
@@ -160,7 +160,7 @@
 #' [`dht`][mrds::dht] and [`dht2`][dht2] functions.
 #'
 #' Examples of distance sampling analyses are available at
-#' <http://examples.distancesampling.org/>.
+#' <https://distancesampling.org/resources/vignettes.html>.
 #'
 #' Hints and tips on fitting (particularly optimisation issues) are on the
 #' [`mrds_opt`][mrds::mrds_opt] manual page.

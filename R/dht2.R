@@ -149,7 +149,7 @@
 #'   rate estimators given in \insertCite{fewster2009;textual}{mrds} can be specified via the
 #'   `er_est` argument. If the argument `innes=TRUE` then calculations use the
 #'   estimated number of individuals in the transect (rather than the
-#'   observed), which was give by \insertCite{innes2002;textual}{mrds} as a superior estimator.
+#'   observed), which was given by \insertCite{innes2002;textual}{mrds} as a superior estimator.
 #'   When there is only one transect in a stratum, Poisson variance is assumed.
 #'   Information on the Fewster encounter rate variance estimators are given in
 #'   [`varn`][mrds::varn]
