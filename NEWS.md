@@ -26,7 +26,7 @@
 
 # Distance 1.0.7
 
-* dht2 now requires the object field in flatfile formatted data. The following vignette shows how to add an object field if your data does not have already have one: https://examples.distancesampling.org/Distance-cameratraps/camera-distill.html
+* dht2 now requires the object field in flatfile formatted data. The following vignette shows how to add an object field if your data does not have already have one: https://distancesampling.org/Distance/articles/web-only/CTDS/camera-distill.html
 * Fix bugs when a uniform is fitted with no adjustments
 * Fixed error in dht2 when binned data used distend / distbegin
 
@@ -112,7 +112,7 @@
 * Added lots of example data sets
 * new abundance estimation via dht2! Handles more complex situations.
 * bootstrap variance estimation via bootdht
-* for more examples see http://examples.distancesampling.org
+* for more examples see https://distancesampling.org/resources/vignettes.html
 
 # Distance 0.9.8
 

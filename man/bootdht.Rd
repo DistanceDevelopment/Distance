@@ -154,7 +154,7 @@ parallel bootstraps is that any starting values in the model object passed
 in to \code{bootdht} must be hard coded (otherwise you get back 0 successful
 bootstraps). For a worked example showing this, see the camera trap distance
 sampling online example at
-\url{https://examples.distancesampling.org/Distance-cameratraps/camera-distill.html}.
+\url{https://distancesampling.org/Distance/articles/web-only/CTDS/camera-distill.html}.
 }
 
 \examples{

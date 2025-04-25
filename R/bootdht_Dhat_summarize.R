@@ -6,7 +6,7 @@
 #' estimated density (with stratum labels).
 #'
 #' Further examples of such functions can be found at
-#' <http://examples.distancesampling.org>.
+#' <https://distancesampling.org/resources/vignettes.html>.
 #'
 #' @param ests output from [`dht2`][dht2].
 #' @param fit fitted detection function object (unused).
