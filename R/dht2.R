@@ -129,7 +129,7 @@
 #'  total number of animals, you should use this option.
 #'
 #' A simple example of using `stratification="geographical"` is given below.
-#' Further examples can be found at <http://examples.distancesampling.org/>
+#' Further examples can be found at <https://distancesampling.org/resources/vignettes.html>
 #' (see, e.g., the deer pellet survey).
 #'
 #' @section Variance:

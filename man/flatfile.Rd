@@ -31,7 +31,7 @@ one \code{Region.Label} and a single corresponding \code{Area} duplicated for ea
 observation.
 
 The example given below was provided by Eric Rexstad. Additional examples
-can be found at  \url{http://examples.distancesampling.org/}.
+can be found at  \url{https://distancesampling.org/resources/vignettes.html}.
 }
 \examples{
 \dontrun{

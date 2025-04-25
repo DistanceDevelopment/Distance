@@ -175,7 +175,7 @@ total number of animals, you should use this option.
 }
 
 A simple example of using \code{stratification="geographical"} is given below.
-Further examples can be found at \url{http://examples.distancesampling.org/}
+Further examples can be found at \url{https://distancesampling.org/resources/vignettes.html}
 (see, e.g., the deer pellet survey).
 }
 
@@ -198,7 +198,7 @@ e.g., Appendix C of \insertCite{borchers2002;textual}{Distance}).
 rate estimators given in \insertCite{fewster2009;textual}{mrds} can be specified via the
 \code{er_est} argument. If the argument \code{innes=TRUE} then calculations use the
 estimated number of individuals in the transect (rather than the
-observed), which was give by \insertCite{innes2002;textual}{mrds} as a superior estimator.
+observed), which was given by \insertCite{innes2002;textual}{mrds} as a superior estimator.
 When there is only one transect in a stratum, Poisson variance is assumed.
 Information on the Fewster encounter rate variance estimators are given in
 \code{\link[mrds:varn]{varn}}

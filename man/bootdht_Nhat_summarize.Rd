@@ -25,7 +25,7 @@ estimated abundance (with stratum labels).
 }
 \details{
 Further examples of such functions can be found at
-\url{http://examples.distancesampling.org}.
+\url{https://distancesampling.org/resources/vignettes.html}.
 }
 \seealso{
 \code{\link{bootdht}} which this function is to be used with and

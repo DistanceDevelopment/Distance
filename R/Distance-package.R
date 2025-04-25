@@ -72,7 +72,7 @@ NULL
 #' observation.
 #'
 #' The example given below was provided by Eric Rexstad. Additional examples
-#' can be found at  <http://examples.distancesampling.org/>.
+#' can be found at  <https://distancesampling.org/resources/vignettes.html>.
 #'
 #' @name flatfile
 #' @docType methods

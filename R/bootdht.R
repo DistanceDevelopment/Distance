@@ -107,7 +107,7 @@
 #' in to `bootdht` must be hard coded (otherwise you get back 0 successful 
 #' bootstraps). For a worked example showing this, see the camera trap distance 
 #' sampling online example at 
-#' <https://examples.distancesampling.org/Distance-cameratraps/camera-distill.html>.
+#' <https://distancesampling.org/Distance/articles/web-only/CTDS/camera-distill.html>.
 #'
 #' @importFrom utils txtProgressBar setTxtProgressBar getTxtProgressBar
 #' @importFrom stats as.formula AIC
