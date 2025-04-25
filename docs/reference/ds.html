@@ -5,7 +5,7 @@
       fontURL: "https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/output/chtml/fonts/woff-v2"
     }
   };
-</script><script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"><link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet"><script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/Roboto-0.4.9/font.css" rel="stylesheet"><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet"><link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet"><script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Fit detection functions and calculate abundance from line or point transect data — ds"><meta name="description" content="This function fits detection functions to line or point transect data and
+</script><script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"><link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet"><script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/Roboto-0.4.10/font.css" rel="stylesheet"><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet"><link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet"><script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Fit detection functions and calculate abundance from line or point transect data — ds"><meta name="description" content="This function fits detection functions to line or point transect data and
 then (provided that survey information is supplied) calculates abundance and
 density estimates. The examples below illustrate some basic types of
 analysis using ds()."><meta property="og:description" content="This function fits detection functions to line or point transect data and
@@ -19,7 +19,7 @@ analysis using ds()."><script type="text/javascript">(function(c,l,a,r,i,t,y){c[
 
     <a class="navbar-brand me-2" href="../index.html">Distance</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.0.0.9004</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.0.0.9009</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -171,7 +171,8 @@ on the <code>key</code>and <code>adjustment</code>. For <code>key="unif"</code>,
 1, 2, 3, ... are fitted when <code>adjustment = "cos"</code> and order 2, 4, 6, ...
 otherwise. For <code>key="hn"</code> or <code>"hr"</code> adjustments of order 2, 3, 4, ... are
 fitted when <code>adjustment = "cos"</code> and order 4, 6, 8, ... otherwise. See
-Buckland et al. (2001, p. 47) for details.</p></dd>
+Buckland et al. (2001)
+ p. 47 for details.</p></dd>
 
 
 <dt id="arg-order">order<a class="anchor" aria-label="anchor" href="#arg-order"></a></dt>
@@ -252,11 +253,13 @@ already.)</p></dd>
 
 
 <dt id="arg-er-var">er_var<a class="anchor" aria-label="anchor" href="#arg-er-var"></a></dt>
-<dd><p>encounter rate variance estimator to use when abundance
-estimates are required. Defaults to "R2" for line transects and "P2" for
-point transects (&gt;= 1.0.9, earlier versions &lt;= 1.0.8 used the "P3" estimator
-by default for points). See <code><a href="dht2.html">dht2</a></code> for more information and if more
-complex options are required.</p></dd>
+<dd><p>specifies which encounter rate estimator to use in the case
+that dht_se is TRUE, er_method is either 1 or 2 and there are two or more
+samplers. Defaults to "R2" for line transects and "P2" for point transects
+(&gt;= 1.0.9, earlier versions &lt;= 1.0.8 used the "P3" estimator by default
+for points), both of which assume random placement of transects. For
+systematic designs, alternative estimators may be more appropriate,
+see <code><a href="dht2.html">dht2</a></code> for more information.</p></dd>
 
 
 <dt id="arg-method">method<a class="anchor" aria-label="anchor" href="#arg-method"></a></dt>
@@ -293,10 +296,14 @@ used when <code>order=NULL</code>.</p></dd>
 
 <dt id="arg-er-method">er_method<a class="anchor" aria-label="anchor" href="#arg-er-method"></a></dt>
 <dd><p>encounter rate variance calculation: default = 2 gives the
-method of Innes et al, using expected counts in the encounter rate. Setting
+method of Innes et al. (2002)
+, using expected counts in the encounter rate. Setting
 to 1 gives observed counts (which matches Distance for Windows) and 0 uses
-binomial variance (only useful in the rare situation where study area =
-surveyed area). See <code><a href="https://rdrr.io/pkg/mrds/man/dht.se.html" class="external-link">dht.se</a></code> for more details.</p></dd>
+negative binomial variance (only useful in the rare situation where study area =
+surveyed area).
+See <code><a href="https://rdrr.io/pkg/mrds/man/dht.se.html" class="external-link">dht.se</a></code> for more details, noting this <code>er_method</code>
+argument corresponds to the <code>varflag</code> element of the <code>options</code>
+argument in <code>dht.se</code>.</p></dd>
 
 
 <dt id="arg-dht-se">dht_se<a class="anchor" aria-label="anchor" href="#arg-dht-se"></a></dt>
@@ -371,12 +378,13 @@ also be supplied. Note that stratification only applies to abundance
 estimates and not at the detection function level. Density and abundance
 estimates, and corresponding estimates of variance and confidence intervals,
 are calculated using the methods described in Buckland et al. (2001)
+
 sections 3.6.1 and 3.7.1 (further details can be found in the documentation
 for <code><a href="https://rdrr.io/pkg/mrds/man/dht.html" class="external-link">dht</a></code>).</p>
 <p>For more advanced abundance/density estimation please see the
 <code><a href="https://rdrr.io/pkg/mrds/man/dht.html" class="external-link">dht</a></code> and <code><a href="dht2.html">dht2</a></code> functions.</p>
 <p>Examples of distance sampling analyses are available at
-<a href="http://examples.distancesampling.org/" class="external-link">http://examples.distancesampling.org/</a>.</p>
+<a href="https://distancesampling.org/resources/vignettes.html" class="external-link">https://distancesampling.org/resources/vignettes.html</a>.</p>
 <p>Hints and tips on fitting (particularly optimisation issues) are on the
 <code><a href="https://rdrr.io/pkg/mrds/man/mrds_opt.html" class="external-link">mrds_opt</a></code> manual page.</p>
     </div>
@@ -398,7 +406,8 @@ or bin end point. This is a default will not be appropriate for all data and
 can often be the cause of model convergence failures. It is recommended that
 one plots a histogram of the observed distances prior to model fitting so as
 to get a feel for an appropriate truncation distance. (Similar arguments go
-for left truncation, if appropriate). Buckland et al (2001) provide
+for left truncation, if appropriate). Buckland et al. (2001)
+ provide
 guidelines on truncation.</p>
 <p>When specified as a percentage, the largest <code>right</code> and smallest <code>left</code>
 percent distances are discarded. Percentages cannot be supplied when using
@@ -435,7 +444,9 @@ not always decrease with increasing distance. This is unrealistic and can
 lead to bias. To avoid this, the detection function can be constrained for
 monotonicity (and is by default for detection functions without covariates).</p>
 <p>Monotonicity constraints are supported in a similar way to that described
-in Buckland et al (2001). 20 equally spaced points over the range of the
+in Buckland et al. (2001)
+. 20 equally spaced points over
+the range of the
 detection function (left to right truncation) are evaluated at each round
 of the optimisation and the function is constrained to be either always
 less than it's value at zero (<code>"weak"</code>) or such that each value is
@@ -493,12 +504,11 @@ density estimates made with the <code>Area</code> column present.</p>
     </div>
     <div class="section level2">
     <h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a></h2>
-    <p>Buckland, S.T., Anderson, D.R., Burnham, K.P., Laake, J.L., Borchers, D.L.,
-and Thomas, L. (2001). Distance Sampling. Oxford University Press. Oxford,
-UK.</p>
-<p>Buckland, S.T., Anderson, D.R., Burnham, K.P., Laake, J.L., Borchers, D.L.,
-and Thomas, L. (2004). Advanced Distance Sampling. Oxford University Press.
-Oxford, UK.</p>
+    <p>Buckland ST, Anderson DR, Burnham KP, Laake JL, Borchers DL, Thomas L (2001).
+<em>Introduction to distance sampling: estimating abundance of biological populations</em>.
+Oxford university press.<br><br> Innes S, Heide-Jørgensen MP, Laake JL, Laidre KL, Cleator HJ, Richard P, Stewart RE (2002).
+“Surveys of belugas and narwhals in the Canadian High Arctic in 1996.”
+<em>NAMMCO Scientific Publications</em>, <b>4</b>, 169-190.</p>
     </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
