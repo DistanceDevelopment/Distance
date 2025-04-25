@@ -14,7 +14,7 @@
   };
 </script><script src="../../../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="../../../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
-<script src="../../../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../../../deps/Roboto-0.4.9/font.css" rel="stylesheet">
+<script src="../../../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../../../deps/Roboto-0.4.10/font.css" rel="stylesheet">
 <link href="../../../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="../../../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
 <script src="../../../deps/headroom-0.11.0/headroom.min.js"></script><script src="../../../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../../../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../../../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../../../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../../../deps/search-1.0.0/fuse.min.js"></script><script src="../../../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../../../pkgdown.js"></script><meta property="og:title" content="Point transect density estimation">
@@ -32,7 +32,7 @@
 
     <a class="navbar-brand me-2" href="../../../index.html">Distance</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.0.0.9005</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.0.0.9009</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -82,7 +82,7 @@
       <h1>Point transect density estimation</h1>
                         <h4 data-toc-skip class="author">Eric Rexstad</h4>
             <address class="author_afil">
-      CREEM, Univ of St Andrews<br><h4 data-toc-skip class="date">March 2025</h4>
+      CREEM, Univ of St Andrews<br><h4 data-toc-skip class="date">April 2025</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/DistanceDevelopment/Distance/blob/HEAD/vignettes/web-only/points/pointtransects-distill.Rmd" class="external-link"><code>vignettes/web-only/points/pointtransects-distill.Rmd</code></a></small>
       <div class="d-none name"><code>pointtransects-distill.Rmd</code></div>
@@ -108,7 +108,7 @@
 <p>A total of 373 point transects were placed in three pastures in the Arapaho National Wildlife Refuge in Colorado (Figure <a href="#fig:fig">1</a>). Elevation of these pastures was ~2500m. We will not deal with pasture-level analysis of these data in this vignette and will alter the data to remove the strata designations.</p>
 <div class="figure">
 <span style="display:block;" id="fig:fig"></span>
-<img src="arapaho.jpg" alt="Summer grazed pastures along Illinois River Arapaho National Wildlife Refuge, Colorado.  Figure from [@knopf_guild_1988]." width="320"><p class="caption">
+<img src="arapaho.JPG" alt="Summer grazed pastures along Illinois River Arapaho National Wildlife Refuge, Colorado.  Figure from [@knopf_guild_1988]."><p class="caption">
 Figure 1: Summer grazed pastures along Illinois River Arapaho National Wildlife Refuge, Colorado. Figure from <span class="citation">(Knopf et al., 1988)</span>.
 </p>
 </div>
@@ -296,9 +296,6 @@ Figure 3: Fit of half normal detection function to savannah sparrow data.
 <code class="sourceCode R"><span><span class="va">sasp.hr.poly</span> <span class="op">&lt;-</span> <span class="fu"><a href="../../../reference/ds.html">ds</a></span><span class="op">(</span><span class="va">Savannah_sparrow_1980</span>, key<span class="op">=</span><span class="st">"hr"</span>, adjustment<span class="op">=</span><span class="st">"poly"</span>, </span>
 <span>                   transect<span class="op">=</span><span class="st">"point"</span>, convert_units<span class="op">=</span><span class="va">conversion.factor</span>, truncation<span class="op">=</span><span class="st">"5%"</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## Warning in ddf.ds(dsmodel = dsmodel, data = data, meta.data = meta.data, :</span></span>
-<span><span class="co">## Estimated hazard-rate scale parameter close to 0 (on log scale). Possible</span></span>
-<span><span class="co">## problem in data (e.g., spike near zero distance).</span></span>
-<span><span class="co">## Warning in ddf.ds(dsmodel = dsmodel, data = data, meta.data = meta.data, :</span></span>
 <span><span class="co">## Estimated hazard-rate scale parameter close to 0 (on log scale). Possible</span></span>
 <span><span class="co">## problem in data (e.g., spike near zero distance).</span></span></code></pre>
 </div>
