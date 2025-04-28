@@ -82,12 +82,7 @@ reference:
 navbar:
   bg: primary
   structure:
-    right: [twitter, github]
-  components:
-    twitter:
-      icon: fa-twitter
-      href: https://twitter.com/distancesamp
-      aria-label: Twitter
+    right: [github]
   left:
     - text: Function reference
       href: reference/index.html
