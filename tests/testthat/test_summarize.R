@@ -76,7 +76,7 @@ test_that("Passing in models via a list",{
   ds.model.cos <- ds(tee.data, 4, adjustment="cos", order=2)
   ds.model.hr <- ds(tee.data, 4, key = "hr", nadj = 0)
   
-  expect_warning(test1 <- summarize_ds_models(ds.model, ds.model.cos, ds.model.hr), "Passing models via ... will be depricated in the next release, please pass models in a list using the models argument.")
+  test1 <- summarize_ds_models(ds.model, ds.model.cos, ds.model.hr)
   
   test2 <- summarize_ds_models(models = list(ds.model, ds.model.cos, ds.model.hr))
   
