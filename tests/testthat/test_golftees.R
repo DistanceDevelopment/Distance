@@ -51,7 +51,7 @@ context("golftees")
 test_that("ER variance", {
 
   # output using old dht
-  df <- ds(gtees, truncation=trunc, key="hn", adjustment=NULL)
+  expect_warning(df <- ds(gtees, truncation=trunc, key="hn", adjustment=NULL), "Only one sample, assuming abundance in the covered region is Poisson. See help on dht.se for recommendations.")
 
   # now do a fancy thing
   dat$obs.table <- dat$obs.table[dat$obs.table$object %in% gtees$object, ]
@@ -81,7 +81,7 @@ test_that("ER variance", {
 test_that("Same results as Distance", {
   gtees$sex <- as.factor(gtees$sex)
   gtees$sex <- relevel(gtees$sex, ref="1")
-  df <- ds(gtees, truncation=trunc, key="hn", adjustment=NULL, formula=~sex)
+  expect_warning(df <- ds(gtees, truncation=trunc, key="hn", adjustment=NULL, formula=~sex), "Only one sample, assuming abundance in the covered region is Poisson. See help on dht.se for recommendations.")
 
   fs_st1 <- expect_warning(dht2(df$ddf, dat$obs.table, dat$sample.table,
                                 dat$region.table, strat_formula=~Region.Label,
