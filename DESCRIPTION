@@ -15,8 +15,8 @@ Description: A simple way of fitting detection functions to distance sampling
     supported. Abundance and density estimates can also be calculated (via a
     Horvitz-Thompson-like estimator) if survey area information is provided. See
     Miller et al. (2019) <doi:10.18637/jss.v089.i01> for more information on
-    methods and <https://examples.distancesampling.org/> for example analyses.
-Version: 2.0.0.9008
+    methods and <https://distancesampling.org/resources/vignettes.html> for example analyses.
+Version: 2.0.0.9010
 URL: https://github.com/DistanceDevelopment/Distance/
 BugReports: https://github.com/DistanceDevelopment/Distance/issues
 Language: en-GB
@@ -26,7 +26,8 @@ Depends:
 Imports:
     dplyr,
     methods,
-    rlang
+    rlang,
+    Rdpack
 Suggests:
     rmarkdown,
     kableExtra,
@@ -45,3 +46,4 @@ Suggests:
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.3.2
+RdMacros: Rdpack

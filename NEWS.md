@@ -7,6 +7,10 @@
 * Truncation distances greater than the largest cutpoint value for binned data are no longer permitted as these cause fitting issues. (Issue #175)
 * print.dht_result now displays estimates for groups as well as individuals by default when group size is present. (Issue #178)
 
+Enhancements
+
+* Warnings and documentation clarification regarding ER variance estimation when there is only a single transect. (Issue #192 and mrds Issue #115)
+
 # Distance 2.0.0
 
 * Requires mrds 3.0.0. mrds is called by ds for fitting detection functions. In mrds there has been a change of optimizer used for CDS detection functions - a constraint solver slsqp now used. This removes the need for external optimizer MCDS.exe in most cases. Other minor changes to optimization have been implemented to improve reliability (see NEWS file of mrds for more info).
@@ -27,7 +31,7 @@
 
 # Distance 1.0.7
 
-* dht2 now requires the object field in flatfile formatted data. The following vignette shows how to add an object field if your data does not have already have one: https://examples.distancesampling.org/Distance-cameratraps/camera-distill.html
+* dht2 now requires the object field in flatfile formatted data. The following vignette shows how to add an object field if your data does not have already have one: https://distancesampling.org/Distance/articles/web-only/CTDS/camera-distill.html
 * Fix bugs when a uniform is fitted with no adjustments
 * Fixed error in dht2 when binned data used distend / distbegin
 
@@ -113,7 +117,7 @@
 * Added lots of example data sets
 * new abundance estimation via dht2! Handles more complex situations.
 * bootstrap variance estimation via bootdht
-* for more examples see http://examples.distancesampling.org
+* for more examples see https://distancesampling.org/resources/vignettes.html
 
 # Distance 0.9.8
 

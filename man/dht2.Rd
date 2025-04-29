@@ -62,10 +62,9 @@ different for each transect).}
 1-alpha, so the default 95 will give a 95\% confidence interval).}
 
 \item{innes}{logical flag for computing encounter rate variance using either
-the method of Innes et al (2002) where estimated abundance per transect
+the method of \insertCite{innes2002;textual}{mrds} where estimated abundance per transect
 divided by effort is used as the encounter rate, vs. (when \code{innes=FALSE})
-using the number of observations divided by the effort (as in Buckland et
-al., 2001)}
+using the number of observations divided by the effort (as in \insertCite{buckland2001;nobrackets}{mrds})}
 
 \item{stratification}{what do strata represent, see "Stratification" below.}
 
@@ -75,8 +74,9 @@ weighted final estimates.}
 
 \item{binomial_var}{if we wish to estimate abundance for the covered area
 only (i.e., study area = surveyed area) then this must be set to be
-\code{TRUE} and use the binomial variance estimator of Borchers et al.
-(1998). This is only valid when objects are not clustered. (This situation
+\code{TRUE} and use the negative binomial variance estimator of
+\insertCite{borchers1998;textual}{mrds}. This is only valid when
+objects are not clustered. (This situation
 is rare.)}
 }
 \value{
@@ -175,7 +175,7 @@ total number of animals, you should use this option.
 }
 
 A simple example of using \code{stratification="geographical"} is given below.
-Further examples can be found at \url{http://examples.distancesampling.org/}
+Further examples can be found at \url{https://distancesampling.org/resources/vignettes.html}
 (see, e.g., the deer pellet survey).
 }
 
@@ -193,12 +193,12 @@ calculated is given here, though see references for more details.
 \itemize{
 \item \emph{detection function}: variance from the detection function parameters is
 transformed to variance about the abundance via a sandwich estimator (see
-e.g., Appendix C of Borchers et al (2002)).
+e.g., Appendix C of \insertCite{borchers2002;textual}{Distance}).
 \item \emph{encounter rate}: for strata with >1 transect in them, the encounter
-rate estimators given in Fewster et al (2009) can be specified via the
+rate estimators given in \insertCite{fewster2009;textual}{mrds} can be specified via the
 \code{er_est} argument. If the argument \code{innes=TRUE} then calculations use the
 estimated number of individuals in the transect (rather than the
-observed), which was give by Innes et al (2002) as a superior estimator.
+observed), which was given by \insertCite{innes2002;textual}{mrds} as a superior estimator.
 When there is only one transect in a stratum, Poisson variance is assumed.
 Information on the Fewster encounter rate variance estimators are given in
 \code{\link[mrds:varn]{varn}}
@@ -288,23 +288,5 @@ print(minke_dht2, report="density")
 }
 }
 \references{
-Borchers, D.L., S.T. Buckland, P.W. Goedhart, E.D. Clarke, and S.L. Hedley.
-1998. Horvitz-Thompson estimators for double-platform line transect surveys.
-\emph{Biometrics} 54: 1221-1237.
-
-Borchers, D.L., S.T. Buckland, and W. Zucchini. 2002 \emph{Estimating Animal
-Abundance: Closed Populations}. Statistics for Biology and Health. Springer
-London.
-
-Buckland, S.T., E.A. Rexstad, T.A. Marques, and C.S. Oedekoven. 2015
-\emph{Distance Sampling: Methods and Applications}. Methods in Statistical
-Ecology. Springer International Publishing.
-
-Buckland, S.T., D.R. Anderson, K. Burnham, J.L. Laake, D.L. Borchers, and L.
-Thomas. 2001 \emph{Introduction to Distance Sampling: Estimating Abundance of
-Biological Populations}. Oxford University Press.
-
-Innes, S., M. P. Heide-Jorgensen, J.L. Laake, K.L. Laidre, H.J. Cleator, P.
-Richard, and R.E.A. Stewart. 2002 Surveys of belugas and narwhals in the
-Canadian high arctic in 1996. \emph{NAMMCO Scientific Publications} 4, 169-190.
+\insertAllCited{}
 }

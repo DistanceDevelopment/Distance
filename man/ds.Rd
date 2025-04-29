@@ -87,7 +87,7 @@ on the \code{key}and \code{adjustment}. For \code{key="unif"}, adjustments of or
 1, 2, 3, ... are fitted when \code{adjustment = "cos"} and order 2, 4, 6, ...
 otherwise. For \code{key="hn"} or \code{"hr"} adjustments of order 2, 3, 4, ... are
 fitted when \code{adjustment = "cos"} and order 4, 6, 8, ... otherwise. See
-Buckland et al. (2001, p. 47) for details.}
+\insertCite{buckland2001;textual}{mrds} p. 47 for details.}
 
 \item{order}{order of adjustment terms to fit. The default value (\code{NULL})
 results in \code{ds} choosing the orders to use - see \code{nadj}. Otherwise a scalar
@@ -154,11 +154,13 @@ produced.
 "Units", below. (Defaults to 1, implying all of the units are "correct"
 already.)}
 
-\item{er_var}{encounter rate variance estimator to use when abundance
-estimates are required. Defaults to "R2" for line transects and "P2" for
-point transects (>= 1.0.9, earlier versions <= 1.0.8 used the "P3" estimator
-by default for points). See \code{\link{dht2}} for more information and if more
-complex options are required.}
+\item{er_var}{specifies which encounter rate estimator to use in the case
+that dht_se is TRUE, er_method is either 1 or 2 and there are two or more
+samplers. Defaults to "R2" for line transects and "P2" for point transects
+(>= 1.0.9, earlier versions <= 1.0.8 used the "P3" estimator by default
+for points), both of which assume random placement of transects. For
+systematic designs, alternative estimators may be more appropriate,
+see \code{\link{dht2}} for more information.}
 
 \item{method}{optimization method to use (any method usable by
 \code{\link[stats:optim]{optim}} or \code{\link[optimx:optimx]{optimx}}). Defaults to
@@ -181,10 +183,13 @@ used.}
 used when \code{order=NULL}.}
 
 \item{er_method}{encounter rate variance calculation: default = 2 gives the
-method of Innes et al, using expected counts in the encounter rate. Setting
+method of \insertCite{innes2002;textual}{mrds}, using expected counts in the encounter rate. Setting
 to 1 gives observed counts (which matches Distance for Windows) and 0 uses
-binomial variance (only useful in the rare situation where study area =
-surveyed area). See \code{\link[mrds:dht.se]{dht.se}} for more details.}
+negative binomial variance (only useful in the rare situation where study area =
+surveyed area).
+See \code{\link[mrds:dht.se]{dht.se}} for more details, noting this \code{er_method}
+argument corresponds to the \code{varflag} element of the \code{options}
+argument in \code{dht.se}.}
 
 \item{dht_se}{should uncertainty be calculated when using \code{dht}? Safe to
 leave as \code{TRUE}, used in \code{bootdht}.}
@@ -239,7 +244,7 @@ and \code{sample_table} must be supplied. If \code{data} does not contain the co
 also be supplied. Note that stratification only applies to abundance
 estimates and not at the detection function level. Density and abundance
 estimates, and corresponding estimates of variance and confidence intervals,
-are calculated using the methods described in Buckland et al. (2001)
+are calculated using the methods described in \insertCite{buckland2001;textual}{mrds}
 sections 3.6.1 and 3.7.1 (further details can be found in the documentation
 for \code{\link[mrds:dht]{dht}}).
 
@@ -247,7 +252,7 @@ For more advanced abundance/density estimation please see the
 \code{\link[mrds:dht]{dht}} and \code{\link{dht2}} functions.
 
 Examples of distance sampling analyses are available at
-\url{http://examples.distancesampling.org/}.
+\url{https://distancesampling.org/resources/vignettes.html}.
 
 Hints and tips on fitting (particularly optimisation issues) are on the
 \code{\link[mrds:mrds_opt]{mrds_opt}} manual page.
@@ -268,7 +273,7 @@ or bin end point. This is a default will not be appropriate for all data and
 can often be the cause of model convergence failures. It is recommended that
 one plots a histogram of the observed distances prior to model fitting so as
 to get a feel for an appropriate truncation distance. (Similar arguments go
-for left truncation, if appropriate). Buckland et al (2001) provide
+for left truncation, if appropriate). \insertCite{buckland2001;textual}{mrds} provide
 guidelines on truncation.
 
 When specified as a percentage, the largest \code{right} and smallest \code{left}
@@ -306,7 +311,8 @@ lead to bias. To avoid this, the detection function can be constrained for
 monotonicity (and is by default for detection functions without covariates).
 
 Monotonicity constraints are supported in a similar way to that described
-in Buckland et al (2001). 20 equally spaced points over the range of the
+in \insertCite{buckland2001;textual}{mrds}. 20 equally spaced points over
+the range of the
 detection function (left to right truncation) are evaluated at each round
 of the optimisation and the function is constrained to be either always
 less than it's value at zero (\code{"weak"}) or such that each value is
@@ -412,13 +418,7 @@ AIC(ds.model.cos23)
 }
 }
 \references{
-Buckland, S.T., Anderson, D.R., Burnham, K.P., Laake, J.L., Borchers, D.L.,
-and Thomas, L. (2001). Distance Sampling. Oxford University Press. Oxford,
-UK.
-
-Buckland, S.T., Anderson, D.R., Burnham, K.P., Laake, J.L., Borchers, D.L.,
-and Thomas, L. (2004). Advanced Distance Sampling. Oxford University Press.
-Oxford, UK.
+\insertAllCited{}
 }
 \seealso{
 \code{\link{flatfile}}, \code{\link[mrds]{AIC.ds}},

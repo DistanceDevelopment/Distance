@@ -8,7 +8,7 @@
 #' necessary to use `mrds`.
 #'
 #' Examples of distance sampling analyses are available at
-#' <http://examples.distancesampling.org/>.
+#' <https://distancesampling.org/resources/vignettes.html>.
 #'
 #' For help with distance sampling and this package, there is a Google Group
 #' <https://groups.google.com/forum/#!forum/distance-sampling>.
@@ -72,10 +72,11 @@ NULL
 #' observation.
 #'
 #' The example given below was provided by Eric Rexstad. Additional examples
-#' can be found at  <http://examples.distancesampling.org/>.
+#' can be found at  <https://distancesampling.org/resources/vignettes.html>.
 #'
 #' @name flatfile
 #' @docType methods
+#' @importFrom Rdpack reprompt
 #' @examples
 #' \dontrun{
 #' library(Distance)
