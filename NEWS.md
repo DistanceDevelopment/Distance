@@ -6,6 +6,10 @@
 * Truncation distances greater than the largest cutpoint value for binned data are no longer permitted as these cause fitting issues. (Issue #175)
 * print.dht_result now displays estimates for groups as well as individuals by default when group size is present. (Issue #178)
 
+Enhancements
+
+* Warnings and documentation clarification regarding ER variance estimation when there is only a single transect. (Issue #192 and mrds Issue #115)
+
 # Distance 2.0.0
 
 * Requires mrds 3.0.0. mrds is called by ds for fitting detection functions. In mrds there has been a change of optimizer used for CDS detection functions - a constraint solver slsqp now used. This removes the need for external optimizer MCDS.exe in most cases. Other minor changes to optimization have been implemented to improve reliability (see NEWS file of mrds for more info).
