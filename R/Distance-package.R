@@ -76,6 +76,7 @@ NULL
 #'
 #' @name flatfile
 #' @docType methods
+#' @importFrom Rdpack reprompt
 #' @examples
 #' \dontrun{
 #' library(Distance)
