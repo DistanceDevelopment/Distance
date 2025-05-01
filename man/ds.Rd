@@ -54,9 +54,9 @@ file" and not supply \code{region_table}, \code{sample_table} and \code{obs_tabl
 "Data format", below and \code{\link{flatfile}}.}
 
 \item{truncation}{either truncation distance (numeric, e.g. 5) or percentage
-(as a string, e.g. "15\%"). Can be supplied as a \code{list} with elements \code{left}
-and \code{right} if left truncation is required (e.g.  \code{list(left=1,right=20)} or
-\code{list(left="1\%",right="15\%")} or even \code{list(left="1",right="15\%")}).  By
+(as a string, e.g. "15\%","15"). Can be supplied as a \code{list} with elements
+\code{left} and \code{right} if left truncation is required (e.g.  \code{list(left=1,right=20)}
+or \code{list(left="1\%",right="15\%")} or even \code{list(left="1",right="15\%")}).  By
 default for exact distances the maximum observed distance is used as the
 right truncation. When the data is binned, the right truncation is the
 largest bin end point. Default left truncation is set to zero.}
