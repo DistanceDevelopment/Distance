@@ -19,6 +19,10 @@ get_truncation <- function(truncation, cutpoints, data){
     stop("Truncation cannot be supplied as a percentage with binned data.", call. = FALSE)
   }
   
+  # Check if any truncation value is a character but doesn't contains the "%" symbol
+  if(any(sapply(truncation, function(x){is.character(x) && !grepl("%", x)}))){
+    warning("Truncation values supplied as characters will be interpreted as % truncation values.", call. = FALSE)
+  }
   
   # Helper function to convert percentage strings to quantiles
   percent_trunc <- function(value, side = c("left", "right")) {
