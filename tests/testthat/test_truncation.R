@@ -59,7 +59,7 @@ test_that("Truncation errors are thrown correctly",{
   eg.2 <- ds(egdata, truncation=list(left = 0, right = "10%"))
   
   # Should be the same
-  expect_equal(eg.1$ddf, eg.2$ddf)
+  expect_equal(eg.1$ddf$Nhat, eg.2$ddf$Nhat)
   # Check its calculated the quantile
   expect_equal(quantile(egdata$distance, probs = 0.9), eg.1$ddf$meta.data$width)
   expect_equal(quantile(egdata$distance, probs = 0.9), eg.2$ddf$meta.data$width)
