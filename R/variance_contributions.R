@@ -18,8 +18,9 @@ variance_contributions <- function(res){
   # get the total
   CV_cont$Total <- sqrt(rowSums(CV_cont^2))
 
-  # make that into percentages
-  CV_cont <- (CV_cont^2/CV_cont[["Total"]]^2)*100
+  # make that into percentages (for non zero rows)
+  index <- which(CV_cont[["Total"]]!=0)
+  CV_cont[index,] <- (CV_cont[index,]^2/CV_cont[index,"Total"]^2)*100
   CV_cont[["Total"]] <- NULL
 
   # zero ER contributions if only one sample

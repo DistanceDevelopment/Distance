@@ -652,7 +652,6 @@ dht2 <- function(ddf, observations=NULL, transects=NULL, geo_strat=NULL,
              group_mean     = if_else(.data$n_observations>0,
                                       mean(.data$size, na.rm=TRUE),
                                       1)) %>%
-             #group_mean     = mean(.data$size, na.rm=TRUE)) %>%
       # report n as n_observations
       mutate(n = .data$n_observations)
   # if we didn't have any areas, then set to 1 and estimate density
@@ -748,11 +747,13 @@ if(mult){
       mutate(ER = .data$n/.data$Effort)
   }
   res <- res %>%
-    mutate(ER_CV = sqrt(.data$ER_var)/.data$ER,
+    mutate(ER_CV = if_else(.data$ER == 0, 0, 
+                           sqrt(.data$ER_var)/.data$ER),
            ER_df = compute_df(.data$k, type=.data$er_est)) %>%
     # calculate stratum abundance estimate
     mutate(Abundance = (.data$Area/.data$Covered_area) * .data$Nc) %>%
-    mutate(df_CV = sqrt(.data$df_var)/.data$Abundance) %>%
+    mutate(df_CV = if_else(.data$Abundance == 0, 0,
+                           sqrt(.data$df_var)/.data$Abundance)) %>%
     mutate(group_CV = if_else(.data$group_var==0, 0,
                               sqrt(.data$group_var)/.data$group_mean))
 
