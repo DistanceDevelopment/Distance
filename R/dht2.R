@@ -649,7 +649,10 @@ dht2 <- function(ddf, observations=NULL, transects=NULL, geo_strat=NULL,
                                       var(.data$size, na.rm=TRUE)/
                                        sum(!is.na(.data$size)),
                                       0),
-             group_mean     = mean(.data$size, na.rm=TRUE)) %>%
+             group_mean     = if_else(.data$n_observations>0,
+                                      mean(.data$size, na.rm=TRUE),
+                                      1)) %>%
+             #group_mean     = mean(.data$size, na.rm=TRUE)) %>%
       # report n as n_observations
       mutate(n = .data$n_observations)
   # if we didn't have any areas, then set to 1 and estimate density
