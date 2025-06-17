@@ -296,4 +296,27 @@ test_that("Deal with strata with no detections", {
                  stratification = "geographical")
   
   expect_true(is(result, "dht_result"))
+  
+  # Check values in output
+  new.row3 <- minke[1, ] %>%
+    mutate(
+      Region.Label = "East",
+      Area = 10000,
+      Sample.Label = max(minke$Sample.Label) + 3,
+      Effort = 10,
+      distance = NA,
+      object = NA
+    )
+  
+  minke2 <- rbind(minke, new.row1, new.row2, new.row3)
+  detfn <- ds(data=minke2, truncation=1.5, key="hr", adjustment=NULL, optimizer = "R")
+  dht2.results <- dht2(ddf = detfn,
+                       flatfile = minke2,
+                       strat_formula =  ~ Region.Label,
+                       stratification = "geographical")
+  
+  expect_equal(dht2.results$Abundance[1], 0)
+  expect_equal(dht2.results$Abundance_se[4], 4834.4118, , tolerance = 0.0001)
+  expect_equal(dht2.results$df[4],15.25496, tolerance = 0.00001)
+  
 })
