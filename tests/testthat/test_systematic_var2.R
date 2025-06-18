@@ -56,8 +56,9 @@ cu <- 1/(cu[3]/(cu[1]*cu[2]))
 
 test_that("no strat",{
 
-  df <- ds(Systematic_variance_2, convert_units=cu)
-
+  # No adjustments to avoid model selection which generates a monotonicity warning. (The HN model with no adjustments is selected based on minimum AIC any way.)
+  df <- ds(Systematic_variance_2, nadj = 0, 
+           convert_units=cu, truncation = 10)
 
   # fiddle with region labels
   obs.table$Region.Label <- NULL
