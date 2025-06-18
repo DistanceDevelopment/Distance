@@ -10,8 +10,10 @@ test_that("variance 2",{
   convert.units <- Systematic_variance_2_units
   cu <- convert.units[, 3]
   cu <- 1/(cu[3]/(cu[1]*cu[2]))
-  # first fit a model
-  sysvar_df <- ds(Systematic_variance_2, adjustment="cos", convert_units=cu)
+  # first fit a model - to avoid warnings use no adjustments (HN model was selected any way based on minimum AIC)
+  sysvar_df <- ds(Systematic_variance_2, 
+                  nadj = 0, 
+                  convert_units=cu)
 
   systematic_var2 <- Systematic_variance_2
   unflat <- unflatten(systematic_var2)
@@ -30,9 +32,9 @@ test_that("variance 2",{
   unflat$obs.table$Sample.Label <- as.numeric(unflat$obs.table$Sample.Label)
   unflat$data$Sample.Label <- as.numeric(unflat$data$Sample.Label)
 
-  # fit the detection function
-  sysvar_df <- ds(unflat$data, adjustment="cos", convert_units=cu)
-
+  # fit the detection function (again avoid adjustment terms to supress warning - no adjustments is selected by AIC any way)
+  sysvar_df <- ds(unflat$data, nadj = 0, convert_units=cu)
+  
   ## no stratification
   #Nhat_nostrat_eff <- dht2(sysvar_df, transects=unflat$sample.table,
   #                             geo_strat=unflat$region.table, observations=unflat$obs.table,
