@@ -25,7 +25,7 @@ ER_var_f <- function(erdat, innes, binomial_var=FALSE){
 
     # sort the data if we use O2/O3 estimators
     if(any(erdat$er_est %in% c("O1", "O2", "O3", "S1", "S2"))){
-      warning("Using one of O1, O2, O3, S1 or S2 encounter rate variance estimators, assuming that sorting on Sample.Label is meaningful", immediate. = TRUE, call. = FALSE)
+      warning("Using one of O1, O2, O3, S1 or S2 encounter rate variance estimators, assuming that sorting on Sample.Label is meaningful.", immediate. = TRUE, call. = FALSE)
       if(!is.numeric(erdat$Sample.Label)){
         warning("Additionally, Sample.Label is not numeric, this may cause additional issues", immediate. = TRUE, call. = FALSE)
       }
