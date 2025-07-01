@@ -11,6 +11,7 @@
 Enhancements
 
 * Warnings and documentation clarification regarding ER variance estimation when there is only a single transect. (Issue #192 and mrds Issue #115)
+* Code is more robust to the different ways of defining a binned analysis and documentation has been clarified. (Issue #144)
 
 # Distance 2.0.0
 
