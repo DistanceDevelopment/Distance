@@ -46,7 +46,7 @@ test_that("variance 2",{
                                  observations=unflat$obs.table,
                                  strat_formula=~1, convert_units=cu,
                                  er_est="O2"),
-                 "Using O2 or O3 encounter rate variance estimator, assuming that sorting on Sample.Label is meaningful")
+                 "Using one of O1, O2, O3, S1 or S2 encounter rate variance estimators, assuming that sorting on Sample.Label is meaningful.")
 
   lr <- Nhat_O2[nrow(Nhat_O2), , drop=FALSE]
   expect_equal(lr$Abundance, 1022, tol=1e-1)
