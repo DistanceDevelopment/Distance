@@ -7,8 +7,8 @@ data}
 \usage{
 ds(
   data,
-  truncation = ifelse(is.null(cutpoints), ifelse(is.null(data$distend),
-    max(data$distance), max(data$distend)), max(cutpoints)),
+  truncation = ifelse(is.null(data$distend), ifelse(is.null(cutpoints),
+    max(data$distance), max(cutpoints)), max(data$distend)),
   transect = "line",
   formula = ~1,
   key = c("hn", "hr", "unif"),
@@ -107,11 +107,10 @@ the bins. Supplying a distance column in your data and specifying cutpoints
 is the recommended approach for all standard binned analyses.
 Ensure that the first element is 0 (or the left truncation
 distance) and the last is the distance to the end of the furthest bin.
-(Default \code{NULL}, no binning.) If you have provided \code{distbegin} and \code{distend}
-columns in your data (note this should only be used when your cutpoints
-are not constant across all your data, e.g. planes flying at differing
-altitudes) then do not specify the cutpoints argument as this will cause
-the \code{distbegin} and \code{distend} columns in your data to be overwritten.}
+(Default \code{NULL}, no binning.) Provide \code{distbegin} and \code{distend} columns
+in your data only when your cutpoints are not constant across all your
+data, e.g. planes flying at differing altitudes then do not specify the
+cutpoints argument.}
 
 \item{dht_group}{should density abundance estimates consider all groups to
 be size 1 (abundance of groups) \code{dht_group=TRUE} or should the abundance of

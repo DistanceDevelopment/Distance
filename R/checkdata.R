@@ -25,10 +25,14 @@ checkdata <- function(data, region.table=NULL, sample.table=NULL,
     }
   }
 
-  
-  # Make sure that the user has only specified either distance or distend / distbegin (need to do this check first as then Distance creates the distance column)
+  # Make sure if the user is using distbegin and distend they have supplied both.
+  if(any(!is.null(data$distbegin), !is.null(data$distend)) && !all(!is.null(data$distbegin), !is.null(data$distend))){
+    stop("You have provided either a 'distbegin' or 'distend' column in your dataset but not both. Please provide both or remove these and provide a distance column and use the cutpoint argument.", call. = FALSE)
+  }
+  # Make sure that the user has only specified either distance or distend / distbegin
   if(!is.null(data$distance) && !is.null(data$distbegin) && !is.null(data$distend)){
-    stop("You can only specify either a 'distance' column or 'distbegin' and 'distend' columns in your data.", call. = FALSE)
+    warning("You have supplied both a 'distance' column and 'distbegin' and 'distend' columns in your data, the distance column will be removed and not used in these analyses.", call. = FALSE, immediate. = TRUE)
+    data$distance <- NULL
   }
   
   # make sure that the data are in the right format first
@@ -36,8 +40,12 @@ checkdata <- function(data, region.table=NULL, sample.table=NULL,
     if(is.null(data$distend) & is.null(data$distbegin)){
       stop("Your data must (at least) have a column called 'distance' or 'distbegin' and 'distend'!", call. = FALSE)
     }else{
-      data$distance <- (data$distend + data$distbegin)/2
+      #data$distance <- (data$distend + data$distbegin)/2
     }
+    # distance column name to avoid creating a distance column
+    distance.col <- "distbegin"
+  }else{
+    distance.col <- "distance"
   }
 
   # make sure that we have a data.frame()
@@ -58,7 +66,7 @@ checkdata <- function(data, region.table=NULL, sample.table=NULL,
     # check that the object IDs are unique
     # first need to remove the rows with NA distances used for padding
     # below
-    data_no_NA <- data[!is.na(data$distance), ]
+    data_no_NA <- data[!is.na(data[[distance.col]]), ]
     if(length(data_no_NA$object) != length(unique(data_no_NA$object))){
       stop("Not all object IDs are unique, check data.")
     }
@@ -130,7 +138,7 @@ checkdata <- function(data, region.table=NULL, sample.table=NULL,
       rownames(data) <- 1:nrow(data)
 
       # remove the NA rows
-      data <- data[!is.na(data$distance),]
+      data <- data[!is.na(data[[distance.col]]),]
     }else if(all(tolower(c("Region.Label", "Sample.Label",
                            "Effort", "object")) %in%
                  tolower(colnames(data)))){

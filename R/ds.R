@@ -58,11 +58,10 @@
 #' is the recommended approach for all standard binned analyses.
 #' Ensure that the first element is 0 (or the left truncation
 #' distance) and the last is the distance to the end of the furthest bin.
-#' (Default `NULL`, no binning.) If you have provided `distbegin` and `distend`
-#' columns in your data (note this should only be used when your cutpoints 
-#' are not constant across all your data, e.g. planes flying at differing 
-#' altitudes) then do not specify the cutpoints argument as this will cause
-#' the `distbegin` and `distend` columns in your data to be overwritten. 
+#' (Default `NULL`, no binning.) Provide `distbegin` and `distend` columns 
+#' in your data only when your cutpoints are not constant across all your 
+#' data, e.g. planes flying at differing altitudes then do not specify the
+#' cutpoints argument. 
 #' @param monotonicity should the detection function be constrained for
 #' monotonicity weakly (`"weak"`), strictly (`"strict"`) or not at all
 #' (`"none"` or `FALSE`). See Monotonicity, below. (Default `"strict"`). By
@@ -321,11 +320,11 @@
 #' AIC(ds.model.cos2)
 #' AIC(ds.model.cos23)
 #'}
-ds <- function(data, truncation=ifelse(is.null(cutpoints),
-                                     ifelse(is.null(data$distend),
-                                            max(data$distance),
-                                            max(data$distend)),
-                                     max(cutpoints)),
+ds <- function(data, truncation=ifelse(is.null(data$distend),
+                                       ifelse(is.null(cutpoints),
+                                              max(data$distance),
+                                              max(cutpoints)),
+                                       max(data$distend)),
              transect="line",
              formula=~1, key=c("hn", "hr", "unif"),
              adjustment=c("cos", "herm", "poly"),
@@ -383,6 +382,12 @@ ds <- function(data, truncation=ifelse(is.null(cutpoints),
   sample_table <- data$sample.table
   obs_table    <- data$obs.table
   data         <- data$data
+  
+  # remove distbegin and distend if they already exist
+  if(any(names(data)=="distend") && any(names(data)=="distbegin") && !is.null(cutpoints)){
+    warning("Data has distend and distbegin columns, cutpoints argument will be ignored.", immediate. = TRUE, call. = FALSE)
+    cutpoints <- NULL
+  }
 
   # setup left and right truncation (width)
   truncation <- get_truncation(truncation, cutpoints, data)
@@ -395,7 +400,6 @@ ds <- function(data, truncation=ifelse(is.null(cutpoints),
       message("Columns \"distbegin\" and \"distend\" in data: performing a binned analysis...")
       binned <- TRUE
       breaks <- sort(unique(c(data$distend, data$distbegin)))
-      data$distance <- (data$distend + data$distbegin)/2
     }else{
       binned <- FALSE
       breaks <- NULL
@@ -408,13 +412,6 @@ ds <- function(data, truncation=ifelse(is.null(cutpoints),
       }
     }else if(cutpoints[1]!=0){
       stop("The first cutpoint must be 0 or the left truncation distance!")
-    }
-
-    # remove distbegin and distend if they already exist
-    if(any(names(data)=="distend") & any(names(data)=="distbegin")){
-      message("data already has distend and distbegin columns, removing them and appling binning as specified by cutpoints.")
-      data$distend <- NULL
-      data$distbegin <- NULL
     }
     # send off to create_bins to make the correct columns in data
     data <- create_bins(data, cutpoints)
@@ -784,7 +781,12 @@ ds <- function(data, truncation=ifelse(is.null(cutpoints),
       message("No survey area information supplied, only estimating detection function.\n")
     }
   }
-
+  
+  # Now add distance column after all the fitting if using distbegin/distend
+  if(!is.null(data$distbegin)){
+    model$data$distance <- (model$data$distend + model$data$distbegin)/2
+  }
+  
   # construct return object
   ret.obj <- list(ddf  = model,
                   dht  = dht.res,
