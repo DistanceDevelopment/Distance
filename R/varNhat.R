@@ -1,6 +1,7 @@
 # Calculate the variance contribution of the detection function
 #  to abundance estimates
-#' @importFrom dplyr reframe
+#' @importFrom dplyr reframe group_by across all_of summarize pull
+#' @importFrom stats aggregate
 varNhat <- function(data, model){
 
   # format the data
@@ -22,6 +23,15 @@ varNhat <- function(data, model){
     reframe(Covered_area = sum(.data$Covered_area),
               Area         = .data$Area) %>%
     distinct()
+  
+  # Add column giving number of obs per stratum
+  n_obs <- aggregate(!is.na(data$object), 
+                     by = data[strat_vars], 
+                     FUN = sum)
+  names(n_obs)[length(n_obs)] <- "n_obs"
+  
+  # Merge into grp_dat
+  grp_dat <- left_join(grp_dat, n_obs, by = strat_vars)
 
   # join the per-stratum data onto the frame
   data$Covered_area <- NULL
@@ -29,7 +39,7 @@ varNhat <- function(data, model){
   data <- left_join(data, grp_dat, by=strat_vars)
 
   # function to calculate Nhat
-  dhtd <- function(par, data, model){
+  dhtd <- function(par, data, model, grp_dat){
     # set par
     model$par <- par
 
@@ -42,6 +52,10 @@ varNhat <- function(data, model){
       reframe(N = (.data$Area/.data$Covered_area) *
                      sum(.data$Nc, na.rm=TRUE)) %>%
       distinct()
+    
+    # Include an NA for strata with no obs and then convert to 0.
+    res <- left_join(grp_dat, res, by = colnames(grp_dat)[1])
+    res$N[is.na(res$N)] <- 0
 
     res$N
   }
@@ -54,7 +68,7 @@ varNhat <- function(data, model){
 
   # calculate variance
   dm <- DeltaMethod(model$par, dhtd, vcov, sqrt(.Machine$double.eps),
-                    model=model, data=data)
+                    model=model, data=data, grp_dat=grp_dat)
   attr(dm, "vardat_str") <- vardat_str
 
   # fiddle with variance data.frame

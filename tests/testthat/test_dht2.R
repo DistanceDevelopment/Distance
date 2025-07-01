@@ -260,3 +260,63 @@ test_that("can accept data.frame and scalar sampling fractions", {
   minke_dht2
   
 })
+
+
+test_that("Deal with strata with no detections", {
+  
+  # Add a third Region with two samples but no observations.
+  # Adding two samples instead of just one to prevent a warning unstable ER var
+  new.row1 <- minke[1, ] %>%
+    mutate(
+      Region.Label = "East",
+      Area = 10000,
+      Sample.Label = max(minke$Sample.Label) + 1,
+      Effort = 10,
+      distance = NA,
+      object = NA
+    )
+  
+  new.row2 <- minke[1, ] %>%
+    mutate(
+      Region.Label = "East",
+      Area = 10000,
+      Sample.Label = max(minke$Sample.Label) + 2,
+      Effort = 10,
+      distance = NA,
+      object = NA
+    )
+  
+  minke <- rbind(minke, new.row1, new.row2)
+  # Fit a detection function
+  detfn <- ds(data=minke, truncation=1.5, key="hr", adjustment=NULL)
+  
+  result <- dht2(ddf = detfn,
+                 flatfile = minke,
+                 strat_formula =  ~ Region.Label,
+                 stratification = "geographical")
+  
+  expect_true(is(result, "dht_result"))
+  
+  # Check values in output
+  new.row3 <- minke[1, ] %>%
+    mutate(
+      Region.Label = "East",
+      Area = 10000,
+      Sample.Label = max(minke$Sample.Label) + 3,
+      Effort = 10,
+      distance = NA,
+      object = NA
+    )
+  
+  minke2 <- rbind(minke, new.row1, new.row2, new.row3)
+  detfn <- ds(data=minke2, truncation=1.5, key="hr", adjustment=NULL, optimizer = "R")
+  dht2.results <- dht2(ddf = detfn,
+                       flatfile = minke2,
+                       strat_formula =  ~ Region.Label,
+                       stratification = "geographical")
+  
+  expect_equal(dht2.results$Abundance[1], 0)
+  expect_equal(dht2.results$Abundance_se[4], 4834.4118, , tolerance = 0.0001)
+  expect_equal(dht2.results$df[4],15.25496, tolerance = 0.00001)
+  
+})

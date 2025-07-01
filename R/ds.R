@@ -13,9 +13,9 @@
 #' file" and not supply `region_table`, `sample_table` and `obs_table`, see
 #' "Data format", below and [`flatfile`][flatfile].
 #' @param truncation either truncation distance (numeric, e.g. 5) or percentage
-#' (as a string, e.g. "15%"). Can be supplied as a `list` with elements `left`
-#' and `right` if left truncation is required (e.g.  `list(left=1,right=20)` or
-#' `list(left="1%",right="15%")` or even `list(left="1",right="15%")`).  By
+#' (as a string, e.g. "15%","15"). Can be supplied as a `list` with elements 
+#' `left` and `right` if left truncation is required (e.g.  `list(left=1,right=20)`
+#' or `list(left="1%",right="15%")` or even `list(left="1",right="15%")`).  By
 #' default for exact distances the maximum observed distance is used as the
 #' right truncation. When the data is binned, the right truncation is the
 #' largest bin end point. Default left truncation is set to zero.

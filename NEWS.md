@@ -2,9 +2,11 @@
 
 * Fixes issue with print dht2 when multipliers are a data.frame (Issue #179)
 * Fixes bug when including a uniform with no adjustment terms in the summarize_ds_models function (Issue #180)
+* dht2 can now deal with strata where there are no observations (Issue #194)
 * Users can alternatively pass a list of models to summarize_ds_models rather than passing them individually. (Issue #149)
 * Truncation distances greater than the largest cutpoint value for binned data are no longer permitted as these cause fitting issues. (Issue #175)
 * print.dht_result now displays estimates for groups as well as individuals by default when group size is present. (Issue #178)
+* Issues a warning when truncation is provided as a character but without the explicit % sign. (Issue #166) 
 
 Enhancements
 
