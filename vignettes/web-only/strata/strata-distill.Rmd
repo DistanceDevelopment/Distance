@@ -137,7 +137,7 @@ Further exploration of analyses involving stratification can be found in the [ex
 
 # Comments
 
-Note there is a difference of `r round(model.pooled.AIC$AIC - model.separate.AIC)` AIC units between the model using stratum-specific detection functions and the model using a pooled detection function, with the stratum-specific detection function model being preferrable.  To be thorough, absolute goodness of fit for the three stratum-specific detection functions is checked, and all models fit the data adequately.
+Note there is a difference of `r round(model.pooled.AIC$AIC - model.separate.AIC)` AIC units between the model using stratum-specific detection functions and the model using a pooled detection function, with the stratum-specific detection function model being preferable.  To be thorough, absolute goodness of fit for the three stratum-specific detection functions is checked, and all models fit the data adequately.
 
 This vignette focuses upon use of stratum-specific detection functions as a model selection exercise.  Consequently, the vignette does not examine stratum-specific abundance or density estimates.  That output is not included in this example analysis, but can easily be produced by continuing the analysis begun in this example.
 
