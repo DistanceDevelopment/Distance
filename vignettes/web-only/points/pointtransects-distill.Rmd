@@ -138,7 +138,7 @@ On calling the `ds` function, information is provided to the screen reminding th
 summary(sasp.hn)
 ```
 
-Visually inspect the fitted detection function with the `plot()` function, specifying the cutpoints histogram with argument `breaks`.  Add the argument `pdf` so the plot shows the probability densiy function rather than the detection function.  The probability density function is preferred for assessing model fit because the PDF incorporates information about the availability of animals to be detected.  There are few animals available to be detected at small distances, therefore lack of fit at small distances is not as consequential for points as it is for lines (Figure \@ref(fig:modelfit)).
+Visually inspect the fitted detection function with the `plot()` function, specifying the cutpoints histogram with argument `breaks`.  Add the argument `pdf` so the plot shows the probability density function rather than the detection function.  The probability density function is preferred for assessing model fit because the PDF incorporates information about the availability of animals to be detected.  There are few animals available to be detected at small distances, therefore lack of fit at small distances is not as consequential for points as it is for lines (Figure \@ref(fig:modelfit)).
 
 ```{r, modelfit, fig.dim=c(7,5), fig.cap="Fit of half normal detection function to savannah sparrow data."}
 cutpoints <- c(0,5,10,15,20,30,40,max(Savannah_sparrow_1980$distance, na.rm=TRUE))
@@ -206,6 +206,6 @@ Key differences between analysis of line transect data and point transect data
 - argument `transect` in `ds()` must be set to `"point"`,
 - histogram of radial detection distances is characteristically "humped" because few individuals are available to be detected near the points,
 - because of the hump shape (Figure \@ref(fig:basichist)), plotting to assess fit of data to detection distribution usually assessed via `pdf=TRUE` argument added to `plot()` function,
-- for the Arapaho National Refuge Savannah sparrow data, the three candidate models all provide adequeate fit to the data and produce comparable estimates of $P_a$.
+- for the Arapaho National Refuge Savannah sparrow data, the three candidate models all provide adequate fit to the data and produce comparable estimates of $P_a$.
 
 # References
