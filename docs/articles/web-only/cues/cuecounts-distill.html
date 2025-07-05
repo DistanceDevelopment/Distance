@@ -14,7 +14,7 @@
   };
 </script><script src="../../../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="../../../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
-<script src="../../../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../../../deps/Roboto-0.4.9/font.css" rel="stylesheet">
+<script src="../../../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../../../deps/Roboto-0.4.10/font.css" rel="stylesheet">
 <link href="../../../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="../../../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
 <script src="../../../deps/headroom-0.11.0/headroom.min.js"></script><script src="../../../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../../../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../../../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../../../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../../../deps/search-1.0.0/fuse.min.js"></script><script src="../../../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../../../pkgdown.js"></script><meta property="og:title" content="Analysis of cue count surveys">
@@ -32,7 +32,7 @@
 
     <a class="navbar-brand me-2" href="../../../index.html">Distance</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.0.0.9004</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.0.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -66,7 +66,6 @@
 <li class="nav-item"><a class="nav-link" href="../../../news/index.html">News</a></li>
       </ul>
 <ul class="navbar-nav">
-<li class="nav-item"><a class="external-link nav-link" href="https://twitter.com/distancesamp" aria-label="Twitter"><span class="fa fa-twitter"></span></a></li>
 <li class="nav-item"><a class="external-link nav-link" href="https://github.com/DistanceDevelopment/Distance/" aria-label="GitHub"><span class="fa fab fa-github fa-lg"></span></a></li>
       </ul>
 </div>
@@ -82,7 +81,7 @@
       <h1>Analysis of cue count surveys</h1>
                         <h4 data-toc-skip class="author">Eric Rexstad</h4>
             <address class="author_afil">
-      CREEM, Univ of St Andrews<br><h4 data-toc-skip class="date">March 2025</h4>
+      CREEM, Univ of St Andrews<br><h4 data-toc-skip class="date">July 2025</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/DistanceDevelopment/Distance/blob/HEAD/vignettes/web-only/cues/cuecounts-distill.Rmd" class="external-link"><code>vignettes/web-only/cues/cuecounts-distill.Rmd</code></a></small>
       <div class="d-none name"><code>cuecounts-distill.Rmd</code></div>
@@ -106,7 +105,7 @@
 <p>Each of the 32 point count stations were visited twice. During each visit, the observer recorded distances to all songs detected during a 5-minute sampling period (Figure <a href="#fig:fig">1</a>).</p>
 <div class="figure">
 <span style="display:block;" id="fig:fig"></span>
-<img src="montrave.JPG" alt="Montrave study area; white circles are point count stations." width="499"><p class="caption">
+<img src="montrave.JPG" alt="Montrave study area; white circles are point count stations."><p class="caption">
 Figure 1: Montrave study area; white circles are point count stations.
 </p>
 </div>
@@ -250,7 +249,7 @@ Figure 4: Q-Q plot of hazard rate model to winter wren radial detection distance
 <div class="section level2">
 <h2 id="notes-regarding-the-cue-count-estimates-of-montrave-winter-wrens">Notes regarding the cue count estimates of Montrave winter wrens<a class="anchor" aria-label="anchor" href="#notes-regarding-the-cue-count-estimates-of-montrave-winter-wrens"></a>
 </h2>
-<p>This vignette uses the function <code>dht2</code> because that function knows how to incorporate multipliers such as cue rates and propogate the uncertainty in cue rate into overall uncertainty in density and abundance. Because there is uncertainty coming not only from encounter rate variability and uncertainty in detection function parameters, but also from cue rate variability, the relative contribution of each source of uncertainty is tablated. This is the last table produced by printing the <code>wren.estimate</code> object. For the Montrave winter wren data, only 4% of the uncertainty in the density estimate is attributable to the detection function, 24% attributable to encounter rate variability and 71% attributable to between-individual variability in call rate.</p>
+<p>This vignette uses the function <code>dht2</code> because that function knows how to incorporate multipliers such as cue rates and propagate the uncertainty in cue rate into overall uncertainty in density and abundance. Because there is uncertainty coming not only from encounter rate variability and uncertainty in detection function parameters, but also from cue rate variability, the relative contribution of each source of uncertainty is tablated. This is the last table produced by printing the <code>wren.estimate</code> object. For the Montrave winter wren data, only 4% of the uncertainty in the density estimate is attributable to the detection function, 24% attributable to encounter rate variability and 71% attributable to between-individual variability in call rate.</p>
 <p>This insight suggests that if this survey was to be repeated, exerting more effort in measuring between-individual variation in call rate would likely yield the most benefits in tightening the precision in density estimates.</p>
 <p>Also note the poor fit of the model to the data; the P-value for the Cramer von-Mises test is &lt;&lt;0.05. This is caused by over-dispersion in the distribution of detected call distances. A single individual may sit on a tree branch and emit many song bursts, leading to a jagged distribution of call distances that is not well fitted by a smooth detection function. That over-dispersion will not bias the density estimates.</p>
 </div>
@@ -259,7 +258,7 @@ Figure 4: Q-Q plot of hazard rate model to winter wren radial detection distance
 </h2>
 <div id="refs" class="references csl-bib-body hanging-indent" entry-spacing="0" line-spacing="2">
 <div id="ref-Buckland2006" class="csl-entry">
-Buckland, S. T. (2006). Point transect surveys for songbirds: Robust methodologies. <em>The Auk</em>, <em>123</em>(2), 345–345. <a href="https://doi.org/10.1642/0004-8038(2006)123%5B345:psfsrm%5D2.0.co;2" class="external-link">https://doi.org/10.1642/0004-8038(2006)123[345:psfsrm]2.0.co;2</a>
+Buckland, S. T. (2006). Point transect surveys for songbirds: Robust methodologies. <em>The Auk</em>, <em>123</em>(2), 345–345. <a href="https://doi.org/10.1642/0004-8038(2006)123[345:psfsrm]2.0.co;2" class="external-link">https://doi.org/10.1642/0004-8038(2006)123[345:psfsrm]2.0.co;2</a>
 </div>
 <div id="ref-miller_distance_2019" class="csl-entry">
 Miller, D. L., Rexstad, E., Thomas, L., Marshall, L., &amp; Laake, J. L. (2019). Distance sampling in r. <em>Journal of Statistical Software</em>, <em>89</em>(1), 1–28. <a href="https://doi.org/10.18637/jss.v089.i01" class="external-link">https://doi.org/10.18637/jss.v089.i01</a>

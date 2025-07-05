@@ -32,7 +32,7 @@
 
     <a class="navbar-brand me-2" href="../../../index.html">Distance</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.0.0.9009</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.0.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -81,7 +81,7 @@
       <h1>Point transect density estimation</h1>
                         <h4 data-toc-skip class="author">Eric Rexstad</h4>
             <address class="author_afil">
-      CREEM, Univ of St Andrews<br><h4 data-toc-skip class="date">April 2025</h4>
+      CREEM, Univ of St Andrews<br><h4 data-toc-skip class="date">July 2025</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/DistanceDevelopment/Distance/blob/HEAD/vignettes/web-only/points/pointtransects-distill.Rmd" class="external-link"><code>vignettes/web-only/points/pointtransects-distill.Rmd</code></a></small>
       <div class="d-none name"><code>pointtransects-distill.Rmd</code></div>
@@ -261,7 +261,7 @@ Figure 2: Histogram of radial distances of savannah sparrows across all pastures
 <span><span class="co">## Density:</span></span>
 <span><span class="co">##   Label Estimate        se         cv      lcl      ucl       df</span></span>
 <span><span class="co">## 1 Total 2.674253 0.2625745 0.09818612 2.206266 3.241509 598.5905</span></span></code></pre>
-<p>Visually inspect the fitted detection function with the <code><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot()</a></code> function, specifying the cutpoints histogram with argument <code>breaks</code>. Add the argument <code>pdf</code> so the plot shows the probability densiy function rather than the detection function. The probability density function is preferred for assessing model fit because the PDF incorporates information about the availability of animals to be detected. There are few animals available to be detected at small distances, therefore lack of fit at small distances is not as consequential for points as it is for lines (Figure <a href="#fig:modelfit">3</a>).</p>
+<p>Visually inspect the fitted detection function with the <code><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot()</a></code> function, specifying the cutpoints histogram with argument <code>breaks</code>. Add the argument <code>pdf</code> so the plot shows the probability density function rather than the detection function. The probability density function is preferred for assessing model fit because the PDF incorporates information about the availability of animals to be detected. There are few animals available to be detected at small distances, therefore lack of fit at small distances is not as consequential for points as it is for lines (Figure <a href="#fig:modelfit">3</a>).</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">cutpoints</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">5</span>,<span class="fl">10</span>,<span class="fl">15</span>,<span class="fl">20</span>,<span class="fl">30</span>,<span class="fl">40</span>,<span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">max</a></span><span class="op">(</span><span class="va">Savannah_sparrow_1980</span><span class="op">$</span><span class="va">distance</span>, na.rm<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">sasp.hn</span>, breaks<span class="op">=</span><span class="va">cutpoints</span>, pdf<span class="op">=</span><span class="cn">TRUE</span>, main<span class="op">=</span><span class="st">"Savannah sparrow point transect data."</span><span class="op">)</span></span></code></pre></div>
@@ -400,7 +400,7 @@ Figure 4: Q-Q plot of half normal detection function to savannah sparrow data.
 <li>argument <code>transect</code> in <code><a href="../../../reference/ds.html">ds()</a></code> must be set to <code>"point"</code>,</li>
 <li>histogram of radial detection distances is characteristically “humped” because few individuals are available to be detected near the points,</li>
 <li>because of the hump shape (Figure <a href="#fig:basichist">2</a>), plotting to assess fit of data to detection distribution usually assessed via <code>pdf=TRUE</code> argument added to <code><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot()</a></code> function,</li>
-<li>for the Arapaho National Refuge Savannah sparrow data, the three candidate models all provide adequeate fit to the data and produce comparable estimates of <span class="math inline">\(P_a\)</span>.</li>
+<li>for the Arapaho National Refuge Savannah sparrow data, the three candidate models all provide adequate fit to the data and produce comparable estimates of <span class="math inline">\(P_a\)</span>.</li>
 </ul>
 </div>
 <div class="section level2">
