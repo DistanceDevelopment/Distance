@@ -14,7 +14,7 @@
   };
 </script><script src="../../../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="../../../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
-<script src="../../../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../../../deps/Roboto-0.4.9/font.css" rel="stylesheet">
+<script src="../../../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../../../deps/Roboto-0.4.10/font.css" rel="stylesheet">
 <link href="../../../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="../../../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
 <script src="../../../deps/headroom-0.11.0/headroom.min.js"></script><script src="../../../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../../../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../../../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../../../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../../../deps/search-1.0.0/fuse.min.js"></script><script src="../../../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../../../pkgdown.js"></script><meta property="og:title" content="Analysis of camera trapping data">
@@ -22,17 +22,34 @@
 ">
 <meta property="og:description" content="Example analysis with Ivory Coast Maxwell's duiker.
 ">
-<script type="text/javascript">(function(c,l,a,r,i,t,y){c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)}; t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;   y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);})(window, document, "clarity", "script", "m9rbql4acz");</script>
 </head>
 <body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
+    <!-- Cookie Consent by TermsFeed https://www.TermsFeed.com -->
+<script type="text/javascript" src="https://www.termsfeed.com/public/cookie-consent/4.2.0/cookie-consent.js" charset="UTF-8"></script><script type="text/javascript" charset="UTF-8">
+document.addEventListener('DOMContentLoaded', function () {
+cookieconsent.run({"notice_banner_type":"simple","consent_type":"express","palette":"light","language":"en","page_load_consent_levels":["strictly-necessary"],"notice_banner_reject_button_hide":false,"preferences_center_close_button_hide":false,"page_refresh_confirmation_buttons":false,"website_name":"https://distancesampling.org/Distance"});
+});
+</script><!-- Google Analytics --><!-- Google tag (gtag.js) --><script type="text/plain" data-cookie-consent="tracking" async src="https://www.googletagmanager.com/gtag/js?id=G-Y8DXDM90VK"></script><script type="text/plain" data-cookie-consent="tracking">
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-Y8DXDM90VK');
+</script><!-- end of Google Analytics--><noscript>Free cookie consent management tool by <a href="https://www.termsfeed.com/" class="external-link">TermsFeed</a>
+</noscript>
+<!-- End Cookie Consent by TermsFeed https://www.TermsFeed.com -->
+
+<!-- Below is the link that users can use to open Preferences Center to change their preferences. Do not modify the ID parameter. Place it where appropriate, style it as needed. -->
+
+<a href="#" id="open_preferences_center">Update cookies preferences</a>
 
 
     <nav class="navbar navbar-expand-lg fixed-top bg-primary" data-bs-theme="dark" aria-label="Site navigation"><div class="container">
 
     <a class="navbar-brand me-2" href="../../../index.html">Distance</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.0.0.9004</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.0.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -66,7 +83,6 @@
 <li class="nav-item"><a class="nav-link" href="../../../news/index.html">News</a></li>
       </ul>
 <ul class="navbar-nav">
-<li class="nav-item"><a class="external-link nav-link" href="https://twitter.com/distancesamp" aria-label="Twitter"><span class="fa fa-twitter"></span></a></li>
 <li class="nav-item"><a class="external-link nav-link" href="https://github.com/DistanceDevelopment/Distance/" aria-label="GitHub"><span class="fa fab fa-github fa-lg"></span></a></li>
       </ul>
 </div>
@@ -82,7 +98,7 @@
       <h1>Analysis of camera trapping data</h1>
                         <h4 data-toc-skip class="author">Eric Howe, Eric Rexstad and Len Thomas</h4>
             <address class="author_afil">
-      CREEM, Univ of St Andrews<br><h4 data-toc-skip class="date">March 2025</h4>
+      CREEM, Univ of St Andrews<br><h4 data-toc-skip class="date">September 2025</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/DistanceDevelopment/Distance/blob/HEAD/vignettes/web-only/CTDS/camera-distill.Rmd" class="external-link"><code>vignettes/web-only/CTDS/camera-distill.Rmd</code></a></small>
       <div class="d-none name"><code>camera-distill.Rmd</code></div>
@@ -259,18 +275,12 @@ Figure 2: Distribution of detection distances during peak activity period.
 <span>          cutpoints <span class="op">=</span> <span class="va">mybreaks</span>, truncation <span class="op">=</span> <span class="va">trunc.list</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## Warning in create_bins(data, cutpoints): Some distances were outside bins and</span></span>
 <span><span class="co">## have been removed.</span></span></code></pre>
-<pre><code><span><span class="co">## Warning in check.mono(result, n.pts = control$mono.points): Detection function</span></span>
-<span><span class="co">## is greater than 1 at some distances</span></span>
-<span><span class="co">## Warning in check.mono(result, n.pts = control$mono.points): Detection function</span></span>
-<span><span class="co">## is greater than 1 at some distances</span></span></code></pre>
-<pre><code><span><span class="co">## Warning in mrds::check.mono(model, n.pts = 10): Detection function is greater</span></span>
-<span><span class="co">## than 1 at some distances</span></span></code></pre>
-<div class="sourceCode" id="cb29"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">hr0</span> <span class="op">&lt;-</span> <span class="fu"><a href="../../../reference/ds.html">ds</a></span><span class="op">(</span><span class="va">DuikerCameraTraps</span>, transect <span class="op">=</span> <span class="st">"point"</span>, key <span class="op">=</span> <span class="st">"hr"</span>, adjustment <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>          convert_units <span class="op">=</span> <span class="va">conversion</span>, cutpoints <span class="op">=</span> <span class="va">mybreaks</span>, truncation <span class="op">=</span> <span class="va">trunc.list</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## Warning in create_bins(data, cutpoints): Some distances were outside bins and</span></span>
 <span><span class="co">## have been removed.</span></span></code></pre>
-<div class="sourceCode" id="cb31"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb29"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">hr1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../../../reference/ds.html">ds</a></span><span class="op">(</span><span class="va">DuikerCameraTraps</span>, transect <span class="op">=</span> <span class="st">"point"</span>, key <span class="op">=</span> <span class="st">"hr"</span>, adjustment <span class="op">=</span> <span class="st">"poly"</span>,</span>
 <span>          nadj <span class="op">=</span> <span class="fl">1</span>, convert_units <span class="op">=</span> <span class="va">conversion</span>,</span>
 <span>          cutpoints <span class="op">=</span> <span class="va">mybreaks</span>, truncation <span class="op">=</span> <span class="va">trunc.list</span><span class="op">)</span></span></code></pre></div>
@@ -308,7 +318,7 @@ uni1
 1
 </td>
 <td style="text-align:right;">
-2825.316
+2824.517
 </td>
 </tr>
 <tr>
@@ -319,7 +329,7 @@ uni2
 2
 </td>
 <td style="text-align:right;">
-2826.822
+2826.023
 </td>
 </tr>
 <tr>
@@ -330,7 +340,7 @@ uni3
 3
 </td>
 <td style="text-align:right;font-weight: bold;background-color: rgba(255, 140, 26, 255) !important;">
-2823.921
+2823.125
 </td>
 </tr>
 </tbody>
@@ -358,7 +368,7 @@ hn0
 1
 </td>
 <td style="text-align:right;">
-2296.204
+2295.446
 </td>
 </tr>
 <tr>
@@ -369,7 +379,7 @@ hn1
 2
 </td>
 <td style="text-align:right;font-weight: bold;background-color: rgba(255, 140, 26, 255) !important;">
-2292.252
+2291.497
 </td>
 </tr>
 <tr>
@@ -380,7 +390,7 @@ hn2
 3
 </td>
 <td style="text-align:right;">
-2294.096
+2293.341
 </td>
 </tr>
 </tbody>
@@ -426,7 +436,7 @@ hr1
 </table>
 <p>From this first pass of model selection based on QAIC values, we find the model with the uniform key function preferred by QAIC has three cosine adjustment terms. The preferred model from the half normal key function family has one cosine adjustment term. Finally, the preferable model from the hazard rate key function family has no adjustment terms.</p>
 <p>The second step of model selection ranks the models by their <span class="math inline">\(\hat{c}\)</span> values.</p>
-<div class="sourceCode" id="cb33"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb31"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">chats</span> <span class="op">&lt;-</span> <span class="fu"><a href="../../../reference/QAIC.html">chi2_select</a></span><span class="op">(</span><span class="va">uni3</span>, <span class="va">hn1</span>, <span class="va">hr0</span><span class="op">)</span><span class="op">$</span><span class="va">criteria</span></span>
 <span><span class="va">modnames</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/unlist.html" class="external-link">unlist</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">lapply</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">uni3</span>, <span class="va">hn1</span>, <span class="va">hr0</span><span class="op">)</span>, <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="va">x</span><span class="op">$</span><span class="va">ddf</span><span class="op">$</span><span class="va">name.message</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="va">results</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span><span class="va">modnames</span>, <span class="va">chats</span><span class="op">)</span></span>
@@ -461,7 +471,7 @@ uniform key function with cosine(1,2,3) adjustments
 half-normal key function with cosine(2) adjustments
 </td>
 <td style="text-align:right;">
-16.54
+16.55
 </td>
 </tr>
 <tr>
@@ -482,7 +492,7 @@ hazard-rate key function
 <p>As a check of the detection function vis-a-vis <span class="citation">Howe et al. (2017)</span>, the paper reports the effective detection radius (<span class="math inline">\(\rho\)</span>) to be 9.4m for the peak activity data set. <span class="citation">Howe et al. (2017)</span> employed a different candidate model set, resulting in the unadjusted hazard rate model as the preferred model. Here we present the estimated effective detection radius from the selected uniform key function with three cosine adjustment terms.</p>
 <p>The effective detection radius can be derived from <span class="math inline">\(\hat{P_a}\)</span> as reported by the function <code>ds</code> as</p>
 <p><span class="math display">\[\hat{\rho} = \sqrt{\hat{P_a} \cdot w^2}\]</span></p>
-<div class="sourceCode" id="cb34"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb32"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">p_a</span> <span class="op">&lt;-</span> <span class="va">uni3</span><span class="op">$</span><span class="va">ddf</span><span class="op">$</span><span class="va">fitted</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span></span>
 <span><span class="va">w</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/range.html" class="external-link">range</a></span><span class="op">(</span><span class="va">mybreaks</span><span class="op">)</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span> <span class="op">-</span> <span class="fu"><a href="https://rdrr.io/r/base/range.html" class="external-link">range</a></span><span class="op">(</span><span class="va">mybreaks</span><span class="op">)</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span></span>
 <span><span class="va">rho</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/MathFun.html" class="external-link">sqrt</a></span><span class="op">(</span><span class="va">p_a</span> <span class="op">*</span> <span class="va">w</span><span class="op">^</span><span class="fl">2</span><span class="op">)</span></span></code></pre></div>
@@ -492,7 +502,7 @@ hazard-rate key function
 <h3 id="selected-detection-function">Selected detection function<a class="anchor" aria-label="anchor" href="#selected-detection-function"></a>
 </h3>
 <p>Figure <a href="#fig:selected">3</a> shows the detection function probability density function of selected model.</p>
-<div class="sourceCode" id="cb35"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb33"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">uni3</span>, main<span class="op">=</span><span class="st">"Daytime activity"</span>, xlab<span class="op">=</span><span class="st">"Distance (m)"</span>,</span>
 <span>     showpoints<span class="op">=</span><span class="cn">FALSE</span>, lwd<span class="op">=</span><span class="fl">3</span>, xlim<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">15</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">uni3</span>, main<span class="op">=</span><span class="st">"Daytime activity"</span>, xlab<span class="op">=</span><span class="st">"Distance (m)"</span>, pdf<span class="op">=</span><span class="cn">TRUE</span>,</span>
@@ -509,7 +519,7 @@ Figure 3: Detection function and probability density function of the selected de
 </h3>
 <p>The camera traps do not view the entire area around them, as would be the case with simple point transect sampling. The portion of the area sampled needs to be incorporated in the estimation of abundance. The data file contains a column <code>multiplier</code> that represents the proportion of the circle sampled. <span class="citation">Howe et al. (2017)</span> notes the camera angle of view (AOV) of 42<span class="math inline">\(^{\circ}\)</span>. The proportion of the circle viewed is this value over 360<span class="math inline">\(^{\circ}\)</span>.</p>
 <p>An argument to <code>dht2</code> is <code>sample_fraction</code>, an obvious place to include this quantity. We also add the multiplier for temporal availability described in <a href="#adjustment-for-temporal-availability">the section on temporal availability</a> The <code>dht2</code> function will produce analytical measures of precision with this call.</p>
-<div class="sourceCode" id="cb36"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb34"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">viewangle</span> <span class="op">&lt;-</span> <span class="fl">42</span> <span class="co"># degrees</span></span>
 <span><span class="va">samfrac</span> <span class="op">&lt;-</span> <span class="va">viewangle</span> <span class="op">/</span> <span class="fl">360</span></span>
 <span><span class="va">peak.uni.dens</span> <span class="op">&lt;-</span> <span class="fu"><a href="../../../reference/dht2.html">dht2</a></span><span class="op">(</span><span class="va">uni3</span>, flatfile<span class="op">=</span><span class="va">DuikerCameraTraps</span>, strat_formula <span class="op">=</span> <span class="op">~</span><span class="fl">1</span>,</span>
@@ -529,7 +539,7 @@ Figure 3: Detection function and probability density function of the selected de
 <span><span class="co">## </span></span>
 <span><span class="co">## Density estimates:</span></span>
 <span><span class="co">##  .Label Estimate    se    cv    LCI     UCI     df</span></span>
-<span><span class="co">##   Total  17.2357 4.801 0.279 9.7947 30.3297 23.239</span></span>
+<span><span class="co">##   Total  17.2392 4.802 0.279 9.7967 30.3357 23.239</span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## Component percentages of variance:</span></span>
 <span><span class="co">##  .Label Detection    ER Multipliers</span></span>
@@ -544,7 +554,7 @@ Figure 3: Detection function and probability density function of the selected de
 <h3 id="summary-function">Summary function<a class="anchor" aria-label="anchor" href="#summary-function"></a>
 </h3>
 <p>As constructed, <code>mysummary</code> will keep the density estimate produced by each bootstrap replicate and the stratum (if any) to which the estimate pertains.</p>
-<div class="sourceCode" id="cb38"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb36"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">mysummary</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">ests</span>, <span class="va">fit</span><span class="op">)</span><span class="op">{</span></span>
 <span>  <span class="kw"><a href="https://rdrr.io/r/base/function.html" class="external-link">return</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>Label <span class="op">=</span> <span class="va">ests</span><span class="op">$</span><span class="va">individuals</span><span class="op">$</span><span class="va">D</span><span class="op">$</span><span class="va">Label</span>,</span>
 <span>                    Dhat <span class="op">=</span> <span class="va">ests</span><span class="op">$</span><span class="va">individuals</span><span class="op">$</span><span class="va">D</span><span class="op">$</span><span class="va">Estimate</span><span class="op">)</span><span class="op">)</span></span>
@@ -559,7 +569,7 @@ Figure 3: Detection function and probability density function of the selected de
 <li>the manner in which precision of the temporal availability estimate is produced and</li>
 <li>the number of hours per day the cameras are in operation</li>
 </ul>
-<div class="sourceCode" id="cb39"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb37"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">mult</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>availability<span class="op">=</span> <span class="fu"><a href="../../../reference/make_activity_fn.html">make_activity_fn</a></span><span class="op">(</span><span class="va">trigger.events</span><span class="op">$</span><span class="va">rtime</span>, sample<span class="op">=</span><span class="st">"data"</span>,</span>
 <span>                                            detector_daily_duration<span class="op">=</span><span class="va">camera.operation.per.day</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 </div>
@@ -574,7 +584,7 @@ Figure 3: Detection function and probability density function of the selected de
 <h3 id="remaining-arguments-to-bootdht">Remaining arguments to <code>bootdht</code><a class="anchor" aria-label="anchor" href="#remaining-arguments-to-bootdht"></a>
 </h3>
 <p>Just as with <code>dht2</code> there are arguments for the <code>model</code>, <code>flatfile</code>, <code>sample_fraction</code>, <code>convert.units</code> and <code>multipliers</code> (although for <code>bootdht</code> <code>multipliers</code> uses a function rather than a single value). The only novel arguments to <code>dht2</code> are <code>resample_transects</code> indicating camera stations are to be resampled with replacement, and <code>nboot</code> for the number of bootstrap replicates.</p>
-<div class="sourceCode" id="cb40"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb38"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">n.cores</span> <span class="op">&lt;-</span> <span class="fu">parallel</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/parallel/detectCores.html" class="external-link">detectCores</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="va">daytime.boot.uni</span> <span class="op">&lt;-</span> <span class="fu"><a href="../../../reference/bootdht.html">bootdht</a></span><span class="op">(</span>model<span class="op">=</span><span class="va">uni3</span>, flatfile<span class="op">=</span><span class="va">DuikerCameraTraps</span>,</span>
 <span>                          resample_transects <span class="op">=</span> <span class="cn">TRUE</span>, nboot <span class="op">=</span> <span class="fl">500</span>, </span>
@@ -585,17 +595,17 @@ Figure 3: Detection function and probability density function of the selected de
 <div class="section level3">
 <h3 id="confidence-limits-computed-via-the-percentile-method-of-the-bootstrap-">Confidence limits computed via the percentile method of the bootstrap.<a class="anchor" aria-label="anchor" href="#confidence-limits-computed-via-the-percentile-method-of-the-bootstrap-"></a>
 </h3>
-<div class="sourceCode" id="cb41"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb39"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">daytime.boot.uni</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## Bootstrap results</span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## Boostraps          : 500 </span></span>
-<span><span class="co">## Successes          : 498 </span></span>
-<span><span class="co">## Failures           : 2 </span></span>
+<span><span class="co">## Successes          : 497 </span></span>
+<span><span class="co">## Failures           : 3 </span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">##      median  mean   se  lcl   ucl   cv</span></span>
-<span><span class="co">## Dhat  18.01 19.13 7.85 7.62 37.79 0.44</span></span></code></pre>
-<div class="sourceCode" id="cb43"><pre class="downlit sourceCode r">
+<span><span class="co">## Dhat  17.36 17.89 7.61 5.77 35.79 0.44</span></span></code></pre>
+<div class="sourceCode" id="cb41"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/hist.html" class="external-link">hist</a></span><span class="op">(</span><span class="va">daytime.boot.uni</span><span class="op">$</span><span class="va">Dhat</span>, breaks <span class="op">=</span> <span class="fl">20</span>, </span>
 <span>     xlab <span class="op">=</span> <span class="st">"Estimated density"</span>, main <span class="op">=</span> <span class="st">"D-hat estimates bootstraps"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/abline.html" class="external-link">abline</a></span><span class="op">(</span>v <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/quantile.html" class="external-link">quantile</a></span><span class="op">(</span><span class="va">daytime.boot.uni</span><span class="op">$</span><span class="va">Dhat</span>, probs <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.025</span>,<span class="fl">0.975</span><span class="op">)</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>, lwd <span class="op">=</span> <span class="fl">2</span>, lty <span class="op">=</span> <span class="fl">2</span>, col <span class="op">=</span> <span class="st">"red"</span><span class="op">)</span></span>
@@ -613,7 +623,7 @@ Figure 4: Distribution of density estimates from bootstrap replicates. Red dashe
 </h3>
 <p>Feel free to skip this unless you’re a fairly advanced user!</p>
 <p>In some cases, it may be necessary to set starting values for the detection function optimization, to help it converge. This can be achieved using the <code>initial_values</code> argument of the <code>ds</code> function. As an example, say we want to use the fitted values from the uniform + 2 cosine function <code>uni2</code> as starting values for the first two parameters of the uniform + 3 cosine function fitting (and 0 for the third parameter). The following code does this:</p>
-<div class="sourceCode" id="cb44"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb42"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">uni3.with.startvals</span> <span class="op">&lt;-</span> <span class="fu"><a href="../../../reference/ds.html">ds</a></span><span class="op">(</span><span class="va">DuikerCameraTraps</span>, transect <span class="op">=</span> <span class="st">"point"</span>, key<span class="op">=</span><span class="st">"unif"</span>, adjustment <span class="op">=</span> <span class="st">"cos"</span>,</span>
 <span>           nadj<span class="op">=</span><span class="fl">3</span>,</span>
 <span>           cutpoints <span class="op">=</span> <span class="va">mybreaks</span>, truncation <span class="op">=</span> <span class="va">trunc.list</span>, </span>
@@ -621,11 +631,11 @@ Figure 4: Distribution of density estimates from bootstrap replicates. Red dashe
 <pre><code><span><span class="co">## Warning in create_bins(data, cutpoints): Some distances were outside bins and</span></span>
 <span><span class="co">## have been removed.</span></span></code></pre>
 <p>What about when it comes to bootstrapping for variance estimation. You can pass this model in to <code>boot.dht</code> with no problems, so long as you don’t set <code>ncores</code> to more than 1. If you do set <code>ncores</code> to more than 1 it won’t work, returning 0 successful bootstraps. Why? Because <code>uni2$ddf$par</code> is not passed along to all those parallel cores. To fix this you have to hard-code the starting values. So, in this example, we see that the values are</p>
-<div class="sourceCode" id="cb46"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb44"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">uni2</span><span class="op">$</span><span class="va">ddf</span><span class="op">$</span><span class="va">par</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## [1] 0.97177303 0.03540654</span></span></code></pre>
 <p>and so we use</p>
-<div class="sourceCode" id="cb48"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb46"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">uni3.with.startvals</span> <span class="op">&lt;-</span> <span class="fu"><a href="../../../reference/ds.html">ds</a></span><span class="op">(</span><span class="va">DuikerCameraTraps</span>, transect <span class="op">=</span> <span class="st">"point"</span>, key<span class="op">=</span><span class="st">"unif"</span>, adjustment <span class="op">=</span> <span class="st">"cos"</span>,</span>
 <span>           nadj<span class="op">=</span><span class="fl">3</span>,</span>
 <span>           cutpoints <span class="op">=</span> <span class="va">mybreaks</span>, truncation <span class="op">=</span> <span class="va">trunc.list</span>, </span>
@@ -634,7 +644,7 @@ Figure 4: Distribution of density estimates from bootstrap replicates. Red dashe
 <span><span class="co">## have been removed.</span></span></code></pre>
 <p>and this will work fine in <code>bootdht</code>.</p>
 <p>A final tip is that setting starting values can sometimes speed up the bootstrap (as optimization is faster if it starts from a good initial spot), so you might want to pass in the starting values from <code>uni3</code> to your bootstrap routine - something like the following, which we found nearly halved the run time on our test machine. Note, this code is set not to run in this examples file - just here to show what you might use.</p>
-<div class="sourceCode" id="cb50"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb48"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">uni3</span><span class="op">$</span><span class="va">ddf</span><span class="op">$</span><span class="va">par</span><span class="op">)</span></span>
 <span><span class="va">uni3.with.startvals</span> <span class="op">&lt;-</span> <span class="fu"><a href="../../../reference/ds.html">ds</a></span><span class="op">(</span><span class="va">DuikerCameraTraps</span>, transect <span class="op">=</span> <span class="st">"point"</span>, key<span class="op">=</span><span class="st">"unif"</span>, adjustment <span class="op">=</span> <span class="st">"cos"</span>,</span>
 <span>           nadj<span class="op">=</span><span class="fl">3</span>,</span>
@@ -682,7 +692,7 @@ Rowcliffe, J. M., Kays, R., Kranstauber, B., Carbone, C., &amp; Jansen, P. A. (2
 
 
     <footer><div class="pkgdown-footer-left">
-  <p>We improve our site and software support by using Microsoft Clarity to see <br> how you use our website. By using our site, you agree that we and Microsoft <br> can collect and use this data. Clarity is GDPR compliant.</p>
+  <p>We improve our site and software support by using cookies to see <br> how you use our website.</p>
 </div>
 
 <div class="pkgdown-footer-right">

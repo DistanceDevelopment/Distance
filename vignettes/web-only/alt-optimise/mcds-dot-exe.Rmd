@@ -19,7 +19,7 @@ pkgdown:
 bibliography: mcds-dot-exe.bib
 csl: ../apa.csl
 vignette: >
-  %\VignetteIndexEntry{Line transect density estimation}
+  %\VignetteIndexEntry{Alternative optimization engine for fitting detection functions}
   %\VignetteEngine{knitr::rmarkdown}
   \usepackage[utf8]{inputenc}
 ---
@@ -51,7 +51,7 @@ In a perfect world, both methods would produce identical results given the same 
 
 Another historical motivation for using the `MCDS.exe` software from within `R` was that the `R`-based optimizer was sometimes slow to converge and so using `MCDS.exe` in place of the `R`-based optimizer can then save significant time, particularly when doing a nonparametric bootstrap for large datasets.  However, from `Distance` 2.0.0 and `mrds` 3.0.0 the `R`-based optimizer is no longer generally slower.
 
-This vignette demonstrates how to download and then use the MCDS.exe sofware from within the `Distance` and `mrds` packages.  For more information, see the `MCDS.exe` help page within the `mrds` package.
+This vignette demonstrates how to download and then use the MCDS.exe software from within the `Distance` and `mrds` packages.  For more information, see the `MCDS.exe` help page within the `mrds` package.
 
 # Downloading and verifying MCDS.exe
 

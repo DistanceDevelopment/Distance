@@ -22,17 +22,34 @@
 ">
 <meta property="og:description" content="Dung surveys including estimates of production and decay rates.
 ">
-<script type="text/javascript">(function(c,l,a,r,i,t,y){c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)}; t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;   y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);})(window, document, "clarity", "script", "m9rbql4acz");</script>
 </head>
 <body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
+    <!-- Cookie Consent by TermsFeed https://www.TermsFeed.com -->
+<script type="text/javascript" src="https://www.termsfeed.com/public/cookie-consent/4.2.0/cookie-consent.js" charset="UTF-8"></script><script type="text/javascript" charset="UTF-8">
+document.addEventListener('DOMContentLoaded', function () {
+cookieconsent.run({"notice_banner_type":"simple","consent_type":"express","palette":"light","language":"en","page_load_consent_levels":["strictly-necessary"],"notice_banner_reject_button_hide":false,"preferences_center_close_button_hide":false,"page_refresh_confirmation_buttons":false,"website_name":"https://distancesampling.org/Distance"});
+});
+</script><!-- Google Analytics --><!-- Google tag (gtag.js) --><script type="text/plain" data-cookie-consent="tracking" async src="https://www.googletagmanager.com/gtag/js?id=G-Y8DXDM90VK"></script><script type="text/plain" data-cookie-consent="tracking">
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-Y8DXDM90VK');
+</script><!-- end of Google Analytics--><noscript>Free cookie consent management tool by <a href="https://www.termsfeed.com/" class="external-link">TermsFeed</a>
+</noscript>
+<!-- End Cookie Consent by TermsFeed https://www.TermsFeed.com -->
+
+<!-- Below is the link that users can use to open Preferences Center to change their preferences. Do not modify the ID parameter. Place it where appropriate, style it as needed. -->
+
+<a href="#" id="open_preferences_center">Update cookies preferences</a>
 
 
     <nav class="navbar navbar-expand-lg fixed-top bg-primary" data-bs-theme="dark" aria-label="Site navigation"><div class="container">
 
     <a class="navbar-brand me-2" href="../../../index.html">Distance</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.0.0.9009</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.0.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -66,7 +83,6 @@
 <li class="nav-item"><a class="nav-link" href="../../../news/index.html">News</a></li>
       </ul>
 <ul class="navbar-nav">
-<li class="nav-item"><a class="external-link nav-link" href="https://twitter.com/distancesamp" aria-label="Twitter"><span class="fa fa-twitter"></span></a></li>
 <li class="nav-item"><a class="external-link nav-link" href="https://github.com/DistanceDevelopment/Distance/" aria-label="GitHub"><span class="fa fab fa-github fa-lg"></span></a></li>
       </ul>
 </div>
@@ -82,7 +98,7 @@
       <h1>Multipliers and indirect surveys</h1>
                         <h4 data-toc-skip class="author">Eric Rexstad</h4>
             <address class="author_afil">
-      CREEM, Univ of St Andrews<br><h4 data-toc-skip class="date">April 2025</h4>
+      CREEM, Univ of St Andrews<br><h4 data-toc-skip class="date">September 2025</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/DistanceDevelopment/Distance/blob/HEAD/vignettes/web-only/multipliers/multipliers-distill.Rmd" class="external-link"><code>vignettes/web-only/multipliers/multipliers-distill.Rmd</code></a></small>
       <div class="d-none name"><code>multipliers-distill.Rmd</code></div>
@@ -113,7 +129,7 @@ Hence, we use distance sampling to produce a pellet group density estimate, then
 <p>Data from 9 woodlands (labelled A-H and J) were collected according to the survey design (Figure <a href="#fig:map">1</a>) but note that data from block D were not included in this exercise.</p>
 <div class="figure">
 <span style="display:block;" id="fig:map"></span>
-<img src="Prac_9_Figure_1.png" alt="Location of sika deer survey in southern Scotland and the survey design (from  [@Maretal01]). Note the differing amounts of effort in different woodlands based on information derived from pilot surveys."><p class="caption">
+<img src="Prac_9_Figure_1.png" alt="Location of sika deer survey in southern Scotland and the survey design (from  [@Maretal01]). Note the differing amounts of effort in different woodlands based on information derived from pilot surveys." width="561"><p class="caption">
 Figure 1: Location of sika deer survey in southern Scotland and the survey design (from <span class="citation">(Marques et al., 2001)</span>). Note the differing amounts of effort in different woodlands based on information derived from pilot surveys.
 </p>
 </div>
@@ -248,9 +264,8 @@ Figure 3: Logistic curve fitted to pellet persistence survey data. Vertical line
 <code class="sourceCode R"><span><span class="va">deer.ests</span> <span class="op">&lt;-</span> <span class="fu"><a href="../../../reference/dht2.html">dht2</a></span><span class="op">(</span><span class="va">deer.df</span>, flatfile<span class="op">=</span><span class="va">sikadeer</span>, strat_formula<span class="op">=</span><span class="op">~</span><span class="va">Region.Label</span>,</span>
 <span>                 convert_units<span class="op">=</span><span class="va">conversion.factor</span>, multipliers<span class="op">=</span><span class="va">mult</span>, </span>
 <span>                 stratification<span class="op">=</span><span class="st">"geographical"</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## Warning in dht2(deer.df, flatfile = sikadeer, strat_formula = ~Region.Label, :</span></span>
-<span><span class="co">## One or more strata have only one transect, cannot calculate empirical encounter</span></span>
-<span><span class="co">## rate variance</span></span></code></pre>
+<pre><code><span><span class="co">## Warning: One or more strata have only one transect, cannot calculate empirical</span></span>
+<span><span class="co">## encounter rate variance</span></span></code></pre>
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">deer.ests</span>, report<span class="op">=</span><span class="st">"density"</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## Density estimates from distance sampling</span></span>
@@ -274,15 +289,15 @@ Figure 3: Logistic curve fitted to pellet persistence survey data. Vertical line
 <span><span class="co">## </span></span>
 <span><span class="co">## Density estimates:</span></span>
 <span><span class="co">##  Region.Label Estimate     se    cv     LCI      UCI        df</span></span>
-<span><span class="co">##             A  73.9134 14.247 0.193 49.6867 109.9528    21.037</span></span>
-<span><span class="co">##             B  37.1693  9.643 0.259 21.3182  64.8065    12.031</span></span>
-<span><span class="co">##             C   3.9005  0.955 0.245  1.7459   8.7138     2.779</span></span>
-<span><span class="co">##             E   3.6440  1.746 0.479  1.0713  12.3953     4.337</span></span>
-<span><span class="co">##             F  14.9710  1.428 0.095 12.4241  18.0400 63227.757</span></span>
-<span><span class="co">##             G   8.2598  4.173 0.505  1.2114  56.3193     2.151</span></span>
-<span><span class="co">##             H   1.5487  0.148 0.095  1.2852   1.8662 63227.757</span></span>
-<span><span class="co">##             J   7.2274  0.689 0.095  5.9978   8.7089 63227.757</span></span>
-<span><span class="co">##         Total  20.8467  3.011 0.144 15.5116  28.0168    25.611</span></span>
+<span><span class="co">##             A  73.9167 14.248 0.193 49.6889 109.9576    21.037</span></span>
+<span><span class="co">##             B  37.1709  9.643 0.259 21.3191  64.8093    12.031</span></span>
+<span><span class="co">##             C   3.9007  0.955 0.245  1.7460   8.7142     2.779</span></span>
+<span><span class="co">##             E   3.6442  1.746 0.479  1.0713  12.3958     4.337</span></span>
+<span><span class="co">##             F  14.9716  1.428 0.095 12.4246  18.0407 63231.773</span></span>
+<span><span class="co">##             G   8.2602  4.173 0.505  1.2114  56.3218     2.151</span></span>
+<span><span class="co">##             H   1.5488  0.148 0.095  1.2853   1.8663 63231.773</span></span>
+<span><span class="co">##             J   7.2277  0.689 0.095  5.9981   8.7093 63231.773</span></span>
+<span><span class="co">##         Total  20.8476  3.011 0.144 15.5123  28.0180    25.610</span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## Component percentages of variance:</span></span>
 <span><span class="co">##  Region.Label Detection    ER Multipliers</span></span>
@@ -345,7 +360,7 @@ Meredith, M. (2017). <em>How long do animal signs remain visible?</em> Retrieved
 
 
     <footer><div class="pkgdown-footer-left">
-  <p>We improve our site and software support by using Microsoft Clarity to see <br> how you use our website. By using our site, you agree that we and Microsoft <br> can collect and use this data. Clarity is GDPR compliant.</p>
+  <p>We improve our site and software support by using cookies to see <br> how you use our website.</p>
 </div>
 
 <div class="pkgdown-footer-right">

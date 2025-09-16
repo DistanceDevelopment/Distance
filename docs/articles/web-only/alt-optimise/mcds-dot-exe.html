@@ -14,7 +14,7 @@
   };
 </script><script src="../../../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="../../../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
-<script src="../../../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../../../deps/Roboto-0.4.9/font.css" rel="stylesheet">
+<script src="../../../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../../../deps/Roboto-0.4.10/font.css" rel="stylesheet">
 <link href="../../../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="../../../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
 <script src="../../../deps/headroom-0.11.0/headroom.min.js"></script><script src="../../../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../../../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../../../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../../../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../../../deps/search-1.0.0/fuse.min.js"></script><script src="../../../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../../../pkgdown.js"></script><meta property="og:title" content="Alternative optimization engine for fitting detection functions">
@@ -22,17 +22,34 @@
 ">
 <meta property="og:description" content="Examples demonstrating the use of the mcds.exe alternative optimization engine for fitting single platform detection functions in the Distance and mrds packages.
 ">
-<script type="text/javascript">(function(c,l,a,r,i,t,y){c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)}; t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;   y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);})(window, document, "clarity", "script", "m9rbql4acz");</script>
 </head>
 <body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
+    <!-- Cookie Consent by TermsFeed https://www.TermsFeed.com -->
+<script type="text/javascript" src="https://www.termsfeed.com/public/cookie-consent/4.2.0/cookie-consent.js" charset="UTF-8"></script><script type="text/javascript" charset="UTF-8">
+document.addEventListener('DOMContentLoaded', function () {
+cookieconsent.run({"notice_banner_type":"simple","consent_type":"express","palette":"light","language":"en","page_load_consent_levels":["strictly-necessary"],"notice_banner_reject_button_hide":false,"preferences_center_close_button_hide":false,"page_refresh_confirmation_buttons":false,"website_name":"https://distancesampling.org/Distance"});
+});
+</script><!-- Google Analytics --><!-- Google tag (gtag.js) --><script type="text/plain" data-cookie-consent="tracking" async src="https://www.googletagmanager.com/gtag/js?id=G-Y8DXDM90VK"></script><script type="text/plain" data-cookie-consent="tracking">
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-Y8DXDM90VK');
+</script><!-- end of Google Analytics--><noscript>Free cookie consent management tool by <a href="https://www.termsfeed.com/" class="external-link">TermsFeed</a>
+</noscript>
+<!-- End Cookie Consent by TermsFeed https://www.TermsFeed.com -->
+
+<!-- Below is the link that users can use to open Preferences Center to change their preferences. Do not modify the ID parameter. Place it where appropriate, style it as needed. -->
+
+<a href="#" id="open_preferences_center">Update cookies preferences</a>
 
 
     <nav class="navbar navbar-expand-lg fixed-top bg-primary" data-bs-theme="dark" aria-label="Site navigation"><div class="container">
 
     <a class="navbar-brand me-2" href="../../../index.html">Distance</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.0.0.9004</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.0.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -66,7 +83,6 @@
 <li class="nav-item"><a class="nav-link" href="../../../news/index.html">News</a></li>
       </ul>
 <ul class="navbar-nav">
-<li class="nav-item"><a class="external-link nav-link" href="https://twitter.com/distancesamp" aria-label="Twitter"><span class="fa fa-twitter"></span></a></li>
 <li class="nav-item"><a class="external-link nav-link" href="https://github.com/DistanceDevelopment/Distance/" aria-label="GitHub"><span class="fa fab fa-github fa-lg"></span></a></li>
       </ul>
 </div>
@@ -82,7 +98,7 @@
       <h1>Alternative optimization engine for fitting detection functions</h1>
                         <h4 data-toc-skip class="author">Len Thomas</h4>
             <address class="author_afil">
-      CREEM, Univ of St Andrews<br><h4 data-toc-skip class="date">March 2025</h4>
+      CREEM, Univ of St Andrews<br><h4 data-toc-skip class="date">September 2025</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/DistanceDevelopment/Distance/blob/HEAD/vignettes/web-only/alt-optimise/mcds-dot-exe.Rmd" class="external-link"><code>vignettes/web-only/alt-optimise/mcds-dot-exe.Rmd</code></a></small>
       <div class="d-none name"><code>mcds-dot-exe.Rmd</code></div>
@@ -112,7 +128,7 @@
 <p>An alternative method for analyzing distance sampling data is using the Distance for Windows software <span class="citation">(Thomas et al., 2010)</span>. This software also uses maximum liklihood to fit the detection function models, and relies on software written in the programming language FORTRAN to do the fitting. The filename of this software is <code>MCDS.exe</code>.</p>
 <p>In a perfect world, both methods would produce identical results given the same data and model specification, since the likelihood has only one maximum. However, the likelihood surface is sometimes complex, especially when monotonicity constraints are used (which ensures the estimated detection probability is flat or decreasing with increasing distance when adjustment terms are used) or with “overdispersed” or “spiked” data (see Figure 2 in Thomas et al. <span class="citation">(2010)</span>), and so in some (rare) cases one or other piece of software fails to find the maximum. Note that in our tests, we have found this to be extremely rare from <code>Distance</code> version 2.0.0 and <code>mrds</code> version 3.0.0 onwards. Nevertheless, to counteract this, it is possible to run both the <code>R</code>-based optimizer and <code>MCDS.exe</code> from the <code>ds</code> function within the <code>Distance</code> package or the <code>ddf</code> function within <code>mrds</code> package.</p>
 <p>Another historical motivation for using the <code>MCDS.exe</code> software from within <code>R</code> was that the <code>R</code>-based optimizer was sometimes slow to converge and so using <code>MCDS.exe</code> in place of the <code>R</code>-based optimizer can then save significant time, particularly when doing a nonparametric bootstrap for large datasets. However, from <code>Distance</code> 2.0.0 and <code>mrds</code> 3.0.0 the <code>R</code>-based optimizer is no longer generally slower.</p>
-<p>This vignette demonstrates how to download and then use the MCDS.exe sofware from within the <code>Distance</code> and <code>mrds</code> packages. For more information, see the <code>MCDS.exe</code> help page within the <code>mrds</code> package.</p>
+<p>This vignette demonstrates how to download and then use the MCDS.exe software from within the <code>Distance</code> and <code>mrds</code> packages. For more information, see the <code>MCDS.exe</code> help page within the <code>mrds</code> package.</p>
 </div>
 <div class="section level2">
 <h2 id="downloading-and-verifying-mcds-exe">Downloading and verifying MCDS.exe<a class="anchor" aria-label="anchor" href="#downloading-and-verifying-mcds-exe"></a>
@@ -130,8 +146,8 @@
 <span><span class="co">#Load the Distance package - now it will be able to use MCDS.exe</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/DistanceDevelopment/Distance/" class="external-link">Distance</a></span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## Loading required package: mrds</span></span></code></pre>
-<pre><code><span><span class="co">## This is mrds 3.0.0</span></span>
-<span><span class="co">## Built: R 4.4.1; ; 2024-10-23 19:10:34 UTC; windows</span></span></code></pre>
+<pre><code><span><span class="co">## This is mrds 3.0.1</span></span>
+<span><span class="co">## Built: R 4.5.1; ; 2025-07-06 23:50:32 UTC; windows</span></span></code></pre>
 <pre><code><span><span class="co">## </span></span>
 <span><span class="co">## Attaching package: 'Distance'</span></span></code></pre>
 <pre><code><span><span class="co">## The following object is masked from 'package:mrds':</span></span>
@@ -189,8 +205,8 @@
 <pre><code><span><span class="co">## Fitting half-normal key function</span></span></code></pre>
 <pre><code><span><span class="co">## DEBUG: initial values = -0.1031529</span></span></code></pre>
 <pre><code><span><span class="co">## Running MCDS.exe...</span></span></code></pre>
-<pre><code><span><span class="co">## Command file written to C:\Users\erexs\AppData\Local\Temp\RtmpWs9vPb\cmdtmp5c88427e55b3.txt</span></span></code></pre>
-<pre><code><span><span class="co">## Stats file written to C:\Users\erexs\AppData\Local\Temp\RtmpWs9vPb\stat5c886c592f16.txt</span></span></code></pre>
+<pre><code><span><span class="co">## Command file written to C:\Users\erexs\AppData\Local\Temp\Rtmp4kuvHu\cmdtmp245c6a52373d.txt</span></span></code></pre>
+<pre><code><span><span class="co">## Stats file written to C:\Users\erexs\AppData\Local\Temp\Rtmp4kuvHu\stat245c2e9e93.txt</span></span></code></pre>
 <pre><code><span><span class="co">## DEBUG: initial values = 0.6632378 </span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## DEBUG: Convergence! </span></span>
@@ -212,8 +228,8 @@
 <pre><code><span><span class="co">## Fitting half-normal key function with cosine(2) adjustments</span></span></code></pre>
 <pre><code><span><span class="co">## DEBUG: initial values = -0.1031529 0</span></span></code></pre>
 <pre><code><span><span class="co">## Running MCDS.exe...</span></span></code></pre>
-<pre><code><span><span class="co">## Command file written to C:\Users\erexs\AppData\Local\Temp\RtmpWs9vPb\cmdtmp5c885dba6716.txt</span></span></code></pre>
-<pre><code><span><span class="co">## Stats file written to C:\Users\erexs\AppData\Local\Temp\RtmpWs9vPb\stat5c88775a59a.txt</span></span></code></pre>
+<pre><code><span><span class="co">## Command file written to C:\Users\erexs\AppData\Local\Temp\Rtmp4kuvHu\cmdtmp245c7817759e.txt</span></span></code></pre>
+<pre><code><span><span class="co">## Stats file written to C:\Users\erexs\AppData\Local\Temp\Rtmp4kuvHu\stat245c6a81318f.txt</span></span></code></pre>
 <pre><code><span><span class="co">## DEBUG: initial values = 0.6606793 -0.0159333 </span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## DEBUG: Convergence! </span></span>
@@ -554,7 +570,7 @@ Figure 2: PDF of fitted model with R-based optimizer.
 <span><span class="co">## Density:</span></span>
 <span><span class="co">##   Label     Estimate           se        cv          lcl          ucl       df</span></span>
 <span><span class="co">## 1 Total 1.430021e-06 3.880986e-07 0.2713936 8.213597e-07 2.489727e-06 20.94597</span></span></code></pre>
-<p>Fitting takes 9.4 secs. (Note, in versions of <code>Distance</code> before 2.0.0 this was a much higher number!) Here we try the <code>MCDS.exe</code> optimizer:</p>
+<p>Fitting takes 9.6 secs. (Note, in versions of <code>Distance</code> before 2.0.0 this was a much higher number!) Here we try the <code>MCDS.exe</code> optimizer:</p>
 <div class="sourceCode" id="cb110"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">start.time</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/Sys.time.html" class="external-link">Sys.time</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="va">uni3.mcds</span> <span class="op">&lt;-</span> <span class="fu"><a href="../../../reference/ds.html">ds</a></span><span class="op">(</span><span class="va">DuikerCameraTraps</span>, transect <span class="op">=</span> <span class="st">"point"</span>, key<span class="op">=</span><span class="st">"unif"</span>, adjustment <span class="op">=</span> <span class="st">"cos"</span>,</span>
@@ -648,7 +664,7 @@ Thomas, L., Buckland, S. T., Rexstad, E. A., Laake, J. L., Strindberg, S., Hedle
 
 
     <footer><div class="pkgdown-footer-left">
-  <p>We improve our site and software support by using Microsoft Clarity to see <br> how you use our website. By using our site, you agree that we and Microsoft <br> can collect and use this data. Clarity is GDPR compliant.</p>
+  <p>We improve our site and software support by using cookies to see <br> how you use our website.</p>
 </div>
 
 <div class="pkgdown-footer-right">
