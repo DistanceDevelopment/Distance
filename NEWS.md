@@ -1,3 +1,7 @@
+# Distance 2.0.2
+
+* Added argument conf_level to ds so users can specify level of confidence in computing confidence intervals (Issue #215)
+
 # Distance 2.0.1
 
 * Fixes issue with print dht2 when multipliers are a data.frame (Issue #179)

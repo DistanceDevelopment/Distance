@@ -130,6 +130,7 @@
 #' @param winebin If you are trying to use our MCDS.exe optimizer on a
 #'   non-windows system then you may need to specify the winebin. Please 
 #'   see [`mcds_dot_exe`][mrds::mcds_dot_exe] for more details.
+#' @param conf_level level of confidence used in computations of confidence interval width: default 0.95, must be between 0 and 1
 #' @param dht.group deprecated, see same argument with underscore, above.
 #' @param region.table deprecated, see same argument with underscore, above.
 #' @param sample.table deprecated, see same argument with underscore, above.
@@ -340,6 +341,7 @@ ds <- function(data, truncation=ifelse(is.null(data$distend),
              initial_values=NULL, max_adjustments=5, er_method=2, dht_se=TRUE,
              optimizer = "both",
              winebin = NULL,
+             conf_level = 0.95,
              # deprecated below here:
              dht.group,
              region.table,
@@ -531,6 +533,9 @@ ds <- function(data, truncation=ifelse(is.null(data$distend),
     stop("Cannot supply initial values when using AIC term selection")
   }
 
+  # check conf_level
+  if(!((conf_level >= 0) | (conf_level <= 1))) stop("Option conf_level is not in the range 0-1")
+  
   ### Actually fit some models here
 
   # construct the meta data object...
@@ -731,7 +736,8 @@ ds <- function(data, truncation=ifelse(is.null(data$distend),
     dht_options <- list(group         = dht_group,
                         ervar         = er_var,
                         varflag       = er_method,
-                        convert.units = convert_units)
+                        convert.units = convert_units,
+                        ci.width      = conf_level)
 
     # if no obs_table
     if(is.null(obs_table)){
