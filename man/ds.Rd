@@ -34,6 +34,8 @@ ds(
   dht_se = TRUE,
   optimizer = "both",
   winebin = NULL,
+  conf_level = 0.95,
+  alpha,
   dht.group,
   region.table,
   sample.table,
@@ -202,6 +204,13 @@ See \code{\link[mrds:mcds_dot_exe]{mcds_dot_exe}} for setup instructions.}
 \item{winebin}{If you are trying to use our MCDS.exe optimizer on a
 non-windows system then you may need to specify the winebin. Please
 see \code{\link[mrds:mcds_dot_exe]{mcds_dot_exe}} for more details.}
+
+\item{conf_level}{level of confidence used in computations of confidence interval width:
+default 0.95, must be between 0 and 1}
+
+\item{alpha}{provides an alternative way to specify \code{conf_level}.  If \code{alpha} is specified
+then \code{conf_level} is set to 1-\code{alpha}.  (This takes precedence over whatever value is given
+to \code{conf_level}.)}
 
 \item{dht.group}{deprecated, see same argument with underscore, above.}
 
