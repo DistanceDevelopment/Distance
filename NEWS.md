@@ -1,6 +1,6 @@
 # Distance 2.0.2
 
-* Added argument conf_level to ds so users can specify level of confidence in computing confidence intervals (Issue #215)
+* Added arguments conf_level and alpha to ds so users can specify level of confidence in computing confidence intervals (Issue #215)
 
 # Distance 2.0.1
 
