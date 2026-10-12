@@ -62,10 +62,9 @@ NULL
 #'   * `Effort` effort for this transect (e.g. line transect length or number
 #'   of times point transect was visited)
 #'   * `Region.Label` label for a given stratum (see below)
-#'   * `Area` area of the strata`
-#' When the row represents a transect without observations, `distance` and any
-#' other observation-specific covariates (including `size` and detection
-#' function covariates) take the value `NA`.
+#'   * `Area` area of the `strata` when the row represents a transect without
+#'   observations, `distance` and any other observation-specific covariates
+#'   (including `size` and detection function covariates) take the value `NA`.
 #'
 #' Note that in the simplest case (one area surveyed only once) there is only
 #' one `Region.Label` and a single corresponding `Area` duplicated for each
